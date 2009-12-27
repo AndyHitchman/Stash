@@ -5,9 +5,9 @@ namespace Stash
 
     public static class Stash
     {
-        public static void Configure<TBackingStore>(Action<PersistenceContext> configurationAction) where TBackingStore : BackingStore
+        public static void Configure<TBackingStore>(TBackingStore backingStore, Action<PersistenceContext> configurationAction) where TBackingStore : BackingStore
         {
-            new ConfigurationEngine<TBackingStore>().Persist(configurationAction);
+            new ConfigurationEngine<TBackingStore>(backingStore).Persist(configurationAction);
         }
     }
 }

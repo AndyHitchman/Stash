@@ -7,7 +7,19 @@ namespace Stash.Configuration
     /// </summary>
     public class ConfigurationEngine<TBackingStore> where TBackingStore : BackingStore
     {
-        private PersistenceContext context;
+        private readonly PersistenceContext persistenceContext;
+        private readonly TBackingStore backingStore;
+
+        public ConfigurationEngine(TBackingStore backingStore)
+        {
+            this.backingStore = backingStore;
+            persistenceContext = new PersistenceContext();
+        }
+
+        public void ConfigureBackingStore(Action<TBackingStore> backingStoreConfigurationActions)
+        {
+            backingStoreConfigurationActions(backingStore);
+        }
 
         /// <summary>
         /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.Configure"/> is a static wrapper for this.
@@ -15,8 +27,7 @@ namespace Stash.Configuration
         /// <param name="persistenceConfigurationActions"></param>
         public void Persist(Action<PersistenceContext> persistenceConfigurationActions)
         {
-            context = new PersistenceContext();
-            persistenceConfigurationActions(context);
+            persistenceConfigurationActions(persistenceContext);
         }
 
         public void ApplyConfiguration()
