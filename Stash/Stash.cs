@@ -7,8 +7,7 @@ namespace Stash
     {
         public static void Configure(Action<ConfigurationContext> configurationAction)
         {
-            var context = new ConfigurationContext();
-            configurationAction(context);
+            new ConfigurationEngine().Configure(configurationAction);
         }
     }
 }

@@ -51,9 +51,9 @@
   <ItemGroup>
     <Compile Include="DummyReducer.cs" />
     <Compile Include="DummyMapper.cs" />
-    <Compile Include="for_configuration\given_configure_stash\when_instantiating.cs" />
-    <Compile Include="for_configuration\given_configure_stash\when_told_to_persist_a_graph.cs" />
-    <Compile Include="for_configuration\given_configure_stash\with_configure_stash.cs" />
+    <Compile Include="for_configuration\given_configuration_context\when_instantiating.cs" />
+    <Compile Include="for_configuration\given_configuration_context\when_told_to_persist_a_graph.cs" />
+    <Compile Include="for_configuration\given_configuration_context\with_configure_stash.cs" />
     <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
@@ -64,7 +64,7 @@
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
-    <Compile Include="given_stash\when_configuring.cs" />
+    <Compile Include="for_configuration\given_configuration_engine\when_configuring.cs" />
     <Compile Include="MethodThatThrows.cs" />
     <Compile Include="OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

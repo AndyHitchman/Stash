@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\ConfigurationEngine.cs" />
     <Compile Include="Configuration\RegisteredMapper.cs" />
     <Compile Include="Configuration\MapContext.cs" />
     <Compile Include="Configuration\GraphContext.cs" />
