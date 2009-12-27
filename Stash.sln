@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash", "Stash\Stash.csproj", "{095683A6-57F6-4E5C-A039-4638F08AE7BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Specifications", "Stash.Specifications\Stash.Specifications.csproj", "{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{095683A6-57F6-4E5C-A039-4638F08AE7BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{095683A6-57F6-4E5C-A039-4638F08AE7BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{095683A6-57F6-4E5C-A039-4638F08AE7BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{095683A6-57F6-4E5C-A039-4638F08AE7BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
