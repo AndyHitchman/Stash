@@ -27,13 +27,14 @@
         /// <returns>
         /// The attribute should equal.
         /// </returns>
-        public static object AttributeShouldEqual(this XmlElement element,
-                                                  string attributeName,
-                                                  object expected)
+        public static object AttributeShouldEqual(
+            this XmlElement element,
+            string attributeName,
+            object expected)
         {
             Assert.IsNotNull(element, "The Element is null");
 
-            string actual = element.GetAttribute(attributeName);
+            var actual = element.GetAttribute(attributeName);
             Assert.AreEqual(expected, actual);
             return expected;
         }
@@ -178,7 +179,7 @@
         /// </typeparam>
         public static void ShouldBeOfType<T>(this object actual)
         {
-            actual.ShouldBeOfType(typeof (T));
+            actual.ShouldBeOfType(typeof(T));
         }
 
         /// <summary>
@@ -232,13 +233,13 @@
             {
                 method();
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Assert.AreEqual(exceptionType, e.GetType());
                 exception = e;
             }
 
-            if (exception == null)
+            if(exception == null)
                 Assert.Fail(String.Format("Expected {0} to be thrown.", exceptionType.FullName));
 
             return exception;
@@ -372,7 +373,7 @@
         /// </param>
         public static void ShouldEqualSqlDate(this DateTime actual, DateTime expected)
         {
-            TimeSpan timeSpan = actual - expected;
+            var timeSpan = actual - expected;
             Assert.Less(Math.Abs(timeSpan.TotalMilliseconds), 3);
         }
 
@@ -454,7 +455,7 @@
         /// </typeparam>
         public static void ShouldNotBeOfType<T>(this object actual)
         {
-            actual.ShouldNotBeOfType(typeof (T));
+            actual.ShouldNotBeOfType(typeof(T));
         }
 
         /// <summary>

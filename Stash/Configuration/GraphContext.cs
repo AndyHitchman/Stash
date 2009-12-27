@@ -1,7 +1,6 @@
 namespace Stash.Configuration
 {
     using System;
-    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using Engine;
 
@@ -11,6 +10,11 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     public class GraphContext<TGraph>
     {
+        public GraphContext(RegisteredGraph<TGraph> registeredGraph)
+        {
+            RegisteredGraph = registeredGraph;
+        }
+
         /// <summary>
         /// The configured object graph.
         /// </summary>

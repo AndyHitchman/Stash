@@ -51,21 +51,22 @@
   <ItemGroup>
     <Compile Include="DummyReducer.cs" />
     <Compile Include="DummyMapper.cs" />
-    <Compile Include="for_configuration\given_configure_stash\DummyConfiguration.cs" />
     <Compile Include="for_configuration\given_configure_stash\when_instantiating.cs" />
     <Compile Include="for_configuration\given_configure_stash\when_told_to_persist_a_graph.cs" />
     <Compile Include="for_configuration\given_configure_stash\with_configure_stash.cs" />
+    <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
+    <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
+    <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
+    <Compile Include="for_configuration\given_graph_context\when_told_to_use_a_custom_serialization_surrogate.cs" />
+    <Compile Include="for_configuration\given_graph_context\with_dummy_object_context.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_not_to_persist.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_to_reduce.cs" />
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />
-    <Compile Include="for_configuration\given_object_context\when_told_to_use_a_custom_serialization_surrogate.cs" />
-    <Compile Include="for_configuration\given_object_context\DummerSerializationSurrogate.cs" />
-    <Compile Include="for_configuration\given_object_context\when_told_to_map.cs" />
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
-    <Compile Include="for_configuration\given_object_context\when_told_to_index.cs" />
-    <Compile Include="for_configuration\given_object_context\with_dummy_object_context.cs" />
+    <Compile Include="given_stash\when_configuring.cs" />
     <Compile Include="MethodThatThrows.cs" />
+    <Compile Include="OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecificationExtensions.cs" />
   </ItemGroup>

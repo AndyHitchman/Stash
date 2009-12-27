@@ -1,10 +1,10 @@
-namespace Stash.Specifications.for_configuration.given_map_context
+namespace Stash.Specifications.for_configuration.given_graph_context
 {
     using System;
     using NUnit.Framework;
 
     [TestFixture]
-    public class when_told_not_to_persist : with_dummy_map_context
+    public class when_told_to_map : with_dummy_object_context
     {
         [Test]
         public void it_should_throw_nix()
@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_configuration.given_map_context
             typeof(NotImplementedException)
                 .ShouldBeThrownBy(
                 () =>
-                Sut.DoNotPersist());
+                Sut.MapWith(new DummyMapper()));
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace Stash
 {
     using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Implement to reducer.

@@ -5,12 +5,12 @@ namespace Stash.Specifications.for_configuration.given_configure_stash
 
     public class with_configure_stash
     {
-        protected DummyConfiguration SutProxy { get; private set; }
+        protected ConfigurationContext Sut { get; private set; }
 
         [SetUp]
         public void each_up()
         {
-            SutProxy = new DummyConfiguration();
+            Sut = new ConfigurationContext();
         }
     }
 }

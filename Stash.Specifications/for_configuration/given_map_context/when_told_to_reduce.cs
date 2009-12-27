@@ -10,8 +10,9 @@ namespace Stash.Specifications.for_configuration.given_map_context
         public void it_should_throw_nix()
         {
             typeof(NotImplementedException)
-                .ShouldBeThrownBy(() =>
-                                  Sut.ReduceWith(new DummyReducer()));
+                .ShouldBeThrownBy(
+                () =>
+                Sut.ReduceWith(new DummyReducer()));
         }
     }
 }

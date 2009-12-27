@@ -1,4 +1,4 @@
-namespace Stash.Specifications.for_configuration.given_object_context
+namespace Stash.Specifications.for_configuration.given_graph_context
 {
     using System;
     using NUnit.Framework;
@@ -9,9 +9,10 @@ namespace Stash.Specifications.for_configuration.given_object_context
         [Test]
         public void it_should_throw_nix()
         {
-            typeof (NotImplementedException)
-                .ShouldBeThrownBy(() =>
-                                  Sut.SerializeWith(new DummerSerializationSurrogate()));
+            typeof(NotImplementedException)
+                .ShouldBeThrownBy(
+                () =>
+                Sut.SerializeWith(new DummerSerializationSurrogate()));
         }
     }
 }

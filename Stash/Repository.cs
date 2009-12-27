@@ -3,10 +3,16 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Provides access to and management of persistent aggregrates and derived projections.
+    /// Provides access to and management of persistent aggregrate object graphs and derived projections.
     /// </summary>
     public interface Repository
     {
+        /// <summary>
+        /// Enumerate all persisted <typeparam name="TGraph"/>
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<TGraph> All<TGraph>();
+
         /// <summary>
         /// Get the <see cref="Tracker"/> for a persisted aggregate object graph.
         /// </summary>
@@ -17,25 +23,6 @@
         /// <param name="aggregateRoot"></param>
         /// <returns></returns>
         Tracker GetTrackerFor<TAggregateRoot>(TAggregateRoot aggregateRoot);
-
-        /// <summary>
-        /// Reconnect a <see cref="Tracker"/> to this session.
-        /// </summary>
-        /// <param name="tracker"></param>
-        void ReconnectTracker(Tracker tracker);
-
-        /// <summary>
-        /// Instruct the repository to durably persist the <paramref name="aggregateRoot"/>.
-        /// </summary>
-        /// <typeparam name="TAggregateRoot"></typeparam>
-        /// <param name="aggregateRoot"></param>
-        void Persist<TAggregateRoot>(TAggregateRoot aggregateRoot);
-
-        /// <summary>
-        /// Enumerate all persisted <typeparam name="TGraph"/>
-        /// </summary>
-        /// <returns></returns>
-        IEnumerable<TGraph> All<TGraph>();
 
         /// <summary>
         /// Enumerate indexes from the provided <paramref name="indexer"/>.
@@ -52,11 +39,24 @@
         IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper);
 
         /// <summary>
+        /// Instruct the repository to durably persist the <paramref name="aggregateRoot"/>.
+        /// </summary>
+        /// <typeparam name="TAggregateRoot"></typeparam>
+        /// <param name="aggregateRoot"></param>
+        void Persist<TAggregateRoot>(TAggregateRoot aggregateRoot);
+
+        /// <summary>
+        /// Reconnect a <see cref="Tracker"/> to this session.
+        /// </summary>
+        /// <param name="tracker"></param>
+        void ReconnectTracker(Tracker tracker);
+
+        /// <summary>
         /// Produce the result for the given <paramref name="reducer"/>.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="reducer"></param>
         /// <returns></returns>
-        TValue Reduce<TKey,TValue>(TKey key, Reducer reducer);
+        TValue Reduce<TKey, TValue>(TKey key, Reducer reducer);
     }
 }

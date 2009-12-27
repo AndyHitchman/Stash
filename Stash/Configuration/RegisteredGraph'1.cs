@@ -1,6 +1,5 @@
 namespace Stash.Configuration
 {
-    using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
 

@@ -1,4 +1,4 @@
-namespace Stash.Specifications.for_configuration.given_object_context
+namespace Stash.Specifications.for_configuration.given_graph_context
 {
     using System;
     using System.Runtime.Serialization;
@@ -10,7 +10,8 @@ namespace Stash.Specifications.for_configuration.given_object_context
             throw new NotImplementedException();
         }
 
-        public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+        public object SetObjectData(
+            object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
         {
             throw new NotImplementedException();
         }

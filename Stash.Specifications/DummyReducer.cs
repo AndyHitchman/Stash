@@ -1,7 +1,6 @@
 namespace Stash.Specifications
 {
     using System;
-    using System.Collections.Generic;
 
     public class DummyReducer : Reducer
     {

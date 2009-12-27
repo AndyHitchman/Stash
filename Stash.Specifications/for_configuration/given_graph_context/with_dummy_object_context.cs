@@ -1,4 +1,4 @@
-namespace Stash.Specifications.for_configuration.given_object_context
+namespace Stash.Specifications.for_configuration.given_graph_context
 {
     using Configuration;
     using NUnit.Framework;
@@ -10,7 +10,7 @@ namespace Stash.Specifications.for_configuration.given_object_context
         [SetUp]
         public void each_up()
         {
-            Sut = new GraphContext<DummyPersistentObject>();
+            Sut = new GraphContext<DummyPersistentObject>(new RegisteredGraph<DummyPersistentObject>());
         }
     }
 }

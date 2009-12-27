@@ -10,7 +10,11 @@ namespace Stash.Engine
             throw new NotImplementedException();
         }
 
-        public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
+        public object SetObjectData(
+            object obj,
+            SerializationInfo info,
+            StreamingContext context,
+            ISurrogateSelector selector)
         {
             throw new NotImplementedException();
         }

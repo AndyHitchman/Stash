@@ -1,7 +1,6 @@
 namespace Stash.Engine
 {
     using System;
-    using System.Collections.Generic;
 
     public class ReduceProjector
     {
@@ -12,7 +11,8 @@ namespace Stash.Engine
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="func"></param>
-        TrackedProjection<TKey,TValue> Emit<TKey, TValue>(Guid originalId, TKey key, TValue accumulator, TValue instance, Func<TKey, TValue, TValue> func)
+        public TrackedProjection<TKey, TValue> Emit<TKey, TValue>(
+            Guid originalId, TKey key, TValue accumulator, TValue instance, Func<TKey, TValue, TValue> func)
         {
             throw new NotImplementedException();
         }

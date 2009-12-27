@@ -3,11 +3,11 @@ namespace Stash.Configuration
     using System;
     using System.Collections.Generic;
 
-    public abstract class ConfigureStash
+    public class ConfigurationContext
     {
         private readonly IDictionary<Type, RegisteredGraph> registeredGraphs;
 
-        protected ConfigureStash()
+        public ConfigurationContext()
         {
             registeredGraphs = new Dictionary<Type, RegisteredGraph>();
         }
@@ -25,7 +25,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        protected void For<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph)
+        public void For<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph)
         {
             configurePersistentGraph(new GraphContext<TGraph>(registerGraph<TGraph>()));
         }
@@ -34,7 +34,7 @@ namespace Stash.Configuration
         /// Configure Stash for the <typeparamref name="TGraph"/> with no additional configuration.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        protected void For<TGraph>()
+        public void For<TGraph>()
         {
             registerGraph<TGraph>();
         }

@@ -50,6 +50,7 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />
     <Compile Include="Engine\MapProjector.cs" />
     <Compile Include="Engine\ReduceProjector.cs" />
@@ -57,7 +58,7 @@
     <Compile Include="Engine\TrackedProjection.cs" />
     <Compile Include="Indexer.cs" />
     <Compile Include="Mapper.cs" />
-    <Compile Include="Configuration\ConfigureStash.cs" />
+    <Compile Include="Configuration\ConfigurationContext.cs" />
     <Compile Include="Projector.cs" />
     <Compile Include="Projection.cs" />
     <Compile Include="Reducer.cs" />
