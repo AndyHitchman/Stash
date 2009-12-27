@@ -5,7 +5,7 @@ namespace Stash
 
     public static class Stash
     {
-        public static void Configure(Action<ConfigurationContext> configurationAction)
+        public static void Configure(Action<PersistenceContext> configurationAction)
         {
             new ConfigurationEngine().Configure(configurationAction);
         }

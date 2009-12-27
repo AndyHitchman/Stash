@@ -7,15 +7,15 @@ namespace Stash.Configuration
     /// </summary>
     public class ConfigurationEngine
     {
-        private ConfigurationContext context;
+        private PersistenceContext context;
 
         /// <summary>
         /// Configure Stash in the required <paramref name="configurationAction"/>. <see cref="Stash.Configure"/> is a static wrapper for this.
         /// </summary>
         /// <param name="configurationAction"></param>
-        public void Configure(Action<ConfigurationContext> configurationAction)
+        public void Configure(Action<PersistenceContext> configurationAction)
         {
-            context = new ConfigurationContext();
+            context = new PersistenceContext();
             configurationAction(context);
         }
 
