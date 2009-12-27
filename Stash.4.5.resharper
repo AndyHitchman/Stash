@@ -317,6 +317,7 @@ II.2.12 <HandlesEvent />
         </ElementKinds>
       </UserRule>
       <Abbreviation Text="ID" />
+      <Abbreviation Text="ESENT" />
     </Naming2>
   </CodeStyleSettings>
 </Configuration>

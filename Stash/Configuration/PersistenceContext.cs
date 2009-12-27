@@ -25,7 +25,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        public void For<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph)
+        public void Register<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph)
         {
             configurePersistentGraph(new GraphContext<TGraph>(registerGraph<TGraph>()));
         }
@@ -34,7 +34,7 @@ namespace Stash.Configuration
         /// Configure Stash for the <typeparamref name="TGraph"/> with no additional configuration.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        public void For<TGraph>()
+        public void Register<TGraph>()
         {
             registerGraph<TGraph>();
         }

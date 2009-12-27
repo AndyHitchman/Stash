@@ -51,6 +51,8 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Configuration\BackingStore.cs" />
+    <Compile Include="In\ESENT\ESENTBackingStore.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />
     <Compile Include="Engine\MapProjector.cs" />
@@ -66,9 +68,6 @@
     <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tracker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="In\ESENT\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

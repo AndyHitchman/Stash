@@ -10,8 +10,8 @@ namespace Stash.Specifications.for_configuration.given_configuration_engine
         public void it_should_provide_a_configuration_context_to_scope_configuration()
         {
             PersistenceContext actual = null;
-            var sut = new ConfigurationEngine();
-            sut.Configure(context => { actual = context; });
+            var sut = new ConfigurationEngine<DummyBackingStore>();
+            sut.Persist(context => { actual = context; });
             actual.ShouldNotBeNull();
         }
 
