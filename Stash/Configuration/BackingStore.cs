@@ -1,8 +1,8 @@
 namespace Stash.Configuration
 {
-    public interface BackingStore
+    using System;
+
+    public interface BackingStore : IDisposable
     {
-        void OpenDatabase();
-        void CloseDatabase();
     }
 }

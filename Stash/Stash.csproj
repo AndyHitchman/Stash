@@ -56,6 +56,11 @@
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="Configuration\BackingStore.cs" />
+    <Compile Include="In\ESENT\Connection.cs" />
+    <Compile Include="In\ESENT\ConnectionPool.cs" />
+    <Compile Include="In\ESENT\PooledConnection.cs" />
+    <Compile Include="In\ESENT\RealConnectionPool.cs" />
+    <Compile Include="In\ESENT\Database.cs" />
     <Compile Include="In\ESENT\ESENTBackingStore.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />

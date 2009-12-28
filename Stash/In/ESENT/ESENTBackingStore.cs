@@ -9,92 +9,70 @@ namespace Stash.In.ESENT
     {
         private static readonly object setupLocker = new object();
         private static bool isSetup;
-        private readonly FileInfo databasePath;
-        private Instance instance;
-        private JET_DBID dbid;
+        private bool isDisposed;    
 
         /// <summary>
         /// Create an instance of the backing store implementation using ESENT
         /// </summary>
         /// <param name="databasePath"></param>
-        public ESENTBackingStore(FileInfo databasePath)
+        /// <param name="connectionPool"></param>
+        public ESENTBackingStore(FileInfo databasePath, ConnectionPool connectionPool)
         {
-            this.databasePath = databasePath;
             setupOnce();
-            setupInstance();
+            Database = new Database(setupInstance(databasePath), databasePath.FullName, connectionPool);
+
+            if (!databasePath.Exists)
+            {
+                createDatabase();
+            }
         }
 
         /// <summary>
         /// Create an instance of the backing store implementation using ESENT
         /// </summary>
         /// <param name="databasePath"></param>
-        public ESENTBackingStore(string databasePath) : this(new FileInfo(databasePath))
+        /// <param name="connectionPool"></param>
+        public ESENTBackingStore(string databasePath, ConnectionPool connectionPool) : this(new FileInfo(databasePath), connectionPool)
         {
         }
 
-        public void OpenDatabase()
-        {
-            using(var session = new Session(instance))
-            {
-                try
-                {
-                    Api.JetOpenDatabase(session, databasePath.FullName, "", out dbid, OpenDatabaseGrbit.None);
-                }
-                catch(EsentErrorException)
-                {
-                    Api.JetDetachDatabase(session, databasePath.FullName);
-                    throw;
-                }
-            }
-        }
-
-        public void CloseDatabase()
-        {
-            using(var session = new Session(instance))
-            {
-                try
-                {
-                    Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
-                }
-                finally
-                {
-                    Api.JetDetachDatabase(session, databasePath.FullName);
-                }
-            }
-        }
+        /// <summary>
+        /// The initialised instance of the database.
+        /// </summary>
+        public Database Database { get; private set; }
 
         private void createDatabase()
         {
-            using(var session = new Session(instance))
+            using(var session = new Session(Database.Instance))
             {
                 try
                 {
-                    JET_DBID dbidForCreation;
-                    Api.JetCreateDatabase(session, databasePath.FullName, "", out dbidForCreation, CreateDatabaseGrbit.None);
+                    JET_DBID dbid;
+                    Api.JetCreateDatabase(session, Database.Path, "", out dbid, CreateDatabaseGrbit.None);
 
                     try
                     {
                         using(var transaction = new Transaction(session))
                         {
-                            createPersistenceTable(session, dbidForCreation);
+                            createPersistenceTable(session, dbid);
                             transaction.Commit(CommitTransactionGrbit.None);
-                            Api.JetCloseDatabase(session, dbidForCreation, CloseDatabaseGrbit.None);
+                            Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                         }
                     }
                     catch(EsentErrorException)
                     {
-                        Api.JetCloseDatabase(session, dbidForCreation, CloseDatabaseGrbit.None);
+                        Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
                         throw;
                     }
                 }
                 catch(EsentErrorException)
                 {
-                    databasePath.Directory.Delete(true);
+                    new FileInfo(Database.Path).Directory.Delete(true);
                     throw;
                 }
                 finally
                 {
-                    Api.JetDetachDatabase(session, databasePath.FullName);
+                    Api.JetDetachDatabase(session, Database.Path);
                 }
             }
         }
@@ -103,9 +81,9 @@ namespace Stash.In.ESENT
         {
         }
 
-        private void setupInstance()
+        private Instance setupInstance(FileInfo databasePath)
         {
-            instance = new Instance(Guid.NewGuid().ToString());
+            var instance = new Instance(Guid.NewGuid().ToString());
             instance.Parameters.SystemDirectory = Path.Combine(databasePath.DirectoryName, "System");
             instance.Parameters.TempDirectory = Path.Combine(databasePath.DirectoryName, "Temp");
             instance.Parameters.LogFileDirectory = Path.Combine(databasePath.DirectoryName, "Log");
@@ -117,10 +95,7 @@ namespace Stash.In.ESENT
 
             instance.Init();
 
-            if(!databasePath.Exists)
-            {
-                createDatabase();
-            }
+            return instance;
         }
 
         private void setupOnce()
@@ -134,6 +109,21 @@ namespace Stash.In.ESENT
                         SystemParameters.Configuration = 0;
                         SystemParameters.EnableAdvanced = true;
                     }
+        }
+
+        public void Dispose()
+        {
+            if(isDisposed) return;
+            isDisposed = true;
+            
+            Database.Dispose();
+            
+            GC.SuppressFinalize(this);
+        }
+
+        ~ESENTBackingStore()
+        {
+            Dispose();
         }
     }
 }

@@ -9,17 +9,5 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
     [TestFixture]
     public class when_opening : with_a_dummy_database
     {
-        [Test]
-        public void it_should_work_without_errors()
-        {
-            try
-            {
-                sut.OpenDatabase();
-            }
-            catch (Exception e)
-            {
-                Assert.Fail(e.ToString());
-            }
-        }
     }
 }

@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DummyConnectionPool.cs" />
     <Compile Include="DummyReducer.cs" />
     <Compile Include="DummyMapper.cs" />
     <Compile Include="for_configuration\given_configuration_engine\DummyBackingStore.cs" />

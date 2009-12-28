@@ -16,7 +16,8 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
             var tempPath = Path.Combine(tempDir, "test.db");
             if(Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 
-            var sut = new ESENTBackingStore(tempPath);
+            var sut = new ESENTBackingStore(tempPath, new DummyConnectionPool());
+            sut.Dispose();
 
             File.Exists(tempPath).ShouldBeTrue();
         }
@@ -28,7 +29,8 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
             var tempPath = Path.Combine(tempDir, "test.db");
             if(Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 
-            var sut = new ESENTBackingStore(tempPath);
+            var sut = new ESENTBackingStore(tempPath, new DummyConnectionPool());
+            sut.Dispose();
 
             Directory.Exists(tempDir).ShouldBeTrue();
         }

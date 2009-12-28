@@ -14,5 +14,10 @@ namespace Stash.Specifications.for_configuration.given_configuration_engine
         {
             throw new NotImplementedException();
         }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

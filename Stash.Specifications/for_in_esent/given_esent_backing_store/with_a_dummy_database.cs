@@ -16,13 +16,13 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
             var tempPath = Path.Combine(tempDir, "test.db");
             if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 
-            sut = new ESENTBackingStore(tempPath);
+            sut = new ESENTBackingStore(tempPath, new DummyConnectionPool());
         }
 
         [TearDown]
         public void each_down()
         {
-            sut.CloseDatabase();
+            sut.Dispose();
         }
     }
 }
