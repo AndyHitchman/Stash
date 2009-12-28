@@ -58,7 +58,6 @@
     <Compile Include="Configuration\BackingStore.cs" />
     <Compile Include="In\ESENT\Connection.cs" />
     <Compile Include="In\ESENT\ConnectionPool.cs" />
-    <Compile Include="In\ESENT\PooledConnection.cs" />
     <Compile Include="In\ESENT\RealConnectionPool.cs" />
     <Compile Include="In\ESENT\Database.cs" />
     <Compile Include="In\ESENT\ESENTBackingStore.cs" />

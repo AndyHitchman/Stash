@@ -71,9 +71,11 @@
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
     <Compile Include="for_configuration\given_configuration_engine\when_configuring.cs" />
-    <Compile Include="for_in_esent\given_esent_backing_store\when_opening.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_instantiating.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\with_a_dummy_database.cs" />
+    <Compile Include="for_in_esent\given_real_connection_pool\when_contructing.cs" />
+    <Compile Include="for_in_esent\given_real_connection_pool\when_freeing_connections.cs" />
+    <Compile Include="for_in_esent\given_real_connection_pool\when_taking_connections.cs" />
     <Compile Include="MethodThatThrows.cs" />
     <Compile Include="OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

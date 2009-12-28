@@ -9,5 +9,25 @@ namespace Stash.Specifications
         {
             
         }
+
+        public Connection TakeConnection()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FreeConnection(Connection connection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WithConnection(Action<Connection> actionWithConnection)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T WithConnection<T>(Func<Connection, T> funcWithConnection)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
