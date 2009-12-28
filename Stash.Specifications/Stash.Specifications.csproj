@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esent.Interop, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Esent.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
@@ -66,6 +70,9 @@
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
     <Compile Include="for_configuration\given_configuration_engine\when_configuring.cs" />
+    <Compile Include="for_in_esent\given_esent_backing_store\when_opening.cs" />
+    <Compile Include="for_in_esent\given_esent_backing_store\when_instantiating.cs" />
+    <Compile Include="for_in_esent\given_esent_backing_store\with_a_dummy_database.cs" />
     <Compile Include="MethodThatThrows.cs" />
     <Compile Include="OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -16,11 +16,6 @@ namespace Stash.Configuration
             persistenceContext = new PersistenceContext();
         }
 
-        public void ConfigureBackingStore(Action<TBackingStore> backingStoreConfigurationActions)
-        {
-            backingStoreConfigurationActions(backingStore);
-        }
-
         /// <summary>
         /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.Configure"/> is a static wrapper for this.
         /// </summary>
