@@ -17,7 +17,7 @@ namespace Stash.Configuration
         }
 
         /// <summary>
-        /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.Configure"/> is a static wrapper for this.
+        /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.ConfigurePersistence{TBackingStore}"/> is a static wrapper for this.
         /// </summary>
         /// <param name="persistenceConfigurationActions"></param>
         public void Persist(Action<PersistenceContext> persistenceConfigurationActions)

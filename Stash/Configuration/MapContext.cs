@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The context for configuring a <see cref="Mapper{TGraph}"/>
@@ -8,10 +9,15 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     public class MapContext<TGraph>
     {
+        public MapContext(RegisteredMapper<TGraph> registeredMapper)
+        {
+            RegisteredMapper = registeredMapper;
+        }
+
         /// <summary>
         /// The configured mapper.
         /// </summary>
-        public RegisteredMapper<TGraph> RegisteredMap { get; private set; }
+        public RegisteredMapper<TGraph> RegisteredMapper { get; private set; }
 
         /// <summary>
         /// Instruct the configuration not to persist the map.

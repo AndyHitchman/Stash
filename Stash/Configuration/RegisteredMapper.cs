@@ -8,14 +8,20 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     public class RegisteredMapper<TGraph>
     {
+        public RegisteredMapper(Mapper<TGraph> mapper)
+        {
+            Mapper = mapper;
+            RegisteredReducers = new List<Reducer>();
+        }
+
         /// <summary>
         /// The mapper.
         /// </summary>
-        public Mapper<TGraph> Mapper { get; set; }
+        public Mapper<TGraph> Mapper { get; private set; }
 
         /// <summary>
         /// Reducers chained to the <see cref="Mapper"/>.
         /// </summary>
-        public IEnumerable<Reducer> Reducers { get; set; }
+        public IList<Reducer> RegisteredReducers { get; private set; }
     }
 }

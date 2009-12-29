@@ -7,12 +7,20 @@ namespace Stash.Specifications.for_configuration.given_graph_context
     public class when_told_to_index : with_dummy_object_context
     {
         [Test]
-        public void it_should_throw_nix()
+        public void it_should_complain_if_the_indexer_is_null()
         {
-            typeof(NotImplementedException)
-                .ShouldBeThrownBy(
-                () =>
-                Sut.IndexWith(new DummerIndexer()));
+            Indexer<DummyPersistentObject> expected = null;
+
+            typeof(ArgumentNullException)
+                .ShouldBeThrownBy(() => Sut.IndexWith(expected));
+        }
+
+        [Test]
+        public void it_should_register_the_indexer()
+        {
+            var expected = new DummerIndexer();
+            Sut.IndexWith(expected);
+            Sut.RegisteredGraph.RegisteredIndexers.ShouldContain(expected);
         }
     }
 }

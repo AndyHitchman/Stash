@@ -10,7 +10,7 @@ namespace Stash.Specifications.for_configuration.given_map_context
         [SetUp]
         public void each_up()
         {
-            Sut = new MapContext<DummyPersistentObject>();
+            Sut = new MapContext<DummyPersistentObject>(new RegisteredMapper<DummyPersistentObject>(new DummyMapper()));
         }
     }
 }

@@ -26,7 +26,8 @@ namespace Stash.Configuration
         /// <param name="indexer"></param>
         public void IndexWith(Indexer<TGraph> indexer)
         {
-            throw new NotImplementedException();
+            if (indexer == null) throw new ArgumentNullException("indexer");
+            RegisteredGraph.RegisteredIndexers.Add(indexer);
         }
 
         /// <summary>
@@ -36,7 +37,10 @@ namespace Stash.Configuration
         /// <returns></returns>
         public MapContext<TGraph> MapWith(Mapper<TGraph> mapper)
         {
-            throw new NotImplementedException();
+            if (mapper == null) throw new ArgumentNullException("mapper");
+            var registeredMapper = new RegisteredMapper<TGraph>(mapper);
+            RegisteredGraph.RegisteredMappers.Add(registeredMapper);
+            return new MapContext<TGraph>(registeredMapper);
         }
 
         /// <summary>

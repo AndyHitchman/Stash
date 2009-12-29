@@ -5,7 +5,7 @@ namespace Stash.Configuration
 
     public class PersistenceContext
     {
-        private readonly IDictionary<Type, RegisteredGraph> registeredGraphs;
+        private readonly Dictionary<Type, RegisteredGraph> registeredGraphs;
 
         public PersistenceContext()
         {
