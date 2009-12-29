@@ -11,7 +11,7 @@ namespace Stash.Specifications.for_configuration.given_configuration_engine
         {
             PersistenceContext actual = null;
             var sut = new ConfigurationEngine<DummyBackingStore>(new DummyBackingStore());
-            sut.Persist(context => { actual = context; });
+            sut.ConfigurePersistence(context => { actual = context; });
             actual.ShouldNotBeNull();
         }
 

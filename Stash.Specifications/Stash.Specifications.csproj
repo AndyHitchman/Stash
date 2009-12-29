@@ -64,7 +64,7 @@
     <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_use_a_custom_serialization_surrogate.cs" />
-    <Compile Include="for_configuration\given_graph_context\with_dummy_object_context.cs" />
+    <Compile Include="for_configuration\given_graph_context\with_dummy_graph_context.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_not_to_persist.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_to_reduce.cs" />
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />

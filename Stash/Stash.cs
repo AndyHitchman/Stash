@@ -7,7 +7,7 @@ namespace Stash
     {
         public static void ConfigurePersistence<TBackingStore>(TBackingStore backingStore, Action<PersistenceContext> configurationAction) where TBackingStore : BackingStore
         {
-            new ConfigurationEngine<TBackingStore>(backingStore).Persist(configurationAction);
+            new ConfigurationEngine<TBackingStore>(backingStore).ConfigurePersistence(configurationAction);
         }
     }
 }

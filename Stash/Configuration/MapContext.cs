@@ -21,7 +21,7 @@ namespace Stash.Configuration
 
         /// <summary>
         /// Instruct the configuration not to persist the map.
-        /// The map is transient, and only required for consumption by a <see cref="Reducer"/>.
+        /// The map is transient, and only required as an intermediate step prior for consumption by a <see cref="Reducer"/>.
         /// </summary>
         public void DoNotPersist()
         {
@@ -34,7 +34,8 @@ namespace Stash.Configuration
         /// <param name="reducer"></param>
         public void ReduceWith(Reducer reducer)
         {
-            throw new NotImplementedException();
+            if (reducer == null) throw new ArgumentNullException("reducer");
+            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reducer));
         }
     }
 }

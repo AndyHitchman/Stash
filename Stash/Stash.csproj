@@ -57,6 +57,7 @@
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="Configuration\BackingStore.cs" />
+    <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="In\ESENT\Connection.cs" />
     <Compile Include="In\ESENT\ConnectionPool.cs" />
     <Compile Include="In\ESENT\RealConnectionPool.cs" />

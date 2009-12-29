@@ -20,14 +20,14 @@ namespace Stash.Configuration
         /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.ConfigurePersistence{TBackingStore}"/> is a static wrapper for this.
         /// </summary>
         /// <param name="persistenceConfigurationActions"></param>
-        public void Persist(Action<PersistenceContext> persistenceConfigurationActions)
+        public void ConfigurePersistence(Action<PersistenceContext> persistenceConfigurationActions)
         {
             persistenceConfigurationActions(persistenceContext);
+            ApplyConfiguration();
         }
 
         public void ApplyConfiguration()
         {
-            throw new NotImplementedException();
         }
     }
 }

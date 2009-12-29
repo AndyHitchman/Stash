@@ -4,7 +4,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
     using NUnit.Framework;
 
     [TestFixture]
-    public class when_told_to_index : with_dummy_object_context
+    public class when_told_to_index : with_dummy_graph_context
     {
         [Test]
         public void it_should_complain_if_the_indexer_is_null()

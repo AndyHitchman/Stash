@@ -11,7 +11,7 @@ namespace Stash.Configuration
         public RegisteredMapper(Mapper<TGraph> mapper)
         {
             Mapper = mapper;
-            RegisteredReducers = new List<Reducer>();
+            RegisteredReducers = new List<RegisteredReducer>();
         }
 
         /// <summary>
@@ -22,6 +22,6 @@ namespace Stash.Configuration
         /// <summary>
         /// Reducers chained to the <see cref="Mapper"/>.
         /// </summary>
-        public IList<Reducer> RegisteredReducers { get; private set; }
+        public IList<RegisteredReducer> RegisteredReducers { get; private set; }
     }
 }

@@ -1,10 +1,10 @@
-namespace Stash.Specifications.for_configuration.given_graph_context
+namespace Stash.Specifications.for_configuration.given_map_context
 {
     using System;
     using NUnit.Framework;
 
     [TestFixture]
-    public class when_told_to_use_a_custom_serialization_surrogate : with_dummy_graph_context
+    public class when_told_to_reduce : with_dummy_map_context
     {
         [Test]
         public void it_should_throw_nix()
@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
             typeof(NotImplementedException)
                 .ShouldBeThrownBy(
                 () =>
-                Sut.SerializeWith(new DummerSerializationSurrogate()));
+                Sut.ReduceWith(new DummyReducer()));
         }
     }
 }
