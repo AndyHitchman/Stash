@@ -2,6 +2,7 @@ namespace Stash
 {
     using System;
     using Configuration;
+    using Engine;
 
     public static class Stash
     {

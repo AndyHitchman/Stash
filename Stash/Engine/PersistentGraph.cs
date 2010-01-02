@@ -1,4 +1,4 @@
-namespace Stash.In.Common
+namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,13 @@ namespace Stash.In.Common
     {
         private readonly Func<Stream> fSerializedGraph;
 
+        /// <summary>
+        /// Manage a persistent graph.
+        /// </summary>
+        /// <param name="internalID"></param>
+        /// <param name="types"></param>
+        /// <param name="version"></param>
+        /// <param name="fSerializedGraph"></param>
         public PersistentGraph(Guid internalID, IEnumerable<Type> types, long version, Func<Stream> fSerializedGraph)
         {
             this.fSerializedGraph = fSerializedGraph;
@@ -18,11 +25,14 @@ namespace Stash.In.Common
 
         public Guid InternalId { get; private set; }
         public IEnumerable<Type> Types { get; private set; }
-        public long Version { get; set; }
+        public long Version { get; private set; }
 
-        public Stream SerializedGraph
+        public void ActOnSerializedGraph(Action<Stream> action)
         {
-            get { return fSerializedGraph(); }
+            using(var stream = fSerializedGraph())
+            {
+                action(stream);
+            }
         }
     }
 }

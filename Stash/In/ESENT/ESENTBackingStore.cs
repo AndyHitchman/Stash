@@ -3,8 +3,7 @@ namespace Stash.In.ESENT
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Common;
-    using Configuration;
+    using Engine;
     using Microsoft.Isam.Esent.Interop;
 
     public class ESENTBackingStore : BackingStore

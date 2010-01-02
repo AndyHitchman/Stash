@@ -1,7 +1,8 @@
 namespace Stash.Specifications.for_configuration.given_configuration_engine
 {
     using System;
-    using Configuration;
+    using System.Collections.Generic;
+    using Engine;
 
     public class DummyBackingStore : BackingStore
     {
@@ -16,6 +17,31 @@ namespace Stash.Specifications.for_configuration.given_configuration_engine
         }
 
         public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
         {
             throw new NotImplementedException();
         }

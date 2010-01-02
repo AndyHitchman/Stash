@@ -56,7 +56,7 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
-    <Compile Include="Configuration\BackingStore.cs" />
+    <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="In\ESENT\Connection.cs" />
     <Compile Include="In\ESENT\ConnectionPool.cs" />
@@ -64,7 +64,7 @@
     <Compile Include="In\ESENT\Database.cs" />
     <Compile Include="In\ESENT\ESENTBackingStore.cs" />
     <Compile Include="In\ESENT\SchemaManager.cs" />
-    <Compile Include="In\Common\PersistentGraph.cs" />
+    <Compile Include="Engine\PersistentGraph.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />
     <Compile Include="Engine\MapProjector.cs" />

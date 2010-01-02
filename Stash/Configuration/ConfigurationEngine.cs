@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System;
+    using Engine;
 
     /// <summary>
     /// The starting point for configuring Stash.
