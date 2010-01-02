@@ -11,11 +11,11 @@ namespace Stash.Configuration
     {
         public RegisteredGraph() : base(typeof(TGraph))
         {
-            RegisteredIndexers = new List<Indexer<TGraph>>();
+            RegisteredIndexers = new List<RegisteredIndexer<TGraph>>();
             RegisteredMappers = new List<RegisteredMapper<TGraph>>();
         }
 
-        public IList<Indexer<TGraph>> RegisteredIndexers { get; private set; }
+        public IList<RegisteredIndexer<TGraph>> RegisteredIndexers { get; private set; }
         public IList<RegisteredMapper<TGraph>> RegisteredMappers { get; private set; }
         public ISerializationSurrogate RegisteredSerializationSurrogate { get; set; }
     }

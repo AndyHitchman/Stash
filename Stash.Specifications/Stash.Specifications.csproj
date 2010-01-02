@@ -57,6 +57,7 @@
     <Compile Include="DummyReducer.cs" />
     <Compile Include="DummyMapper.cs" />
     <Compile Include="for_configuration\given_configuration_engine\DummyBackingStore.cs" />
+    <Compile Include="for_configuration\given_persistence_context\when_asked_for_a_graph.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_instantiating.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
     <Compile Include="for_configuration\given_persistence_context\with_configure_stash.cs" />

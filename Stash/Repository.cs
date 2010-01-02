@@ -19,10 +19,10 @@
         /// <remarks>
         /// The tracker managed the provided aggregate and allows the aggregrate to be reconnected to a subsequent session.
         /// </remarks>
-        /// <typeparam name="TAggregateRoot"></typeparam>
-        /// <param name="aggregateRoot"></param>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
         /// <returns></returns>
-        Tracker GetTrackerFor<TAggregateRoot>(TAggregateRoot aggregateRoot);
+        Tracker GetTrackerFor<TGraph>(TGraph graph);
 
         /// <summary>
         /// Enumerate indexes from the provided <paramref name="indexer"/>.

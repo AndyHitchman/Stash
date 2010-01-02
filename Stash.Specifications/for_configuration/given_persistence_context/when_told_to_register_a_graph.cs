@@ -45,7 +45,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         public void it_should_register_a_graph()
         {
             Sut.Register<DummyPersistentObject>();
-            Sut.RegisteredGraphs.ShouldHaveCount(1);
+            Sut.AllRegisteredGraphs.ShouldHaveCount(1);
         }
 
         [Test]
@@ -53,9 +53,9 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         {
             Sut.Register<DummyPersistentObject>();
             Sut.Register<OtherDummyPersistentObject>();
-            Sut.RegisteredGraphs.ShouldContain(
+            Sut.AllRegisteredGraphs.ShouldContain(
                 graph => graph.GetType() == typeof(RegisteredGraph<DummyPersistentObject>));
-            Sut.RegisteredGraphs.ShouldContain(
+            Sut.AllRegisteredGraphs.ShouldContain(
                 graph => graph.GetType() == typeof(RegisteredGraph<OtherDummyPersistentObject>));
         }
 
@@ -63,7 +63,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         public void it_should_register_the_provided_graph()
         {
             Sut.Register<DummyPersistentObject>();
-            Sut.RegisteredGraphs.ShouldContain(
+            Sut.AllRegisteredGraphs.ShouldContain(
                 graph => graph.GetType() == typeof(RegisteredGraph<DummyPersistentObject>));
         }
     }

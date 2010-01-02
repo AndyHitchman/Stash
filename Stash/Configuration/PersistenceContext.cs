@@ -15,9 +15,31 @@ namespace Stash.Configuration
         /// <summary>
         /// The aggregate object graphs currently configured.
         /// </summary>
-        public IEnumerable<RegisteredGraph> RegisteredGraphs
+        public IEnumerable<RegisteredGraph> AllRegisteredGraphs
         {
             get { return registeredGraphs.Values; }
+        }
+
+        /// <summary>
+        /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <typeparamref name="TGraph"/>.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <returns></returns>
+        public RegisteredGraph<TGraph> GetGraphFor<TGraph>()
+        {
+            return (RegisteredGraph<TGraph>)GetGraphFor(typeof(TGraph));
+        }
+
+        /// <summary>
+        /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <paramref name="graphType"/>.
+        /// </summary>
+        /// <returns></returns>
+        public RegisteredGraph GetGraphFor(Type graphType)
+        {
+            if(graphType == null) throw new ArgumentNullException("graphType");
+            if(!registeredGraphs.ContainsKey(graphType)) throw new ArgumentOutOfRangeException("graphType");
+
+            return registeredGraphs[graphType];
         }
 
         /// <summary>

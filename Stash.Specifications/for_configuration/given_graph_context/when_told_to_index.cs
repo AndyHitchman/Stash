@@ -20,7 +20,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
         {
             var expected = new DummerIndexer();
             Sut.IndexWith(expected);
-            Sut.RegisteredGraph.RegisteredIndexers.ShouldContain(expected);
+            Sut.RegisteredGraph.RegisteredIndexers.ShouldContain(indexer => indexer.Indexer == expected);
         }
     }
 }

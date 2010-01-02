@@ -7,13 +7,11 @@ namespace Stash.Configuration
     /// </summary>
     public class ConfigurationEngine<TBackingStore> where TBackingStore : BackingStore
     {
-        private readonly PersistenceContext persistenceContext;
         private readonly TBackingStore backingStore;
 
         public ConfigurationEngine(TBackingStore backingStore)
         {
             this.backingStore = backingStore;
-            persistenceContext = new PersistenceContext();
         }
 
         /// <summary>
@@ -22,12 +20,17 @@ namespace Stash.Configuration
         /// <param name="persistenceConfigurationActions"></param>
         public void ConfigurePersistence(Action<PersistenceContext> persistenceConfigurationActions)
         {
+            var persistenceContext = new PersistenceContext();
             persistenceConfigurationActions(persistenceContext);
-            ApplyConfiguration();
+            ApplyConfiguration(persistenceContext);
         }
 
-        public void ApplyConfiguration()
+        public void ApplyConfiguration(PersistenceContext persistenceContext)
         {
+            foreach(var registeredGraph in persistenceContext.AllRegisteredGraphs)
+            {
+//                registeredGraph.
+            }
         }
     }
 }

@@ -27,7 +27,8 @@ namespace Stash.Configuration
         public void IndexWith(Indexer<TGraph> indexer)
         {
             if (indexer == null) throw new ArgumentNullException("indexer");
-            RegisteredGraph.RegisteredIndexers.Add(indexer);
+            var registeredIndexer = new RegisteredIndexer<TGraph>(indexer);
+            RegisteredGraph.RegisteredIndexers.Add(registeredIndexer);
         }
 
         /// <summary>

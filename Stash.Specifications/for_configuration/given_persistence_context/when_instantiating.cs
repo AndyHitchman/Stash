@@ -8,7 +8,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         [Test]
         public void it_should_have_no_configured_graphs()
         {
-            Sut.RegisteredGraphs.ShouldBeEmpty();
+            Sut.AllRegisteredGraphs.ShouldBeEmpty();
         }
     }
 }
