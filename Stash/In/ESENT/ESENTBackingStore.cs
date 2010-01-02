@@ -1,8 +1,9 @@
 namespace Stash.In.ESENT
 {
     using System;
-    using System.Globalization;
+    using System.Collections.Generic;
     using System.IO;
+    using Common;
     using Configuration;
     using Microsoft.Isam.Esent.Interop;
 
@@ -82,6 +83,31 @@ namespace Stash.In.ESENT
             SystemParameters.DatabasePageSize = 8192;
             SystemParameters.Configuration = 0;
             SystemParameters.EnableAdvanced = true;
+        }
+
+        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
         }
     }
 }
