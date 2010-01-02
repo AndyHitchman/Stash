@@ -63,6 +63,7 @@
     <Compile Include="In\ESENT\RealConnectionPool.cs" />
     <Compile Include="In\ESENT\Database.cs" />
     <Compile Include="In\ESENT\ESENTBackingStore.cs" />
+    <Compile Include="In\ESENT\SchemaManager.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />
     <Compile Include="Engine\MapProjector.cs" />

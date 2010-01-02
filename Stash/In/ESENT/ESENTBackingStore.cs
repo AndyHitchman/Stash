@@ -1,15 +1,19 @@
 namespace Stash.In.ESENT
 {
     using System;
+    using System.Globalization;
     using System.IO;
     using Configuration;
     using Microsoft.Isam.Esent.Interop;
 
     public class ESENTBackingStore : BackingStore
     {
-        private static readonly object setupLocker = new object();
-        private static bool isSetup;
-        private bool isDisposed;    
+        private bool isDisposed;
+
+        static ESENTBackingStore()
+        {
+            setupOnce();
+        }
 
         /// <summary>
         /// Create an instance of the backing store implementation using ESENT
@@ -18,12 +22,11 @@ namespace Stash.In.ESENT
         /// <param name="connectionPool"></param>
         public ESENTBackingStore(FileInfo databasePath, ConnectionPool connectionPool)
         {
-            setupOnce();
             Database = new Database(setupInstance(databasePath), databasePath.FullName, connectionPool);
 
-            if (!databasePath.Exists)
+            if(!databasePath.Exists)
             {
-                createDatabase();
+                SchemaManager.CreateDatabase(Database);
             }
         }
 
@@ -32,7 +35,8 @@ namespace Stash.In.ESENT
         /// </summary>
         /// <param name="databasePath"></param>
         /// <param name="connectionPool"></param>
-        public ESENTBackingStore(string databasePath, ConnectionPool connectionPool) : this(new FileInfo(databasePath), connectionPool)
+        public ESENTBackingStore(string databasePath, ConnectionPool connectionPool)
+            : this(new FileInfo(databasePath), connectionPool)
         {
         }
 
@@ -41,47 +45,22 @@ namespace Stash.In.ESENT
         /// </summary>
         public Database Database { get; private set; }
 
-        private void createDatabase()
+        public void Dispose()
         {
-            using(var session = new Session(Database.Instance))
-            {
-                try
-                {
-                    JET_DBID dbid;
-                    Api.JetCreateDatabase(session, Database.Path, "", out dbid, CreateDatabaseGrbit.None);
+            if(isDisposed) return;
+            isDisposed = true;
 
-                    try
-                    {
-                        using(var transaction = new Transaction(session))
-                        {
-                            createPersistenceTable(session, dbid);
-                            transaction.Commit(CommitTransactionGrbit.None);
-                            Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
-                        }
-                    }
-                    catch(EsentErrorException)
-                    {
-                        Api.JetCloseDatabase(session, dbid, CloseDatabaseGrbit.None);
-                        throw;
-                    }
-                }
-                catch(EsentErrorException)
-                {
-                    new FileInfo(Database.Path).Directory.Delete(true);
-                    throw;
-                }
-                finally
-                {
-                    Api.JetDetachDatabase(session, Database.Path);
-                }
-            }
+            Database.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
-        private void createPersistenceTable(Session session, JET_DBID dbid)
+        ~ESENTBackingStore()
         {
+            Dispose();
         }
 
-        private Instance setupInstance(FileInfo databasePath)
+        private static Instance setupInstance(FileInfo databasePath)
         {
             var instance = new Instance(Guid.NewGuid().ToString());
             instance.Parameters.SystemDirectory = Path.Combine(databasePath.DirectoryName, "System");
@@ -98,32 +77,11 @@ namespace Stash.In.ESENT
             return instance;
         }
 
-        private void setupOnce()
+        private static void setupOnce()
         {
-            if(!isSetup)
-                lock(setupLocker)
-                    if(!isSetup)
-                    {
-                        isSetup = true;
-                        SystemParameters.DatabasePageSize = 8192;
-                        SystemParameters.Configuration = 0;
-                        SystemParameters.EnableAdvanced = true;
-                    }
-        }
-
-        public void Dispose()
-        {
-            if(isDisposed) return;
-            isDisposed = true;
-            
-            Database.Dispose();
-            
-            GC.SuppressFinalize(this);
-        }
-
-        ~ESENTBackingStore()
-        {
-            Dispose();
+            SystemParameters.DatabasePageSize = 8192;
+            SystemParameters.Configuration = 0;
+            SystemParameters.EnableAdvanced = true;
         }
     }
 }
