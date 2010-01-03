@@ -3,11 +3,13 @@ namespace Stash.In.ESENT
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using Engine;
     using Microsoft.Isam.Esent.Interop;
 
     public class ESENTBackingStore : BackingStore
     {
+        private readonly ConnectionPool connectionPool;
         private bool isDisposed;
 
         static ESENTBackingStore()
@@ -22,7 +24,8 @@ namespace Stash.In.ESENT
         /// <param name="connectionPool"></param>
         public ESENTBackingStore(FileInfo databasePath, ConnectionPool connectionPool)
         {
-            Database = new Database(setupInstance(databasePath), databasePath.FullName, connectionPool);
+            this.connectionPool = connectionPool;
+            Database = new Database(setupInstance(databasePath), databasePath.FullName);
 
             if(!databasePath.Exists)
             {
@@ -45,6 +48,11 @@ namespace Stash.In.ESENT
         /// </summary>
         public Database Database { get; private set; }
 
+        public void DeleteGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             if(isDisposed) return;
@@ -55,10 +63,54 @@ namespace Stash.In.ESENT
             GC.SuppressFinalize(this);
         }
 
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            if(persistentGraphs == null) throw new ArgumentNullException("persistentGraphs");
+            if(persistentGraphs.Any(graph => graph == null))
+                throw new ArgumentNullException("persistentGraphs", "A persistent graph in the set was null");
+
+            connectionPool.WithConnection(
+                connection =>
+                    {
+                        using(var transaction = connection.BeginTransaction())
+                        {
+//                            if (connection.TrySeek(item.Key))
+//                            {
+//                                throw new ArgumentException("An item with this key already exists", "key");
+//                            }
+
+//                            using (var update = new Update(connection.Session, this.dataTable, JET_prep.Insert))
+//                            {
+//                                this.SetKeyColumn(data.Key);
+//                                this.SetValue(data.Value);
+//                                update.Save();
+//                            }
+
+                            transaction.Commit(CommitTransactionGrbit.LazyFlush);
+                        }
+                    });
+        }
+
+        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
         ~ESENTBackingStore()
         {
             Dispose();
         }
+
 
         private static Instance setupInstance(FileInfo databasePath)
         {
@@ -82,31 +134,6 @@ namespace Stash.In.ESENT
             SystemParameters.DatabasePageSize = 8192;
             SystemParameters.Configuration = 0;
             SystemParameters.EnableAdvanced = true;
-        }
-
-        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteGraphs(IEnumerable<Guid> internalIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
         }
     }
 }

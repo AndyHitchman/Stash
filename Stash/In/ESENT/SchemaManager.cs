@@ -18,7 +18,7 @@ namespace Stash.In.ESENT
 
                     try
                     {
-                        createMainStashTable(session, dbid);
+                        createMainStashTable(database, session, dbid);
                         using(var transaction = new Transaction(session))
                         {
                             transaction.Commit(CommitTransactionGrbit.None);
@@ -51,42 +51,42 @@ namespace Stash.In.ESENT
             }
         }
 
-        private static void createMainStashTable(Session session, JET_DBID dbid)
+        private static void createMainStashTable(Database database, Session session, JET_DBID dbid)
         {
             JET_TABLEID table;
             JET_COLUMNID internalIdColumn;
             JET_COLUMNID versionColumn;
             JET_COLUMNID typeColumn;
             JET_COLUMNID graphColumn;
-            const string internalId = "internalId";
-            const string version = "version";
-            const string type = "type";
 
-            Api.JetCreateTable(session, dbid, "mainStash", 1, 100, out table);
+            Api.JetCreateTable(session, dbid, Schema.StashTableName, 1, 100, out table);
+            database.Schema.StashTableId = table;
 
             Api.JetAddColumn(
                 session,
                 table,
-                internalId,
+                Schema.InternalIdColumnName,
                 new JET_COLUMNDEF
                     {coltyp = JET_coltyp.Binary, cp = JET_CP.None, cbMax = 16, grbit = ColumndefGrbit.ColumnNotNULL},
                 null,
                 0,
                 out internalIdColumn);
+            database.Schema.InternalIdColumnId = internalIdColumn;
 
             Api.JetAddColumn(
                 session,
                 table,
-                version,
+                Schema.VersionColumnName,
                 new JET_COLUMNDEF {coltyp = JET_coltyp.Long, cp = JET_CP.None, grbit = ColumndefGrbit.ColumnVersion},
                 null,
                 0,
                 out versionColumn);
+            database.Schema.VersionColumnId = versionColumn;
 
             Api.JetAddColumn(
                 session,
                 table,
-                type,
+                Schema.TypeColumnName,
                 new JET_COLUMNDEF
                     {
                         coltyp = JET_coltyp.LongText,
@@ -96,6 +96,7 @@ namespace Stash.In.ESENT
                 null,
                 0,
                 out typeColumn);
+            database.Schema.TypeColumnId = typeColumn;
 
             Api.JetAddColumn(
                 session,
@@ -105,8 +106,9 @@ namespace Stash.In.ESENT
                 null,
                 0,
                 out graphColumn);
+            database.Schema.GraphColumnId = graphColumn;
 
-            var internalIdIndex = String.Format(CultureInfo.InvariantCulture, "+{0}\0\0", internalId);
+            var internalIdIndex = String.Format(CultureInfo.InvariantCulture, "+{0}\0\0", Schema.InternalIdColumnName);
             Api.JetCreateIndex(
                 session,
                 table,
@@ -116,7 +118,7 @@ namespace Stash.In.ESENT
                 internalIdIndex.Length,
                 100);
 
-            var typeIndex = String.Format(CultureInfo.InvariantCulture, "+{0}\0\0", type);
+            var typeIndex = String.Format(CultureInfo.InvariantCulture, "+{0}\0\0", Schema.TypeColumnName);
             Api.JetCreateIndex(
                 session, table, "onType", CreateIndexGrbit.IndexDisallowNull, typeIndex, typeIndex.Length, 100);
 

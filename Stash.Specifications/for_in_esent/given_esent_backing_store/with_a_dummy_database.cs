@@ -7,7 +7,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
 
     public class with_a_dummy_database
     {
-        protected ESENTBackingStore sut;
+        protected ESENTBackingStore Sut;
 
         [SetUp]
         public void each_up()
@@ -16,13 +16,13 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
             var tempPath = Path.Combine(tempDir, "test.db");
             if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
 
-            sut = new ESENTBackingStore(tempPath, new DummyConnectionPool());
+            Sut = new ESENTBackingStore(tempPath, new DummyConnectionPool());
         }
 
         [TearDown]
         public void each_down()
         {
-            sut.Dispose();
+            Sut.Dispose();
         }
     }
 }

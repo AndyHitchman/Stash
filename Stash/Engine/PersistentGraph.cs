@@ -9,6 +9,15 @@ namespace Stash.Engine
         private readonly Func<Stream> fSerializedGraph;
 
         /// <summary>
+        /// Manage a transient persistent graph. A new <see cref="InternalId"/> is created. <see cref="Version"/> is zero.
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="fSerializedGraph"></param>
+        public PersistentGraph(IEnumerable<Type> types, Func<Stream> fSerializedGraph) : this(Guid.NewGuid(), types, 0l, fSerializedGraph)
+        {
+        }
+
+        /// <summary>
         /// Manage a persistent graph.
         /// </summary>
         /// <param name="internalID"></param>
