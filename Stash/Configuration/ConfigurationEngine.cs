@@ -19,14 +19,14 @@ namespace Stash.Configuration
         /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.ConfigurePersistence{TBackingStore}"/> is a static wrapper for this.
         /// </summary>
         /// <param name="persistenceConfigurationActions"></param>
-        public void ConfigurePersistence(Action<PersistenceContext> persistenceConfigurationActions)
+        public void ConfigurePersistence(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
         {
-            var persistenceContext = new PersistenceContext();
+            var persistenceContext = new PersistenceContext<TBackingStore>();
             persistenceConfigurationActions(persistenceContext);
             ApplyConfiguration(persistenceContext);
         }
 
-        public void ApplyConfiguration(PersistenceContext persistenceContext)
+        public void ApplyConfiguration(PersistenceContext<TBackingStore> persistenceContext)
         {
             foreach(var registeredGraph in persistenceContext.AllRegisteredGraphs)
             {

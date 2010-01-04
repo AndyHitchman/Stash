@@ -2,8 +2,13 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using Engine;
 
-    public class PersistenceContext
+    /// <summary>
+    /// The root context for configuring persistence.
+    /// </summary>
+    /// <typeparam name="TBackingStore"></typeparam>
+    public class PersistenceContext<TBackingStore> where TBackingStore : BackingStore
     {
         private readonly Dictionary<Type, RegisteredGraph> registeredGraphs;
 
@@ -47,9 +52,9 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        public void Register<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph)
+        public void Register<TGraph>(Action<GraphContext<TBackingStore,TGraph>> configurePersistentGraph)
         {
-            configurePersistentGraph(new GraphContext<TGraph>(registerGraph<TGraph>()));
+            configurePersistentGraph(new GraphContext<TBackingStore,TGraph>(registerGraph<TGraph>()));
         }
 
         /// <summary>

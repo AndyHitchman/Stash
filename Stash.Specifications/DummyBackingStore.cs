@@ -1,4 +1,4 @@
-namespace Stash.Specifications.for_configuration.given_configuration_engine
+namespace Stash.Specifications
 {
     using System;
     using System.Collections.Generic;

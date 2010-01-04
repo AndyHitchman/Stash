@@ -2,12 +2,14 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using Engine;
 
     /// <summary>
     /// The context for configuring a <see cref="Mapper{TGraph}"/>
     /// </summary>
+    /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class MapContext<TGraph>
+    public class MapContext<TBackingStore,TGraph> where TBackingStore : BackingStore
     {
         public MapContext(RegisteredMapper<TGraph> registeredMapper)
         {

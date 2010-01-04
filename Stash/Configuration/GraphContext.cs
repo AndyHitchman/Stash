@@ -7,8 +7,9 @@ namespace Stash.Configuration
     /// <summary>
     /// The context for configuring a persistent object graph.
     /// </summary>
+    /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class GraphContext<TGraph>
+    public class GraphContext<TBackingStore,TGraph> where TBackingStore : BackingStore
     {
         public GraphContext(RegisteredGraph<TGraph> registeredGraph)
         {
@@ -36,12 +37,12 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="mapper"></param>
         /// <returns></returns>
-        public MapContext<TGraph> MapWith(Mapper<TGraph> mapper)
+        public MapContext<TBackingStore,TGraph> MapWith(Mapper<TGraph> mapper)
         {
             if (mapper == null) throw new ArgumentNullException("mapper");
             var registeredMapper = new RegisteredMapper<TGraph>(mapper);
             RegisteredGraph.RegisteredMappers.Add(registeredMapper);
-            return new MapContext<TGraph>(registeredMapper);
+            return new MapContext<TBackingStore,TGraph>(registeredMapper);
         }
 
         /// <summary>

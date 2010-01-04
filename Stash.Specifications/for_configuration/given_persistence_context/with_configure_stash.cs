@@ -5,12 +5,12 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
 
     public class with_configure_stash
     {
-        protected PersistenceContext Sut { get; private set; }
+        protected PersistenceContext<DummyBackingStore> Sut { get; private set; }
 
         [SetUp]
         public void each_up()
         {
-            Sut = new PersistenceContext();
+            Sut = new PersistenceContext<DummyBackingStore>();
         }
     }
 }
