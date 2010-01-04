@@ -13,7 +13,7 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="types"></param>
         /// <param name="fSerializedGraph"></param>
-        public PersistentGraph(IEnumerable<Type> types, Func<Stream> fSerializedGraph) : this(Guid.NewGuid(), types, 0l, fSerializedGraph)
+        public PersistentGraph(IEnumerable<Type> types, Func<Stream> fSerializedGraph) : this(Guid.NewGuid(), types, 0L, fSerializedGraph)
         {
         }
 

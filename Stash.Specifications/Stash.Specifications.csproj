@@ -73,6 +73,7 @@
     <Compile Include="DummyPersistentObject.cs" />
     <Compile Include="for_configuration\given_configuration_engine\when_configuring.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_creating_a_new_database.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_instantiating.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_instantiating.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_told_to_insert.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\with_a_dummy_database.cs" />
@@ -102,4 +103,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)lib\libdb_csharp48.dll" "$(TargetDir)"
+copy "$(SolutionDir)lib\libdb48.dll" "$(TargetDir)"
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -35,6 +35,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Esent.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="libdb_dotnet48, Version=4.8.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\libdb_dotnet48.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -58,6 +62,7 @@
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
+    <Compile Include="Engine\CustomSerializer.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
     <Compile Include="In\ESENT\Connection.cs" />
     <Compile Include="In\ESENT\ConnectionPool.cs" />

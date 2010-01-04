@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System;
+    using System.IO;
     using System.Runtime.Serialization;
     using Engine;
 
@@ -43,6 +44,25 @@ namespace Stash.Configuration
             var registeredMapper = new RegisteredMapper<TGraph>(mapper);
             RegisteredGraph.RegisteredMappers.Add(registeredMapper);
             return new MapContext<TBackingStore,TGraph>(registeredMapper);
+        }
+
+        /// <summary>
+        /// Tell the engine to use the provided serializaton functions.
+        /// </summary>
+        /// <param name="serializer"></param>
+        /// <param name="deserializer"></param>
+        public void SerializeWith(Func<TGraph,Stream> serializer, Func<Stream,TGraph> deserializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="customSerializer"/>.
+        /// </summary>
+        /// <param name="customSerializer"></param>
+        public void SerializeWith(CustomSerializer customSerializer)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
