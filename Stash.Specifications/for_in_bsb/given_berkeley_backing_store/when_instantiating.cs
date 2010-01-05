@@ -1,6 +1,5 @@
 namespace Stash.Specifications.for_in_bsb.given_bdb_backing_store
 {
-    using System;
     using System.IO;
     using In.BDB;
     using NUnit.Framework;
@@ -16,21 +15,14 @@ namespace Stash.Specifications.for_in_bsb.given_bdb_backing_store
 
             Directory.Exists(TempDir).ShouldBeTrue();
         }
-    }
 
-    public class with_temp_dir
-    {
-        protected string TempDir;
-
-        [SetUp]public void each_up()
+        [Test]
+        public void it_should_create_the_primary_database()
         {
-            TempDir = Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString());
-            if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
-        }
+            var sut = new BerkeleyBackingStore(TempDir);
+            sut.Dispose();
 
-        [TearDown]public void each_down()
-        {
-//            if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
+            File.Exists(Path.Combine(TempDir, "data\\stash.db")).ShouldBeTrue();
         }
     }
 }

@@ -11,8 +11,11 @@ namespace Stash.In.BDB
     /// </summary>
     public class BerkeleyBackingStore : BackingStore
     {
-        private readonly string rootDir;
-        private readonly FileInfo databasePath;
+        private const string DataSubdirectory = "data";
+        private const string DbName = "stash.db";
+        private readonly string databaseDirectory;
+        private HashDatabase db;
+        private DatabaseEnvironment env;
         private bool isDisposed;
 
 
@@ -22,35 +25,14 @@ namespace Stash.In.BDB
         /// <param name="databaseDirectory"></param>
         public BerkeleyBackingStore(string databaseDirectory)
         {
-            rootDir = databaseDirectory;
-            if (!Directory.Exists(rootDir))
-                Directory.CreateDirectory(rootDir);
-
-            setupEnvironment();
+            this.databaseDirectory = databaseDirectory;
+            Directory.CreateDirectory(Path.Combine(databaseDirectory, DataSubdirectory));
+            openDatabase(databaseDirectory);
         }
 
-        private void setupEnvironment()
+        public void DeleteGraphs(IEnumerable<Guid> internalIds)
         {
-            var dataDir = Path.Combine(rootDir, "data");
-
-            /* Configure an environment. */
-            var envConfig = new DatabaseEnvironmentConfig
-                                {
-                                    MPoolSystemCfg = new MPoolConfig {CacheSize = new CacheInfo(0, 64*1024, 1)},
-                                    Create = true,
-                                    CreationDir = dataDir,
-                                    ErrorPrefix = "Stash",
-                                    UseLogging = true,
-                                    UseLocking = true,
-                                    UseMPool = true,
-                                    UseTxns = true
-                                };
-            envConfig.DataDirs.Add(dataDir);
-
-            /* Create and open the environment. */
-            var env = DatabaseEnvironment.Open(rootDir, envConfig);
-
-            env.Close();
+            throw new NotImplementedException();
         }
 
         public void Dispose()
@@ -58,7 +40,22 @@ namespace Stash.In.BDB
             if(isDisposed) return;
 
             isDisposed = true;
-            DatabaseEnvironment.Remove(rootDir);
+            closeDatabase();
+        }
+
+        ~BerkeleyBackingStore()
+        {
+            Dispose();
+        }
+
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
         }
 
         public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
@@ -71,19 +68,46 @@ namespace Stash.In.BDB
             throw new NotImplementedException();
         }
 
-        public void DeleteGraphs(IEnumerable<Guid> internalIds)
+        private void closeDatabase()
         {
-            throw new NotImplementedException();
+            db.Close();
+            env.Close();
+            DatabaseEnvironment.Remove(databaseDirectory);
         }
 
-        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        private void openDatabase(string rootDir)
         {
-            throw new NotImplementedException();
-        }
+            var dataDir = Path.Combine(rootDir, DataSubdirectory);
 
-        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
+            var envConfig = new DatabaseEnvironmentConfig
+                                {
+                                    MPoolSystemCfg = new MPoolConfig {CacheSize = new CacheInfo(0, 128*1024, 1)},
+                                    Create = true,
+                                    CreationDir = dataDir,
+                                    ErrorPrefix = "Stash",
+                                    UseLogging = true,
+                                    UseLocking = true,
+                                    UseMPool = true,
+                                    UseTxns = true,
+                                    FreeThreaded = true,
+                                    RunRecovery = true,
+                                    LockSystemCfg = new LockingConfig {DeadlockResolution = DeadlockPolicy.MIN_WRITE}
+                                };
+            envConfig.DataDirs.Add(dataDir);
+
+            env = DatabaseEnvironment.Open(rootDir, envConfig);
+
+            var dbConfig = new HashDatabaseConfig
+                               {
+                                   AutoCommit = true,
+                                   Creation = CreatePolicy.IF_NEEDED,
+                                   Duplicates = DuplicatesPolicy.NONE,
+                                   FreeThreaded = true,
+                                   ReadUncommitted = true,
+                                   Env = env
+                               };
+
+            db = HashDatabase.Open(DbName, dbConfig);
         }
     }
 }

@@ -32,6 +32,13 @@
         IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph> indexer);
 
         /// <summary>
+        /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
+        /// </summary>
+        /// <param name="joinIndexers"></param>
+        /// <returns></returns>
+        IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers);
+
+        /// <summary>
         /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
         /// </summary>
         /// <param name="mapper"></param>
@@ -39,11 +46,11 @@
         IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper);
 
         /// <summary>
-        /// Instruct the repository to durably persist the <paramref name="aggregateRoot"/>.
+        /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>
-        /// <typeparam name="TAggregateRoot"></typeparam>
-        /// <param name="aggregateRoot"></param>
-        void Persist<TAggregateRoot>(TAggregateRoot aggregateRoot);
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        void Persist<TGraph>(TGraph graph);
 
         /// <summary>
         /// Reconnect a <see cref="Tracker"/> to this session.
