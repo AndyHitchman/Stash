@@ -36,7 +36,7 @@ namespace Stash
         /// </summary>
         /// <param name="joinIndexers"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph, TKey>(params Indexer<TGraph, TKey>[] joinIndexers);
+        IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers);
 
         /// <summary>
         /// Enumerate mapped projections from the provided <paramref name="mapper"/>.

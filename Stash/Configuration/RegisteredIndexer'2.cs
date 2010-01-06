@@ -1,5 +1,6 @@
 namespace Stash.Configuration
 {
+    using System;
     using Engine;
 
     /// <summary>
@@ -15,9 +16,17 @@ namespace Stash.Configuration
         }
 
         /// <summary>
-        /// The mapper.
+        /// The indexer.
         /// </summary>
         public virtual Indexer<TGraph, TKey> Indexer { get; private set; }
+
+        /// <summary>
+        /// The indexer, without the <typeparam name="TKey"/>.
+        /// </summary>
+        public override Indexer<TGraph> KeylessIndexer
+        {
+            get { return Indexer; }
+        }
 
         public override void EngageBackingStore(BackingStore backingStore)
         {

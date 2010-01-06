@@ -66,6 +66,7 @@
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="Engine\CustomSerializer.cs" />
     <Compile Include="Engine\TypeIndexer.cs" />
+    <Compile Include="Indexer%272.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
     <Compile Include="In\BDB\SecondaryDatabaseConfig.cs" />
     <Compile Include="In\BDB\DefaultDatabaseEnvironmentConfig.cs" />
