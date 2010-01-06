@@ -5,7 +5,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
     using Engine;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture][Ignore]
     public class when_told_to_insert : with_a_dummy_database
     {
         [Test]

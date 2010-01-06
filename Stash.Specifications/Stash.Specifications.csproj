@@ -35,9 +35,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\Esent.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="libdb_dotnet48, Version=4.8.26.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\libdb_dotnet48.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -57,6 +65,7 @@
     <Compile Include="DummyReducer.cs" />
     <Compile Include="DummyMapper.cs" />
     <Compile Include="DummyBackingStore.cs" />
+    <Compile Include="for_configuration\given_registered_indexer\when_engaging_backing_store.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_asked_for_a_graph.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_instantiating.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
@@ -71,7 +80,13 @@
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
-    <Compile Include="for_configuration\given_configuration_engine\when_configuring.cs" />
+    <Compile Include="for_configuration\given_registered_graph\when_engaging_backing_store.cs" />
+    <Compile Include="for_configuration\given_registrar\when_configuring.cs" />
+    <Compile Include="for_engine\given_type_indexer\ClassWithNoAncestors.cs" />
+    <Compile Include="for_engine\given_type_indexer\ClassWithOneAncestors.cs" />
+    <Compile Include="for_engine\given_type_indexer\ClassWithTwoAncestors.cs" />
+    <Compile Include="for_engine\given_type_indexer\OpenedUpTypeIndexer.cs" />
+    <Compile Include="for_engine\given_type_indexer\when_getting_the_type_hierarchy.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\with_temp_dir.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_creating_a_new_database.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_instantiating.cs" />
@@ -92,9 +107,6 @@
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="for_engine\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System;
+    using Engine;
 
     /// <summary>
     /// An abstract configured graph.
@@ -15,6 +16,9 @@ namespace Stash.Configuration
         /// <summary>
         /// The <see cref="Type"/> of the root of the object graph.
         /// </summary>
-        public Type AggregateType { get; private set; }
+        public virtual Type AggregateType { get; private set; }
+
+
+        public abstract void EngageBackingStore(BackingStore backingStore);
     }
 }

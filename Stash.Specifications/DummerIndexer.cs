@@ -3,14 +3,14 @@ namespace Stash.Specifications
     using System;
     using System.Collections.Generic;
 
-    public class DummerIndexer : Indexer<DummyPersistentObject>
+    public class DummerIndexer : Indexer<DummyPersistentObject,object>
     {
         public string Name
         {
             get { throw new NotImplementedException(); }
         }
 
-        public Func<DummyPersistentObject, IEnumerable<Projection<TKey, DummyPersistentObject>>> Index<TKey>()
+        public Func<DummyPersistentObject, IEnumerable<Projection<object, DummyPersistentObject>>> Index()
         {
             throw new NotImplementedException();
         }

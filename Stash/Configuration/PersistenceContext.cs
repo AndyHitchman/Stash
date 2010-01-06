@@ -20,7 +20,7 @@ namespace Stash.Configuration
         /// <summary>
         /// The aggregate object graphs currently configured.
         /// </summary>
-        public IEnumerable<RegisteredGraph> AllRegisteredGraphs
+        public virtual IEnumerable<RegisteredGraph> AllRegisteredGraphs
         {
             get { return registeredGraphs.Values; }
         }
@@ -30,7 +30,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        public RegisteredGraph<TGraph> GetGraphFor<TGraph>()
+        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>()
         {
             return (RegisteredGraph<TGraph>)GetGraphFor(typeof(TGraph));
         }
@@ -39,7 +39,7 @@ namespace Stash.Configuration
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <paramref name="graphType"/>.
         /// </summary>
         /// <returns></returns>
-        public RegisteredGraph GetGraphFor(Type graphType)
+        public virtual RegisteredGraph GetGraphFor(Type graphType)
         {
             if(graphType == null) throw new ArgumentNullException("graphType");
             if(!registeredGraphs.ContainsKey(graphType)) throw new ArgumentOutOfRangeException("graphType");
@@ -52,21 +52,21 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        public void Register<TGraph>(Action<GraphContext<TBackingStore,TGraph>> configurePersistentGraph)
+        public virtual void Register<TGraph>(Action<GraphContext<TBackingStore,TGraph>> configurePersistentGraph)
         {
-            configurePersistentGraph(new GraphContext<TBackingStore,TGraph>(registerGraph<TGraph>()));
+            configurePersistentGraph(new GraphContext<TBackingStore,TGraph>(RegisterGraph<TGraph>()));
         }
 
         /// <summary>
         /// Configure Stash for the <typeparamref name="TGraph"/> with no additional configuration.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        public void Register<TGraph>()
+        public virtual void Register<TGraph>()
         {
-            registerGraph<TGraph>();
+            RegisterGraph<TGraph>();
         }
 
-        private RegisteredGraph<TGraph> registerGraph<TGraph>()
+        protected virtual RegisteredGraph<TGraph> RegisterGraph<TGraph>()
         {
             var graph = typeof(TGraph);
             if(registeredGraphs.ContainsKey(graph))

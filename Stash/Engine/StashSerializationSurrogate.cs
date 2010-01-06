@@ -5,12 +5,12 @@ namespace Stash.Engine
 
     public class StashSerializationSurrogate : ISerializationSurrogate
     {
-        public void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
+        public virtual void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
             throw new NotImplementedException();
         }
 
-        public object SetObjectData(
+        public virtual object SetObjectData(
             object obj,
             SerializationInfo info,
             StreamingContext context,

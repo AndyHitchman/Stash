@@ -19,13 +19,13 @@ namespace Stash.Configuration
         /// <summary>
         /// The configured mapper.
         /// </summary>
-        public RegisteredMapper<TGraph> RegisteredMapper { get; private set; }
+        public virtual RegisteredMapper<TGraph> RegisteredMapper { get; private set; }
 
         /// <summary>
         /// Instruct the configuration not to persist the map.
         /// The map is transient, and only required as an intermediate step prior for consumption by a <see cref="Reducer"/>.
         /// </summary>
-        public void DoNotPersist()
+        public virtual void DoNotPersist()
         {
             throw new NotImplementedException();
         }
@@ -34,7 +34,7 @@ namespace Stash.Configuration
         /// Reduce the map with the given <paramref name="reducer"/>
         /// </summary>
         /// <param name="reducer"></param>
-        public void ReduceWith(Reducer reducer)
+        public virtual void ReduceWith(Reducer reducer)
         {
             if (reducer == null) throw new ArgumentNullException("reducer");
             RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reducer));

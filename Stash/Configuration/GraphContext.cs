@@ -20,16 +20,17 @@ namespace Stash.Configuration
         /// <summary>
         /// The configured object graph.
         /// </summary>
-        public RegisteredGraph<TGraph> RegisteredGraph { get; private set; }
+        public virtual RegisteredGraph<TGraph> RegisteredGraph { get; private set; }
 
         /// <summary>
         /// Index the object graph with the given <paramref name="indexer"/>.
         /// </summary>
         /// <param name="indexer"></param>
-        public void IndexWith(Indexer<TGraph> indexer)
+        /// <typeparam name="TKey"></typeparam>
+        public virtual void IndexWith<TKey>(Indexer<TGraph,TKey> indexer)
         {
             if (indexer == null) throw new ArgumentNullException("indexer");
-            var registeredIndexer = new RegisteredIndexer<TGraph>(indexer);
+            var registeredIndexer = new RegisteredIndexer<TGraph,TKey>(indexer);
             RegisteredGraph.RegisteredIndexers.Add(registeredIndexer);
         }
 
@@ -38,7 +39,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="mapper"></param>
         /// <returns></returns>
-        public MapContext<TBackingStore,TGraph> MapWith(Mapper<TGraph> mapper)
+        public virtual MapContext<TBackingStore,TGraph> MapWith(Mapper<TGraph> mapper)
         {
             if (mapper == null) throw new ArgumentNullException("mapper");
             var registeredMapper = new RegisteredMapper<TGraph>(mapper);
@@ -51,7 +52,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="serializer"></param>
         /// <param name="deserializer"></param>
-        public void SerializeWith(Func<TGraph,Stream> serializer, Func<Stream,TGraph> deserializer)
+        public virtual void SerializeWith(Func<TGraph,Stream> serializer, Func<Stream,TGraph> deserializer)
         {
             throw new NotImplementedException();
         }
@@ -60,7 +61,7 @@ namespace Stash.Configuration
         /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="customSerializer"/>.
         /// </summary>
         /// <param name="customSerializer"></param>
-        public void SerializeWith(CustomSerializer customSerializer)
+        public virtual void SerializeWith(CustomSerializer customSerializer)
         {
             throw new NotImplementedException();
         }
@@ -69,7 +70,7 @@ namespace Stash.Configuration
         /// Tell the engine to use the provided serializaton surrogate rather than the default <see cref="StashSerializationSurrogate"/>.
         /// </summary>
         /// <param name="surrogate"></param>
-        public void SerializeWith(ISerializationSurrogate surrogate)
+        public virtual void SerializeWith(ISerializationSurrogate surrogate)
         {
             throw new NotImplementedException();
         }

@@ -16,7 +16,7 @@ namespace Stash.Engine
             Projection = projection;
         }
 
-        public IEnumerable<Guid> OriginalIds { get; private set; }
-        public Projection<TKey, TValue> Projection { get; private set; }
+        public virtual IEnumerable<Guid> OriginalIds { get; private set; }
+        public virtual Projection<TKey, TValue> Projection { get; private set; }
     }
 }

@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System.Collections.Generic;
+    using Engine;
 
     /// <summary>
     /// A configured mapper.
@@ -23,5 +24,10 @@ namespace Stash.Configuration
         /// Reducers chained to the <see cref="Mapper"/>.
         /// </summary>
         public IList<RegisteredReducer> RegisteredReducers { get; private set; }
+
+        public virtual void EngageBackingStore(BackingStore backingStore)
+        {
+            backingStore.EnsureMapper(Mapper);
+        }
     }
 }

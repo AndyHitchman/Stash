@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\ConfigurationEngine.cs" />
+    <Compile Include="Configuration\Registrar.cs" />
+    <Compile Include="Configuration\RegisteredIndexer%272.cs" />
     <Compile Include="Configuration\RegisteredIndexer.cs" />
     <Compile Include="Configuration\RegisteredMapper.cs" />
     <Compile Include="Configuration\MapContext.cs" />
@@ -63,7 +64,11 @@
     <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="Engine\CustomSerializer.cs" />
+    <Compile Include="Engine\TypeIndexer.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
+    <Compile Include="In\BDB\SecondaryDatabaseConfig.cs" />
+    <Compile Include="In\BDB\DefaultDatabaseEnvironmentConfig.cs" />
+    <Compile Include="In\BDB\PrimaryDatabaseConfig.cs" />
     <Compile Include="In\ESENT\Connection.cs" />
     <Compile Include="In\ESENT\ConnectionPool.cs" />
     <Compile Include="In\ESENT\RealConnectionPool.cs" />

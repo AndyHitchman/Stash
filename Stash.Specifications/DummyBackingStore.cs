@@ -45,5 +45,20 @@ namespace Stash.Specifications
         {
             throw new NotImplementedException();
         }
+
+        public bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool EnsureMapper<TGraph>(Mapper<TGraph> mapper)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool EnsureReducer(Reducer reducer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

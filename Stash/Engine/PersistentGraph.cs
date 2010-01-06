@@ -32,11 +32,11 @@ namespace Stash.Engine
             Version = version;
         }
 
-        public Guid InternalId { get; private set; }
-        public IEnumerable<Type> Types { get; private set; }
-        public long Version { get; private set; }
+        public virtual Guid InternalId { get; private set; }
+        public virtual IEnumerable<Type> Types { get; private set; }
+        public virtual long Version { get; private set; }
 
-        public void ActOnSerializedGraph(Action<Stream> action)
+        public virtual void ActOnSerializedGraph(Action<Stream> action)
         {
             using(var stream = fSerializedGraph())
             {

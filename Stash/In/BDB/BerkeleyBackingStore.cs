@@ -11,9 +11,9 @@ namespace Stash.In.BDB
     /// </summary>
     public class BerkeleyBackingStore : BackingStore
     {
-        private const string DataSubdirectory = "data";
         private const string DbName = "stash.db";
         private readonly string databaseDirectory;
+        private readonly BTreeDatabaseConfig secondaryDatabaseConfig;
         private HashDatabase db;
         private DatabaseEnvironment env;
         private bool isDisposed;
@@ -23,11 +23,31 @@ namespace Stash.In.BDB
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
         /// <param name="databaseDirectory"></param>
-        public BerkeleyBackingStore(string databaseDirectory)
+        /// <param name="databaseEnvironmentConfig"></param>
+        public BerkeleyBackingStore(
+            string databaseDirectory,
+            DatabaseEnvironmentConfig databaseEnvironmentConfig)
+            : this(databaseDirectory, databaseEnvironmentConfig, new PrimaryDatabaseConfig(), new SecondaryDatabaseConfig())
+        {
+        }
+
+        /// <summary>
+        /// Create an instance of the backing store implementation using BerkeleyDB
+        /// </summary>
+        /// <param name="databaseDirectory"></param>
+        /// <param name="databaseEnvironmentConfig"></param>
+        /// <param name="primaryDatabaseConfig"></param>
+        /// <param name="secondaryDatabaseConfig"></param>
+        public BerkeleyBackingStore(
+            string databaseDirectory,
+            DatabaseEnvironmentConfig databaseEnvironmentConfig,
+            HashDatabaseConfig primaryDatabaseConfig,
+            BTreeDatabaseConfig secondaryDatabaseConfig)
         {
             this.databaseDirectory = databaseDirectory;
-            Directory.CreateDirectory(Path.Combine(databaseDirectory, DataSubdirectory));
-            openDatabase(databaseDirectory);
+            this.secondaryDatabaseConfig = secondaryDatabaseConfig;
+            Directory.CreateDirectory(Path.Combine(databaseDirectory, databaseEnvironmentConfig.CreationDir));
+            openDatabase(databaseDirectory, databaseEnvironmentConfig, primaryDatabaseConfig);
         }
 
         public void DeleteGraphs(IEnumerable<Guid> internalIds)
@@ -43,9 +63,40 @@ namespace Stash.In.BDB
             closeDatabase();
         }
 
-        ~BerkeleyBackingStore()
+        /// <summary>
+        /// Ensures that the database is configured to persist the provided <paramref name="indexer"/>.
+        /// </summary>
+        /// <remarks>Indexes are stored in secordary databases.</remarks>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="indexer"></param>
+        /// <returns>true is the backing store is going to manage the indexer, false if the backing store expects management to be by the Stash Engine.</returns>
+        public bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer)
         {
-            Dispose();
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Ensures that the database is configured to persist the provided <paramref name="mapper"/>.
+        /// </summary>
+        /// <remarks>Maps are stored in a secondary database.</remarks>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="mapper"></param>
+        /// <returns>true is the backing store is going to manage the mapper, false if the backing store expects management to be by the Stash Engine.</returns>
+        public bool EnsureMapper<TGraph>(Mapper<TGraph> mapper)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Ensures that the database is configured to persist the provided <paramref name="reducer"/>.
+        /// </summary>
+        /// <remarks>Reductions are stored in a secondary database.</remarks>
+        /// <param name="reducer"></param>
+        /// <returns>true is the backing store is going to manage the reducer, false if the backing store expects management to be by the Stash Engine.</returns>
+        public bool EnsureReducer(Reducer reducer)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
@@ -75,39 +126,16 @@ namespace Stash.In.BDB
             DatabaseEnvironment.Remove(databaseDirectory);
         }
 
-        private void openDatabase(string rootDir)
+        ~BerkeleyBackingStore()
         {
-            var dataDir = Path.Combine(rootDir, DataSubdirectory);
+            Dispose();
+        }
 
-            var envConfig = new DatabaseEnvironmentConfig
-                                {
-                                    MPoolSystemCfg = new MPoolConfig {CacheSize = new CacheInfo(0, 128*1024, 1)},
-                                    Create = true,
-                                    CreationDir = dataDir,
-                                    ErrorPrefix = "Stash",
-                                    UseLogging = true,
-                                    UseLocking = true,
-                                    UseMPool = true,
-                                    UseTxns = true,
-                                    FreeThreaded = true,
-                                    RunRecovery = true,
-                                    LockSystemCfg = new LockingConfig {DeadlockResolution = DeadlockPolicy.MIN_WRITE}
-                                };
-            envConfig.DataDirs.Add(dataDir);
-
-            env = DatabaseEnvironment.Open(rootDir, envConfig);
-
-            var dbConfig = new HashDatabaseConfig
-                               {
-                                   AutoCommit = true,
-                                   Creation = CreatePolicy.IF_NEEDED,
-                                   Duplicates = DuplicatesPolicy.NONE,
-                                   FreeThreaded = true,
-                                   ReadUncommitted = true,
-                                   Env = env
-                               };
-
-            db = HashDatabase.Open(DbName, dbConfig);
+        private void openDatabase(string rootDir, DatabaseEnvironmentConfig environmentConfig, HashDatabaseConfig databaseConfig)
+        {
+            env = DatabaseEnvironment.Open(rootDir, environmentConfig);
+            databaseConfig.Env = env;
+            db = HashDatabase.Open(DbName, databaseConfig);
         }
     }
 }

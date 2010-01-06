@@ -1,21 +1,11 @@
 namespace Stash.Configuration
 {
+    using System;
     using System.Collections.Generic;
+    using Engine;
 
-    /// <summary>
-    /// A configured indexer.
-    /// </summary>
-    /// <typeparam name="TGraph"></typeparam>
-    public class RegisteredIndexer<TGraph>
+    public abstract class RegisteredIndexer<TGraph>
     {
-        public RegisteredIndexer(Indexer<TGraph> indexder)
-        {
-            Indexer = indexder;
-        }
-
-        /// <summary>
-        /// The mapper.
-        /// </summary>
-        public Indexer<TGraph> Indexer { get; private set; }
+        public abstract void EngageBackingStore(BackingStore backingStore);
     }
 }

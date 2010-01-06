@@ -1,6 +1,7 @@
 namespace Stash.Configuration
 {
     using System;
+    using Engine;
 
     public class RegisteredReducer
     {
@@ -10,5 +11,10 @@ namespace Stash.Configuration
         }
 
         public Reducer Reducer { get; private set; }
+
+        public virtual void EngageBackingStore(BackingStore backingStore)
+        {
+            backingStore.EnsureReducer(Reducer);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace Stash
             TBackingStore backingStore, Action<PersistenceContext<TBackingStore>> configurationAction)
             where TBackingStore : BackingStore
         {
-            new ConfigurationEngine<TBackingStore>(backingStore).ConfigurePersistence(configurationAction);
+            new Registrar<TBackingStore>(backingStore).ConfigurePersistence(configurationAction);
         }
     }
 }

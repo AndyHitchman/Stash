@@ -6,7 +6,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
     using Microsoft.Isam.Esent.Interop;
     using NUnit.Framework;
 
-    [TestFixture]
+    [TestFixture][Ignore]
     public class when_instantiating
     {
         [Test]

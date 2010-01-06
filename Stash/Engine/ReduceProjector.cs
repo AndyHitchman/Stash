@@ -11,7 +11,7 @@ namespace Stash.Engine
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="func"></param>
-        public TrackedProjection<TKey, TValue> Emit<TKey, TValue>(
+        public virtual TrackedProjection<TKey, TValue> Emit<TKey, TValue>(
             Guid originalId, TKey key, TValue accumulator, TValue instance, Func<TKey, TValue, TValue> func)
         {
             throw new NotImplementedException();
