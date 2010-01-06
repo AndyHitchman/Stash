@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Security;
-using System.Web.UI;
-
 namespace Stash.Example.Controllers
 {
+    using System;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Globalization;
+    using System.Security.Principal;
+    using System.Web.Mvc;
+    using System.Web.Security;
 
     [HandleError]
     public class AccountController : Controller
     {
-
         // This constructor is used by the MVC framework to instantiate the controller using
         // the default forms authentication and membership providers.
 
@@ -32,92 +27,13 @@ namespace Stash.Example.Controllers
             MembershipService = service ?? new AccountMembershipService();
         }
 
-        public IFormsAuthentication FormsAuth
-        {
-            get;
-            private set;
-        }
+        public IFormsAuthentication FormsAuth { get; private set; }
 
-        public IMembershipService MembershipService
-        {
-            get;
-            private set;
-        }
-
-        public ActionResult LogOn()
-        {
-
-            return View();
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings",
-            Justification = "Needs to take same parameter type as Controller.Redirect()")]
-        public ActionResult LogOn(string userName, string password, bool rememberMe, string returnUrl)
-        {
-
-            if (!ValidateLogOn(userName, password))
-            {
-                return View();
-            }
-
-            FormsAuth.SignIn(userName, rememberMe);
-            if (!String.IsNullOrEmpty(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home");
-            }
-        }
-
-        public ActionResult LogOff()
-        {
-
-            FormsAuth.SignOut();
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult Register()
-        {
-
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-
-            return View();
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Register(string userName, string email, string password, string confirmPassword)
-        {
-
-            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
-
-            if (ValidateRegistration(userName, email, password, confirmPassword))
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus = MembershipService.CreateUser(userName, password, email);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsAuth.SignIn(userName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View();
-        }
+        public IMembershipService MembershipService { get; private set; }
 
         [Authorize]
         public ActionResult ChangePassword()
         {
-
             ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
 
             return View();
@@ -125,21 +41,20 @@ namespace Stash.Example.Controllers
 
         [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
+        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes",
             Justification = "Exceptions result in password not being changed.")]
         public ActionResult ChangePassword(string currentPassword, string newPassword, string confirmPassword)
         {
-
             ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
 
-            if (!ValidateChangePassword(currentPassword, newPassword, confirmPassword))
+            if(!ValidateChangePassword(currentPassword, newPassword, confirmPassword))
             {
                 return View();
             }
 
             try
             {
-                if (MembershipService.ChangePassword(User.Identity.Name, currentPassword, newPassword))
+                if(MembershipService.ChangePassword(User.Identity.Name, currentPassword, newPassword))
                 {
                     return RedirectToAction("ChangePasswordSuccess");
                 }
@@ -158,89 +73,87 @@ namespace Stash.Example.Controllers
 
         public ActionResult ChangePasswordSuccess()
         {
-
             return View();
+        }
+
+        public ActionResult LogOff()
+        {
+            FormsAuth.SignOut();
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult LogOn()
+        {
+            return View();
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        [SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings",
+            Justification = "Needs to take same parameter type as Controller.Redirect()")]
+        public ActionResult LogOn(string userName, string password, bool rememberMe, string returnUrl)
+        {
+            if(!ValidateLogOn(userName, password))
+            {
+                return View();
+            }
+
+            FormsAuth.SignIn(userName, rememberMe);
+            if(!String.IsNullOrEmpty(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (filterContext.HttpContext.User.Identity is WindowsIdentity)
+            if(filterContext.HttpContext.User.Identity is WindowsIdentity)
             {
                 throw new InvalidOperationException("Windows authentication is not supported.");
             }
         }
 
-        #region Validation Methods
-
-        private bool ValidateChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        public ActionResult Register()
         {
-            if (String.IsNullOrEmpty(currentPassword))
-            {
-                ModelState.AddModelError("currentPassword", "You must specify a current password.");
-            }
-            if (newPassword == null || newPassword.Length < MembershipService.MinPasswordLength)
-            {
-                ModelState.AddModelError("newPassword",
-                    String.Format(CultureInfo.CurrentCulture,
-                         "You must specify a new password of {0} or more characters.",
-                         MembershipService.MinPasswordLength));
-            }
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
 
-            if (!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
-            {
-                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
-            }
-
-            return ModelState.IsValid;
+            return View();
         }
 
-        private bool ValidateLogOn(string userName, string password)
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Register(string userName, string email, string password, string confirmPassword)
         {
-            if (String.IsNullOrEmpty(userName))
+            ViewData["PasswordLength"] = MembershipService.MinPasswordLength;
+
+            if(ValidateRegistration(userName, email, password, confirmPassword))
             {
-                ModelState.AddModelError("username", "You must specify a username.");
-            }
-            if (String.IsNullOrEmpty(password))
-            {
-                ModelState.AddModelError("password", "You must specify a password.");
-            }
-            if (!MembershipService.ValidateUser(userName, password))
-            {
-                ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+                // Attempt to register the user
+                var createStatus = MembershipService.CreateUser(userName, password, email);
+
+                if(createStatus == MembershipCreateStatus.Success)
+                {
+                    FormsAuth.SignIn(userName, false /* createPersistentCookie */);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("_FORM", ErrorCodeToString(createStatus));
+                }
             }
 
-            return ModelState.IsValid;
-        }
-
-        private bool ValidateRegistration(string userName, string email, string password, string confirmPassword)
-        {
-            if (String.IsNullOrEmpty(userName))
-            {
-                ModelState.AddModelError("username", "You must specify a username.");
-            }
-            if (String.IsNullOrEmpty(email))
-            {
-                ModelState.AddModelError("email", "You must specify an email address.");
-            }
-            if (password == null || password.Length < MembershipService.MinPasswordLength)
-            {
-                ModelState.AddModelError("password",
-                    String.Format(CultureInfo.CurrentCulture,
-                         "You must specify a password of {0} or more characters.",
-                         MembershipService.MinPasswordLength));
-            }
-            if (!String.Equals(password, confirmPassword, StringComparison.Ordinal))
-            {
-                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
-            }
-            return ModelState.IsValid;
+            // If we got this far, something failed, redisplay form
+            return View();
         }
 
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {
             // See http://msdn.microsoft.com/en-us/library/system.web.security.membershipcreatestatus.aspx for
             // a full list of status codes.
-            switch (createStatus)
+            switch(createStatus)
             {
                 case MembershipCreateStatus.DuplicateUserName:
                     return "Username already exists. Please enter a different user name.";
@@ -264,16 +177,86 @@ namespace Stash.Example.Controllers
                     return "The user name provided is invalid. Please check the value and try again.";
 
                 case MembershipCreateStatus.ProviderError:
-                    return "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return
+                        "The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 case MembershipCreateStatus.UserRejected:
-                    return "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return
+                        "The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
 
                 default:
-                    return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
+                    return
+                        "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
         }
-        #endregion
+
+        private bool ValidateChangePassword(string currentPassword, string newPassword, string confirmPassword)
+        {
+            if(String.IsNullOrEmpty(currentPassword))
+            {
+                ModelState.AddModelError("currentPassword", "You must specify a current password.");
+            }
+            if(newPassword == null || newPassword.Length < MembershipService.MinPasswordLength)
+            {
+                ModelState.AddModelError(
+                    "newPassword",
+                    String.Format(
+                        CultureInfo.CurrentCulture,
+                        "You must specify a new password of {0} or more characters.",
+                        MembershipService.MinPasswordLength));
+            }
+
+            if(!String.Equals(newPassword, confirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+
+            return ModelState.IsValid;
+        }
+
+        private bool ValidateLogOn(string userName, string password)
+        {
+            if(String.IsNullOrEmpty(userName))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if(String.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("password", "You must specify a password.");
+            }
+            if(!MembershipService.ValidateUser(userName, password))
+            {
+                ModelState.AddModelError("_FORM", "The username or password provided is incorrect.");
+            }
+
+            return ModelState.IsValid;
+        }
+
+        private bool ValidateRegistration(string userName, string email, string password, string confirmPassword)
+        {
+            if(String.IsNullOrEmpty(userName))
+            {
+                ModelState.AddModelError("username", "You must specify a username.");
+            }
+            if(String.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("email", "You must specify an email address.");
+            }
+            if(password == null || password.Length < MembershipService.MinPasswordLength)
+            {
+                ModelState.AddModelError(
+                    "password",
+                    String.Format(
+                        CultureInfo.CurrentCulture,
+                        "You must specify a password of {0} or more characters.",
+                        MembershipService.MinPasswordLength));
+            }
+            if(!String.Equals(password, confirmPassword, StringComparison.Ordinal))
+            {
+                ModelState.AddModelError("_FORM", "The new password and confirmation password do not match.");
+            }
+            return ModelState.IsValid;
+        }
     }
 
     // The FormsAuthentication type is sealed and contains static members, so it is difficult to
@@ -293,6 +276,7 @@ namespace Stash.Example.Controllers
         {
             FormsAuthentication.SetAuthCookie(userName, createPersistentCookie);
         }
+
         public void SignOut()
         {
             FormsAuthentication.SignOut();
@@ -303,14 +287,14 @@ namespace Stash.Example.Controllers
     {
         int MinPasswordLength { get; }
 
-        bool ValidateUser(string userName, string password);
-        MembershipCreateStatus CreateUser(string userName, string password, string email);
         bool ChangePassword(string userName, string oldPassword, string newPassword);
+        MembershipCreateStatus CreateUser(string userName, string password, string email);
+        bool ValidateUser(string userName, string password);
     }
 
     public class AccountMembershipService : IMembershipService
     {
-        private MembershipProvider _provider;
+        private readonly MembershipProvider _provider;
 
         public AccountMembershipService()
             : this(null)
@@ -324,15 +308,13 @@ namespace Stash.Example.Controllers
 
         public int MinPasswordLength
         {
-            get
-            {
-                return _provider.MinRequiredPasswordLength;
-            }
+            get { return _provider.MinRequiredPasswordLength; }
         }
 
-        public bool ValidateUser(string userName, string password)
+        public bool ChangePassword(string userName, string oldPassword, string newPassword)
         {
-            return _provider.ValidateUser(userName, password);
+            var currentUser = _provider.GetUser(userName, true /* userIsOnline */);
+            return currentUser.ChangePassword(oldPassword, newPassword);
         }
 
         public MembershipCreateStatus CreateUser(string userName, string password, string email)
@@ -342,10 +324,9 @@ namespace Stash.Example.Controllers
             return status;
         }
 
-        public bool ChangePassword(string userName, string oldPassword, string newPassword)
+        public bool ValidateUser(string userName, string password)
         {
-            MembershipUser currentUser = _provider.GetUser(userName, true /* userIsOnline */);
-            return currentUser.ChangePassword(oldPassword, newPassword);
+            return _provider.ValidateUser(userName, password);
         }
     }
 }

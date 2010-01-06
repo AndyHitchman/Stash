@@ -6,27 +6,7 @@ namespace Stash.Specifications
 
     public class DummyBackingStore : BackingStore
     {
-        public void OpenDatabase()
-        {
-            throw new NotImplementedException();
-        }
-
         public void CloseDatabase()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
         {
             throw new NotImplementedException();
         }
@@ -36,17 +16,12 @@ namespace Stash.Specifications
             throw new NotImplementedException();
         }
 
-        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        public void Dispose()
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer)
+        public bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
         {
             throw new NotImplementedException();
         }
@@ -57,6 +32,31 @@ namespace Stash.Specifications
         }
 
         public bool EnsureReducer(Reducer reducer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
         {
             throw new NotImplementedException();
         }

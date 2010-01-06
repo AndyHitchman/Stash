@@ -63,12 +63,7 @@ namespace Stash.In.ESENT
             GC.SuppressFinalize(this);
         }
 
-        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer)
+        public bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
         {
             throw new NotImplementedException();
         }
@@ -79,6 +74,11 @@ namespace Stash.In.ESENT
         }
 
         public bool EnsureReducer(Reducer reducer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
         {
             throw new NotImplementedException();
         }

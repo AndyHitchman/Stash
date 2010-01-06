@@ -7,15 +7,14 @@ namespace Stash.Specifications
     {
         public void Dispose()
         {
-            
         }
 
-        public Connection TakeConnection()
+        public void FreeConnection(Connection connection)
         {
             throw new NotImplementedException();
         }
 
-        public void FreeConnection(Connection connection)
+        public Connection TakeConnection()
         {
             throw new NotImplementedException();
         }

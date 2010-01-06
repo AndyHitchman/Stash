@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\RegisteredStash.cs" />
     <Compile Include="Configuration\Registrar.cs" />
     <Compile Include="Configuration\RegisteredIndexer%272.cs" />
     <Compile Include="Configuration\RegisteredIndexer.cs" />

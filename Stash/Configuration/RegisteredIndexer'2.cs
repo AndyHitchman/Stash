@@ -7,9 +7,9 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class RegisteredIndexer<TGraph,TKey> : RegisteredIndexer<TGraph>
+    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph>
     {
-        public RegisteredIndexer(Indexer<TGraph,TKey> indexer)
+        public RegisteredIndexer(Indexer<TGraph, TKey> indexer)
         {
             Indexer = indexer;
         }
@@ -17,7 +17,7 @@ namespace Stash.Configuration
         /// <summary>
         /// The mapper.
         /// </summary>
-        public virtual Indexer<TGraph,TKey> Indexer { get; private set; }
+        public virtual Indexer<TGraph, TKey> Indexer { get; private set; }
 
         public override void EngageBackingStore(BackingStore backingStore)
         {

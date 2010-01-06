@@ -2,21 +2,22 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
     using System.IO;
-    using System.Threading;
     using NUnit.Framework;
 
     public class with_temp_dir
     {
         protected string TempDir;
 
-        [SetUp]public void each_up()
+        [TearDown]
+        public void each_down()
         {
-            TempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
         }
 
-        [TearDown]public void each_down()
+        [SetUp]
+        public void each_up()
         {
+            TempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
         }
     }

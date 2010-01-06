@@ -1,6 +1,5 @@
 namespace Stash.Configuration
 {
-    using System;
     using Engine;
 
     public class RegisteredReducer

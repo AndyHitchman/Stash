@@ -8,8 +8,8 @@ namespace Stash.In.ESENT
     {
         private readonly Database database;
         private readonly object locker = new object();
-        private bool isDisposed;
         public readonly Queue<Connection> PooledConnections;
+        private bool isDisposed;
 
         /// <summary>
         /// Create the connection pool, specifying the initial pool size.

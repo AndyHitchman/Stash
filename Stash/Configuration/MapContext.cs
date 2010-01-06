@@ -1,7 +1,6 @@
 namespace Stash.Configuration
 {
     using System;
-    using System.Collections.Generic;
     using Engine;
 
     /// <summary>
@@ -9,7 +8,7 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class MapContext<TBackingStore,TGraph> where TBackingStore : BackingStore
+    public class MapContext<TBackingStore, TGraph> where TBackingStore : BackingStore
     {
         public MapContext(RegisteredMapper<TGraph> registeredMapper)
         {
@@ -36,7 +35,7 @@ namespace Stash.Configuration
         /// <param name="reducer"></param>
         public virtual void ReduceWith(Reducer reducer)
         {
-            if (reducer == null) throw new ArgumentNullException("reducer");
+            if(reducer == null) throw new ArgumentNullException("reducer");
             RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reducer));
         }
     }

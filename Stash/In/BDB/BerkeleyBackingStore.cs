@@ -71,7 +71,7 @@ namespace Stash.In.BDB
         /// <typeparam name="TKey"></typeparam>
         /// <param name="indexer"></param>
         /// <returns>true is the backing store is going to manage the indexer, false if the backing store expects management to be by the Stash Engine.</returns>
-        public bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer)
+        public bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
         {
             throw new NotImplementedException();
         }

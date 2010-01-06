@@ -4,19 +4,18 @@ namespace Stash.Specifications.for_in_esent.given_real_connection_pool
     using In.ESENT;
     using NUnit.Framework;
 
-    [TestFixture][Ignore]
+    [TestFixture]
+    [Ignore]
     public class when_taking_connections : with_dummy_instance
     {
         [Test]
-        public void it_should_take_them_from_the_pool()
+        public void it_should_create_them_dynamically_if_the_pool_is_empty()
         {
-            ushort actual = 1;
-            var expected = actual - 1;
-            var sut = new RealConnectionPool(new Database(Instance, null), actual);
-
+            var sut = new RealConnectionPool(new Database(Instance, null), 1);
             sut.TakeConnection();
-            
-            sut.PooledConnections.Count.ShouldEqual(expected);
+
+            sut.PooledConnections.Any().ShouldBeFalse();
+            sut.TakeConnection().ShouldBeOfType<Connection>();
         }
 
         [Test]
@@ -28,14 +27,15 @@ namespace Stash.Specifications.for_in_esent.given_real_connection_pool
         }
 
         [Test]
-        public void it_should_create_them_dynamically_if_the_pool_is_empty()
+        public void it_should_take_them_from_the_pool()
         {
-            var sut = new RealConnectionPool(new Database(Instance, null), 1);
+            ushort actual = 1;
+            var expected = actual - 1;
+            var sut = new RealConnectionPool(new Database(Instance, null), actual);
+
             sut.TakeConnection();
 
-            sut.PooledConnections.Any().ShouldBeFalse();
-            sut.TakeConnection().ShouldBeOfType<Connection>();
+            sut.PooledConnections.Count.ShouldEqual(expected);
         }
-
     }
 }

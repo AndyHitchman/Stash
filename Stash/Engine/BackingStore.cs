@@ -5,11 +5,7 @@ namespace Stash.Engine
 
     public interface BackingStore : IDisposable
     {
-        void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs);
-        void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs);
         void DeleteGraphs(IEnumerable<Guid> internalIds);
-        IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds);
-        IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs);
 
         /// <summary>
         /// Ensures that the database is configured to persist the provided <paramref name="indexer"/>.
@@ -18,7 +14,7 @@ namespace Stash.Engine
         /// <typeparam name="TKey"></typeparam>
         /// <param name="indexer"></param>
         /// <returns>true is the backing store is going to manage the indexer, false if the backing store expects management to be by the Stash Engine.</returns>
-        bool EnsureIndexer<TGraph,TKey>(Indexer<TGraph,TKey> indexer);
+        bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer);
 
         /// <summary>
         /// Ensures that the database is configured to persist the provided <paramref name="mapper"/>.
@@ -34,5 +30,10 @@ namespace Stash.Engine
         /// <param name="reducer"></param>
         /// <returns>true is the backing store is going to manage the reducer, false if the backing store expects management to be by the Stash Engine.</returns>
         bool EnsureReducer(Reducer reducer);
+
+        IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs);
+        IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds);
+        void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs);
+        void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs);
     }
 }

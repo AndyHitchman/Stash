@@ -1,6 +1,5 @@
 namespace Stash.Specifications.for_engine.given_type_indexer
 {
-    using Engine;
     using NUnit.Framework;
 
     [TestFixture]
@@ -31,14 +30,6 @@ namespace Stash.Specifications.for_engine.given_type_indexer
         }
 
         [Test]
-        public void it_should_return_two_types_for_a_class_with_one_ancestor()
-        {
-            var sut = new OpenedUpTypeIndexer();
-            var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithOneAncestors());
-            actual.ShouldHaveCount(2);
-        }
-
-        [Test]
         public void it_should_return_the_base_classes_for_a_class_with_many_ancestor()
         {
             var sut = new OpenedUpTypeIndexer();
@@ -54,6 +45,14 @@ namespace Stash.Specifications.for_engine.given_type_indexer
             var sut = new OpenedUpTypeIndexer();
             var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithTwoAncestors());
             actual.ShouldHaveCount(3);
+        }
+
+        [Test]
+        public void it_should_return_two_types_for_a_class_with_one_ancestor()
+        {
+            var sut = new OpenedUpTypeIndexer();
+            var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithOneAncestors());
+            actual.ShouldHaveCount(2);
         }
     }
 }

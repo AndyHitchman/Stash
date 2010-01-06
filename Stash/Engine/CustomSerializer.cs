@@ -9,8 +9,7 @@ namespace Stash.Engine
     /// </summary>
     public interface CustomSerializer
     {
-        Func<TGraph, Stream> Serialize<TGraph>();
-
         Func<Stream, TGraph> Deserialize<TGraph>();
+        Func<TGraph, Stream> Serialize<TGraph>();
     }
 }

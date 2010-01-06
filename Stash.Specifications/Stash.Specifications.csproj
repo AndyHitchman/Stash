@@ -66,10 +66,8 @@
     <Compile Include="DummyMapper.cs" />
     <Compile Include="DummyBackingStore.cs" />
     <Compile Include="for_configuration\given_registered_indexer\when_engaging_backing_store.cs" />
-    <Compile Include="for_configuration\given_persistence_context\when_asked_for_a_graph.cs" />
-    <Compile Include="for_configuration\given_persistence_context\when_instantiating.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
-    <Compile Include="for_configuration\given_persistence_context\with_configure_stash.cs" />
+    <Compile Include="for_configuration\given_persistence_context\with_persistence_context.cs" />
     <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
@@ -81,7 +79,12 @@
     <Compile Include="DummerIndexer.cs" />
     <Compile Include="DummyPersistentObject.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_engaging_backing_store.cs" />
+    <Compile Include="for_configuration\given_registered_stash\when_asked_for_a_graph.cs" />
+    <Compile Include="for_configuration\given_registered_stash\when_instantiating.cs" />
+    <Compile Include="for_configuration\given_registered_stash\when_told_to_register_a_graph.cs" />
+    <Compile Include="for_configuration\given_registered_stash\with_registered_stash.cs" />
     <Compile Include="for_configuration\given_registrar\when_configuring.cs" />
+    <Compile Include="for_configuration\given_registered_stash\when_engaging_backing_store.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithNoAncestors.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithOneAncestors.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithTwoAncestors.cs" />

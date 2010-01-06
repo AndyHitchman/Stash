@@ -1,4 +1,4 @@
-﻿namespace Stash
+namespace Stash
 {
     using System.Collections.Generic;
 
@@ -29,14 +29,14 @@
         /// </summary>
         /// <param name="indexer"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph,TKey> indexer);
+        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer);
 
         /// <summary>
         /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
         /// </summary>
         /// <param name="joinIndexers"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph,TKey>(params Indexer<TGraph,TKey>[] joinIndexers);
+        IEnumerable<TGraph> Index<TGraph, TKey>(params Indexer<TGraph, TKey>[] joinIndexers);
 
         /// <summary>
         /// Enumerate mapped projections from the provided <paramref name="mapper"/>.

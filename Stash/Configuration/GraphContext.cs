@@ -10,7 +10,7 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class GraphContext<TBackingStore,TGraph> where TBackingStore : BackingStore
+    public class GraphContext<TBackingStore, TGraph> where TBackingStore : BackingStore
     {
         public GraphContext(RegisteredGraph<TGraph> registeredGraph)
         {
@@ -27,10 +27,10 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="indexer"></param>
         /// <typeparam name="TKey"></typeparam>
-        public virtual void IndexWith<TKey>(Indexer<TGraph,TKey> indexer)
+        public virtual void IndexWith<TKey>(Indexer<TGraph, TKey> indexer)
         {
-            if (indexer == null) throw new ArgumentNullException("indexer");
-            var registeredIndexer = new RegisteredIndexer<TGraph,TKey>(indexer);
+            if(indexer == null) throw new ArgumentNullException("indexer");
+            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(indexer);
             RegisteredGraph.RegisteredIndexers.Add(registeredIndexer);
         }
 
@@ -39,12 +39,12 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="mapper"></param>
         /// <returns></returns>
-        public virtual MapContext<TBackingStore,TGraph> MapWith(Mapper<TGraph> mapper)
+        public virtual MapContext<TBackingStore, TGraph> MapWith(Mapper<TGraph> mapper)
         {
-            if (mapper == null) throw new ArgumentNullException("mapper");
+            if(mapper == null) throw new ArgumentNullException("mapper");
             var registeredMapper = new RegisteredMapper<TGraph>(mapper);
             RegisteredGraph.RegisteredMappers.Add(registeredMapper);
-            return new MapContext<TBackingStore,TGraph>(registeredMapper);
+            return new MapContext<TBackingStore, TGraph>(registeredMapper);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="serializer"></param>
         /// <param name="deserializer"></param>
-        public virtual void SerializeWith(Func<TGraph,Stream> serializer, Func<Stream,TGraph> deserializer)
+        public virtual void SerializeWith(Func<TGraph, Stream> serializer, Func<Stream, TGraph> deserializer)
         {
             throw new NotImplementedException();
         }

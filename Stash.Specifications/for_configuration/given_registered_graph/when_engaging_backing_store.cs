@@ -8,9 +8,10 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
     public class when_engaging_backing_store
     {
         [Test]
-        public void it_should_ask_registered_indexers_to_engage_themselves()
+        public void it_should_tell_registered_indexers_to_engage_themselves()
         {
-            var mockRegisteredIndexer = MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, object>>((Indexer<DummyPersistentObject,object>)null);
+            var mockRegisteredIndexer =
+                MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, object>>((Indexer<DummyPersistentObject, object>)null);
             var sut = new RegisteredGraph<DummyPersistentObject>();
             sut.RegisteredIndexers.Add(mockRegisteredIndexer);
 

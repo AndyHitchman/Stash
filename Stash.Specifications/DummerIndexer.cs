@@ -3,7 +3,7 @@ namespace Stash.Specifications
     using System;
     using System.Collections.Generic;
 
-    public class DummerIndexer : Indexer<DummyPersistentObject,object>
+    public class DummerIndexer : Indexer<DummyPersistentObject, object>
     {
         public string Name
         {

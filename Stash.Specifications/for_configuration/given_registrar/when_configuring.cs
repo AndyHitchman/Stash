@@ -14,6 +14,5 @@ namespace Stash.Specifications.for_configuration.given_registrar
             sut.ConfigurePersistence(context => { actual = context; });
             actual.ShouldNotBeNull();
         }
-
     }
 }

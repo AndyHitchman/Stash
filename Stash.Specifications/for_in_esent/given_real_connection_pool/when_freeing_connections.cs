@@ -3,7 +3,8 @@ namespace Stash.Specifications.for_in_esent.given_real_connection_pool
     using In.ESENT;
     using NUnit.Framework;
 
-    [TestFixture][Ignore]
+    [TestFixture]
+    [Ignore]
     public class when_freeing_connections : with_dummy_instance
     {
         [Test]

@@ -21,7 +21,6 @@ namespace Stash.In.BDB
             LockSystemCfg = new LockingConfig {DeadlockResolution = DeadlockPolicy.MIN_WRITE};
 
             DataDirs.Add(dataDir);
-
         }
     }
 }
