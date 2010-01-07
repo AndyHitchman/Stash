@@ -4,9 +4,9 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using Engine;
 
-    public class RegisteredStash
+    public class Registration
     {
-        public RegisteredStash()
+        public Registration()
         {
             RegisteredGraphs = new Dictionary<Type, RegisteredGraph>();
         }
@@ -24,13 +24,16 @@ namespace Stash.Configuration
         /// <summary>
         /// Engage the backing store in managing the stash.
         /// </summary>
-        public void EngageBackingStore(BackingStore backingStore)
+        public virtual void EngageBackingStore(BackingStore backingStore)
         {
+            BackingStore = backingStore;
             foreach(var registeredGraph in AllRegisteredGraphs)
             {
                 registeredGraph.EngageBackingStore(backingStore);
             }
         }
+
+        public virtual BackingStore BackingStore { get; private set; }
 
         /// <summary>
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <typeparamref name="TGraph"/>.

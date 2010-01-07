@@ -14,11 +14,11 @@ namespace Stash
             registrar.PerformRegistration(configurationAction);
             registrar.ApplyRegistration();
             Registration = registrar.Registration;
-            SessionFactory = new SessionFactory(registrar.Registration);
+            SessionFactory = new ActualSessionFactory(registrar.Registration);
         }
 
         public static SessionFactory SessionFactory { get; private set; }
 
-        public static RegisteredStash Registration { get; set; }
+        public static Registration Registration { get; set; }
     }
 }

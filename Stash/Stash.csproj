@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\RegisteredStash.cs" />
+    <Compile Include="Configuration\Registration.cs" />
     <Compile Include="Configuration\Registrar.cs" />
     <Compile Include="Configuration\RegisteredIndexer%272.cs" />
     <Compile Include="Configuration\RegisteredIndexer.cs" />
@@ -62,16 +62,20 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Engine\PersistenceEvents\Endure.cs" />
     <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="Engine\CustomSerializer.cs" />
     <Compile Include="Engine\ActualEnlistedRepository.cs" />
     <Compile Include="Engine\EnlistedRepository.cs" />
     <Compile Include="Engine\ActualUnenlistedRepository.cs" />
+    <Compile Include="Engine\PersistenceEvents\PersistenceEvent%271.cs" />
+    <Compile Include="Engine\PersistenceEvents\PersistenceEvent.cs" />
     <Compile Include="Engine\UnenlistedRepository.cs" />
-    <Compile Include="Repository.cs" />
     <Compile Include="Session.cs" />
-    <Compile Include="SessionFactory.cs" />
+    <Compile Include="Repository.cs" />
+    <Compile Include="InternalSession.cs" />
+    <Compile Include="ActualSessionFactory.cs" />
     <Compile Include="Engine\TypeIndexer.cs" />
     <Compile Include="Indexer%272.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
@@ -86,6 +90,7 @@
     <Compile Include="In\ESENT\Schema.cs" />
     <Compile Include="In\ESENT\SchemaManager.cs" />
     <Compile Include="Engine\PersistentGraph.cs" />
+    <Compile Include="SessionFactory.cs" />
     <Compile Include="Stash.cs" />
     <Compile Include="Engine\IndexProjector.cs" />
     <Compile Include="Engine\MapProjector.cs" />

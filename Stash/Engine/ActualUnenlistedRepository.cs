@@ -2,20 +2,20 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using PersistenceEvents;
 
     public class ActualUnenlistedRepository : UnenlistedRepository
     {
-        private Session getSession()
-        {
-            return Stash.SessionFactory.GetSession();
-        }
-
         /// <summary>
-        /// Enumerate all persisted <typeparam name="TGraph"/>
+        /// Enumerate all persisted <typeparam name="TGraph"/> with an ad-hoc session.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<TGraph> All<TGraph>()
+        {
+            return All<TGraph>(getSession());
+        }
+
+        public IEnumerable<TGraph> All<TGraph>(Session session)
         {
             throw new NotImplementedException();
         }
@@ -27,7 +27,7 @@ namespace Stash.Engine
         /// <returns></returns>
         public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
         {
-            throw new NotImplementedException();
+            return Index(getSession(), indexer);
         }
 
         /// <summary>
@@ -37,43 +37,7 @@ namespace Stash.Engine
         /// <returns></returns>
         public IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
-        /// </summary>
-        /// <param name="mapper"></param>
-        /// <returns></returns>
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Instruct the repository to durably persist the <paramref name="graph"/>.
-        /// </summary>
-        /// <typeparam name="TGraph"></typeparam>
-        /// <param name="graph"></param>
-        public void Persist<TGraph>(TGraph graph)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Produce the result for the given <paramref name="reducer"/>.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="reducer"></param>
-        /// <returns></returns>
-        public TValue Reduce<TKey, TValue>(TKey key, Reducer reducer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TGraph> All<TGraph>(Session session)
-        {
-            throw new NotImplementedException();
+            return Index(getSession(), joinIndexers);
         }
 
         public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Session session, Indexer<TGraph, TKey> indexer)
@@ -86,19 +50,55 @@ namespace Stash.Engine
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
+        /// </summary>
+        /// <param name="mapper"></param>
+        /// <returns></returns>
+        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper)
+        {
+            return Map<TGraph, TKey, TValue>(getSession(), mapper);
+        }
+
         public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Session session, Mapper<TGraph> mapper)
         {
             throw new NotImplementedException();
         }
 
-        public void Persist<TGraph>(Session session, TGraph graph)
+        /// <summary>
+        /// Instruct the repository to durably persist the <paramref name="graph"/>.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        public void Persist<TGraph>(TGraph graph)
         {
-            throw new NotImplementedException();
+            Persist(getSession(), graph);
+        }
+
+        public void Persist<TGraph>(InternalSession internalSession, TGraph graph)
+        {
+            internalSession.Enroll(new Endure<TGraph>(graph));
+        }
+
+        /// <summary>
+        /// Produce the result for the given <paramref name="reducer"/>.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="reducer"></param>
+        /// <returns></returns>
+        public TValue Reduce<TKey, TValue>(TKey key, Reducer reducer)
+        {
+            return Reduce<TKey, TValue>(getSession(), key, reducer);
         }
 
         public TValue Reduce<TKey, TValue>(Session session, TKey key, Reducer reducer)
         {
             throw new NotImplementedException();
+        }
+
+        private static InternalSession getSession()
+        {
+            return Stash.SessionFactory.GetSession().Internalize();
         }
     }
 }

@@ -85,6 +85,7 @@
     <Compile Include="for_configuration\given_registered_stash\with_registered_stash.cs" />
     <Compile Include="for_configuration\given_registrar\when_configuring.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_engaging_backing_store.cs" />
+    <Compile Include="for_engine\given_actual_unenlisted_repository\when_persisting.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithNoAncestors.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithOneAncestors.cs" />
     <Compile Include="for_engine\given_type_indexer\ClassWithTwoAncestors.cs" />

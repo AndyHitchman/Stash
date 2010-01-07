@@ -42,9 +42,9 @@ namespace Stash.Engine
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        /// <param name="session"></param>
+        /// <param name="internalSession"></param>
         /// <param name="graph"></param>
-        void Persist<TGraph>(Session session, TGraph graph);
+        void Persist<TGraph>(InternalSession internalSession, TGraph graph);
 
         /// <summary>
         /// Produce the result for the given <paramref name="reducer"/>.
