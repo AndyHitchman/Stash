@@ -9,26 +9,31 @@ namespace Stash.Configuration
     public class Registrar<TBackingStore> where TBackingStore : BackingStore
     {
         private readonly TBackingStore backingStore;
+        private PersistenceContext<TBackingStore> persistenceContext;
 
         public Registrar(TBackingStore backingStore)
         {
             this.backingStore = backingStore;
         }
 
-        public virtual void ApplyConfiguration(RegisteredStash registeredStash)
+        public virtual RegisteredStash Registration
         {
-            registeredStash.EngageBackingStore(backingStore);
+            get { return persistenceContext.RegisteredStash; }
+        }
+
+        public virtual void ApplyRegistration()
+        {
+            persistenceContext.RegisteredStash.EngageBackingStore(backingStore);
         }
 
         /// <summary>
-        /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>. <see cref="Stash.ConfigurePersistence{TBackingStore}"/> is a static wrapper for this.
+        /// Configure Stash in the required <paramref name="persistenceConfigurationActions"/>.
         /// </summary>
         /// <param name="persistenceConfigurationActions"></param>
-        public virtual void ConfigurePersistence(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
+        public virtual void PerformRegistration(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
         {
-            var persistenceContext = new PersistenceContext<TBackingStore>(new RegisteredStash());
+            persistenceContext = new PersistenceContext<TBackingStore>(new RegisteredStash());
             persistenceConfigurationActions(persistenceContext);
-            ApplyConfiguration(persistenceContext.RegisteredStash);
         }
     }
 }

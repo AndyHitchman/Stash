@@ -11,7 +11,7 @@ namespace Stash.Specifications.for_configuration.given_registrar
         {
             PersistenceContext<DummyBackingStore> actual = null;
             var sut = new Registrar<DummyBackingStore>(new DummyBackingStore());
-            sut.ConfigurePersistence(context => { actual = context; });
+            sut.PerformRegistration(context => { actual = context; });
             actual.ShouldNotBeNull();
         }
     }

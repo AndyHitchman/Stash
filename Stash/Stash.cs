@@ -6,11 +6,19 @@ namespace Stash
 
     public static class Stash
     {
-        public static void ConfigurePersistence<TBackingStore>(
+        public static void Kickstart<TBackingStore>(
             TBackingStore backingStore, Action<PersistenceContext<TBackingStore>> configurationAction)
             where TBackingStore : BackingStore
         {
-            new Registrar<TBackingStore>(backingStore).ConfigurePersistence(configurationAction);
+            var registrar = new Registrar<TBackingStore>(backingStore);
+            registrar.PerformRegistration(configurationAction);
+            registrar.ApplyRegistration();
+            Registration = registrar.Registration;
+            SessionFactory = new SessionFactory(registrar.Registration);
         }
+
+        public static SessionFactory SessionFactory { get; private set; }
+
+        public static RegisteredStash Registration { get; set; }
     }
 }

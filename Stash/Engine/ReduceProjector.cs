@@ -10,7 +10,11 @@ namespace Stash.Engine
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
+        /// <param name="instance"></param>
         /// <param name="func"></param>
+        /// <param name="originalId"></param>
+        /// <param name="key"></param>
+        /// <param name="accumulator"></param>
         public virtual TrackedProjection<TKey, TValue> Emit<TKey, TValue>(
             Guid originalId, TKey key, TValue accumulator, TValue instance, Func<TKey, TValue, TValue> func)
         {
