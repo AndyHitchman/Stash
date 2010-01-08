@@ -62,6 +62,8 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Engine\PersistenceEvents\Track.cs" />
+    <Compile Include="Engine\PersistenceEvents\Destroy.cs" />
     <Compile Include="Engine\PersistenceEvents\Endure.cs" />
     <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />

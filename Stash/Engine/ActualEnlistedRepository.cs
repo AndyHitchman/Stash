@@ -5,57 +5,66 @@ namespace Stash.Engine
 
     public class ActualEnlistedRepository : EnlistedRepository
     {
+        private readonly InternalSession enlistedSession;
         private readonly UnenlistedRepository underlyingUnenlistedRepository;
 
-        public ActualEnlistedRepository(Session enlistToSession, UnenlistedRepository unenlistedRepository)
+        public ActualEnlistedRepository(InternalSession enlistToSession, UnenlistedRepository unenlistedRepository)
         {
             underlyingUnenlistedRepository = unenlistedRepository;
-            EnlistedSession = enlistToSession;
+            enlistedSession = enlistToSession;
         }
 
         /// <summary>
         /// The session this repository is enlisted to.
         /// </summary>
-        public Session EnlistedSession { get; private set; }
+        public Session EnlistedSession
+        {
+            get { return enlistedSession; }
+        }
 
         public IEnumerable<TGraph> All<TGraph>()
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.All<TGraph>(enlistedSession);
+        }
+
+        public void Delete<TGraph>(TGraph graph)
+        {
+            underlyingUnenlistedRepository.Delete(enlistedSession, graph);
         }
 
         public Tracker GetTrackerFor<TGraph>(TGraph graph)
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.GetTrackerFor(enlistedSession, graph);
         }
 
         public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.Index(enlistedSession, indexer);
         }
 
         public IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers)
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.Index(enlistedSession, joinIndexers);
         }
 
         public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper)
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.Map<TGraph, TKey, TValue>(enlistedSession, mapper);
         }
 
         public void Persist<TGraph>(TGraph graph)
         {
-            throw new NotImplementedException();
+            underlyingUnenlistedRepository.Persist(enlistedSession, graph);
         }
 
         public void ReconnectTracker(Tracker tracker)
         {
-            throw new NotImplementedException();
+            underlyingUnenlistedRepository.ReconnectTracker(enlistedSession, tracker);
         }
 
         public TValue Reduce<TKey, TValue>(TKey key, Reducer reducer)
         {
-            throw new NotImplementedException();
+            return underlyingUnenlistedRepository.Reduce<TKey, TValue>(enlistedSession, key, reducer);
         }
     }
 }

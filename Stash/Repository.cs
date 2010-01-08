@@ -11,6 +11,13 @@ namespace Stash
         IEnumerable<TGraph> All<TGraph>();
 
         /// <summary>
+        /// Instruct the repository to delete the graph from the persistent store.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        void Delete<TGraph>(TGraph graph);
+
+        /// <summary>
         /// Enumerate indexes from the provided <paramref name="indexer"/>.
         /// </summary>
         /// <param name="indexer"></param>

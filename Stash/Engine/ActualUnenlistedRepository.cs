@@ -15,7 +15,38 @@ namespace Stash.Engine
             return All<TGraph>(getSession());
         }
 
-        public IEnumerable<TGraph> All<TGraph>(Session session)
+        /// <summary>
+        /// Enumerate all persisted <typeparam name="TGraph"/>
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        public IEnumerable<TGraph> All<TGraph>(InternalSession session)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Instruct the repository to delete the graph from the persistent store.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        public void Delete<TGraph>(TGraph graph)
+        {
+            Delete(getSession(), graph);
+        }
+
+        /// <summary>
+        /// Instruct the repository to delete the graph from the persistent store.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="session"></param>
+        /// <param name="graph"></param>
+        public void Delete<TGraph>(InternalSession session, TGraph graph)
+        {
+            session.Enroll(new Destroy<TGraph>(graph));
+        }
+
+        public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph)
         {
             throw new NotImplementedException();
         }
@@ -40,12 +71,12 @@ namespace Stash.Engine
             return Index(getSession(), joinIndexers);
         }
 
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Session session, Indexer<TGraph, TKey> indexer)
+        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Indexer<TGraph, TKey> indexer)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TGraph> Index<TGraph>(Session session, params Indexer<TGraph>[] joinIndexers)
+        public IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Indexer<TGraph>[] joinIndexers)
         {
             throw new NotImplementedException();
         }
@@ -60,7 +91,7 @@ namespace Stash.Engine
             return Map<TGraph, TKey, TValue>(getSession(), mapper);
         }
 
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Session session, Mapper<TGraph> mapper)
+        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Mapper<TGraph> mapper)
         {
             throw new NotImplementedException();
         }
@@ -80,6 +111,11 @@ namespace Stash.Engine
             internalSession.Enroll(new Endure<TGraph>(graph));
         }
 
+        public void ReconnectTracker(InternalSession session, Tracker tracker)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Produce the result for the given <paramref name="reducer"/>.
         /// </summary>
@@ -91,7 +127,7 @@ namespace Stash.Engine
             return Reduce<TKey, TValue>(getSession(), key, reducer);
         }
 
-        public TValue Reduce<TKey, TValue>(Session session, TKey key, Reducer reducer)
+        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reducer reducer)
         {
             throw new NotImplementedException();
         }

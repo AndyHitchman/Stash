@@ -12,7 +12,27 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> All<TGraph>(Session session);
+        IEnumerable<TGraph> All<TGraph>(InternalSession session);
+
+        /// <summary>
+        /// Instruct the repository to delete the graph from the persistent store.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="session"></param>
+        /// <param name="graph"></param>
+        void Delete<TGraph>(InternalSession session, TGraph graph);
+
+        /// <summary>
+        /// Get the <see cref="Tracker"/> for a persisted aggregate object graph.
+        /// </summary>
+        /// <remarks>
+        /// The tracker managed the provided aggregate and allows the aggregrate to be reconnected to a subsequent session.
+        /// </remarks>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="session"></param>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph);
 
         /// <summary>
         /// Enumerate indexes from the provided <paramref name="indexer"/>.
@@ -20,7 +40,7 @@ namespace Stash.Engine
         /// <param name="session"></param>
         /// <param name="indexer"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Session session, Indexer<TGraph, TKey> indexer);
+        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Indexer<TGraph, TKey> indexer);
 
         /// <summary>
         /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
@@ -28,7 +48,7 @@ namespace Stash.Engine
         /// <param name="session"></param>
         /// <param name="joinIndexers"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph>(Session session, params Indexer<TGraph>[] joinIndexers);
+        IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Indexer<TGraph>[] joinIndexers);
 
         /// <summary>
         /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
@@ -36,7 +56,7 @@ namespace Stash.Engine
         /// <param name="session"></param>
         /// <param name="mapper"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Session session, Mapper<TGraph> mapper);
+        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Mapper<TGraph> mapper);
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
@@ -47,12 +67,19 @@ namespace Stash.Engine
         void Persist<TGraph>(InternalSession internalSession, TGraph graph);
 
         /// <summary>
+        /// Reconnect a <see cref="Tracker"/> to this session.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="tracker"></param>
+        void ReconnectTracker(InternalSession session, Tracker tracker);
+
+        /// <summary>
         /// Produce the result for the given <paramref name="reducer"/>.
         /// </summary>
         /// <param name="session"></param>
         /// <param name="key"></param>
         /// <param name="reducer"></param>
         /// <returns></returns>
-        TValue Reduce<TKey, TValue>(Session session, TKey key, Reducer reducer);
+        TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reducer reducer);
     }
 }
