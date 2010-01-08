@@ -23,28 +23,28 @@ namespace Stash.Configuration
         public virtual RegisteredGraph<TGraph> RegisteredGraph { get; private set; }
 
         /// <summary>
-        /// Index the object graph with the given <paramref name="indexer"/>.
+        /// Index the object graph with the given <paramref name="index"/>.
         /// </summary>
-        /// <param name="indexer"></param>
+        /// <param name="index"></param>
         /// <typeparam name="TKey"></typeparam>
-        public virtual void IndexWith<TKey>(Indexer<TGraph, TKey> indexer)
+        public virtual void IndexWith<TKey>(Index<TGraph, TKey> index)
         {
-            if(indexer == null) throw new ArgumentNullException("indexer");
-            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(indexer);
+            if(index == null) throw new ArgumentNullException("index");
+            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);
             RegisteredGraph.RegisteredIndexers.Add(registeredIndexer);
         }
 
         /// <summary>
-        /// Map the object graph with the given <paramref name="mapper"/>
+        /// Map the object graph with the given <paramref name="map"/>
         /// </summary>
-        /// <param name="mapper"></param>
+        /// <param name="map"></param>
         /// <returns></returns>
-        public virtual MapContext<TBackingStore, TGraph> MapWith(Mapper<TGraph> mapper)
+        public virtual MapContext<TBackingStore, TGraph, TKey, TValue> MapWith<TKey, TValue>(Map<TGraph, TKey, TValue> map)
         {
-            if(mapper == null) throw new ArgumentNullException("mapper");
-            var registeredMapper = new RegisteredMapper<TGraph>(mapper);
+            if(map == null) throw new ArgumentNullException("map");
+            var registeredMapper = new RegisteredMapper<TGraph,TKey,TValue>(map);
             RegisteredGraph.RegisteredMappers.Add(registeredMapper);
-            return new MapContext<TBackingStore, TGraph>(registeredMapper);
+            return new MapContext<TBackingStore, TGraph, TKey, TValue>(registeredMapper);
         }
 
         /// <summary>

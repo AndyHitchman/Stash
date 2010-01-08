@@ -50,7 +50,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockIndexer = MockRepository.GenerateMock<Indexer<DummyPersistentObject>>();
+            var mockIndexer = MockRepository.GenerateMock<Index<DummyPersistentObject>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.Index(mockIndexer);
@@ -63,7 +63,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockIndexer = MockRepository.GenerateMock<Indexer<DummyPersistentObject>>();
+            var mockIndexer = MockRepository.GenerateMock<Index<DummyPersistentObject>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
             var expected = new[] {mockIndexer};
             
@@ -77,12 +77,12 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockMapper = MockRepository.GenerateMock<Mapper<DummyPersistentObject>>();
+            var mockMapper = MockRepository.GenerateMock<Map<DummyPersistentObject,object,object>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.Map<DummyPersistentObject,object,object>(mockMapper);
 
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Map<DummyPersistentObject, object, object>(mockSession, mockMapper));
+            mockUnenlistedRepository.AssertWasCalled(repository => repository.Map(mockSession, mockMapper));
         }
 
         [Test]
@@ -116,7 +116,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockReducer = MockRepository.GenerateMock<Reducer>();
+            var mockReducer = MockRepository.GenerateMock<Reduction>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
             var expected = new object();
             

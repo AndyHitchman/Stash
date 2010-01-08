@@ -4,16 +4,16 @@ namespace Stash.Configuration
 
     public class RegisteredReducer
     {
-        public RegisteredReducer(Reducer reducer)
+        public RegisteredReducer(Reduction reduction)
         {
-            Reducer = reducer;
+            Reduction = reduction;
         }
 
-        public Reducer Reducer { get; private set; }
+        public Reduction Reduction { get; private set; }
 
         public virtual void EngageBackingStore(BackingStore backingStore)
         {
-            backingStore.EnsureReducer(Reducer);
+            backingStore.EnsureReduction(Reduction);
         }
     }
 }

@@ -3,9 +3,9 @@ namespace Stash
     using System;
 
     /// <summary>
-    /// Implement to reducer.
+    /// Implement to Reduction.
     /// </summary>
-    public interface Reducer : Projector
+    public interface Reduction : Projector
     {
         /// <summary>
         /// The reduce function that aggregates <typeparam name="TValue">values</typeparam> for a given <typeparam name="TKey"/>.

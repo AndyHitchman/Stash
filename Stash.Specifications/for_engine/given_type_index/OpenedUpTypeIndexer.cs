@@ -1,10 +1,10 @@
-namespace Stash.Specifications.for_engine.given_type_indexer
+namespace Stash.Specifications.for_engine.given_type_index
 {
     using System;
     using System.Collections.Generic;
     using Engine;
 
-    public class OpenedUpTypeIndexer : TypeIndexer
+    public class OpenedUpTypeIndex : TypeIndex
     {
         public IEnumerable<Projection<Type, object>> OpenedGetTypeHierarchyFor(object o)
         {

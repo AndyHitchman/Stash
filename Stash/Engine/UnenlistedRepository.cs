@@ -35,28 +35,28 @@ namespace Stash.Engine
         Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph);
 
         /// <summary>
-        /// Enumerate indexes from the provided <paramref name="indexer"/>.
+        /// Enumerate indexes from the provided <paramref name="index"/>.
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="indexer"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Indexer<TGraph, TKey> indexer);
+        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index);
 
         /// <summary>
-        /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
+        /// Enumerate joined indexes from the provided <paramref name="joinIndices"/>.
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="joinIndexers"></param>
+        /// <param name="joinIndices"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Indexer<TGraph>[] joinIndexers);
+        IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices);
 
         /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
+        /// Enumerate mapped projections from the provided <paramref name="map"/>.
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="mapper"></param>
+        /// <param name="map"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Mapper<TGraph> mapper);
+        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Map<TGraph,TKey,TValue> map);
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
@@ -74,12 +74,12 @@ namespace Stash.Engine
         void ReconnectTracker(InternalSession session, Tracker tracker);
 
         /// <summary>
-        /// Produce the result for the given <paramref name="reducer"/>.
+        /// Produce the result for the given <paramref name="reduction"/>.
         /// </summary>
         /// <param name="session"></param>
         /// <param name="key"></param>
-        /// <param name="reducer"></param>
+        /// <param name="reduction"></param>
         /// <returns></returns>
-        TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reducer reducer);
+        TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction reduction);
     }
 }

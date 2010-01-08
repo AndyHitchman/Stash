@@ -62,8 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DummyConnectionPool.cs" />
-    <Compile Include="DummyReducer.cs" />
-    <Compile Include="DummyMapper.cs" />
+    <Compile Include="DummyReduction.cs" />
+    <Compile Include="DummyMap.cs" />
     <Compile Include="DummyBackingStore.cs" />
     <Compile Include="for_configuration\given_registered_indexer\when_engaging_backing_store.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
@@ -88,11 +88,11 @@
     <Compile Include="for_engine\given_actual_enlisted_repository\when_doing_work.cs" />
     <Compile Include="for_engine\given_actual_unenlisted_repository\when_deleting.cs" />
     <Compile Include="for_engine\given_actual_unenlisted_repository\when_persisting.cs" />
-    <Compile Include="for_engine\given_type_indexer\ClassWithNoAncestors.cs" />
-    <Compile Include="for_engine\given_type_indexer\ClassWithOneAncestors.cs" />
-    <Compile Include="for_engine\given_type_indexer\ClassWithTwoAncestors.cs" />
-    <Compile Include="for_engine\given_type_indexer\OpenedUpTypeIndexer.cs" />
-    <Compile Include="for_engine\given_type_indexer\when_getting_the_type_hierarchy.cs" />
+    <Compile Include="for_engine\given_type_index\ClassWithNoAncestors.cs" />
+    <Compile Include="for_engine\given_type_index\ClassWithOneAncestors.cs" />
+    <Compile Include="for_engine\given_type_index\ClassWithTwoAncestors.cs" />
+    <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
+    <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\with_temp_dir.cs" />
     <Compile Include="for_in_esent\given_esent_backing_store\when_creating_a_new_database.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_instantiating.cs" />

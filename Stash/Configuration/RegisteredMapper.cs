@@ -1,33 +1,13 @@
 namespace Stash.Configuration
 {
-    using System.Collections.Generic;
     using Engine;
 
     /// <summary>
-    /// A configured mapper.
+    /// A configured Map.
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
-    public class RegisteredMapper<TGraph>
+    public abstract class RegisteredMapper<TGraph>
     {
-        public RegisteredMapper(Mapper<TGraph> mapper)
-        {
-            Mapper = mapper;
-            RegisteredReducers = new List<RegisteredReducer>();
-        }
-
-        /// <summary>
-        /// The mapper.
-        /// </summary>
-        public Mapper<TGraph> Mapper { get; private set; }
-
-        /// <summary>
-        /// Reducers chained to the <see cref="Mapper"/>.
-        /// </summary>
-        public IList<RegisteredReducer> RegisteredReducers { get; private set; }
-
-        public virtual void EngageBackingStore(BackingStore backingStore)
-        {
-            backingStore.EnsureMapper(Mapper);
-        }
+        public abstract void EngageBackingStore(BackingStore backingStore);
     }
 }

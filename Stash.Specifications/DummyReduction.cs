@@ -2,7 +2,7 @@ namespace Stash.Specifications
 {
     using System;
 
-    public class DummyReducer : Reducer
+    public class DummyReduction : Reduction
     {
         public string Name
         {

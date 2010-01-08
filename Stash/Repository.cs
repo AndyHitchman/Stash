@@ -18,25 +18,25 @@ namespace Stash
         void Delete<TGraph>(TGraph graph);
 
         /// <summary>
-        /// Enumerate indexes from the provided <paramref name="indexer"/>.
+        /// Enumerate indexes from the provided <paramref name="index"/>.
         /// </summary>
-        /// <param name="indexer"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer);
+        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Index<TGraph, TKey> index);
 
         /// <summary>
-        /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
+        /// Enumerate joined indexes from the provided <paramref name="joinIndices"/>.
         /// </summary>
-        /// <param name="joinIndexers"></param>
+        /// <param name="joinIndices"></param>
         /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers);
+        IEnumerable<TGraph> Index<TGraph>(params Index<TGraph>[] joinIndices);
 
         /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
+        /// Enumerate mapped projections from the provided <paramref name="map"/>.
         /// </summary>
-        /// <param name="mapper"></param>
+        /// <param name="map"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper);
+        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Map<TGraph,TKey,TValue> map);
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
@@ -46,11 +46,11 @@ namespace Stash
         void Persist<TGraph>(TGraph graph);
 
         /// <summary>
-        /// Produce the result for the given <paramref name="reducer"/>.
+        /// Produce the result for the given <paramref name="reduction"/>.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="reducer"></param>
+        /// <param name="reduction"></param>
         /// <returns></returns>
-        TValue Reduce<TKey, TValue>(TKey key, Reducer reducer);
+        TValue Reduce<TKey, TValue>(TKey key, Reduction reduction);
     }
 }

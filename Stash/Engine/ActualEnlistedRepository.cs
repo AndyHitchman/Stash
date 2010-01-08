@@ -37,19 +37,19 @@ namespace Stash.Engine
             return underlyingUnenlistedRepository.GetTrackerFor(enlistedSession, graph);
         }
 
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
+        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Index<TGraph, TKey> index)
         {
-            return underlyingUnenlistedRepository.Index(enlistedSession, indexer);
+            return underlyingUnenlistedRepository.Index(enlistedSession, index);
         }
 
-        public IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers)
+        public IEnumerable<TGraph> Index<TGraph>(params Index<TGraph>[] joinIndices)
         {
-            return underlyingUnenlistedRepository.Index(enlistedSession, joinIndexers);
+            return underlyingUnenlistedRepository.Index(enlistedSession, joinIndices);
         }
 
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper)
+        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Map<TGraph, TKey, TValue> map)
         {
-            return underlyingUnenlistedRepository.Map<TGraph, TKey, TValue>(enlistedSession, mapper);
+            return underlyingUnenlistedRepository.Map<TGraph, TKey, TValue>(enlistedSession, map);
         }
 
         public void Persist<TGraph>(TGraph graph)
@@ -62,9 +62,9 @@ namespace Stash.Engine
             underlyingUnenlistedRepository.ReconnectTracker(enlistedSession, tracker);
         }
 
-        public TValue Reduce<TKey, TValue>(TKey key, Reducer reducer)
+        public TValue Reduce<TKey, TValue>(TKey key, Reduction reduction)
         {
-            return underlyingUnenlistedRepository.Reduce<TKey, TValue>(enlistedSession, key, reducer);
+            return underlyingUnenlistedRepository.Reduce<TKey, TValue>(enlistedSession, key, reduction);
         }
     }
 }

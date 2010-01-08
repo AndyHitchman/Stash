@@ -12,12 +12,12 @@ namespace Stash.Specifications.for_configuration.given_registered_indexer
         public void it_should_tell_the_backing_store_to_ensure_the_indexer_is_managed()
         {
             var mockBackingStore = MockRepository.GenerateMock<BackingStore>();
-            var fakeIndexer = MockRepository.GenerateStub<Indexer<DummyPersistentObject, object>>();
+            var fakeIndexer = MockRepository.GenerateStub<Index<DummyPersistentObject, object>>();
             var sut = new RegisteredIndexer<DummyPersistentObject, object>(fakeIndexer);
 
             sut.EngageBackingStore(mockBackingStore);
 
-            mockBackingStore.AssertWasCalled(backingStore => backingStore.EnsureIndexer(fakeIndexer));
+            mockBackingStore.AssertWasCalled(backingStore => backingStore.EnsureIndex(fakeIndexer));
         }
     }
 }

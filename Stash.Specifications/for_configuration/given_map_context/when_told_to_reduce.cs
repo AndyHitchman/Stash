@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_configuration.given_map_context
         [Test]
         public void it_should_complain_if_the_reducer_is_null()
         {
-            Reducer expected = null;
+            Reduction expected = null;
 
             typeof(ArgumentNullException)
                 .ShouldBeThrownBy(() => Sut.ReduceWith(expected));
@@ -18,9 +18,9 @@ namespace Stash.Specifications.for_configuration.given_map_context
         [Test]
         public void it_should_register_the_reducer()
         {
-            var expected = new DummyReducer();
+            var expected = new DummyReduction();
             Sut.ReduceWith(expected);
-            Sut.RegisteredMapper.RegisteredReducers.ShouldContain(reducer => reducer.Reducer == expected);
+            Sut.RegisteredMapper.RegisteredReducers.ShouldContain(reducer => reducer.Reduction == expected);
         }
     }
 }

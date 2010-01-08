@@ -52,46 +52,56 @@ namespace Stash.Engine
         }
 
         /// <summary>
-        /// Enumerate indexes from the provided <paramref name="indexer"/>.
+        /// Enumerate indexes from the provided <paramref name="index"/>.
         /// </summary>
-        /// <param name="indexer"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
+        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Index<TGraph, TKey> index)
         {
-            return Index(getSession(), indexer);
+            return Index(getSession(), index);
         }
 
         /// <summary>
-        /// Enumerate joined indexes from the provided <paramref name="joinIndexers"/>.
+        /// Enumerate joined indexes from the provided <paramref name="joinIndices"/>.
         /// </summary>
-        /// <param name="joinIndexers"></param>
+        /// <param name="joinIndices"></param>
         /// <returns></returns>
-        public IEnumerable<TGraph> Index<TGraph>(params Indexer<TGraph>[] joinIndexers)
+        public IEnumerable<TGraph> Index<TGraph>(params Index<TGraph>[] joinIndices)
         {
-            return Index(getSession(), joinIndexers);
+            return Index(getSession(), joinIndices);
         }
 
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Indexer<TGraph, TKey> indexer)
+        public IEnumerable<Projection<TKey, TGraph>> Fetch<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Indexer<TGraph>[] joinIndexers)
+        public IEnumerable<TGraph> Fetch<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="mapper"/>.
+        /// Enumerate mapped projections from the provided <paramref name="map"/>.
         /// </summary>
-        /// <param name="mapper"></param>
+        /// <param name="map"></param>
         /// <returns></returns>
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Mapper<TGraph> mapper)
+        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Map<TGraph,TKey,TValue> map)
         {
-            return Map<TGraph, TKey, TValue>(getSession(), mapper);
+            return Map<TGraph, TKey, TValue>(getSession(), map);
         }
 
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Mapper<TGraph> mapper)
+        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Map<TGraph,TKey,TValue> map)
         {
             throw new NotImplementedException();
         }
@@ -117,17 +127,17 @@ namespace Stash.Engine
         }
 
         /// <summary>
-        /// Produce the result for the given <paramref name="reducer"/>.
+        /// Produce the result for the given <paramref name="reduction"/>.
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="reducer"></param>
+        /// <param name="reduction"></param>
         /// <returns></returns>
-        public TValue Reduce<TKey, TValue>(TKey key, Reducer reducer)
+        public TValue Reduce<TKey, TValue>(TKey key, Reduction reduction)
         {
-            return Reduce<TKey, TValue>(getSession(), key, reducer);
+            return Reduce<TKey, TValue>(getSession(), key, reduction);
         }
 
-        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reducer reducer)
+        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction reduction)
         {
             throw new NotImplementedException();
         }

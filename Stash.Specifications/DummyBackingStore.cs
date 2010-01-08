@@ -21,17 +21,17 @@ namespace Stash.Specifications
             throw new NotImplementedException();
         }
 
-        public bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer)
+        public bool EnsureIndex<TGraph, TKey>(Index<TGraph, TKey> index)
         {
             throw new NotImplementedException();
         }
 
-        public bool EnsureMapper<TGraph>(Mapper<TGraph> mapper)
+        public bool EnsureMap<TGraph,TKey,TValue>(Map<TGraph,TKey,TValue> map)
         {
             throw new NotImplementedException();
         }
 
-        public bool EnsureReducer(Reducer reducer)
+        public bool EnsureReduction(Reduction reduction)
         {
             throw new NotImplementedException();
         }

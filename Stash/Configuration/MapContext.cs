@@ -4,25 +4,27 @@ namespace Stash.Configuration
     using Engine;
 
     /// <summary>
-    /// The context for configuring a <see cref="Mapper{TGraph}"/>
+    /// The context for configuring a <see cref="Map{TGraph}"/>
     /// </summary>
     /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class MapContext<TBackingStore, TGraph> where TBackingStore : BackingStore
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    public class MapContext<TBackingStore, TGraph, TKey, TValue> where TBackingStore : BackingStore
     {
-        public MapContext(RegisteredMapper<TGraph> registeredMapper)
+        public MapContext(RegisteredMapper<TGraph,TKey,TValue> registeredMapper)
         {
             RegisteredMapper = registeredMapper;
         }
 
         /// <summary>
-        /// The configured mapper.
+        /// The configured Map.
         /// </summary>
-        public virtual RegisteredMapper<TGraph> RegisteredMapper { get; private set; }
+        public virtual RegisteredMapper<TGraph,TKey,TValue> RegisteredMapper { get; private set; }
 
         /// <summary>
         /// Instruct the configuration not to persist the map.
-        /// The map is transient, and only required as an intermediate step prior for consumption by a <see cref="Reducer"/>.
+        /// The map is transient, and only required as an intermediate step prior for consumption by a <see cref="Reduction"/>.
         /// </summary>
         public virtual void DoNotPersist()
         {
@@ -30,13 +32,13 @@ namespace Stash.Configuration
         }
 
         /// <summary>
-        /// Reduce the map with the given <paramref name="reducer"/>
+        /// Reduce the map with the given <paramref name="reduction"/>
         /// </summary>
-        /// <param name="reducer"></param>
-        public virtual void ReduceWith(Reducer reducer)
+        /// <param name="reduction"></param>
+        public virtual void ReduceWith(Reduction reduction)
         {
-            if(reducer == null) throw new ArgumentNullException("reducer");
-            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reducer));
+            if(reduction == null) throw new ArgumentNullException("reduction");
+            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reduction));
         }
     }
 }

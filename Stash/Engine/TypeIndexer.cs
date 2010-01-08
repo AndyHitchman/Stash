@@ -3,7 +3,7 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
 
-    public class TypeIndexer : Indexer<object, Type>
+    public class TypeIndex : Index<object, Type>
     {
         protected virtual IEnumerable<Projection<Type, object>> GetTypeHierarchyFor(object o)
         {

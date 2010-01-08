@@ -8,28 +8,30 @@ namespace Stash.Engine
         void DeleteGraphs(IEnumerable<Guid> internalIds);
 
         /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="indexer"/>.
+        /// Ensures that the database is configured to persist the provided <paramref name="index"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <typeparam name="TKey"></typeparam>
-        /// <param name="indexer"></param>
-        /// <returns>true is the backing store is going to manage the indexer, false if the backing store expects management to be by the Stash Engine.</returns>
-        bool EnsureIndexer<TGraph, TKey>(Indexer<TGraph, TKey> indexer);
+        /// <param name="index"></param>
+        /// <returns>true is the backing store is going to manage the Index, false if the backing store expects management to be by the Stash Engine.</returns>
+        bool EnsureIndex<TGraph, TKey>(Index<TGraph, TKey> index);
 
         /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="mapper"/>.
+        /// Ensures that the database is configured to persist the provided <paramref name="map"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        /// <param name="mapper"></param>
-        /// <returns>true is the backing store is going to manage the mapper, false if the backing store expects management to be by the Stash Engine.</returns>
-        bool EnsureMapper<TGraph>(Mapper<TGraph> mapper);
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="map"></param>
+        /// <returns>true is the backing store is going to manage the Map, false if the backing store expects management to be by the Stash Engine.</returns>
+        bool EnsureMap<TGraph,TKey,TValue>(Map<TGraph,TKey,TValue> map);
 
         /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="reducer"/>.
+        /// Ensures that the database is configured to persist the provided <paramref name="reduction"/>.
         /// </summary>
-        /// <param name="reducer"></param>
-        /// <returns>true is the backing store is going to manage the reducer, false if the backing store expects management to be by the Stash Engine.</returns>
-        bool EnsureReducer(Reducer reducer);
+        /// <param name="reduction"></param>
+        /// <returns>true is the backing store is going to manage the Reduction, false if the backing store expects management to be by the Stash Engine.</returns>
+        bool EnsureReduction(Reduction reduction);
 
         IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs);
         IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds);
