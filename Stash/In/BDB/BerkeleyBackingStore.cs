@@ -96,7 +96,7 @@ namespace Stash.In.BDB
         /// <remarks>Reductions are stored in a secondary database.</remarks>
         /// <param name="reduction"></param>
         /// <returns>true is the backing store is going to manage the Reduction, false if the backing store expects management to be by the Stash Engine.</returns>
-        public bool EnsureReduction(Reduction reduction)
+        public bool EnsureReduction<TKey, TValue>(Reduction<TKey, TValue> reduction)
         {
             throw new NotImplementedException();
         }

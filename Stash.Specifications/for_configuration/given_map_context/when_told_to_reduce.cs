@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_configuration.given_map_context
         [Test]
         public void it_should_complain_if_the_reducer_is_null()
         {
-            Reduction expected = null;
+            Reduction<object, object> expected = null;
 
             typeof(ArgumentNullException)
                 .ShouldBeThrownBy(() => Sut.ReduceWith(expected));

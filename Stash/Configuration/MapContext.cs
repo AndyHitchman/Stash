@@ -35,10 +35,10 @@ namespace Stash.Configuration
         /// Reduce the map with the given <paramref name="reduction"/>
         /// </summary>
         /// <param name="reduction"></param>
-        public virtual void ReduceWith(Reduction reduction)
+        public virtual void ReduceWith(Reduction<TKey, TValue> reduction)
         {
             if(reduction == null) throw new ArgumentNullException("reduction");
-            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer(reduction));
+            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer<TKey, TValue>(reduction));
         }
     }
 }

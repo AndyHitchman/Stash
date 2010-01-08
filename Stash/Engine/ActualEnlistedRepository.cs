@@ -62,7 +62,7 @@ namespace Stash.Engine
             underlyingUnenlistedRepository.ReconnectTracker(enlistedSession, tracker);
         }
 
-        public TValue Reduce<TKey, TValue>(TKey key, Reduction reduction)
+        public TValue Reduce<TKey, TValue>(TKey key, Reduction<TKey, TValue> reduction)
         {
             return underlyingUnenlistedRepository.Reduce<TKey, TValue>(enlistedSession, key, reduction);
         }

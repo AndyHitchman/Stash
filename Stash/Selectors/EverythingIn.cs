@@ -1,8 +1,8 @@
 namespace Stash.Selectors
 {
-    public class EverythingIn<TGraph,TKey>
+    public class EverythingIn<TProjection,TKey>
     {
-        public EverythingIn(Index<TGraph,TKey> index)
+        public EverythingIn(Index<TProjection,TKey> index)
         {
         }
     }

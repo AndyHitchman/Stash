@@ -132,12 +132,12 @@ namespace Stash.Engine
         /// <param name="key"></param>
         /// <param name="reduction"></param>
         /// <returns></returns>
-        public TValue Reduce<TKey, TValue>(TKey key, Reduction reduction)
+        public TValue Reduce<TKey, TValue>(TKey key, Reduction<TKey, TValue> reduction)
         {
             return Reduce<TKey, TValue>(getSession(), key, reduction);
         }
 
-        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction reduction)
+        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction<TKey, TValue> reduction)
         {
             throw new NotImplementedException();
         }

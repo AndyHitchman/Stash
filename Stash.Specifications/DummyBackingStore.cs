@@ -31,7 +31,7 @@ namespace Stash.Specifications
             throw new NotImplementedException();
         }
 
-        public bool EnsureReduction(Reduction reduction)
+        public bool EnsureReduction<TKey, TValue>(Reduction<TKey, TValue> reduction)
         {
             throw new NotImplementedException();
         }

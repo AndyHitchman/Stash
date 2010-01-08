@@ -116,7 +116,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockReducer = MockRepository.GenerateMock<Reduction>();
+            var mockReducer = MockRepository.GenerateMock<Reduction<object, object>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
             var expected = new object();
             

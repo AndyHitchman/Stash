@@ -31,7 +31,7 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="reduction"></param>
         /// <returns>true is the backing store is going to manage the Reduction, false if the backing store expects management to be by the Stash Engine.</returns>
-        bool EnsureReduction(Reduction reduction);
+        bool EnsureReduction<TKey, TValue>(Reduction<TKey, TValue> reduction);
 
         IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs);
         IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds);

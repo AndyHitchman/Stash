@@ -2,14 +2,9 @@ namespace Stash.Specifications
 {
     using System;
 
-    public class DummyReduction : Reduction
+    public class DummyReduction : Reduction<object, object>
     {
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public Func<TKey, TValue, TValue> Reduce<TKey, TValue>()
+        public Func<object, object, object> Reduce()
         {
             throw new NotImplementedException();
         }

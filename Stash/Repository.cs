@@ -51,6 +51,6 @@ namespace Stash
         /// <param name="key"></param>
         /// <param name="reduction"></param>
         /// <returns></returns>
-        TValue Reduce<TKey, TValue>(TKey key, Reduction reduction);
+        TValue Reduce<TKey, TValue>(TKey key, Reduction<TKey, TValue> reduction);
     }
 }

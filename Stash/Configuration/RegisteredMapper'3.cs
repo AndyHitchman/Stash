@@ -14,7 +14,7 @@
         public RegisteredMapper(Map<TGraph,TKey,TValue> map)
         {
             Map = map;
-            RegisteredReducers = new List<RegisteredReducer>();
+            RegisteredReducers = new List<RegisteredReducer<TKey, TValue>>();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@
         /// <summary>
         /// Reducers chained to the <see cref="Map"/>.
         /// </summary>
-        public IList<RegisteredReducer> RegisteredReducers { get; private set; }
+        public IList<RegisteredReducer<TKey, TValue>> RegisteredReducers { get; private set; }
 
         public override void EngageBackingStore(BackingStore backingStore)
         {
