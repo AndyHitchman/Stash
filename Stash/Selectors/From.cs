@@ -1,7 +1,6 @@
 namespace Stash.Selectors
 {
-    public interface Selector
+    public interface From<TProjection>
     {
-        
     }
 }

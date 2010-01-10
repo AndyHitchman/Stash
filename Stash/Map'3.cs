@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    public interface Map<TGraph,TKey,TValue> : Map<TGraph>
+    public interface Map<TGraph,TKey,TValue> : Map<TGraph>, Projector<TKey, TGraph>
     {
         /// <summary>
         /// The map function that projects the persisted <typeparam name="TGraph">object graph</typeparam> to 

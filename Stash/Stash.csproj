@@ -76,8 +76,12 @@
     <Compile Include="Engine\PersistenceEvents\PersistenceEvent.cs" />
     <Compile Include="Engine\UnenlistedRepository.cs" />
     <Compile Include="Map%273.cs" />
-    <Compile Include="Selectors\EverythingIn.cs" />
-    <Compile Include="Selectors\Selector.cs" />
+    <Compile Include="Projector%272.cs" />
+    <Compile Include="Selectors\RangeFrom.cs" />
+    <Compile Include="Selectors\FirstFrom.cs" />
+    <Compile Include="Selectors\EverythingFrom.cs" />
+    <Compile Include="Selectors\From%272.cs" />
+    <Compile Include="Selectors\From.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="InternalSession.cs" />

@@ -1,6 +1,7 @@
 namespace Stash.Engine
 {
     using System.Collections.Generic;
+    using Selectors;
 
     /// <summary>
     /// Provides access to and management of persistent aggregrate object graphs and derived projections.
@@ -35,30 +36,6 @@ namespace Stash.Engine
         Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph);
 
         /// <summary>
-        /// Enumerate indexes from the provided <paramref name="index"/>.
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index);
-
-        /// <summary>
-        /// Enumerate joined indexes from the provided <paramref name="joinIndices"/>.
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="joinIndices"></param>
-        /// <returns></returns>
-        IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices);
-
-        /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="map"/>.
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="map"></param>
-        /// <returns></returns>
-        IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Map<TGraph,TKey,TValue> map);
-
-        /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
@@ -73,13 +50,8 @@ namespace Stash.Engine
         /// <param name="tracker"></param>
         void ReconnectTracker(InternalSession session, Tracker tracker);
 
-        /// <summary>
-        /// Produce the result for the given <paramref name="reduction"/>.
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="key"></param>
-        /// <param name="reduction"></param>
-        /// <returns></returns>
-        TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction<TKey, TValue> reduction);
+        IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(InternalSession session, From<TKey, TProjection> @from);
+
+        IEnumerable<TProjection> Fetch<TProjection>(InternalSession session, params From<TProjection>[] @from);
     }
 }

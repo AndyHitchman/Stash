@@ -5,7 +5,7 @@ namespace Stash
     /// <summary>
     /// Implement to Reduction.
     /// </summary>
-    public interface Reduction<TKey,TValue> : Projector
+    public interface Reduction<TKey, TValue> : Projector<TKey, TValue>
     {
         /// <summary>
         /// The reduce function that aggregates <typeparam name="TValue">values</typeparam> for a given <typeparam name="TKey"/>.

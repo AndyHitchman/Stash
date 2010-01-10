@@ -3,6 +3,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
     using Engine;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Selectors;
 
     [TestFixture]
     public class when_doing_work
@@ -46,43 +47,30 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         }
 
         [Test]
-        public void it_should_delegate_index_to_the_underlying_repository()
+        public void it_should_delegate_fetch_to_the_underlying_repository()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockIndexer = MockRepository.GenerateMock<Index<DummyPersistentObject>>();
+            var mockSelector = MockRepository.GenerateMock<From<DummyPersistentObject>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
 
-            sut.Index(mockIndexer);
+            sut.Fetch(mockSelector);
 
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Index(mockSession, mockIndexer));
+            mockUnenlistedRepository.AssertWasCalled(repository => repository.Fetch(mockSession, mockSelector));
         }
 
         [Test]
-        public void it_should_delegate_index_many_to_the_underlying_repository()
+        public void it_should_delegate_fetch_many_to_the_underlying_repository()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockIndexer = MockRepository.GenerateMock<Index<DummyPersistentObject>>();
+            var mockSelector = MockRepository.GenerateMock<From<DummyPersistentObject>>();
             var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
-            var expected = new[] {mockIndexer};
+            var expected = new[] {mockSelector};
             
-            sut.Index(expected);
+            sut.Fetch(expected);
 
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Index(mockSession, expected));
-        }
-
-        [Test]
-        public void it_should_delegate_map_to_the_underlying_repository()
-        {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockMapper = MockRepository.GenerateMock<Map<DummyPersistentObject,object,object>>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
-
-            sut.Map<DummyPersistentObject,object,object>(mockMapper);
-
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Map(mockSession, mockMapper));
+            mockUnenlistedRepository.AssertWasCalled(repository => repository.Fetch(mockSession, expected));
         }
 
         [Test]
@@ -109,20 +97,6 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
             sut.ReconnectTracker(mockTracker);
 
             mockUnenlistedRepository.AssertWasCalled(repository => repository.ReconnectTracker(mockSession, mockTracker));
-        }
-
-        [Test]
-        public void it_should_delegate_reduce_to_the_underlying_repository()
-        {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockReducer = MockRepository.GenerateMock<Reduction<object, object>>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
-            var expected = new object();
-            
-            sut.Reduce<object,object>(expected, mockReducer);
-
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Reduce<object, object>(mockSession, expected, mockReducer));
         }
     }
 }

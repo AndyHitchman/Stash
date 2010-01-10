@@ -3,6 +3,7 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
     using PersistenceEvents;
+    using Selectors;
 
     public class ActualUnenlistedRepository : UnenlistedRepository
     {
@@ -46,62 +47,27 @@ namespace Stash.Engine
             session.Enroll(new Destroy<TGraph>(graph));
         }
 
+        public IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(InternalSession session, From<TKey, TProjection> @from)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TProjection> Fetch<TProjection>(InternalSession session, params From<TProjection>[] @from)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(From<TKey, TProjection> from)
+        {
+            return Fetch(getSession(), from);
+        }
+
+        public IEnumerable<TProjection> Fetch<TProjection>(params From<TProjection>[] from)
+        {
+            return Fetch(getSession(), from);
+        }
+
         public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Enumerate indexes from the provided <paramref name="index"/>.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(Index<TGraph, TKey> index)
-        {
-            return Index(getSession(), index);
-        }
-
-        /// <summary>
-        /// Enumerate joined indexes from the provided <paramref name="joinIndices"/>.
-        /// </summary>
-        /// <param name="joinIndices"></param>
-        /// <returns></returns>
-        public IEnumerable<TGraph> Index<TGraph>(params Index<TGraph>[] joinIndices)
-        {
-            return Index(getSession(), joinIndices);
-        }
-
-        public IEnumerable<Projection<TKey, TGraph>> Fetch<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TGraph> Fetch<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Projection<TKey, TGraph>> Index<TGraph, TKey>(InternalSession session, Index<TGraph, TKey> index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TGraph> Index<TGraph>(InternalSession session, params Index<TGraph>[] joinIndices)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Enumerate mapped projections from the provided <paramref name="map"/>.
-        /// </summary>
-        /// <param name="map"></param>
-        /// <returns></returns>
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(Map<TGraph,TKey,TValue> map)
-        {
-            return Map<TGraph, TKey, TValue>(getSession(), map);
-        }
-
-        public IEnumerable<Projection<TKey, TValue>> Map<TGraph, TKey, TValue>(InternalSession session, Map<TGraph,TKey,TValue> map)
         {
             throw new NotImplementedException();
         }
@@ -122,22 +88,6 @@ namespace Stash.Engine
         }
 
         public void ReconnectTracker(InternalSession session, Tracker tracker)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Produce the result for the given <paramref name="reduction"/>.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="reduction"></param>
-        /// <returns></returns>
-        public TValue Reduce<TKey, TValue>(TKey key, Reduction<TKey, TValue> reduction)
-        {
-            return Reduce<TKey, TValue>(getSession(), key, reduction);
-        }
-
-        public TValue Reduce<TKey, TValue>(InternalSession session, TKey key, Reduction<TKey, TValue> reduction)
         {
             throw new NotImplementedException();
         }
