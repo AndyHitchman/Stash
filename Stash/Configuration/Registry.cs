@@ -4,9 +4,9 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using Engine;
 
-    public class Registration
+    public class Registry
     {
-        public Registration()
+        public Registry()
         {
             RegisteredGraphs = new Dictionary<Type, RegisteredGraph>();
         }

@@ -8,7 +8,7 @@
         /// <summary>
         /// The registered configuration.
         /// </summary>
-        Registration Registration { get; }
+        Registry Registry { get; }
 
         /// <summary>
         /// The engaged backing store.

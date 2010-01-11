@@ -10,11 +10,11 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_return_the_provided_registration()
         {
-            var fakeRegistration = new Registration();
+            var fakeRegistration = new Registry();
 
             var sut = new DefaultInternalSession(fakeRegistration);
 
-            sut.Registration.ShouldEqual(fakeRegistration);
+            sut.Registry.ShouldEqual(fakeRegistration);
         }
     }
 }

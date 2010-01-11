@@ -16,14 +16,14 @@ namespace Stash.Configuration
             this.backingStore = backingStore;
         }
 
-        public virtual Registration Registration
+        public virtual Registry Registry
         {
-            get { return persistenceContext.Registration; }
+            get { return persistenceContext.Registry; }
         }
 
         public virtual void ApplyRegistration()
         {
-            persistenceContext.Registration.EngageBackingStore(backingStore);
+            persistenceContext.Registry.EngageBackingStore(backingStore);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Stash.Configuration
         /// <param name="persistenceConfigurationActions"></param>
         public virtual void PerformRegistration(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
         {
-            persistenceContext = new PersistenceContext<TBackingStore>(new Registration());
+            persistenceContext = new PersistenceContext<TBackingStore>(new Registry());
             persistenceConfigurationActions(persistenceContext);
         }
     }

@@ -5,12 +5,12 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
 
     public class with_registered_stash
     {
-        protected Registration Sut { get; private set; }
+        protected Registry Sut { get; private set; }
 
         [SetUp]
         public void each_up()
         {
-            Sut = new Registration();
+            Sut = new Registry();
         }
     }
 }

@@ -5,11 +5,11 @@
 
     public class DefaultSessionFactory : SessionFactory
     {
-        private readonly Registration registration;
+        private readonly Registry registry;
 
-        public DefaultSessionFactory(Registration registration)
+        public DefaultSessionFactory(Registry registry)
         {
-            this.registration = registration;
+            this.registry = registry;
         }
 
 
@@ -19,7 +19,7 @@
         /// <returns></returns>
         public Session GetSession()
         {
-            return new DefaultInternalSession(registration);
+            return new DefaultInternalSession(registry);
         }
     }
 }

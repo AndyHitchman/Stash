@@ -7,7 +7,7 @@ namespace Stash.Engine.PersistenceEvents
             Graph = graph;
         }
 
-        protected virtual TGraph Graph { get; set; }
+        protected virtual TGraph Graph { get; private set; }
 
         protected virtual InternalSession InternalSession { get; set; }
 

@@ -9,12 +9,12 @@ namespace Stash.Configuration
     /// <typeparam name="TBackingStore"></typeparam>
     public class PersistenceContext<TBackingStore> where TBackingStore : BackingStore
     {
-        public PersistenceContext(Registration registration)
+        public PersistenceContext(Registry registry)
         {
-            Registration = registration;
+            Registry = registry;
         }
 
-        public Registration Registration { get; private set; }
+        public Registry Registry { get; private set; }
 
         /// <summary>
         /// Configure Stash for the <typeparamref name="TGraph"/> and provide an action that performs additional configuration.
@@ -23,7 +23,7 @@ namespace Stash.Configuration
         /// <param name="configurePersistentGraph"></param>
         public virtual void Register<TGraph>(Action<GraphContext<TBackingStore, TGraph>> configurePersistentGraph)
         {
-            configurePersistentGraph(new GraphContext<TBackingStore, TGraph>(Registration.RegisterGraph<TGraph>()));
+            configurePersistentGraph(new GraphContext<TBackingStore, TGraph>(Registry.RegisterGraph<TGraph>()));
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Stash.Configuration
         /// <typeparam name="TGraph"></typeparam>
         public virtual void Register<TGraph>()
         {
-            Registration.RegisterGraph<TGraph>();
+            Registry.RegisterGraph<TGraph>();
         }
     }
 }

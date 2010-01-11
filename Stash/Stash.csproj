@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\RegisteredMapper%273.cs" />
-    <Compile Include="Configuration\Registration.cs" />
+    <Compile Include="Configuration\Registry.cs" />
     <Compile Include="Configuration\Registrar.cs" />
     <Compile Include="Configuration\RegisteredIndexer%272.cs" />
     <Compile Include="Configuration\RegisteredIndexer.cs" />

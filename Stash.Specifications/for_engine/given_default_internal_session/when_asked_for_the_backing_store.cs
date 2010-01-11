@@ -11,7 +11,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_return_the_backing_store_given_to_the_registration()
         {
-            var mockRegistration = MockRepository.GenerateMock<Registration>();
+            var mockRegistration = MockRepository.GenerateMock<Registry>();
             
             var sut = new DefaultInternalSession(mockRegistration);
             var actual = sut.BackingStore;

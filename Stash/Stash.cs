@@ -13,12 +13,12 @@ namespace Stash
             var registrar = new Registrar<TBackingStore>(backingStore);
             registrar.PerformRegistration(configurationAction);
             registrar.ApplyRegistration();
-            Registration = registrar.Registration;
-            SessionFactory = new DefaultSessionFactory(registrar.Registration);
+            Registry = registrar.Registry;
+            SessionFactory = new DefaultSessionFactory(registrar.Registry);
         }
 
         public static SessionFactory SessionFactory { get; private set; }
 
-        public static Registration Registration { get; set; }
+        public static Registry Registry { get; set; }
     }
 }

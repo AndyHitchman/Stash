@@ -6,9 +6,9 @@ namespace Stash.Engine
 
     public class DefaultInternalSession : InternalSession
     {
-        public DefaultInternalSession(Registration registration)
+        public DefaultInternalSession(Registry registry)
         {
-            Registration = registration;
+            Registry = registry;
         }
 
         public virtual void Dispose()
@@ -31,11 +31,11 @@ namespace Stash.Engine
             throw new NotImplementedException();
         }
 
-        public virtual Registration Registration { get; private set; }
+        public virtual Registry Registry { get; private set; }
 
         public virtual BackingStore BackingStore
         {
-            get { return Registration.BackingStore; }
+            get { return Registry.BackingStore; }
         }
 
         public virtual void Enroll<TGraph>(PersistenceEvent<TGraph> persistenceEvent)
