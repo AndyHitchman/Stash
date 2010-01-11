@@ -1,8 +1,8 @@
 namespace Stash.Engine.PersistenceEvents
 {
-    public class Endure<TGraph> : PersistenceEvent<TGraph>
+    public class Endure<TGraph> : CommonPersistenceEvent<TGraph>
     {
-        public Endure(TGraph graph)
+        public Endure(TGraph graph) : base(graph)
         {
         }
     }

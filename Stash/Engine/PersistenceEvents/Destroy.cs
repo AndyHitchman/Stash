@@ -1,8 +1,8 @@
 namespace Stash.Engine.PersistenceEvents
 {
-    public class Destroy<TGraph> : PersistenceEvent<TGraph>
+    public class Destroy<TGraph> : CommonPersistenceEvent<TGraph>
     {
-        public Destroy(TGraph graph)
+        public Destroy(TGraph graph) : base(graph)
         {
         }
     }

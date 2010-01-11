@@ -66,6 +66,7 @@
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />
     <Compile Include="Engine\InternalSession.cs" />
+    <Compile Include="Engine\PersistenceEvents\CommonPersistenceEvent.cs" />
     <Compile Include="Engine\PersistenceEvents\Track.cs" />
     <Compile Include="Engine\PersistenceEvents\Destroy.cs" />
     <Compile Include="Engine\PersistenceEvents\Endure.cs" />

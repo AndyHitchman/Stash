@@ -40,12 +40,15 @@ namespace Stash.Engine
 
         public virtual void Enroll<TGraph>(PersistenceEvent<TGraph> persistenceEvent)
         {
+            persistenceEvent.EnlistedSessionIs(this);
+
             //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
             //saving unecessary work in the backing store.
             //Keep a local cache of indexes, maps and reduces for graphs tracked in the session. Go here before hitting the
             //backing store. Reduces may be out of date once retrieved.
             //Exclude destroyed graphs from results.
             //Reduces must be calculated by a background process to ensure consistency. Use a BDB Queue?
+
             throw new NotImplementedException();
         }
     }
