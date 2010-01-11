@@ -1,6 +1,6 @@
 namespace Stash.Selectors
 {
-    public class FirstFrom<TKey, TProjection> : From<TKey, TProjection>
+    public class FirstFrom<TKey, TProjection> : From<FirstFrom<TKey,TProjection> ,TKey, TProjection>
     {
         public FirstFrom(Projector<TKey, TProjection> projector) : base(projector)
         {
@@ -8,7 +8,7 @@ namespace Stash.Selectors
 
         public FirstFrom<TKey, TProjection> WithKey(TKey equalTo)
         {
-            return this;
+            return FromThis();
         }
     }
 }

@@ -18,12 +18,7 @@ namespace Stash
         InternalSession Internalize();
 
         /// <summary>
-        /// Push all enrolled changes to the <see cref="BackingStore"/>.
-        /// </summary>
-        void Flush();
-
-        /// <summary>
-        /// End the session. Implementations must call <see cref="Flush"/>.
+        /// End the session.
         /// </summary>
         void End();
     }

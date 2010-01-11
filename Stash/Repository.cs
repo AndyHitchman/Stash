@@ -26,7 +26,7 @@ namespace Stash
         /// <typeparam name="TProjection"></typeparam>
         /// <param name="from"></param>
         /// <returns></returns>
-        IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(From<TKey, TProjection> @from);
+        IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
 
         /// <summary>
         /// Fetch from the set of projections.
@@ -34,6 +34,6 @@ namespace Stash
         /// <typeparam name="TProjection"></typeparam>
         /// <param name="from"></param>
         /// <returns></returns>
-        IEnumerable<TProjection> Fetch<TProjection>(params From<TProjection>[] @from);
+        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params From<TFromThis, TProjection>[] @from) where TFromThis : From<TFromThis, TProjection>;
     }
 }

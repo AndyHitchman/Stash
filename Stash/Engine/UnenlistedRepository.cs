@@ -50,8 +50,8 @@ namespace Stash.Engine
         /// <param name="tracker"></param>
         void ReconnectTracker(InternalSession session, Tracker tracker);
 
-        IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(InternalSession session, From<TKey, TProjection> @from);
+        IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(InternalSession internalSession, From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
 
-        IEnumerable<TProjection> Fetch<TProjection>(InternalSession session, params From<TProjection>[] @from);
+        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession internalSession, params From<TFromThis, TProjection>[] @from) where TFromThis : From<TFromThis, TProjection>;
     }
 }

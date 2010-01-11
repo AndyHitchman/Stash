@@ -1,10 +1,7 @@
-namespace Stash
+﻿namespace Stash.Engine
 {
-    using System;
-    using System.Collections.Generic;
     using Configuration;
-    using Engine;
-    using Engine.PersistenceEvents;
+    using PersistenceEvents;
 
     public interface InternalSession : Session
     {

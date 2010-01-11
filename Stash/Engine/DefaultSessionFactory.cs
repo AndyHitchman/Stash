@@ -1,14 +1,13 @@
-namespace Stash
+﻿namespace Stash.Engine
 {
     using System;
-    using System.Collections.Generic;
     using Configuration;
 
-    public class ActualSessionFactory : SessionFactory
+    public class DefaultSessionFactory : SessionFactory
     {
         private readonly Registration registration;
 
-        public ActualSessionFactory(Registration registration)
+        public DefaultSessionFactory(Registration registration)
         {
             this.registration = registration;
         }
@@ -20,7 +19,7 @@ namespace Stash
         /// <returns></returns>
         public Session GetSession()
         {
-            throw new NotImplementedException(); 
+            return new DefaultInternalSession(registration);
         }
     }
 }

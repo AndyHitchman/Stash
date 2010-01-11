@@ -4,12 +4,12 @@ namespace Stash.Engine
     using System.Collections.Generic;
     using Selectors;
 
-    public class ActualEnlistedRepository : EnlistedRepository
+    public class DefaultEnlistedRepository : EnlistedRepository
     {
         private readonly InternalSession enlistedSession;
         private readonly UnenlistedRepository underlyingUnenlistedRepository;
 
-        public ActualEnlistedRepository(InternalSession enlistToSession, UnenlistedRepository unenlistedRepository)
+        public DefaultEnlistedRepository(InternalSession enlistToSession, UnenlistedRepository unenlistedRepository)
         {
             underlyingUnenlistedRepository = unenlistedRepository;
             enlistedSession = enlistToSession;
@@ -43,12 +43,12 @@ namespace Stash.Engine
             underlyingUnenlistedRepository.Persist(enlistedSession, graph);
         }
 
-        public IEnumerable<Projection<TKey, TProjection>> Fetch<TKey, TProjection>(From<TKey, TProjection> from)
+        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from) where TFromThis : From<TFromThis, TKey, TProjection>
         {
             return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
         }
 
-        public IEnumerable<TProjection> Fetch<TProjection>(params From<TProjection>[] from)
+        public IEnumerable<TProjection> Fetch<TFromThis,TProjection>(params From<TFromThis, TProjection>[] from) where TFromThis : From<TFromThis, TProjection>
         {
             return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
         }

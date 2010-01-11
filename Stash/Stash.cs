@@ -14,7 +14,7 @@ namespace Stash
             registrar.PerformRegistration(configurationAction);
             registrar.ApplyRegistration();
             Registration = registrar.Registration;
-            SessionFactory = new ActualSessionFactory(registrar.Registration);
+            SessionFactory = new DefaultSessionFactory(registrar.Registration);
         }
 
         public static SessionFactory SessionFactory { get; private set; }

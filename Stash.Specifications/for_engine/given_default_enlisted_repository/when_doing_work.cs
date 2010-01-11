@@ -1,9 +1,9 @@
-namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
+namespace Stash.Specifications.for_engine.given_default_enlisted_repository
 {
     using Engine;
+    using Selectors;
     using NUnit.Framework;
     using Rhino.Mocks;
-    using Selectors;
 
     [TestFixture]
     public class when_doing_work
@@ -13,7 +13,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.All<DummyPersistentObject>();
 
@@ -25,7 +25,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
             sut.Delete(graph);
@@ -38,7 +38,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
             sut.GetTrackerFor(graph);
@@ -51,8 +51,8 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockSelector = MockRepository.GenerateMock<From<DummyPersistentObject>>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, DummyPersistentObject>>();
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.Fetch(mockSelector);
 
@@ -64,8 +64,8 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockSelector = MockRepository.GenerateMock<From<DummyPersistentObject>>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var expected = new[] {mockSelector};
             
             sut.Fetch(expected);
@@ -78,7 +78,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
             sut.Persist(graph);
@@ -92,7 +92,7 @@ namespace Stash.Specifications.for_engine.given_actual_enlisted_repository
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
             var mockTracker = MockRepository.GenerateMock<Tracker>();
-            var sut = new ActualEnlistedRepository(mockSession, mockUnenlistedRepository);
+            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.ReconnectTracker(mockTracker);
 
