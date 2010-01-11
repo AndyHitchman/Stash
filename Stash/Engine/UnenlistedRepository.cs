@@ -9,13 +9,6 @@ namespace Stash.Engine
     public interface UnenlistedRepository : Repository
     {
         /// <summary>
-        /// Enumerate all persisted <typeparam name="TGraph"/>
-        /// </summary>
-        /// <param name="session"></param>
-        /// <returns></returns>
-        IEnumerable<TGraph> All<TGraph>(InternalSession session);
-
-        /// <summary>
         /// Instruct the repository to delete the graph from the persistent store.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>

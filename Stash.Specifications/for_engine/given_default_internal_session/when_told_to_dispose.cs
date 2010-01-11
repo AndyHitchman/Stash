@@ -1,9 +1,7 @@
 namespace Stash.Specifications.for_engine.given_default_internal_session
 {
-    using Configuration;
     using Engine;
     using NUnit.Framework;
-    using Rhino.Mocks;
 
     [TestFixture]
     public class when_told_to_dispose

@@ -9,7 +9,7 @@ namespace Stash
         /// Tell the session to track the work performed with the given repository.
         /// </summary>
         /// <param name="unenlistedRepository"></param>
-        Action<UnenlistedRepository> EnlistRepository(UnenlistedRepository unenlistedRepository);
+        EnlistedRepository EnlistRepository(UnenlistedRepository unenlistedRepository);
 
         /// <summary>
         /// Get the <see cref="InternalSession"/> used by Stash. Not for external use.

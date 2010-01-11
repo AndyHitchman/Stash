@@ -4,6 +4,10 @@ namespace Stash.Engine
     using System.Collections.Generic;
     using Selectors;
 
+    /// <summary>
+    /// The default implementation of <see cref="EnlistedRepository"/> delegates all requests to a
+    /// provided <see cref="UnenlistedRepository"/> using the <see cref="EnlistedSession"/>.
+    /// </summary>
     public class DefaultEnlistedRepository : EnlistedRepository
     {
         private readonly InternalSession enlistedSession;
@@ -21,11 +25,6 @@ namespace Stash.Engine
         public Session EnlistedSession
         {
             get { return enlistedSession; }
-        }
-
-        public IEnumerable<TGraph> All<TGraph>()
-        {
-            return underlyingUnenlistedRepository.All<TGraph>(enlistedSession);
         }
 
         public void Delete<TGraph>(TGraph graph)

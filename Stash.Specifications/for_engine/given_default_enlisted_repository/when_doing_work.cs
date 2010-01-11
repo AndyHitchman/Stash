@@ -9,18 +9,6 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
     public class when_doing_work
     {
         [Test]
-        public void it_should_delegate_all_to_the_underlying_repository()
-        {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
-
-            sut.All<DummyPersistentObject>();
-
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.All<DummyPersistentObject>(mockSession));
-        }
-
-        [Test]
         public void it_should_delegate_delete_to_the_underlying_repository()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
