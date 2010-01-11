@@ -90,7 +90,7 @@
     <Compile Include="for_engine\given_default_enlisted_repository\when_doing_work.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_dispose.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_backing_store.cs" />
-    <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_registration.cs" />
+    <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_registry.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_enlist_repository.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_internalise.cs" />
     <Compile Include="for_engine\given_default_unenlisted_repository\when_fetching.cs" />
