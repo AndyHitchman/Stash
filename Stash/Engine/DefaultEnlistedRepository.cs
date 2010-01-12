@@ -27,17 +27,17 @@ namespace Stash.Engine
             get { return enlistedSession; }
         }
 
-        public void Delete<TGraph>(TGraph graph)
+        public void Delete<TGraph>(TGraph graph) where TGraph : class
         {
             underlyingUnenlistedRepository.Delete(enlistedSession, graph);
         }
 
-        public Tracker GetTrackerFor<TGraph>(TGraph graph)
+        public Tracker GetTrackerFor<TGraph>(TGraph graph) where TGraph : class
         {
             return underlyingUnenlistedRepository.GetTrackerFor(enlistedSession, graph);
         }
 
-        public void Persist<TGraph>(TGraph graph)
+        public void Persist<TGraph>(TGraph graph) where TGraph : class
         {
             underlyingUnenlistedRepository.Persist(enlistedSession, graph);
         }

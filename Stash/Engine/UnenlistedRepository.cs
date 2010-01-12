@@ -14,7 +14,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="session"></param>
         /// <param name="graph"></param>
-        void Delete<TGraph>(InternalSession session, TGraph graph);
+        void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Get the <see cref="Tracker"/> for a persisted aggregate object graph.
@@ -26,7 +26,7 @@ namespace Stash.Engine
         /// <param name="session"></param>
         /// <param name="graph"></param>
         /// <returns></returns>
-        Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph);
+        Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
@@ -34,7 +34,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="internalSession"></param>
         /// <param name="graph"></param>
-        void Persist<TGraph>(InternalSession internalSession, TGraph graph);
+        void Persist<TGraph>(InternalSession internalSession, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Reconnect a <see cref="Tracker"/> to this session.

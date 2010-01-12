@@ -10,20 +10,21 @@ namespace Stash
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph"></param>
-        void Delete<TGraph>(TGraph graph);
+        void Delete<TGraph>(TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph"></param>
-        void Persist<TGraph>(TGraph graph);
+        void Persist<TGraph>(TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Fetch from the projection.
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TProjection"></typeparam>
+        /// <typeparam name="TFromThis"></typeparam>
         /// <param name="from"></param>
         /// <returns></returns>
         IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
@@ -32,6 +33,7 @@ namespace Stash
         /// Fetch from the set of projections.
         /// </summary>
         /// <typeparam name="TProjection"></typeparam>
+        /// <typeparam name="TFromThis"></typeparam>
         /// <param name="from"></param>
         /// <returns></returns>
         IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params From<TFromThis, TProjection>[] @from) where TFromThis : From<TFromThis, TProjection>;

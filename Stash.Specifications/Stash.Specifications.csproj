@@ -86,6 +86,7 @@
     <Compile Include="for_configuration\given_registered_stash\with_registered_stash.cs" />
     <Compile Include="for_configuration\given_registrar\when_configuring.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_engaging_backing_store.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_endure\when_enrolling_in_session.cs" />
     <Compile Include="for_engine\given_default_enlisted_repository\when_initialising.cs" />
     <Compile Include="for_engine\given_default_enlisted_repository\when_doing_work.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_dispose.cs" />

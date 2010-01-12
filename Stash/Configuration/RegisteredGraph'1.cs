@@ -8,7 +8,7 @@ namespace Stash.Configuration
     /// A configured object graph.
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
-    public class RegisteredGraph<TGraph> : RegisteredGraph
+    public class RegisteredGraph<TGraph> : RegisteredGraph where TGraph : class
     {
         public RegisteredGraph() : base(typeof(TGraph))
         {

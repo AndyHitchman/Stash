@@ -10,13 +10,13 @@ namespace Stash.Configuration
     {
         protected RegisteredGraph(Type aggregateType)
         {
-            AggregateType = aggregateType;
+            GraphType = aggregateType;
         }
 
         /// <summary>
         /// The <see cref="Type"/> of the root of the object graph.
         /// </summary>
-        public virtual Type AggregateType { get; private set; }
+        public virtual Type GraphType { get; private set; }
 
 
         public abstract void EngageBackingStore(BackingStore backingStore);

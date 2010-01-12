@@ -12,7 +12,7 @@ namespace Stash.Engine
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph"></param>
-        public void Delete<TGraph>(TGraph graph)
+        public void Delete<TGraph>(TGraph graph) where TGraph : class
         {
             Delete(getSession(), graph);
         }
@@ -23,7 +23,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="session"></param>
         /// <param name="graph"></param>
-        public void Delete<TGraph>(InternalSession session, TGraph graph)
+        public void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class
         {
             session.Enroll(new Destroy<TGraph>(graph));
         }
@@ -64,7 +64,7 @@ namespace Stash.Engine
             return fetched;
         }
 
-        public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph)
+        public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph) where TGraph : class
         {
             throw new NotImplementedException();
         }
@@ -74,12 +74,12 @@ namespace Stash.Engine
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph"></param>
-        public void Persist<TGraph>(TGraph graph)
+        public void Persist<TGraph>(TGraph graph) where TGraph : class
         {
             Persist(getSession(), graph);
         }
 
-        public void Persist<TGraph>(InternalSession internalSession, TGraph graph)
+        public void Persist<TGraph>(InternalSession internalSession, TGraph graph) where TGraph : class
         {
             internalSession.Enroll(new Endure<TGraph>(graph));
         }

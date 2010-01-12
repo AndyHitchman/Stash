@@ -1,5 +1,6 @@
 ﻿namespace Stash.Engine
 {
+    using System.Collections.Generic;
     using Configuration;
     using PersistenceEvents;
 
@@ -14,6 +15,10 @@
         /// The engaged backing store.
         /// </summary>
         BackingStore BackingStore { get; }
+
+        DefaultUnenlistedRepository InternalRepository { get; }
+        IEnumerable<PersistenceEvent> EnrolledPersistenceEvents { get; }
+        IEnumerable<object> TrackedGraphs { get; }
 
         /// <summary>
         /// Ensure that the given <paramref name="persistenceEvent"/> is managed.

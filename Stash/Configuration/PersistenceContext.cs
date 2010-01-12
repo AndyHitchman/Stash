@@ -21,7 +21,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        public virtual void Register<TGraph>(Action<GraphContext<TBackingStore, TGraph>> configurePersistentGraph)
+        public virtual void Register<TGraph>(Action<GraphContext<TBackingStore, TGraph>> configurePersistentGraph) where TGraph : class
         {
             configurePersistentGraph(new GraphContext<TBackingStore, TGraph>(Registry.RegisterGraph<TGraph>()));
         }
@@ -30,7 +30,7 @@ namespace Stash.Configuration
         /// Configure Stash for the <typeparamref name="TGraph"/> with no additional configuration.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        public virtual void Register<TGraph>()
+        public virtual void Register<TGraph>() where TGraph : class
         {
             Registry.RegisterGraph<TGraph>();
         }

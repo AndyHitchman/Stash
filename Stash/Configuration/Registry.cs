@@ -2,6 +2,7 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Engine;
 
     public class Registry
@@ -40,7 +41,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>()
+        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>() where TGraph : class
         {
             return (RegisteredGraph<TGraph>)GetGraphFor(typeof(TGraph));
         }
@@ -57,7 +58,7 @@ namespace Stash.Configuration
             return RegisteredGraphs[graphType];
         }
 
-        public virtual RegisteredGraph<TGraph> RegisterGraph<TGraph>()
+        public virtual RegisteredGraph<TGraph> RegisterGraph<TGraph>() where TGraph : class
         {
             var graph = typeof(TGraph);
             if(RegisteredGraphs.ContainsKey(graph))
@@ -66,6 +67,11 @@ namespace Stash.Configuration
             var registeredGraph = new RegisteredGraph<TGraph>();
             RegisteredGraphs.Add(graph, registeredGraph);
             return registeredGraph;
+        }
+
+        public virtual bool IsManagingGraphTypeOrAncestor(Type graphType)
+        {
+            return AllRegisteredGraphs.Any(rg => rg.GraphType.IsAssignableFrom(graphType));
         }
     }
 }

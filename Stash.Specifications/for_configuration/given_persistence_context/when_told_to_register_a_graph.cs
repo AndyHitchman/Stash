@@ -38,7 +38,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         {
             GraphContext<DummyBackingStore, DummyPersistentObject> actual = null;
             Sut.Register<DummyPersistentObject>(context => { actual = context; });
-            actual.RegisteredGraph.AggregateType.ShouldEqual(typeof(DummyPersistentObject));
+            actual.RegisteredGraph.GraphType.ShouldEqual(typeof(DummyPersistentObject));
         }
     }
 }

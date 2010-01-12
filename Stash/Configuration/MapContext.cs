@@ -10,7 +10,9 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class MapContext<TBackingStore, TGraph, TKey, TValue> where TBackingStore : BackingStore
+    public class MapContext<TBackingStore, TGraph, TKey, TValue>
+        where TBackingStore : BackingStore
+        where TGraph : class
     {
         public MapContext(RegisteredMapper<TGraph,TKey,TValue> registeredMapper)
         {

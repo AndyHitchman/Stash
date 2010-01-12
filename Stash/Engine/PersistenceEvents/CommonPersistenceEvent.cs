@@ -1,17 +1,26 @@
 namespace Stash.Engine.PersistenceEvents
 {
-    public class CommonPersistenceEvent<TGraph> : PersistenceEvent<TGraph>
+    public abstract class CommonPersistenceEvent<TGraph> : PersistenceEvent<TGraph>
     {
         protected CommonPersistenceEvent(TGraph graph)
         {
             Graph = graph;
         }
 
-        protected virtual TGraph Graph { get; private set; }
+        public virtual TGraph Graph { get; private set; }
 
-        protected virtual InternalSession InternalSession { get; set; }
+        public virtual InternalSession InternalSession { get; set; }
 
-        public virtual void EnlistedSessionIs(InternalSession internalSession)
+        public object UntypedGraph
+        {
+            get { return Graph; }
+        }
+
+        public abstract void Complete();
+        public abstract void EnrollInSession();
+        public abstract void FlushFromSession();
+
+        public virtual void SessionIs(InternalSession internalSession)
         {
             InternalSession = internalSession;
         }

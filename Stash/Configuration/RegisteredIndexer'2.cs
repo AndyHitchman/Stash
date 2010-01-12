@@ -8,7 +8,7 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph>
+    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph> where TGraph : class
     {
         public RegisteredIndexer(Index<TGraph, TKey> index)
         {

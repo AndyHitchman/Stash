@@ -9,7 +9,7 @@
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class RegisteredMapper<TGraph,TKey,TValue> : RegisteredMapper<TGraph>
+    public class RegisteredMapper<TGraph, TKey, TValue> : RegisteredMapper<TGraph> where TGraph : class
     {
         public RegisteredMapper(Map<TGraph,TKey,TValue> map)
         {

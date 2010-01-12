@@ -13,7 +13,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph"></param>
         /// <returns></returns>
-        Tracker GetTrackerFor<TGraph>(TGraph graph);
+        Tracker GetTrackerFor<TGraph>(TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Reconnect a <see cref="Tracker"/> to this session.
