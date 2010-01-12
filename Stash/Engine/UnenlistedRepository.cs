@@ -32,9 +32,9 @@ namespace Stash.Engine
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        /// <param name="internalSession"></param>
+        /// <param name="session"></param>
         /// <param name="graph"></param>
-        void Persist<TGraph>(InternalSession internalSession, TGraph graph) where TGraph : class;
+        void Persist<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Reconnect a <see cref="Tracker"/> to this session.
@@ -43,8 +43,8 @@ namespace Stash.Engine
         /// <param name="tracker"></param>
         void ReconnectTracker(InternalSession session, Tracker tracker);
 
-        IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(InternalSession internalSession, From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
+        IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(InternalSession session, From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
 
-        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession internalSession, params From<TFromThis, TProjection>[] @from) where TFromThis : From<TFromThis, TProjection>;
+        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession session, params From<TFromThis, TProjection>[] @from) where TFromThis : From<TFromThis, TProjection>;
     }
 }

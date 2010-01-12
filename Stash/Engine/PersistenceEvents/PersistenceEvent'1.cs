@@ -10,6 +10,6 @@
         /// <summary>
         /// The internal session to which the persistence event belongs.
         /// </summary>
-        InternalSession InternalSession { get; set; }
+        InternalSession Session { get; }
     }
 }

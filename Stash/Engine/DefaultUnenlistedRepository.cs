@@ -25,7 +25,15 @@ namespace Stash.Engine
         /// <param name="graph"></param>
         public void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class
         {
-            session.Enroll(new Destroy<TGraph>(graph));
+            ensureGraphTypeIsRegistered<TGraph>(session);
+
+            new Destroy<TGraph>(graph, session).EnrollInSession();
+        }
+
+        private void ensureGraphTypeIsRegistered<TGraph>(InternalSession session)
+        {
+            if (!session.Registry.IsManagingGraphTypeOrAncestor(typeof(TGraph)))
+                throw new ArgumentOutOfRangeException("graph", "The graph type is not being managed by Stash");
         }
 
         public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from)
@@ -35,13 +43,13 @@ namespace Stash.Engine
         }
 
         public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(
-            InternalSession internalSession, From<TFromThis, TKey, TProjection> @from)
+            InternalSession session, From<TFromThis, TKey, TProjection> @from)
             where TFromThis : From<TFromThis, TKey, TProjection>
         {
-            var fetched = new[] {new Projection<TKey, TProjection>(default(TKey), default(TProjection))};
+            var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
             foreach(var projection in fetched)
             {
-                internalSession.Enroll(new Track<TProjection>(projection.Value));
+                new Track<TProjection>(projection.Value, session).EnrollInSession();
             }
             return fetched;
         }
@@ -53,13 +61,13 @@ namespace Stash.Engine
         }
 
         public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(
-            InternalSession internalSession, params From<TFromThis, TProjection>[] @from)
+            InternalSession session, params From<TFromThis, TProjection>[] @from)
             where TFromThis : From<TFromThis, TProjection>
         {
             var fetched = new[] { default(TProjection) };
             foreach (var projection in fetched)
             {
-                internalSession.Enroll(new Track<TProjection>(projection));
+                new Track<TProjection>(projection, session).EnrollInSession();
             }
             return fetched;
         }
@@ -79,9 +87,11 @@ namespace Stash.Engine
             Persist(getSession(), graph);
         }
 
-        public void Persist<TGraph>(InternalSession internalSession, TGraph graph) where TGraph : class
+        public void Persist<TGraph>(InternalSession session, TGraph graph) where TGraph : class
         {
-            internalSession.Enroll(new Endure<TGraph>(graph));
+            ensureGraphTypeIsRegistered<TGraph>(session);
+
+            new Endure<TGraph>(graph, session).EnrollInSession();
         }
 
         public void ReconnectTracker(InternalSession session, Tracker tracker)

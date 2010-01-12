@@ -41,7 +41,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>() where TGraph : class
+        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>()
         {
             return (RegisteredGraph<TGraph>)GetGraphFor(typeof(TGraph));
         }

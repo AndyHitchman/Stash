@@ -6,12 +6,6 @@
     public interface PersistenceEvent
     {
         /// <summary>
-        /// Get a handle for the session.
-        /// </summary>
-        /// <param name="internalSession"></param>
-        void SessionIs(InternalSession internalSession);
-
-        /// <summary>
         /// Enroll the persistence event in the session.
         /// </summary>
         void EnrollInSession();
@@ -30,5 +24,7 @@
         /// Get the untypes graph.
         /// </summary>
         object UntypedGraph { get; }
+
+        void InstructSessionToEntrollThis();
     }
 }

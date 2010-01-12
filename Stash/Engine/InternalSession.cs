@@ -16,15 +16,32 @@
         /// </summary>
         BackingStore BackingStore { get; }
 
-        DefaultUnenlistedRepository InternalRepository { get; }
+        /// <summary>
+        /// An internal repository for use by the session.
+        /// </summary>
+        UnenlistedRepository InternalRepository { get; }
+
+        /// <summary>
+        /// Persistence events enrolled in the session.
+        /// </summary>
         IEnumerable<PersistenceEvent> EnrolledPersistenceEvents { get; }
+
+        /// <summary>
+        /// Graphs tracked by the session.
+        /// </summary>
         IEnumerable<object> TrackedGraphs { get; }
 
         /// <summary>
-        /// Ensure that the given <paramref name="persistenceEvent"/> is managed.
+        /// True if the graph is being tracked by this session.
         /// </summary>
-        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        bool GraphIsTracked(object graph);
+
+        /// <summary>
+        /// Manage the persistence event.
+        /// </summary>
         /// <param name="persistenceEvent"></param>
-        void Enroll<TGraph>(PersistenceEvent<TGraph> persistenceEvent);
+        void Enroll(PersistenceEvent persistenceEvent);
     }
 }

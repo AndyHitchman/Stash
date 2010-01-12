@@ -4,13 +4,8 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Destroy<TGraph> : CommonPersistenceEvent<TGraph> where TGraph : class
     {
-        public Destroy(TGraph graph) : base(graph)
+        public Destroy(TGraph graph, InternalSession session) : base(graph, session)
         {
-        }
-
-        public override void EnrollInSession()
-        {
-            throw new NotImplementedException();
         }
 
         public override void Complete()
@@ -21,6 +16,11 @@ namespace Stash.Engine.PersistenceEvents
         public override void FlushFromSession()
         {
             throw new NotImplementedException();
+        }
+
+        public override void EnrollInSession()
+        {
+            InstructSessionToEntrollThis();
         }
     }
 }
