@@ -1,6 +1,7 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using Configuration;
 
     public class Track<TGraph> : CommonPersistenceEvent<TGraph>
     {
@@ -27,9 +28,9 @@ namespace Stash.Engine.PersistenceEvents
 
             InstructSessionToEnrollThis();
 
-            Session.Registry.GetGraphFor<TGraph>();
-            calculateIndexes();
-            calculateMaps();
+            var registeredGraph = Session.Registry.GetGraphFor<TGraph>();
+            calculateIndexes(registeredGraph);
+            calculateMaps(registeredGraph);
         }
 
         public override void FlushFromSession()
@@ -37,11 +38,11 @@ namespace Stash.Engine.PersistenceEvents
             throw new NotImplementedException();
         }
 
-        private void calculateIndexes()
+        private void calculateIndexes(RegisteredGraph<TGraph> registeredGraph)
         {
         }
 
-        private void calculateMaps()
+        private void calculateMaps(RegisteredGraph<TGraph> registeredGraph)
         {
         }
     }
