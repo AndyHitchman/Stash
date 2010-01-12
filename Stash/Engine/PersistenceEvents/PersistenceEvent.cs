@@ -25,6 +25,6 @@
         /// </summary>
         object UntypedGraph { get; }
 
-        void InstructSessionToEntrollThis();
+        void InstructSessionToEnrollThis();
     }
 }

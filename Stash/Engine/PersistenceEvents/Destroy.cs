@@ -20,7 +20,7 @@ namespace Stash.Engine.PersistenceEvents
 
         public override void EnrollInSession()
         {
-            InstructSessionToEntrollThis();
+            InstructSessionToEnrollThis();
         }
     }
 }

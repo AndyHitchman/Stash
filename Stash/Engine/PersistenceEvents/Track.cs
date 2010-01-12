@@ -25,7 +25,9 @@ namespace Stash.Engine.PersistenceEvents
             if (Session.GraphIsTracked(Graph))
                 return;
 
-            InstructSessionToEntrollThis();
+            InstructSessionToEnrollThis();
+
+            Session.Registry.GetGraphFor<TGraph>();
             calculateIndexes();
             calculateMaps();
         }
@@ -37,7 +39,6 @@ namespace Stash.Engine.PersistenceEvents
 
         private void calculateIndexes()
         {
-            Session.Registry.GetGraphFor<TGraph>();
         }
 
         private void calculateMaps()

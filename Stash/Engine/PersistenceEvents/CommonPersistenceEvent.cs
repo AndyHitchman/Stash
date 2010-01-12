@@ -43,7 +43,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public abstract void FlushFromSession();
 
-        public void InstructSessionToEntrollThis()
+        public void InstructSessionToEnrollThis()
         {
             Session.Enroll(this);
         }
