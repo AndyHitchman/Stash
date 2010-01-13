@@ -27,10 +27,10 @@ namespace Stash.Engine
         {
             ensureGraphTypeIsRegistered<TGraph>(session);
 
-            new Destroy<TGraph>(graph, session).EnrollInSession();
+            new Destroy<TGraph>(Guid.Empty, graph, session).EnrollInSession();
         }
 
-        private void ensureGraphTypeIsRegistered<TGraph>(InternalSession session)
+        private static void ensureGraphTypeIsRegistered<TGraph>(InternalSession session)
         {
             if (!session.Registry.IsManagingGraphTypeOrAncestor(typeof(TGraph)))
                 throw new ArgumentOutOfRangeException("graph", "The graph type is not being managed by Stash");
@@ -49,7 +49,7 @@ namespace Stash.Engine
             var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
             foreach(var projection in fetched)
             {
-                new Track<TProjection>(projection.Value, session).EnrollInSession();
+                new Track<TProjection>(Guid.Empty, projection.Value, session).EnrollInSession();
             }
             return fetched;
         }
@@ -67,7 +67,7 @@ namespace Stash.Engine
             var fetched = new[] { default(TProjection) };
             foreach (var projection in fetched)
             {
-                new Track<TProjection>(projection, session).EnrollInSession();
+                new Track<TProjection>(Guid.Empty, projection, session).EnrollInSession();
             }
             return fetched;
         }

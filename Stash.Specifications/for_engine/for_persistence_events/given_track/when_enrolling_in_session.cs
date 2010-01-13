@@ -1,5 +1,6 @@
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
+    using System;
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
@@ -14,7 +15,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(graph, mockSession);
+            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, mockSession);
 
             mockSession.Expect(s => s.GraphIsTracked(graph)).Return(true);
 
@@ -29,11 +30,9 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(graph, mockSession);
+            var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, mockSession);
 
             mockSession.Expect(s => s.GraphIsTracked(graph)).Return(false);
-            mockSession.Expect(s => s.Registry).Return(mockRegistry);
-            mockRegistry.Expect(r => r.GetGraphFor<DummyPersistentObject>()).IgnoreArguments().Return(null);
 
             sut.EnrollInSession();
 
@@ -45,13 +44,26 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(graph, mockSession);
+            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, mockSession);
 
             mockSession.Expect(s => s.GraphIsTracked(graph)).Return(true);
 
             sut.EnrollInSession();
 
             mockSession.VerifyAllExpectations();
+        }
+
+
+        private class StandInTrack<TGraph> : Track<TGraph>
+        {
+            public StandInTrack(Guid internalId, TGraph graph, InternalSession session) : base(internalId, graph, session)
+            {
+            }
+
+            public override void PrepareEnrollment()
+            {
+                //Do nothing
+            }
         }
     }
 }

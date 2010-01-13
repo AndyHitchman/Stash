@@ -4,7 +4,7 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Endure<TGraph> : Track<TGraph> where TGraph : class
     {
-        public Endure(TGraph graph, InternalSession session) : base(graph, session)
+        public Endure(TGraph graph, InternalSession session) : base(Guid.NewGuid(), graph, session)
         {
         }
 

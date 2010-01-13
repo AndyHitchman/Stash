@@ -18,8 +18,13 @@ namespace Stash
         InternalSession Internalize();
 
         /// <summary>
-        /// End the session.
+        /// Complete the session. Persist all work.
         /// </summary>
-        void End();
+        void Complete();
+
+        /// <summary>
+        /// Abandon the session. Throw away all work.
+        /// </summary>
+        void Abandon();
     }
 }

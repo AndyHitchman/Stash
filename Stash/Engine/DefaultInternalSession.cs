@@ -38,12 +38,17 @@ namespace Stash.Engine
 
         public virtual void Dispose()
         {
-            End();
+            Complete();
         }
 
-        public virtual void End()
+        public virtual void Complete()
         {
             throw new NotImplementedException();
+        }
+
+        public void Abandon()
+        {
+            enrolledPersistenceEvents.Clear();
         }
 
         public virtual EnlistedRepository EnlistRepository(UnenlistedRepository unenlistedRepository)
@@ -58,6 +63,10 @@ namespace Stash.Engine
 
         public void Enroll(PersistenceEvent persistenceEvent)
         {
+            foreach(var @event in enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
+            {
+                persistenceEvent.TellSessionWhatToDoWithPreviouslyEnrolledEvent(@event);
+            }
             enrolledPersistenceEvents.Add(persistenceEvent);
         }
 

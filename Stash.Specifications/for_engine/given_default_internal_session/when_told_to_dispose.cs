@@ -22,7 +22,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
             public bool EndWasCalled;
             public StandInDefaultInternalSession() : base(null) {}
 
-            public override void End()
+            public override void Complete()
             {
                 EndWasCalled = true;
             }

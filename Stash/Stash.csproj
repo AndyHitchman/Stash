@@ -67,6 +67,7 @@
     <Compile Include="Engine\DefaultInternalSession.cs" />
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="Engine\PersistenceEvents\CommonPersistenceEvent.cs" />
+    <Compile Include="Engine\PersistenceEvents\PreviouslyEnrolledEvent.cs" />
     <Compile Include="Engine\PersistenceEvents\Track.cs" />
     <Compile Include="Engine\PersistenceEvents\Destroy.cs" />
     <Compile Include="Engine\PersistenceEvents\Endure.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Engine\PersistenceEvents\PersistenceEvent.cs" />
     <Compile Include="Engine\UnenlistedRepository.cs" />
     <Compile Include="Map%273.cs" />
+    <Compile Include="Projection.cs" />
     <Compile Include="Projector%272.cs" />
     <Compile Include="Selectors\RangeFrom.cs" />
     <Compile Include="Selectors\FirstFrom.cs" />
@@ -113,7 +115,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="Configuration\PersistenceContext.cs" />
     <Compile Include="Projector.cs" />
-    <Compile Include="Projection.cs" />
+    <Compile Include="Projection%272.cs" />
     <Compile Include="Reduction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tracker.cs" />

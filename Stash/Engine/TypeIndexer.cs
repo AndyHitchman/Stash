@@ -16,7 +16,7 @@ namespace Stash.Engine
             } while(t != null && t != typeof(object));
         }
 
-        public Func<object, IEnumerable<Projection<Type, object>>> Index()
+        public Func<object, IEnumerable<Projection<Type, object>>> F()
         {
             return o => GetTypeHierarchyFor(o);
         }

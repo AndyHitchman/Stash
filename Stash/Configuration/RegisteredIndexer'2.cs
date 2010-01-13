@@ -1,6 +1,8 @@
 namespace Stash.Configuration
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Engine;
 
     /// <summary>
@@ -23,6 +25,11 @@ namespace Stash.Configuration
         public override void EngageBackingStore(BackingStore backingStore)
         {
             backingStore.EnsureIndex(Index);
+        }
+
+        public override IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph)
+        {
+            return Index.F()(graph).Cast<Projection<TGraph>>();
         }
     }
 }

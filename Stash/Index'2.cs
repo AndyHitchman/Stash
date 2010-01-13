@@ -14,6 +14,6 @@ namespace Stash
         /// The index function that accepts the persisted object and returns a <see cref="Projection{TKey,TGraph}"/>
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
-        Func<TGraph, IEnumerable<Projection<TKey, TGraph>>> Index();
+        Func<TGraph, IEnumerable<Projection<TKey, TGraph>>> F();
     }
 }

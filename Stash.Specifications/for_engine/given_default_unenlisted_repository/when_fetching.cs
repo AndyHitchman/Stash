@@ -12,6 +12,8 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     [TestFixture]
     public class when_fetching
     {
+        //TODO : Refactor repository to simplify tests.
+
         [Test]
         public void it_should_give_the_session_a_persistence_track_for_each_graph()
         {
@@ -19,10 +21,12 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSelector =
                 MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+            var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
             var sut = new DefaultUnenlistedRepository();
 
             mockSession.Expect(s => s.Registry).Return(mockRegistry);
             mockRegistry.Expect(r => r.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
+            mockRegistry.Expect(r => r.GetRegistrationFor<DummyPersistentObject>()).Return(mockRegisteredGraph);
 
             sut.Fetch(mockSession, new[] { mockSelector });
 

@@ -3,20 +3,15 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
 
-    /// <summary>
-    /// Contains a <see cref="Projection"/> that remains linked to the original persisted objects.
-    /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    public class TrackedProjection<TKey, TValue>
+    public class TrackedProjection<TValue>
     {
-        public TrackedProjection(IEnumerable<Guid> originalIds, Projection<TKey, TValue> projection)
+        public TrackedProjection(IEnumerable<Guid> originalIds, Projection<TValue> projection)
         {
             OriginalIds = originalIds;
             Projection = projection;
         }
 
         public virtual IEnumerable<Guid> OriginalIds { get; private set; }
-        public virtual Projection<TKey, TValue> Projection { get; private set; }
+        public virtual Projection<TValue> Projection { get; private set; }
     }
 }

@@ -4,11 +4,14 @@ namespace Stash.Engine.PersistenceEvents
 
     public abstract class CommonPersistenceEvent<TGraph> : PersistenceEvent<TGraph>
     {
-        protected CommonPersistenceEvent(TGraph graph, InternalSession session)
+        protected CommonPersistenceEvent(Guid internalId, TGraph graph, InternalSession session)
         {
+            InternalId = internalId;
             Graph = graph;
             Session = session;
         }
+
+        public Guid InternalId { get; set; }
 
         /// <summary>
         /// The typed graph.
@@ -47,5 +50,9 @@ namespace Stash.Engine.PersistenceEvents
         {
             Session.Enroll(this);
         }
+
+        public abstract PreviouslyEnrolledEvent TellSessionWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event);
+
+        public abstract void PrepareEnrollment();
     }
 }

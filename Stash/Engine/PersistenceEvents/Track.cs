@@ -1,11 +1,15 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.Collections.Generic;
     using Configuration;
+    using System.Linq;
 
     public class Track<TGraph> : CommonPersistenceEvent<TGraph>
     {
-        public Track(TGraph graph, InternalSession session) : base(graph, session)
+        public Dictionary<RegisteredIndexer<TGraph>,List<TrackedProjection<TGraph>>> IndexProjections = new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>>();
+
+        public Track(Guid internalId, TGraph graph, InternalSession session) : base(internalId, graph, session)
         {
         }
 
@@ -16,8 +20,6 @@ namespace Stash.Engine.PersistenceEvents
 
         public override void EnrollInSession()
         {
-            //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
-            //saving unecessary work in the backing store.
             //Keep a local cache of indexes, maps and reduces for graphs tracked in the session. Go here before hitting the
             //backing store. Reduces may be out of date once retrieved.
             //Exclude destroyed graphs from results.
@@ -27,8 +29,20 @@ namespace Stash.Engine.PersistenceEvents
                 return;
 
             InstructSessionToEnrollThis();
+            PrepareEnrollment();
+        }
 
-            var registeredGraph = Session.Registry.GetGraphFor<TGraph>();
+        public override PreviouslyEnrolledEvent TellSessionWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        {
+            return PreviouslyEnrolledEvent.ShouldBeRetained;
+        }
+
+        public override void PrepareEnrollment()
+        {
+            var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
+
+            //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
+            //saving unecessary work in the backing store.
             calculateIndexes(registeredGraph);
             calculateMaps(registeredGraph);
         }
@@ -40,10 +54,18 @@ namespace Stash.Engine.PersistenceEvents
 
         private void calculateIndexes(RegisteredGraph<TGraph> registeredGraph)
         {
+            foreach(var registeredIndexer in registeredGraph.RegisteredIndexers)
+            {
+                IndexProjections.Add(registeredIndexer, registeredIndexer.GetKeyFreeProjections(Graph).Select(projection => new TrackedProjection<TGraph>(new[]{InternalId}, projection)).ToList());
+            }
         }
 
         private void calculateMaps(RegisteredGraph<TGraph> registeredGraph)
         {
+            foreach(var registeredMapper in registeredGraph.RegisteredMappers)
+            {
+                
+            }
         }
     }
 }

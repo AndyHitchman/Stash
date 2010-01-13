@@ -13,7 +13,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
             typeof(ArgumentOutOfRangeException)
                 .ShouldBeThrownBy(
                 () =>
-                Sut.GetGraphFor(typeof(DummyPersistentObject)));
+                Sut.GetRegistrationFor(typeof(DummyPersistentObject)));
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
             typeof(ArgumentNullException)
                 .ShouldBeThrownBy(
                 () =>
-                Sut.GetGraphFor(null));
+                Sut.GetRegistrationFor(null));
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         {
             Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>());
 
-            Sut.GetGraphFor<DummyPersistentObject>().ShouldNotBeNull();
+            Sut.GetRegistrationFor<DummyPersistentObject>().ShouldNotBeNull();
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         {
             Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>());
 
-            Sut.GetGraphFor(typeof(DummyPersistentObject)).ShouldNotBeNull();
+            Sut.GetRegistrationFor(typeof(DummyPersistentObject)).ShouldNotBeNull();
         }
     }
 }

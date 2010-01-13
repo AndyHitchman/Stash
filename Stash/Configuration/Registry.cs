@@ -41,16 +41,16 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        public virtual RegisteredGraph<TGraph> GetGraphFor<TGraph>()
+        public virtual RegisteredGraph<TGraph> GetRegistrationFor<TGraph>()
         {
-            return (RegisteredGraph<TGraph>)GetGraphFor(typeof(TGraph));
+            return (RegisteredGraph<TGraph>)GetRegistrationFor(typeof(TGraph));
         }
 
         /// <summary>
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <paramref name="graphType"/>.
         /// </summary>
         /// <returns></returns>
-        public virtual RegisteredGraph GetGraphFor(Type graphType)
+        public virtual RegisteredGraph GetRegistrationFor(Type graphType)
         {
             if(graphType == null) throw new ArgumentNullException("graphType");
             if(!RegisteredGraphs.ContainsKey(graphType)) throw new ArgumentOutOfRangeException("graphType");
