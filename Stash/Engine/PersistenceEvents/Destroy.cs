@@ -2,7 +2,7 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
 
-    public class Destroy<TGraph> : CommonPersistenceEvent<TGraph> where TGraph : class
+    public class Destroy<TGraph> : PotentialPersistenceEvent<TGraph> where TGraph : class
     {
         public Destroy(Guid internalId, TGraph graph, InternalSession session) : base(internalId, graph, session)
         {
@@ -18,7 +18,7 @@ namespace Stash.Engine.PersistenceEvents
             throw new NotImplementedException();
         }
 
-        public override PreviouslyEnrolledEvent TellSessionWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public override PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }

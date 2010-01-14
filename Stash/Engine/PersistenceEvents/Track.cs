@@ -2,12 +2,16 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
     using System.Linq;
+    using Configuration;
 
-    public class Track<TGraph> : CommonPersistenceEvent<TGraph>
+    public class Track<TGraph> : PotentialPersistenceEvent<TGraph>
     {
-        public Dictionary<RegisteredIndexer<TGraph>,List<TrackedProjection<TGraph>>> IndexProjections = new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>>();
+        public Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>> IndexProjections =
+            new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>>();
+
+        public Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>> MapProjections =
+            new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>>();
 
         public Track(Guid internalId, TGraph graph, InternalSession session) : base(internalId, graph, session)
         {
@@ -25,16 +29,16 @@ namespace Stash.Engine.PersistenceEvents
             //Exclude destroyed graphs from results.
             //Reduces must be calculated by a background process to ensure consistency. Use a BDB Queue?
 
-            if (Session.GraphIsTracked(Graph))
+            if(Session.GraphIsTracked(Graph))
                 return;
 
             InstructSessionToEnrollThis();
             PrepareEnrollment();
         }
 
-        public override PreviouslyEnrolledEvent TellSessionWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public override void FlushFromSession()
         {
-            return PreviouslyEnrolledEvent.ShouldBeRetained;
+            throw new NotImplementedException();
         }
 
         public override void PrepareEnrollment()
@@ -47,16 +51,20 @@ namespace Stash.Engine.PersistenceEvents
             calculateMaps(registeredGraph);
         }
 
-        public override void FlushFromSession()
+        public override PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
         {
-            throw new NotImplementedException();
+            return PreviouslyEnrolledEvent.ShouldBeRetained;
         }
 
         private void calculateIndexes(RegisteredGraph<TGraph> registeredGraph)
         {
             foreach(var registeredIndexer in registeredGraph.RegisteredIndexers)
             {
-                IndexProjections.Add(registeredIndexer, registeredIndexer.GetKeyFreeProjections(Graph).Select(projection => new TrackedProjection<TGraph>(new[]{InternalId}, projection)).ToList());
+                IndexProjections.Add(
+                    registeredIndexer,
+                    registeredIndexer.GetKeyFreeProjections(Graph)
+                        .Select(projection => new TrackedProjection<TGraph>(new[] {InternalId}, projection))
+                        .ToList());
             }
         }
 
@@ -64,7 +72,11 @@ namespace Stash.Engine.PersistenceEvents
         {
             foreach(var registeredMapper in registeredGraph.RegisteredMappers)
             {
-                
+                MapProjections.Add(
+                    registeredMapper,
+                    registeredMapper.GetKeyFreeProjections(Graph)
+                        .Select(projection => new TrackedProjection<TGraph>(new[] {InternalId}, projection))
+                        .ToList());
             }
         }
     }

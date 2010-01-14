@@ -1,6 +1,7 @@
 ﻿namespace Stash.Configuration
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Engine;
 
     /// <summary>
@@ -31,5 +32,11 @@
         {
             backingStore.EnsureMap(Map);
         }
+
+        public override IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph)
+        {
+            return Map.F(graph).Cast<Projection<TGraph>>();
+        }
+
     }
 }

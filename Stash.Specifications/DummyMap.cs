@@ -5,7 +5,7 @@ namespace Stash.Specifications
 
     public class DummyMap : Map<DummyPersistentObject,object,object>
     {
-        public Func<DummyPersistentObject, IEnumerable<Projection<object, object>>> Map()
+        public IEnumerable<Projection<object, object>> F(DummyPersistentObject graph)
         {
             throw new NotImplementedException();
         }

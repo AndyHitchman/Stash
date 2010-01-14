@@ -65,7 +65,7 @@ namespace Stash.Engine
         {
             foreach(var @event in enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
             {
-                persistenceEvent.TellSessionWhatToDoWithPreviouslyEnrolledEvent(@event);
+                persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
             }
             enrolledPersistenceEvents.Add(persistenceEvent);
         }

@@ -4,7 +4,7 @@ namespace Stash.Specifications
 
     public class DummyReduction : Reduction<object, object>
     {
-        public Func<object, object, object> Reduce()
+        public object Reduce(object k, object v)
         {
             throw new NotImplementedException();
         }

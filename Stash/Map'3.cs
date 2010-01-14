@@ -9,6 +9,6 @@
         /// The map function that projects the persisted <typeparam name="TGraph">object graph</typeparam> to 
         /// a <typeparam name="TKey">key</typeparam> and <typeparam name="TValue">value</typeparam>.
         /// </summary>
-        Func<TGraph, IEnumerable<Projection<TKey, TValue>>> Map();
+        IEnumerable<Projection<TKey, TValue>> F(TGraph graph);
     }
 }

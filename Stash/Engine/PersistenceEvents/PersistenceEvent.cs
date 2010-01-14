@@ -25,7 +25,6 @@
         /// </summary>
         object UntypedGraph { get; }
 
-        void InstructSessionToEnrollThis();
-        PreviouslyEnrolledEvent TellSessionWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event);
+        PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event);
     }
 }

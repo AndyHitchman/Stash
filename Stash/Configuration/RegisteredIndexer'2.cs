@@ -29,7 +29,7 @@ namespace Stash.Configuration
 
         public override IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph)
         {
-            return Index.F()(graph).Cast<Projection<TGraph>>();
+            return Index.F(graph).Cast<Projection<TGraph>>();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Stash.Specifications
             get { throw new NotImplementedException(); }
         }
 
-        public Func<DummyPersistentObject, IEnumerable<Projection<object, DummyPersistentObject>>> F()
+        public IEnumerable<Projection<object, DummyPersistentObject>> F(DummyPersistentObject graph)
         {
             throw new NotImplementedException();
         }
