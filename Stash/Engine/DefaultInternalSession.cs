@@ -3,12 +3,14 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using Configuration;
     using PersistenceEvents;
 
     public class DefaultInternalSession : InternalSession
     {
-        private readonly List<PersistenceEvent> enrolledPersistenceEvents;
+        private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
+        protected readonly List<PersistenceEvent> enrolledPersistenceEvents;
 
         public DefaultInternalSession(Registry registry)
         {
@@ -28,12 +30,34 @@ namespace Stash.Engine
 
         public IEnumerable<PersistenceEvent> EnrolledPersistenceEvents
         {
-            get { return enrolledPersistenceEvents; }
+            get
+            {
+                enrolledPersistenceEventsLocker.EnterReadLock();
+                try
+                {
+                    return enrolledPersistenceEvents.ToList();
+                }
+                finally
+                {
+                    enrolledPersistenceEventsLocker.ExitReadLock();                    
+                }
+            }
         }
 
         public IEnumerable<object> TrackedGraphs
         {
-            get { return enrolledPersistenceEvents.Select(@event => @event.UntypedGraph); }
+            get
+            {
+                enrolledPersistenceEventsLocker.EnterReadLock();
+                try
+                {
+                    return enrolledPersistenceEvents.Select(@event => @event.UntypedGraph).ToList();
+                }
+                finally
+                {
+                    enrolledPersistenceEventsLocker.ExitReadLock();
+                }
+            }
         }
 
         public virtual void Dispose()
@@ -43,12 +67,42 @@ namespace Stash.Engine
 
         public virtual void Complete()
         {
-            throw new NotImplementedException();
+            phaseComplete();
+            phaseComplete();
+        }
+
+        private void phaseComplete()
+        {
+            List<PersistenceEvent> drain;
+
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                drain = enrolledPersistenceEvents.ToList();
+                enrolledPersistenceEvents.Clear();
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
+
+            foreach(var @event in drain)
+            {
+                @event.Complete();
+            }
         }
 
         public void Abandon()
         {
-            enrolledPersistenceEvents.Clear();
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                enrolledPersistenceEvents.Clear();
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
         }
 
         public virtual EnlistedRepository EnlistRepository(UnenlistedRepository unenlistedRepository)
@@ -63,11 +117,20 @@ namespace Stash.Engine
 
         public void Enroll(PersistenceEvent persistenceEvent)
         {
-            foreach(var @event in enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
             {
-                persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
+                foreach(var @event in enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
+                {
+                    //TODO: Act on answer (determine whether answer is ever useful.)
+                    persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
+                }
+                enrolledPersistenceEvents.Add(persistenceEvent);
             }
-            enrolledPersistenceEvents.Add(persistenceEvent);
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
         }
 
         public virtual InternalSession Internalize()
