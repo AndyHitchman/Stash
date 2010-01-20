@@ -1,6 +1,7 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.IO;
 
     public class Endure<TGraph> : Track<TGraph> where TGraph : class
     {
@@ -9,7 +10,8 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         /// <param name="graph"></param>
         /// <param name="session"></param>
-        public Endure(TGraph graph, InternalSession session) : base(Guid.NewGuid(), graph, session)
+        public Endure(TGraph graph, InternalSession session)
+            : base(Guid.NewGuid(), graph, new MemoryStream(), session)
         {
         }
 

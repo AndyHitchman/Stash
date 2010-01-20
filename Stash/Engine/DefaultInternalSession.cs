@@ -1,6 +1,5 @@
 namespace Stash.Engine
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -9,8 +8,8 @@ namespace Stash.Engine
 
     public class DefaultInternalSession : InternalSession
     {
-        private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
         protected readonly List<PersistenceEvent> enrolledPersistenceEvents;
+        private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
         public DefaultInternalSession(Registry registry)
         {
@@ -21,14 +20,14 @@ namespace Stash.Engine
 
         public UnenlistedRepository InternalRepository { get; private set; }
 
-        public virtual Registry Registry { get; private set; }
+        public Registry Registry { get; private set; }
 
-        public virtual BackingStore BackingStore
+        public BackingStore BackingStore
         {
             get { return Registry.BackingStore; }
         }
 
-        public IEnumerable<PersistenceEvent> EnrolledPersistenceEvents
+        public virtual IEnumerable<PersistenceEvent> EnrolledPersistenceEvents
         {
             get
             {
@@ -39,12 +38,12 @@ namespace Stash.Engine
                 }
                 finally
                 {
-                    enrolledPersistenceEventsLocker.ExitReadLock();                    
+                    enrolledPersistenceEventsLocker.ExitReadLock();
                 }
             }
         }
 
-        public IEnumerable<object> TrackedGraphs
+        public virtual IEnumerable<object> TrackedGraphs
         {
             get
             {
@@ -60,15 +59,63 @@ namespace Stash.Engine
             }
         }
 
-        public virtual void Dispose()
+        public void Abandon()
         {
-            Complete();
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                enrolledPersistenceEvents.Clear();
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
         }
 
         public virtual void Complete()
         {
             phaseComplete();
             phaseComplete();
+        }
+
+        public virtual void Dispose()
+        {
+            Complete();
+        }
+
+        public virtual EnlistedRepository EnlistRepository(UnenlistedRepository unenlistedRepository)
+        {
+            return new DefaultEnlistedRepository(this, unenlistedRepository);
+        }
+
+        public void Enroll(PersistenceEvent persistenceEvent)
+        {
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                foreach(
+                    var @event in
+                        enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
+                {
+                    //TODO: Act on answer (determine whether answer is ever useful.)
+                    persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
+                }
+                enrolledPersistenceEvents.Add(persistenceEvent);
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
+        }
+
+        public bool GraphIsTracked(object graph)
+        {
+            return TrackedGraphs.Any(o => ReferenceEquals(o, graph));
+        }
+
+        public virtual InternalSession Internalize()
+        {
+            return this;
         }
 
         private void phaseComplete()
@@ -90,52 +137,6 @@ namespace Stash.Engine
             {
                 @event.Complete();
             }
-        }
-
-        public void Abandon()
-        {
-            enrolledPersistenceEventsLocker.EnterWriteLock();
-            try
-            {
-                enrolledPersistenceEvents.Clear();
-            }
-            finally
-            {
-                enrolledPersistenceEventsLocker.ExitWriteLock();
-            }
-        }
-
-        public virtual EnlistedRepository EnlistRepository(UnenlistedRepository unenlistedRepository)
-        {
-            return new DefaultEnlistedRepository(this, unenlistedRepository);
-        }
-
-        public bool GraphIsTracked(object graph)
-        {
-            return TrackedGraphs.Any(o => ReferenceEquals(o, graph));
-        }
-
-        public void Enroll(PersistenceEvent persistenceEvent)
-        {
-            enrolledPersistenceEventsLocker.EnterWriteLock();
-            try
-            {
-                foreach(var @event in enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
-                {
-                    //TODO: Act on answer (determine whether answer is ever useful.)
-                    persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
-                }
-                enrolledPersistenceEvents.Add(persistenceEvent);
-            }
-            finally
-            {
-                enrolledPersistenceEventsLocker.ExitWriteLock();
-            }
-        }
-
-        public virtual InternalSession Internalize()
-        {
-            return this;
         }
     }
 }

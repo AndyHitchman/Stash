@@ -2,6 +2,7 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using PersistenceEvents;
     using Selectors;
 
@@ -49,7 +50,7 @@ namespace Stash.Engine
             var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
             foreach(var projection in fetched)
             {
-                new Track<TProjection>(Guid.Empty, projection.Value, session).EnrollInSession();
+                new Track<TProjection>(Guid.Empty, projection.Value, new MemoryStream(), session).EnrollInSession();
             }
             return fetched;
         }
@@ -67,7 +68,7 @@ namespace Stash.Engine
             var fetched = new[] { default(TProjection) };
             foreach (var projection in fetched)
             {
-                new Track<TProjection>(Guid.Empty, projection, session).EnrollInSession();
+                new Track<TProjection>(Guid.Empty, projection, new MemoryStream(), session).EnrollInSession();
             }
             return fetched;
         }

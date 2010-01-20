@@ -18,7 +18,6 @@ namespace Stash.Configuration
 
         public virtual IList<RegisteredIndexer<TGraph>> RegisteredIndexers { get; private set; }
         public virtual IList<RegisteredMapper<TGraph>> RegisteredMappers { get; private set; }
-        public virtual ISerializationSurrogate RegisteredSerializationSurrogate { get; set; }
 
         public override void EngageBackingStore(BackingStore backingStore)
         {

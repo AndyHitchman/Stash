@@ -2,27 +2,61 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Security.Cryptography;
     using Configuration;
 
-    public class Track<TGraph> : PotentialPersistenceEvent<TGraph>
+    public class Track<TGraph> : PersistenceEvent<TGraph>
     {
-        public Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>> IndexProjections =
+        protected readonly Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>> IndexProjections =
             new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>>();
 
-        public Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>> MapProjections =
+        protected readonly Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>> MapProjections =
             new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>>();
 
-        public Track(Guid internalId, TGraph graph, InternalSession session) : base(internalId, graph, session)
+        private readonly SHA1CryptoServiceProvider hashCodeGenerator;
+
+        public Track(Guid internalId, TGraph graph, Stream serializedGraph, InternalSession session)
         {
+            InternalId = internalId;
+            Graph = graph;
+            Session = session;
+            hashCodeGenerator = new SHA1CryptoServiceProvider();
+            OriginalHash = hashCodeGenerator.ComputeHash(serializedGraph);
         }
 
-        public override void Complete()
+        /// <summary>
+        /// The hash code calculated from the serialised graph at the time this track is created.
+        /// </summary>
+        public byte[] OriginalHash { get; private set; }
+
+        public Guid InternalId { get; set; }
+
+        /// <summary>
+        /// The typed graph.
+        /// </summary>
+        public TGraph Graph { get; private set; }
+
+        /// <summary>
+        /// The internal session to which the persistence event belongs.
+        /// </summary>
+        public InternalSession Session { get; private set; }
+
+        /// <summary>
+        /// Get the untypes graph.
+        /// </summary>
+        public object UntypedGraph
+        {
+            get { return Graph; }
+        }
+
+        public virtual void Complete()
         {
             throw new NotImplementedException();
         }
 
-        public override void EnrollInSession()
+        public virtual void EnrollInSession()
         {
             //Keep a local cache of indexes, maps and reduces for graphs tracked in the session. Go here before hitting the
             //backing store. Reduces may be out of date once retrieved.
@@ -32,16 +66,16 @@ namespace Stash.Engine.PersistenceEvents
             if(Session.GraphIsTracked(Graph))
                 return;
 
-            InstructSessionToEnrollThis();
+            Session.Enroll(this);
             PrepareEnrollment();
         }
 
-        public override void FlushFromSession()
+        public virtual void FlushFromSession()
         {
             throw new NotImplementedException();
         }
 
-        public override void PrepareEnrollment()
+        public virtual void PrepareEnrollment()
         {
             var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
 
@@ -51,7 +85,7 @@ namespace Stash.Engine.PersistenceEvents
             calculateMaps(registeredGraph);
         }
 
-        public override PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeRetained;
         }
