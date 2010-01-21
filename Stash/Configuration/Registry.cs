@@ -37,7 +37,7 @@ namespace Stash.Configuration
 
         public virtual BackingStore BackingStore { get; private set; }
 
-        public Func<Serializer> Serializer { get; set; }
+        public virtual Func<Serializer> Serializer { get; set; }
 
         /// <summary>
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <typeparamref name="TGraph"/>.

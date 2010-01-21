@@ -54,6 +54,12 @@ namespace Stash.Engine.PersistenceEvents
         public virtual void Complete()
         {
             var serializedGraph = Session.Registry.Serializer().Serialize(Graph);
+            var currentHash = hashCodeGenerator.ComputeHash(serializedGraph);
+            
+            if(currentHash.SequenceEqual(OriginalHash))
+                //No change to object. No work to do.
+                return;
+
             new Update<TGraph>(this).EnrollInSession();
         }
 
