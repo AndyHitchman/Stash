@@ -4,6 +4,7 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using System.Linq;
     using Engine;
+    using Engine.Serializers;
 
     public class Registry
     {
@@ -35,6 +36,8 @@ namespace Stash.Configuration
         }
 
         public virtual BackingStore BackingStore { get; private set; }
+
+        public Func<Serializer> Serializer { get; set; }
 
         /// <summary>
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <typeparamref name="TGraph"/>.

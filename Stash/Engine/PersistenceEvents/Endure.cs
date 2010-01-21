@@ -3,7 +3,7 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using System.IO;
 
-    public class Endure<TGraph> : Track<TGraph> where TGraph : class
+    public class Endure<TGraph> : Track<TGraph>
     {
         /// <summary>
         /// We are persisting a new graph here, so create a new <see cref="Guid"/>.

@@ -2,6 +2,7 @@ namespace Stash.Configuration
 {
     using System;
     using Engine;
+    using Engine.Serializers;
 
     /// <summary>
     /// The root context for configuring persistence.
@@ -15,6 +16,11 @@ namespace Stash.Configuration
         }
 
         public Registry Registry { get; private set; }
+
+        public virtual void SerializeGraphsWith(Func<Serializer> serializer)
+        {
+            Registry.Serializer = serializer;
+        }
 
         /// <summary>
         /// Configure Stash for the <typeparamref name="TGraph"/> and provide an action that performs additional configuration.

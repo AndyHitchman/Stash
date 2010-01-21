@@ -332,6 +332,7 @@ II.2.12 <HandlesEvent />
       </UserRule>
       <Abbreviation Text="ID" />
       <Abbreviation Text="ESENT" />
+      <Abbreviation Text="BSON" />
     </Naming2>
   </CodeStyleSettings>
 </Configuration>

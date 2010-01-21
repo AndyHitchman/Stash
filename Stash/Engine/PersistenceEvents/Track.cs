@@ -53,7 +53,8 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void Complete()
         {
-            throw new NotImplementedException();
+            var serializedGraph = Session.Registry.Serializer().Serialize(Graph);
+            new Update<TGraph>(this).EnrollInSession();
         }
 
         public virtual void EnrollInSession()

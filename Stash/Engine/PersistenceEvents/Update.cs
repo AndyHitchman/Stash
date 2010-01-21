@@ -2,13 +2,13 @@
 {
     using System;
 
-    public class Insert<TGraph> : PersistenceEvent<TGraph>
+    public class Update<TGraph> : PersistenceEvent<TGraph>
     {
-        private readonly Endure<TGraph> endureEvent;
+        private readonly Track<TGraph> trackEvent;
 
-        public Insert(Endure<TGraph> endureEvent)
+        public Update(Track<TGraph> trackEvent)
         {
-            this.endureEvent = endureEvent;
+            this.trackEvent = trackEvent;
         }
 
         public void Complete()
@@ -38,12 +38,12 @@
 
         public TGraph Graph
         {
-            get { return endureEvent.Graph; }
+            get { return trackEvent.Graph; }
         }
 
         public InternalSession Session
         {
-            get { return endureEvent.Session; }
+            get { return trackEvent.Session; }
         }
     }
 }
