@@ -12,21 +12,23 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     public class when_deleting
     {
         [Test]
-        public void it_should_give_the_session_a_persistence_event()
+        public void it_should_make_the_event_via_the_persistence_event_factory()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
+            var mockDestroy = MockRepository.GenerateStub<Destroy<DummyPersistentObject>>(Guid.Empty, null, null);
 
             mockSession.Expect(s => s.Registry).Return(mockRegistry);
             mockRegistry.Expect(r => r.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
+            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
+            mockPersistenceEventFactory.Expect(_ => _.MakeDestroy<DummyPersistentObject>(Guid.Empty, null, null)).IgnoreArguments().Return(mockDestroy);
 
             sut.Delete(mockSession, graph);
 
-            mockSession.AssertWasCalled(
-                session => session.Enroll(null),
-                o => o.Constraints(Is.TypeOf<Destroy<DummyPersistentObject>>()));
+            mockPersistenceEventFactory.VerifyAllExpectations();
         }
 
         [Test]

@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_record_the_peristed_event()
         {
-            var sut = new DefaultInternalSession(null);
+            var sut = new DefaultInternalSession(null, null);
             var mockPersistentEvent = MockRepository.GenerateStub<PersistenceEvent>();
 
             sut.Enroll(mockPersistentEvent);

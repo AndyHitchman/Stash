@@ -13,7 +13,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         {
             var mockRegistration = MockRepository.GenerateMock<Registry>();
             
-            var sut = new DefaultInternalSession(mockRegistration);
+            var sut = new DefaultInternalSession(mockRegistration, null);
             var actual = sut.BackingStore;
 
             mockRegistration.AssertWasCalled(registration => { var x = registration.BackingStore; });

@@ -18,7 +18,7 @@ namespace Stash.Engine.PersistenceEvents
 
         public override void Complete()
         {
-            new Insert<TGraph>(this).EnrollInSession();
+            Session.PersistenceEventFactory.MakeInsert(this).EnrollInSession();
         }
     }
 }

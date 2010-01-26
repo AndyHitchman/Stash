@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         {
             var fakeRegistry = new Registry();
 
-            var sut = new DefaultInternalSession(fakeRegistry);
+            var sut = new DefaultInternalSession(fakeRegistry, null);
 
             sut.Registry.ShouldEqual(fakeRegistry);
         }

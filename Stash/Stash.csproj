@@ -66,6 +66,8 @@
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />
     <Compile Include="Engine\InternalSession.cs" />
+    <Compile Include="Engine\PersistenceEvents\DefaultPersistenceEventFactory.cs" />
+    <Compile Include="Engine\PersistenceEvents\PersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\Update.cs" />
     <Compile Include="Engine\PersistenceEvents\Insert.cs" />
     <Compile Include="Engine\PersistenceEvents\PreviouslyEnrolledEvent.cs" />

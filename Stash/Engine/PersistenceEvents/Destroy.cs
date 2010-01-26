@@ -2,7 +2,7 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
 
-    public class Destroy<TGraph> : PersistenceEvent<TGraph> where TGraph : class
+    public class Destroy<TGraph> : PersistenceEvent<TGraph>
     {
         public Destroy(Guid internalId, TGraph graph, InternalSession session)
         {
@@ -31,22 +31,22 @@ namespace Stash.Engine.PersistenceEvents
             get { return Graph; }
         }
 
-        public void Complete()
+        public virtual void Complete()
         {
             throw new NotImplementedException();
         }
 
-        public void FlushFromSession()
+        public virtual void FlushFromSession()
         {
             throw new NotImplementedException();
         }
 
-        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }
 
-        public void EnrollInSession()
+        public virtual void EnrollInSession()
         {
             Session.Enroll(this);
         }

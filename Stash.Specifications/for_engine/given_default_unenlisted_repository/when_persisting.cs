@@ -13,25 +13,23 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     public class when_persisting
     {
         [Test]
-        public void it_should_give_the_session_a_persistence_event()
+        public void it_should_make_the_event_via_the_persistence_event_factory()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
+            var mockEndure = MockRepository.GenerateStub<Endure<DummyPersistentObject>>(null, null);
 
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry).Repeat.Any();
-            mockRegistry.Expect(_ => _.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
-            mockRegistry.Expect(_ => _.GetRegistrationFor<DummyPersistentObject>()).Return(mockRegisteredGraph);
-            mockRegisteredGraph.Expect(_ => _.RegisteredIndexers).Return(new RegisteredIndexer<DummyPersistentObject>[] {});
-            mockRegisteredGraph.Expect(_ => _.RegisteredMappers).Return(new RegisteredMapper<DummyPersistentObject>[] {});
+            mockSession.Expect(s => s.Registry).Return(mockRegistry);
+            mockRegistry.Expect(r => r.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
+            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
+            mockPersistenceEventFactory.Expect(_ => _.MakeEndure<DummyPersistentObject>(null, null)).IgnoreArguments().Return(mockEndure);
 
             sut.Persist(mockSession, graph);
 
-            mockSession.AssertWasCalled(
-                session => session.Enroll(null),
-                o => o.Constraints(Is.TypeOf<Endure<DummyPersistentObject>>()));
+            mockPersistenceEventFactory.VerifyAllExpectations();
         }
 
         [Test]

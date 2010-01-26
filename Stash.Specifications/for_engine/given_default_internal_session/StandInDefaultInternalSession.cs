@@ -6,7 +6,7 @@
 
     internal class StandInDefaultInternalSession : DefaultInternalSession
     {
-        public StandInDefaultInternalSession() : base(null)
+        public StandInDefaultInternalSession() : base(null, null)
         {
         }
 

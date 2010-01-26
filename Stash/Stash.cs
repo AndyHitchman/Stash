@@ -3,6 +3,7 @@ namespace Stash
     using System;
     using Configuration;
     using Engine;
+    using Engine.PersistenceEvents;
 
     public static class Stash
     {
@@ -14,7 +15,7 @@ namespace Stash
             registrar.PerformRegistration(configurationAction);
             registrar.ApplyRegistration();
             Registry = registrar.Registry;
-            SessionFactory = new DefaultSessionFactory(registrar.Registry);
+            SessionFactory = new DefaultSessionFactory(registrar.Registry, new DefaultPersistenceEventFactory());
         }
 
         public static SessionFactory SessionFactory { get; private set; }

@@ -28,7 +28,7 @@ namespace Stash.Engine
         {
             ensureGraphTypeIsRegistered<TGraph>(session);
 
-            new Destroy<TGraph>(Guid.Empty, graph, session).EnrollInSession();
+            session.PersistenceEventFactory.MakeDestroy(Guid.Empty, graph, session).EnrollInSession();
         }
 
         private static void ensureGraphTypeIsRegistered<TGraph>(InternalSession session)
@@ -50,7 +50,7 @@ namespace Stash.Engine
             var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
             foreach(var projection in fetched)
             {
-                new Track<TProjection>(Guid.Empty, projection.Value, new MemoryStream(), session).EnrollInSession();
+                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection.Value, new MemoryStream(), session).EnrollInSession();
             }
             return fetched;
         }
@@ -68,7 +68,7 @@ namespace Stash.Engine
             var fetched = new[] { default(TProjection) };
             foreach (var projection in fetched)
             {
-                new Track<TProjection>(Guid.Empty, projection, new MemoryStream(), session).EnrollInSession();
+                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection, new MemoryStream(), session).EnrollInSession();
             }
             return fetched;
         }
@@ -92,7 +92,7 @@ namespace Stash.Engine
         {
             ensureGraphTypeIsRegistered<TGraph>(session);
 
-            new Endure<TGraph>(graph, session).EnrollInSession();
+            session.PersistenceEventFactory.MakeEndure(graph, session).EnrollInSession();
         }
 
         public void ReconnectTracker(InternalSession session, Tracker tracker)

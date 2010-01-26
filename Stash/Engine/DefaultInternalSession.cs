@@ -11,9 +11,10 @@ namespace Stash.Engine
         protected readonly List<PersistenceEvent> enrolledPersistenceEvents;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        public DefaultInternalSession(Registry registry)
+        public DefaultInternalSession(Registry registry, PersistenceEventFactory persistenceEventFactory)
         {
             Registry = registry;
+            PersistenceEventFactory = persistenceEventFactory;
             InternalRepository = new DefaultUnenlistedRepository();
             enrolledPersistenceEvents = new List<PersistenceEvent>();
         }
@@ -21,6 +22,7 @@ namespace Stash.Engine
         public UnenlistedRepository InternalRepository { get; private set; }
 
         public Registry Registry { get; private set; }
+        public PersistenceEventFactory PersistenceEventFactory { get; set; }
 
         public BackingStore BackingStore
         {

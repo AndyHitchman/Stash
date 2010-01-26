@@ -20,16 +20,20 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var graph = new DummyPersistentObject();
             var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, new MemoryStream(), mockSession);
+            var mockUpdate = new Update<DummyPersistentObject>(sut);
 
             mockSession.Expect(_ => _.Registry).Return(mockRegistry);
+            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
+            mockPersistenceEventFactory.Expect(_ => _.MakeUpdate(sut)).Return(mockUpdate);
             mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
             mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(new MemoryStream(new byte[] {1}));
 
             sut.Complete();
 
-            mockSession.AssertWasCalled(s => s.Enroll(null), o => o.Constraints(Is.TypeOf<Update<DummyPersistentObject>>()));
+            mockSession.AssertWasCalled(s => s.Enroll(mockUpdate));
         }
 
         [Test]

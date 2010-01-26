@@ -31,6 +31,8 @@
         /// </summary>
         IEnumerable<object> TrackedGraphs { get; }
 
+        PersistenceEventFactory PersistenceEventFactory { get; set; }
+
         /// <summary>
         /// True if the graph is being tracked by this session.
         /// </summary>

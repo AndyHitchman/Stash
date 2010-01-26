@@ -60,7 +60,7 @@ namespace Stash.Engine.PersistenceEvents
                 //No change to object. No work to do.
                 return;
 
-            new Update<TGraph>(this).EnrollInSession();
+            Session.PersistenceEventFactory.MakeUpdate(this).EnrollInSession();
         }
 
         public virtual void EnrollInSession()
