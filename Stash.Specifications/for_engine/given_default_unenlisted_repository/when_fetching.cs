@@ -1,6 +1,7 @@
 namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
 {
     using System;
+    using System.IO;
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
@@ -12,29 +13,25 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     [TestFixture]
     public class when_fetching
     {
-        //TODO : Refactor repository to simplify tests. Mock persistence events.
-
         [Test]
         public void it_should_give_the_session_a_persistence_track_for_each_graph()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var mockSelector =
                 MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
-            var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
+            var mockTrack = MockRepository.GenerateStub<Track<DummyPersistentObject>>(Guid.Empty, null, Stream.Null, null);
             var sut = new DefaultUnenlistedRepository();
 
             mockSession.Expect(s => s.Registry).Return(mockRegistry);
             mockRegistry.Expect(r => r.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
-            mockRegistry.Expect(r => r.GetRegistrationFor<DummyPersistentObject>()).Return(mockRegisteredGraph);
-            mockRegisteredGraph.Expect(_ => _.RegisteredIndexers).Return(new RegisteredIndexer<DummyPersistentObject>[] { });
-            mockRegisteredGraph.Expect(_ => _.RegisteredMappers).Return(new RegisteredMapper<DummyPersistentObject>[] { });
+            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
+            mockPersistenceEventFactory.Expect(_ => _.MakeTrack<DummyPersistentObject>(Guid.Empty, null, null, null)).IgnoreArguments().Return(mockTrack);
 
             sut.Fetch(mockSession, new[] { mockSelector });
 
-            mockSession.AssertWasCalled(
-                session => session.Enroll(null),
-                o => o.Constraints(Is.TypeOf<Track<DummyPersistentObject>>()));
+            mockPersistenceEventFactory.VerifyAllExpectations();
         }
 
         [Test]
@@ -42,22 +39,21 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var mockSelector =
                 MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
             var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
+            var mockTrack = MockRepository.GenerateStub<Track<DummyPersistentObject>>(Guid.Empty, null, Stream.Null, null);
             var sut = new DefaultUnenlistedRepository();
 
             mockSession.Expect(s => s.Registry).Return(mockRegistry);
             mockRegistry.Expect(r => r.IsManagingGraphTypeOrAncestor(null)).IgnoreArguments().Return(true);
-            mockRegistry.Expect(r => r.GetRegistrationFor<DummyPersistentObject>()).Return(mockRegisteredGraph);
-            mockRegisteredGraph.Expect(_ => _.RegisteredIndexers).Return(new RegisteredIndexer<DummyPersistentObject>[] { });
-            mockRegisteredGraph.Expect(_ => _.RegisteredMappers).Return(new RegisteredMapper<DummyPersistentObject>[] { });
+            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
+            mockPersistenceEventFactory.Expect(_ => _.MakeTrack<DummyPersistentObject>(Guid.Empty, null, null, null)).IgnoreArguments().Return(mockTrack);
             
             sut.Fetch(mockSession, mockSelector);
 
-            mockSession.AssertWasCalled(
-                session => session.Enroll(null),
-                o => o.Constraints(Is.TypeOf<Track<DummyPersistentObject>>()));
+            mockPersistenceEventFactory.VerifyAllExpectations();
         }
 
         [Test, Ignore("Isn't valid: Can fetch maps and reductions")]
