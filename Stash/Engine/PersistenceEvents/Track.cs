@@ -60,6 +60,13 @@ namespace Stash.Engine.PersistenceEvents
                 //No change to object. No work to do.
                 return;
 
+            var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
+
+            //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
+            //saving unecessary work in the backing store.
+            CalculateIndexes(registeredGraph);
+            CalculateMaps(registeredGraph);
+
             Session.PersistenceEventFactory.MakeUpdate(this).EnrollInSession();
         }
 
@@ -84,12 +91,6 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void PrepareEnrollment()
         {
-            var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
-
-            //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
-            //saving unecessary work in the backing store.
-            calculateIndexes(registeredGraph);
-            calculateMaps(registeredGraph);
         }
 
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
@@ -97,7 +98,7 @@ namespace Stash.Engine.PersistenceEvents
             return PreviouslyEnrolledEvent.ShouldBeRetained;
         }
 
-        private void calculateIndexes(RegisteredGraph<TGraph> registeredGraph)
+        protected virtual void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
         {
             foreach(var registeredIndexer in registeredGraph.RegisteredIndexers)
             {
@@ -109,7 +110,7 @@ namespace Stash.Engine.PersistenceEvents
             }
         }
 
-        private void calculateMaps(RegisteredGraph<TGraph> registeredGraph)
+        protected virtual void CalculateMaps(RegisteredGraph<TGraph> registeredGraph)
         {
             foreach(var registeredMapper in registeredGraph.RegisteredMappers)
             {

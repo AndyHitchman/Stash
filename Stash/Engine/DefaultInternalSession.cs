@@ -52,7 +52,7 @@ namespace Stash.Engine
                 enrolledPersistenceEventsLocker.EnterReadLock();
                 try
                 {
-                    return enrolledPersistenceEvents.Select(@event => @event.UntypedGraph).ToList();
+                    return enrolledPersistenceEvents.Select(_ => _.UntypedGraph).ToList();
                 }
                 finally
                 {
@@ -76,8 +76,10 @@ namespace Stash.Engine
 
         public virtual void Complete()
         {
-            phaseComplete();
-            phaseComplete();
+            while(enrolledPersistenceEvents.Any())
+            {
+                phaseComplete();
+            }
         }
 
         public virtual void Dispose()
@@ -97,7 +99,7 @@ namespace Stash.Engine
             {
                 foreach(
                     var @event in
-                        enrolledPersistenceEvents.Where(@event => ReferenceEquals(persistenceEvent.UntypedGraph, @event.UntypedGraph)))
+                        enrolledPersistenceEvents.Where(_ => ReferenceEquals(persistenceEvent.UntypedGraph, _.UntypedGraph)))
                 {
                     //TODO: Act on answer (determine whether answer is ever useful.)
                     persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
