@@ -31,6 +31,11 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public byte[] OriginalHash { get; private set; }
 
+        /// <summary>
+        /// The hash code calculated from the serialised graph at the time this track is completed.
+        /// </summary>
+        public byte[] CompletionHash { get; private set; }
+
         public Guid InternalId { get; set; }
 
         /// <summary>
@@ -54,9 +59,9 @@ namespace Stash.Engine.PersistenceEvents
         public virtual void Complete()
         {
             var serializedGraph = Session.Registry.Serializer().Serialize(Graph);
-            var currentHash = hashCodeGenerator.ComputeHash(serializedGraph);
+            CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph);
             
-            if(currentHash.SequenceEqual(OriginalHash))
+            if(CompletionHash.SequenceEqual(OriginalHash))
                 //No change to object. No work to do.
                 return;
 

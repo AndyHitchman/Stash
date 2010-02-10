@@ -123,5 +123,24 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 
             mockSession.AssertWasNotCalled(s => s.Enroll(null), o => o.IgnoreArguments());
         }
+
+        [Test]
+        public void it_should_calculate_a_new_hash()
+        {
+            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockRegistry = MockRepository.GenerateMock<Registry>();
+            var mockSerializer = MockRepository.GenerateMock<Serializer>();
+            Func<Serializer> fSerializer = () => mockSerializer;
+            var graph = new DummyPersistentObject();
+            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
+
+            mockSession.Expect(_ => _.Registry).Return(mockRegistry);
+            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
+            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Stream.Null);
+
+            sut.Complete();
+
+            sut.CompletionHash.ShouldNotBeNull();
+        }
     }
 }
