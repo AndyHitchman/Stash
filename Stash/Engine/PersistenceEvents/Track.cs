@@ -67,8 +67,7 @@ namespace Stash.Engine.PersistenceEvents
 
             var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
 
-            //Calculate indexes, maps and reduces on tracked graphs. This should allow any changes to be determined by comparison,
-            //saving unecessary work in the backing store.
+            //Calculate indexes, maps and reduces on tracked graphs.
             CalculateIndexes(registeredGraph);
             CalculateMaps(registeredGraph);
 
