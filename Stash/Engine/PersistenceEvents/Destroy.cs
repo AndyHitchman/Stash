@@ -36,11 +36,6 @@ namespace Stash.Engine.PersistenceEvents
             throw new NotImplementedException();
         }
 
-        public virtual void FlushFromSession()
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeEvicted;

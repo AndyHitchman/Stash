@@ -9,11 +9,11 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Track<TGraph> : PersistenceEvent<TGraph>
     {
-        protected readonly Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>> IndexProjections =
-            new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection<TGraph>>>();
+        protected readonly Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection>> IndexProjections =
+            new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection>>();
 
-        protected readonly Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>> MapProjections =
-            new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection<TGraph>>>();
+        protected readonly Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>> MapProjections =
+            new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>>();
 
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
 
@@ -88,11 +88,6 @@ namespace Stash.Engine.PersistenceEvents
             PrepareEnrollment();
         }
 
-        public virtual void FlushFromSession()
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual void PrepareEnrollment()
         {
         }
@@ -109,7 +104,7 @@ namespace Stash.Engine.PersistenceEvents
                 IndexProjections.Add(
                     registeredIndexer,
                     registeredIndexer.GetKeyFreeProjections(Graph)
-                        .Select(projection => new TrackedProjection<TGraph>(new[] {InternalId}, projection))
+                        .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
                         .ToList());
             }
         }
@@ -121,7 +116,7 @@ namespace Stash.Engine.PersistenceEvents
                 MapProjections.Add(
                     registeredMapper,
                     registeredMapper.GetKeyFreeProjections(Graph)
-                        .Select(projection => new TrackedProjection<TGraph>(new[] {InternalId}, projection))
+                        .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
                         .ToList());
             }
         }

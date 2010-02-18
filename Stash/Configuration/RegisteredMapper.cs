@@ -12,9 +12,9 @@ namespace Stash.Configuration
         public abstract void EngageBackingStore(BackingStore backingStore);
 
         /// <summary>
-        /// Calls the index function and returns a <see cref="Projection{TGraph}"/>
+        /// Calls the index function and returns a <see cref="Projection"/>
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
-        public abstract IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph);
+        public abstract IEnumerable<Projection> GetKeyFreeProjections(TGraph graph);
     }
 }

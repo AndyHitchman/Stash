@@ -27,9 +27,9 @@ namespace Stash.Configuration
             backingStore.EnsureIndex(Index);
         }
 
-        public override IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph)
+        public override IEnumerable<Projection> GetKeyFreeProjections(TGraph graph)
         {
-            return Index.F(graph).Cast<Projection<TGraph>>();
+            return Index.F(graph).Cast<Projection>();
         }
     }
 }

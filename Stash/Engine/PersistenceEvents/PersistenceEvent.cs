@@ -16,11 +16,6 @@
         void Complete();
 
         /// <summary>
-        /// Remove the persistence event from the session.
-        /// </summary>
-        void FlushFromSession();
-
-        /// <summary>
         /// Get the untypes graph.
         /// </summary>
         object UntypedGraph { get; }

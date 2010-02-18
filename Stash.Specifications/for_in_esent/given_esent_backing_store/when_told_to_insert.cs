@@ -11,7 +11,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
         [Test]
         public void it_should_complain_if_the_func_to_get_the_serialization_stream_is_null()
         {
-            var persistentGraph = new PersistentGraph(new[] {typeof(DummyPersistentObject)}, null);
+            var persistentGraph = new PersistentGraph(new[] {typeof(DummyPersistentObject)}, null, null, null);
             typeof(ArgumentNullException).ShouldBeThrownBy(
                 () =>
                 Sut.InsertGraphs(new[] {persistentGraph})
@@ -21,7 +21,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
         [Test]
         public void it_should_complain_if_the_func_to_get_the_serialization_stream_returns_null()
         {
-            var persistentGraph = new PersistentGraph(new[] {typeof(DummyPersistentObject)}, () => null);
+            var persistentGraph = new PersistentGraph(new[] { typeof(DummyPersistentObject) }, null, null, () => null);
             typeof(ArgumentNullException).ShouldBeThrownBy(
                 () =>
                 Sut.InsertGraphs(new[] {persistentGraph})

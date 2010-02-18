@@ -13,7 +13,7 @@ namespace Stash.Engine
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
         /// <param name="func"></param>
-        public virtual IEnumerable<TrackedProjection<TValue>> Emit<TGraph, TKey, TValue>(
+        public virtual IEnumerable<TrackedProjection> Emit<TGraph, TKey, TValue>(
             Func<Guid, TGraph, IEnumerable<Projection<TKey, TValue>>> func)
         {
             throw new NotImplementedException();

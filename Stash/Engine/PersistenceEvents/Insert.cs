@@ -16,11 +16,6 @@
             throw new NotImplementedException();
         }
 
-        public void FlushFromSession()
-        {
-            throw new NotImplementedException();
-        }
-
         public object UntypedGraph
         {
             get { throw new NotImplementedException(); }

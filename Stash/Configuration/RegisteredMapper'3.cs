@@ -33,9 +33,9 @@
             backingStore.EnsureMap(Map);
         }
 
-        public override IEnumerable<Projection<TGraph>> GetKeyFreeProjections(TGraph graph)
+        public override IEnumerable<Projection> GetKeyFreeProjections(TGraph graph)
         {
-            return Map.F(graph).Cast<Projection<TGraph>>();
+            return Map.F(graph).Cast<Projection>();
         }
 
     }

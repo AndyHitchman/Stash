@@ -16,14 +16,9 @@
             throw new NotImplementedException();
         }
 
-        public void FlushFromSession()
-        {
-            throw new NotImplementedException();
-        }
-
         public object UntypedGraph
         {
-            get { throw new NotImplementedException(); }
+            get { return trackEvent.UntypedGraph; }
         }
 
         public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)

@@ -1,7 +1,8 @@
-﻿namespace Stash
+namespace Stash
 {
-    public abstract class Projection<TValue>
+    public abstract class Projection
     {
         public abstract object UntypedKey { get; }
+        public abstract object UntypedValue { get; }
     }
 }

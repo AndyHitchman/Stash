@@ -7,7 +7,7 @@ namespace Stash
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class Projection<TKey, TValue> : Projection<TValue>
+    public class Projection<TKey, TValue> : Projection
     {
         public Projection(TKey key, TValue value)
         {
@@ -19,6 +19,11 @@ namespace Stash
         public TValue Value { get; private set; }
 
         public override object UntypedKey
+        {
+            get { return Key; }
+        }
+
+        public override object UntypedValue
         {
             get { return Value; }
         }
