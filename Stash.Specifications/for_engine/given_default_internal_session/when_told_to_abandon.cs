@@ -5,6 +5,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     using Engine.PersistenceEvents;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
 
     [TestFixture]
     public class when_told_to_abandon

@@ -8,6 +8,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     using NUnit.Framework;
     using Rhino.Mocks;
     using Selectors;
+    using Support;
     using Is = Rhino.Mocks.Constraints.Is;
 
     [TestFixture]
@@ -20,7 +21,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var mockSelector =
-                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var mockTrack = MockRepository.GenerateStub<Track<DummyPersistentObject>>(Guid.Empty, null, Stream.Null, null);
             var sut = new DefaultUnenlistedRepository();
 
@@ -41,7 +42,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
             var mockSelector =
-                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
             var mockTrack = MockRepository.GenerateStub<Track<DummyPersistentObject>>(Guid.Empty, null, Stream.Null, null);
             var sut = new DefaultUnenlistedRepository();
@@ -62,7 +63,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSelector =
-                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
 
@@ -79,7 +80,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSelector =
-                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+                MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
 

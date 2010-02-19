@@ -24,7 +24,7 @@ namespace Stash.Engine
         public Registry Registry { get; private set; }
         public PersistenceEventFactory PersistenceEventFactory { get; set; }
 
-        public BackingStore BackingStore
+        public IBackingStore BackingStore
         {
             get { return Registry.BackingStore; }
         }

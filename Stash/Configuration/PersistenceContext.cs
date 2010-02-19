@@ -8,7 +8,7 @@ namespace Stash.Configuration
     /// The root context for configuring persistence.
     /// </summary>
     /// <typeparam name="TBackingStore"></typeparam>
-    public class PersistenceContext<TBackingStore> where TBackingStore : BackingStore
+    public class PersistenceContext<TBackingStore> where TBackingStore : IBackingStore
     {
         public PersistenceContext(Registry registry)
         {

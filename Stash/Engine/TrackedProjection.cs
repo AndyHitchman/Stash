@@ -5,13 +5,13 @@ namespace Stash.Engine
 
     public class TrackedProjection
     {
-        public TrackedProjection(IEnumerable<Guid> originalIds, Projection projection)
+        public TrackedProjection(IEnumerable<Guid> originalIds, IProjectedIndex projection)
         {
             OriginalIds = originalIds;
             Projection = projection;
         }
 
         public virtual IEnumerable<Guid> OriginalIds { get; private set; }
-        public virtual Projection Projection { get; private set; }
+        public virtual IProjectedIndex Projection { get; private set; }
     }
 }

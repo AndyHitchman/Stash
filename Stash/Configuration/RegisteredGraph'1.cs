@@ -19,7 +19,7 @@ namespace Stash.Configuration
         public virtual IList<RegisteredIndexer<TGraph>> RegisteredIndexers { get; private set; }
         public virtual IList<RegisteredMapper<TGraph>> RegisteredMappers { get; private set; }
 
-        public override void EngageBackingStore(BackingStore backingStore)
+        public override void EngageBackingStore(IBackingStore backingStore)
         {
             foreach(var registeredIndexer in RegisteredIndexers)
                 registeredIndexer.EngageBackingStore(backingStore);

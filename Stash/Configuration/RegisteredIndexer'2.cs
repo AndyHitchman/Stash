@@ -22,14 +22,14 @@ namespace Stash.Configuration
         /// </summary>
         public virtual Index<TGraph, TKey> Index { get; private set; }
 
-        public override void EngageBackingStore(BackingStore backingStore)
+        public override void EngageBackingStore(IBackingStore backingStore)
         {
-            backingStore.EnsureIndex(Index);
+//            backingStore.EnsureIndex(Index);
         }
 
-        public override IEnumerable<Projection> GetKeyFreeProjections(TGraph graph)
+        public override IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph)
         {
-            return Index.F(graph).Cast<Projection>();
+            return Index.Yield(graph).Cast<IProjectedIndex>();
         }
     }
 }

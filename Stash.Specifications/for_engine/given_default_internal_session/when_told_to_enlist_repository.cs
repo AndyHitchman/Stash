@@ -2,6 +2,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
 {
     using Engine;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_told_to_enlist_repository

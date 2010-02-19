@@ -26,7 +26,7 @@ namespace Stash.Configuration
         /// <summary>
         /// Engage the backing store in managing the stash.
         /// </summary>
-        public virtual void EngageBackingStore(BackingStore backingStore)
+        public virtual void EngageBackingStore(IBackingStore backingStore)
         {
             BackingStore = backingStore;
             foreach(var registeredGraph in AllRegisteredGraphs)
@@ -35,7 +35,7 @@ namespace Stash.Configuration
             }
         }
 
-        public virtual BackingStore BackingStore { get; private set; }
+        public virtual IBackingStore BackingStore { get; private set; }
 
         public virtual Func<Serializer> Serializer { get; set; }
 

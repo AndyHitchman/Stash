@@ -37,23 +37,23 @@ namespace Stash.Engine
                 throw new ArgumentOutOfRangeException("graph", "The graph type is not being managed by Stash");
         }
 
-        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from)
-            where TFromThis : From<TFromThis, TKey, TProjection>
-        {
-            return Fetch(getSession(), from);
-        }
-
-        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(
-            InternalSession session, From<TFromThis, TKey, TProjection> @from)
-            where TFromThis : From<TFromThis, TKey, TProjection>
-        {
-            var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
-            foreach(var projection in fetched)
-            {
-                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection.Value, new MemoryStream(), session).EnrollInSession();
-            }
-            return fetched;
-        }
+//        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from)
+//            where TFromThis : From<TFromThis, TKey, TProjection>
+//        {
+//            return Fetch(getSession(), from);
+//        }
+//
+//        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(
+//            InternalSession session, From<TFromThis, TKey, TProjection> @from)
+//            where TFromThis : From<TFromThis, TKey, TProjection>
+//        {
+//            var fetched = new[] { new Projection<TKey, TProjection>(default(TKey), default(TProjection)) };
+//            foreach(var projection in fetched)
+//            {
+//                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection.Value, new MemoryStream(), session).EnrollInSession();
+//            }
+//            return fetched;
+//        }
 
         public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params From<TFromThis, TProjection>[] from)
             where TFromThis : From<TFromThis, TProjection>

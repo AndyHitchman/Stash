@@ -2,6 +2,7 @@ namespace Stash.Specifications.for_in_esent.given_real_connection_pool
 {
     using In.ESENT;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     [Ignore]

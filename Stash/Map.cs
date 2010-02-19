@@ -4,7 +4,7 @@ namespace Stash
     /// Implement to map for a <typeparamref name="TGraph"/>.
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
-    public interface Map<TGraph> : Projector
+    public interface Map<TGraph>
     {
     }
 }

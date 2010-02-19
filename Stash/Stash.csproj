@@ -31,26 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esent.Interop, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\Esent.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="libdb_dotnet48, Version=4.8.26.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\libdb_dotnet48.dll</HintPath>
+      <HintPath>..\lib\BerkeleyDB\libdb_dotnet48.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\RegisteredMapper%273.cs" />
@@ -65,7 +53,21 @@
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />
+    <Compile Include="Engine\IBackingStore.cs" />
     <Compile Include="Engine\InternalSession.cs" />
+    <Compile Include="Engine\ITrackedGraph`1.cs" />
+    <Compile Include="In\BDB\BerkeleyBackingStoreParams.cs" />
+    <Compile Include="In\BDB\IBerkeleyBackingStoreParams.cs" />
+    <Compile Include="IProjectedIndex.cs" />
+    <Compile Include="Map`3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Map.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IProjectedIndex`1.cs" />
+    <Compile Include="Engine\IStoredGraph.cs" />
+    <Compile Include="Engine\ITrackedGraph.cs" />
     <Compile Include="Engine\PersistenceEvents\DefaultPersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\PersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\Update.cs" />
@@ -74,20 +76,34 @@
     <Compile Include="Engine\PersistenceEvents\Track.cs" />
     <Compile Include="Engine\PersistenceEvents\Destroy.cs" />
     <Compile Include="Engine\PersistenceEvents\Endure.cs" />
-    <Compile Include="Engine\BackingStore.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="Engine\CustomSerializer.cs" />
     <Compile Include="Engine\DefaultEnlistedRepository.cs" />
     <Compile Include="Engine\EnlistedRepository.cs" />
     <Compile Include="Engine\DefaultUnenlistedRepository.cs" />
-    <Compile Include="Engine\PersistenceEvents\PersistenceEvent%271.cs" />
+    <Compile Include="Engine\PersistenceEvents\PersistenceEvent`1.cs" />
     <Compile Include="Engine\PersistenceEvents\PersistenceEvent.cs" />
+    <Compile Include="Engine\ProjectedIndex.cs" />
     <Compile Include="Engine\Serializers\BSONSerializer.cs" />
     <Compile Include="Engine\Serializers\Serializer.cs" />
+    <Compile Include="Engine\StoredGraph.cs" />
+    <Compile Include="Engine\TrackedGraph.cs" />
     <Compile Include="Engine\UnenlistedRepository.cs" />
-    <Compile Include="Map%273.cs" />
-    <Compile Include="Projection.cs" />
-    <Compile Include="Projector%272.cs" />
+    <Compile Include="Projection%272.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Projection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Projector%272.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Projector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Reduction.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Selectors\RangeFrom.cs" />
     <Compile Include="Selectors\FirstFrom.cs" />
     <Compile Include="Selectors\EverythingFrom.cs" />
@@ -96,18 +112,11 @@
     <Compile Include="Session.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Engine\TypeIndexer.cs" />
-    <Compile Include="Index%272.cs" />
+    <Compile Include="Index`2.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
     <Compile Include="In\BDB\SecondaryDatabaseConfig.cs" />
     <Compile Include="In\BDB\DefaultDatabaseEnvironmentConfig.cs" />
     <Compile Include="In\BDB\PrimaryDatabaseConfig.cs" />
-    <Compile Include="In\ESENT\Connection.cs" />
-    <Compile Include="In\ESENT\ConnectionPool.cs" />
-    <Compile Include="In\ESENT\RealConnectionPool.cs" />
-    <Compile Include="In\ESENT\Database.cs" />
-    <Compile Include="In\ESENT\ESENTBackingStore.cs" />
-    <Compile Include="In\ESENT\Schema.cs" />
-    <Compile Include="In\ESENT\SchemaManager.cs" />
     <Compile Include="Engine\PersistentGraph.cs" />
     <Compile Include="SessionFactory.cs" />
     <Compile Include="Stash.cs" />
@@ -116,17 +125,11 @@
     <Compile Include="Engine\ReduceProjector.cs" />
     <Compile Include="Engine\StashSerializationSurrogate.cs" />
     <Compile Include="Engine\TrackedProjection.cs" />
-    <Compile Include="Index.cs" />
-    <Compile Include="Map.cs" />
     <Compile Include="Configuration\PersistenceContext.cs" />
-    <Compile Include="Projector.cs" />
-    <Compile Include="Projection%272.cs" />
-    <Compile Include="Reduction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tracker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="In\Lucene\" />
+    <Compile Include="Tracker.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -3,6 +3,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
     using System;
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_asked_for_a_graph : with_registered_stash

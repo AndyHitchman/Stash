@@ -6,6 +6,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
     using Engine.PersistenceEvents;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
     using Is = Rhino.Mocks.Constraints.Is;
 
     [TestFixture]

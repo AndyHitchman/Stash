@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         public void it_should_tell_registered_graphs_to_engage_themselves()
         {
             var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>();
-            var fakeBackingStore = MockRepository.GenerateStub<BackingStore>();
+            var fakeBackingStore = MockRepository.GenerateStub<IBackingStore>();
             var sut = new Registry();
             sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), mockRegisteredGraph);
 

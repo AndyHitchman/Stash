@@ -52,7 +52,7 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((Projector<object, DummyPersistentObject>)null);
+            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var expected = new[] {mockSelector};
             

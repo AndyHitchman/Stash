@@ -2,7 +2,7 @@ namespace Stash.Selectors
 {
     public class FirstFrom<TKey, TProjection> : From<FirstFrom<TKey,TProjection> ,TKey, TProjection>
     {
-        public FirstFrom(Projector<TKey, TProjection> projector) : base(projector)
+        public FirstFrom(IProjectedIndex<TKey> projector) : base(projector)
         {
         }
 

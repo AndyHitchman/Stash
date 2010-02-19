@@ -15,7 +15,7 @@
         public RegisteredMapper(Map<TGraph,TKey,TValue> map)
         {
             Map = map;
-            RegisteredReducers = new List<RegisteredReducer<TKey, TValue>>();
+//            RegisteredReducers = new List<RegisteredReducer<TKey, TValue>>();
         }
 
         /// <summary>
@@ -26,16 +26,16 @@
         /// <summary>
         /// Reducers chained to the <see cref="Map"/>.
         /// </summary>
-        public IList<RegisteredReducer<TKey, TValue>> RegisteredReducers { get; private set; }
+//        public IList<RegisteredReducer<TKey, TValue>> RegisteredReducers { get; private set; }
 
-        public override void EngageBackingStore(BackingStore backingStore)
+        public override void EngageBackingStore(IBackingStore backingStore)
         {
-            backingStore.EnsureMap(Map);
+//            backingStore.EnsureMap(Map);
         }
 
-        public override IEnumerable<Projection> GetKeyFreeProjections(TGraph graph)
+        public override IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph)
         {
-            return Map.F(graph).Cast<Projection>();
+            return Map.F(graph).Cast<IProjectedIndex>();
         }
 
     }

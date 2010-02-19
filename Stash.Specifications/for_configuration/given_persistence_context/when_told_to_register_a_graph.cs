@@ -3,6 +3,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
     using System;
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_told_to_register_a_graph : with_persistence_context

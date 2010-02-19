@@ -6,7 +6,7 @@ namespace Stash.Configuration
     /// <summary>
     /// The starting point for configuring Stash.
     /// </summary>
-    public class Registrar<TBackingStore> where TBackingStore : BackingStore
+    public class Registrar<TBackingStore> where TBackingStore : IBackingStore
     {
         private readonly TBackingStore backingStore;
         private PersistenceContext<TBackingStore> persistenceContext;

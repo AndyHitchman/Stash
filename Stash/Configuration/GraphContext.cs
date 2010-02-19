@@ -10,7 +10,7 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TBackingStore"></typeparam>
     /// <typeparam name="TGraph"></typeparam>
-    public class GraphContext<TBackingStore, TGraph> where TBackingStore : BackingStore where TGraph : class
+    public class GraphContext<TBackingStore, TGraph> where TBackingStore : IBackingStore where TGraph : class
     {
         public GraphContext(RegisteredGraph<TGraph> registeredGraph)
         {

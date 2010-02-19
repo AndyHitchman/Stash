@@ -9,7 +9,7 @@ namespace Stash
     {
         public static void Kickstart<TBackingStore>(
             TBackingStore backingStore, Action<PersistenceContext<TBackingStore>> configurationAction)
-            where TBackingStore : BackingStore
+            where TBackingStore : IBackingStore
         {
             var registrar = new Registrar<TBackingStore>(backingStore);
             registrar.PerformRegistration(configurationAction);

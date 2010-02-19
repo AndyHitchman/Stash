@@ -22,6 +22,6 @@ namespace Stash.Configuration
         public virtual ISerializationSurrogate RegisteredSerializationSurrogate { get; set; }
 
 
-        public abstract void EngageBackingStore(BackingStore backingStore);
+        public abstract void EngageBackingStore(IBackingStore backingStore);
     }
 }

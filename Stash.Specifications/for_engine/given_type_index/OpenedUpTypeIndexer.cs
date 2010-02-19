@@ -6,7 +6,7 @@ namespace Stash.Specifications.for_engine.given_type_index
 
     public class OpenedUpTypeIndex : TypeIndex
     {
-        public IEnumerable<Projection<Type, object>> OpenedGetTypeHierarchyFor(object o)
+        public IEnumerable<Type> OpenedGetTypeHierarchyFor(object o)
         {
             return base.GetTypeHierarchyFor(o);
         }

@@ -5,55 +5,34 @@ namespace Stash.In.BDB
     using System.IO;
     using BerkeleyDB;
     using Engine;
+    using System.Linq;
 
     /// <summary>
     /// A backing store for Stash using BerkeleyDB.
     /// </summary>
-    public class BerkeleyBackingStore : BackingStore
+    public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
-        private const string DbName = "stash.db";
+        public const string DbName = "stash.db";
         private readonly string databaseDirectory;
         private readonly BTreeDatabaseConfig secondaryDatabaseConfig;
         private HashDatabase db;
-        private DatabaseEnvironment env;
+        public DatabaseEnvironment Environment { get; set; }
         private bool isDisposed;
 
-
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
-        /// <param name="databaseDirectory"></param>
-        /// <param name="databaseEnvironmentConfig"></param>
-        public BerkeleyBackingStore(
-            string databaseDirectory,
-            DatabaseEnvironmentConfig databaseEnvironmentConfig)
-            : this(databaseDirectory, databaseEnvironmentConfig, new PrimaryDatabaseConfig(), new SecondaryDatabaseConfig())
+        public BerkeleyBackingStore(IBerkeleyBackingStoreParams berkeleyBackingStoreParams)
         {
+            databaseDirectory = berkeleyBackingStoreParams.DatabaseDirectory;
+            secondaryDatabaseConfig = berkeleyBackingStoreParams.SecondaryDatabaseConfig;
+            Directory.CreateDirectory(Path.Combine(berkeleyBackingStoreParams.DatabaseDirectory, berkeleyBackingStoreParams.DatabaseEnvironmentConfig.CreationDir));
+            openDatabase(
+                            berkeleyBackingStoreParams.DatabaseDirectory,
+                            berkeleyBackingStoreParams.DatabaseEnvironmentConfig,
+                            berkeleyBackingStoreParams.PrimaryDatabaseConfig);
         }
 
-        /// <summary>
-        /// Create an instance of the backing store implementation using BerkeleyDB
-        /// </summary>
-        /// <param name="databaseDirectory"></param>
-        /// <param name="databaseEnvironmentConfig"></param>
-        /// <param name="primaryDatabaseConfig"></param>
-        /// <param name="secondaryDatabaseConfig"></param>
-        public BerkeleyBackingStore(
-            string databaseDirectory,
-            DatabaseEnvironmentConfig databaseEnvironmentConfig,
-            HashDatabaseConfig primaryDatabaseConfig,
-            BTreeDatabaseConfig secondaryDatabaseConfig)
-        {
-            this.databaseDirectory = databaseDirectory;
-            this.secondaryDatabaseConfig = secondaryDatabaseConfig;
-            Directory.CreateDirectory(Path.Combine(databaseDirectory, databaseEnvironmentConfig.CreationDir));
-            openDatabase(databaseDirectory, databaseEnvironmentConfig, primaryDatabaseConfig);
-        }
-
-        public void DeleteGraphs(IEnumerable<Guid> internalIds)
-        {
-            throw new NotImplementedException();
-        }
 
         public void Dispose()
         {
@@ -63,68 +42,14 @@ namespace Stash.In.BDB
             closeDatabase();
         }
 
-        /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="index"/>.
-        /// </summary>
-        /// <remarks>Indexes are stored in secordary databases.</remarks>
-        /// <typeparam name="TGraph"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
-        /// <param name="index"></param>
-        /// <returns>true is the backing store is going to manage the Index, false if the backing store expects management to be by the Stash Engine.</returns>
-        public bool EnsureIndex<TGraph, TKey>(Index<TGraph, TKey> index)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="map"/>.
-        /// </summary>
-        /// <remarks>Maps are stored in a secondary database.</remarks>
-        /// <typeparam name="TGraph"></typeparam>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="map"></param>
-        /// <returns>true is the backing store is going to manage the Map, false if the backing store expects management to be by the Stash Engine.</returns>
-        public bool EnsureMap<TGraph,TKey,TValue>(Map<TGraph,TKey,TValue> map)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Ensures that the database is configured to persist the provided <paramref name="reduction"/>.
-        /// </summary>
-        /// <remarks>Reductions are stored in a secondary database.</remarks>
-        /// <param name="reduction"></param>
-        /// <returns>true is the backing store is going to manage the Reduction, false if the backing store expects management to be by the Stash Engine.</returns>
-        public bool EnsureReduction<TKey, TValue>(Reduction<TKey, TValue> reduction)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<PersistentGraph> GetExternallyModifiedGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<PersistentGraph> GetGraphs(IEnumerable<Guid> internalIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateGraphs(IEnumerable<PersistentGraph> persistentGraphs)
-        {
-            throw new NotImplementedException();
-        }
-
         private void closeDatabase()
         {
-            db.Close();
-            env.Close();
+            if(db != null) db.Close();
+            if(Environment != null)
+            {
+                Environment.Checkpoint();
+                Environment.Close();
+            }
             DatabaseEnvironment.Remove(databaseDirectory);
         }
 
@@ -135,9 +60,29 @@ namespace Stash.In.BDB
 
         private void openDatabase(string rootDir, DatabaseEnvironmentConfig environmentConfig, HashDatabaseConfig databaseConfig)
         {
-            env = DatabaseEnvironment.Open(rootDir, environmentConfig);
-            databaseConfig.Env = env;
+            Environment = DatabaseEnvironment.Open(rootDir, environmentConfig);
+            databaseConfig.Env = Environment;
             db = HashDatabase.Open(DbName, databaseConfig);
+        }
+
+        public void InsertGraph(ITrackedGraph trackedGraph)
+        {
+            db.PutNoOverwrite(new DatabaseEntry(trackedGraph.InternalId.ToByteArray()), new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()));
+        }
+
+        public void UpdateGraph(ITrackedGraph trackedGraph)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteGraph(Guid internalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IStoredGraph Get(Guid internalId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

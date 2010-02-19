@@ -5,12 +5,7 @@ namespace Stash.Specifications
 
     public class DummerIndex : Index<DummyPersistentObject, object>
     {
-        public string Name
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IEnumerable<Projection<object, DummyPersistentObject>> F(DummyPersistentObject graph)
+        public IEnumerable<object> Yield(DummyPersistentObject graph)
         {
             throw new NotImplementedException();
         }

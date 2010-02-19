@@ -1,6 +1,7 @@
 namespace Stash.Specifications.for_configuration.given_registered_stash
 {
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_instantiating : with_registered_stash

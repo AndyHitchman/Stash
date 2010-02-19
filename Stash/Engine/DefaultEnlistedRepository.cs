@@ -42,10 +42,10 @@ namespace Stash.Engine
             underlyingUnenlistedRepository.Persist(enlistedSession, graph);
         }
 
-        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from) where TFromThis : From<TFromThis, TKey, TProjection>
-        {
-            return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
-        }
+//        public IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(From<TFromThis, TKey, TProjection> from) where TFromThis : From<TFromThis, TKey, TProjection>
+//        {
+//            return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
+//        }
 
         public IEnumerable<TProjection> Fetch<TFromThis,TProjection>(params From<TFromThis, TProjection>[] from) where TFromThis : From<TFromThis, TProjection>
         {

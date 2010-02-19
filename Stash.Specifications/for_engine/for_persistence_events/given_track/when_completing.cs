@@ -8,6 +8,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     using Engine.Serializers;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
 
     [TestFixture]
     public class when_completing

@@ -10,6 +10,7 @@ namespace Stash.In.BDB
             Duplicates = DuplicatesPolicy.NONE;
             FreeThreaded = true;
             ReadUncommitted = true;
+            AutoCommit = true;
         }
     }
 }

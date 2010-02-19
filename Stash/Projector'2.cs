@@ -1,7 +1,7 @@
-﻿namespace Stash
-{
-    public interface Projector<TKey, TProjection> : Projector
-    {
-        
-    }
-}
+﻿//namespace Stash
+//{
+//    public interface Projector<TKey, TProjection> : Projector
+//    {
+//        
+//    }
+//}

@@ -1,6 +1,7 @@
 namespace Stash.Specifications.for_engine.given_type_index
 {
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_getting_the_type_hierarchy
@@ -18,7 +19,7 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpTypeIndex();
             var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithNoAncestors());
-            actual.ShouldContain(projection => projection.Key == typeof(ClassWithNoAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors));
         }
 
         [Test]
@@ -26,7 +27,7 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpTypeIndex();
             var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithOneAncestors());
-            actual.ShouldContain(projection => projection.Key == typeof(ClassWithOneAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors));
         }
 
         [Test]
@@ -34,9 +35,9 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpTypeIndex();
             var actual = sut.OpenedGetTypeHierarchyFor(new ClassWithTwoAncestors());
-            actual.ShouldContain(projection => projection.Key == typeof(ClassWithOneAncestors));
-            actual.ShouldContain(projection => projection.Key == typeof(ClassWithTwoAncestors));
-            actual.ShouldContain(projection => projection.Key == typeof(ClassWithNoAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithTwoAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors));
         }
 
         [Test]

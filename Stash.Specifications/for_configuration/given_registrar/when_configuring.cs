@@ -2,6 +2,7 @@ namespace Stash.Specifications.for_configuration.given_registrar
 {
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_configuring

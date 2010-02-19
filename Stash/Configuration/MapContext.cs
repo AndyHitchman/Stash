@@ -11,7 +11,7 @@ namespace Stash.Configuration
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
     public class MapContext<TBackingStore, TGraph, TKey, TValue>
-        where TBackingStore : BackingStore
+        where TBackingStore : IBackingStore
         where TGraph : class
     {
         public MapContext(RegisteredMapper<TGraph,TKey,TValue> registeredMapper)
@@ -37,10 +37,10 @@ namespace Stash.Configuration
         /// Reduce the map with the given <paramref name="reduction"/>
         /// </summary>
         /// <param name="reduction"></param>
-        public virtual void ReduceWith(Reduction<TKey, TValue> reduction)
-        {
-            if(reduction == null) throw new ArgumentNullException("reduction");
-            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer<TKey, TValue>(reduction));
-        }
+//        public virtual void ReduceWith(Reduction<TKey, TValue> reduction)
+//        {
+//            if(reduction == null) throw new ArgumentNullException("reduction");
+//            RegisteredMapper.RegisteredReducers.Add(new RegisteredReducer<TKey, TValue>(reduction));
+//        }
     }
 }

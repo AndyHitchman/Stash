@@ -14,7 +14,7 @@
         /// <summary>
         /// The engaged backing store.
         /// </summary>
-        BackingStore BackingStore { get; }
+        IBackingStore BackingStore { get; }
 
         /// <summary>
         /// An internal repository for use by the session.

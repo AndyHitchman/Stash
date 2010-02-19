@@ -3,6 +3,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
     using System;
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     public class when_told_to_index : with_dummy_graph_context

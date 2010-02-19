@@ -4,6 +4,7 @@ namespace Stash.Specifications.for_in_esent.given_esent_backing_store
     using System.IO;
     using In.ESENT;
     using NUnit.Framework;
+    using Support;
 
     [TestFixture]
     [Ignore]

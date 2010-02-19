@@ -2,22 +2,32 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
     using System.IO;
-    using NUnit.Framework;
+    using In.BDB;
+    using Rhino.Mocks;
+    using Support;
 
-    public class with_temp_dir
+    public abstract class with_temp_dir : Specification<BerkeleyBackingStore>
     {
         protected string TempDir;
 
-        [TearDown]
-        public void each_down()
+        protected override void BaseContext()
         {
-            if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
+            base.BaseContext();
+
+            TempDir = Path.Combine(Path.GetTempPath(), "Stash" + Guid.NewGuid());
+            if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
+
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseDirectory).Return(TempDir);
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseEnvironmentConfig).Return(new DefaultDatabaseEnvironmentConfig());
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.PrimaryDatabaseConfig).Return(new PrimaryDatabaseConfig());
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.SecondaryDatabaseConfig).Return(new SecondaryDatabaseConfig());
         }
 
-        [SetUp]
-        public void each_up()
+        protected override void BaseTidyUp()
         {
-            TempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            base.BaseTidyUp();
+
+            Subject.Dispose();
             if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
         }
     }

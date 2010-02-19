@@ -7,7 +7,7 @@ namespace Stash.In.ESENT
     using Engine;
     using Microsoft.Isam.Esent.Interop;
 
-    public class ESENTBackingStore : BackingStore
+    public class ESENTBackingStore : IBackingStore
     {
         private readonly ConnectionPool connectionPool;
         private bool isDisposed;
