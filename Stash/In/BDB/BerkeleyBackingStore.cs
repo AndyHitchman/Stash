@@ -10,8 +10,10 @@ namespace Stash.In.BDB
     /// </summary>
     public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
-        private const string ConcreteTypeDbName = "concreteTypes.db";
-        private const string GraphDbName = "graphs.db";
+        private const string ConcreteTypeFileName = "concreteTypes.db";
+        private const string GraphFileName = "graphs.db";
+        private const string TypeHierarchyFileName = "typeHierarchy.db";
+
         private readonly IBerkeleyBackingStoreParams backingStoreParams;
         private bool isDisposed;
 
@@ -26,9 +28,11 @@ namespace Stash.In.BDB
             dbOpen();
         }
 
-        public HashDatabase GraphDatabase { get; private set; }
-        public BTreeDatabase ConcreteTypeDatabase { get; private set; }
         public DatabaseEnvironment Environment { get; private set; }
+
+        public HashDatabase GraphDatabase { get; private set; }
+        public HashDatabase ConcreteTypeDatabase { get; private set; }
+        public BTreeDatabase TypeHierarchyDatabase { get; private set; }
 
         public void Dispose()
         {
@@ -72,8 +76,14 @@ namespace Stash.In.BDB
             if(GraphDatabase != null) GraphDatabase.Close();
         }
 
+        private void closeTypeHierarchyDatabase()
+        {
+            if(TypeHierarchyDatabase != null) TypeHierarchyDatabase.Close();
+        }
+
         private void dbClose()
         {
+            closeTypeHierarchyDatabase();
             closeConcreteTypeDatabase();
             closeGraphDatabase();
 
@@ -86,23 +96,29 @@ namespace Stash.In.BDB
 
             openGraphDatabase();
             openConcreteTypeDatabase();
+            openTypeHierarchyDatabase();
         }
 
         private void openConcreteTypeDatabase()
         {
-            ConcreteTypeDatabase = BTreeDatabase.Open(ConcreteTypeDbName, backingStoreParams.SatelliteDatabaseConfig);
+            ConcreteTypeDatabase = HashDatabase.Open(ConcreteTypeFileName, backingStoreParams.ValueDatabaseConfig);
         }
 
         private void openEnvironment()
         {
             Environment = DatabaseEnvironment.Open(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig);
-            backingStoreParams.GraphDatabaseConfig.Env = Environment;
-            backingStoreParams.SatelliteDatabaseConfig.Env = Environment;
+            backingStoreParams.ValueDatabaseConfig.Env = Environment;
+            backingStoreParams.IndexDatabaseConfig.Env = Environment;
         }
 
         private void openGraphDatabase()
         {
-            GraphDatabase = HashDatabase.Open(GraphDbName, backingStoreParams.GraphDatabaseConfig);
+            GraphDatabase = HashDatabase.Open(GraphFileName, backingStoreParams.ValueDatabaseConfig);
+        }
+
+        private void openTypeHierarchyDatabase()
+        {
+            TypeHierarchyDatabase = BTreeDatabase.Open(TypeHierarchyFileName, backingStoreParams.IndexDatabaseConfig);
         }
     }
 }

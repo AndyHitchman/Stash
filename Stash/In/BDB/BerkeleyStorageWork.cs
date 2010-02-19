@@ -19,14 +19,27 @@ namespace Stash.In.BDB
         public void InsertGraph(ITrackedGraph trackedGraph)
         {
             BackingStore.GraphDatabase.PutNoOverwrite(
-                                                         new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
-                                                         new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
-                                                         Transaction);
-            BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
-                                                                new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
-                                                                new DatabaseEntry(trackedGraph.ConcreteType.ToStringAsByteArray()),
-                                                                Transaction);
+                new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
+                new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
+                Transaction);
 
+            BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
+                new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
+                new DatabaseEntry(trackedGraph.ConcreteType.ToStringAsByteArray()),
+                Transaction);
+
+            BackingStore.TypeHierarchyDatabase.Put(
+                new DatabaseEntry(trackedGraph.ConcreteType.ToStringAsByteArray()),
+                new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
+                Transaction);
+
+            foreach (var type in trackedGraph.SuperTypes)
+            {
+                BackingStore.TypeHierarchyDatabase.Put(
+                    new DatabaseEntry(type.ToStringAsByteArray()),
+                    new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
+                    Transaction);
+            }
         }
 
         public void UpdateGraph(ITrackedGraph trackedGraph)

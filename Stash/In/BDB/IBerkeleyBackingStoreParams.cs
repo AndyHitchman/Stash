@@ -6,7 +6,7 @@
     {
         string DatabaseDirectory { get; }
         DatabaseEnvironmentConfig DatabaseEnvironmentConfig { get; }
-        HashDatabaseConfig GraphDatabaseConfig { get; }
-        BTreeDatabaseConfig SatelliteDatabaseConfig { get; }
+        HashDatabaseConfig ValueDatabaseConfig { get; }
+        BTreeDatabaseConfig IndexDatabaseConfig { get; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using BerkeleyDB;
     using In.BDB;
     using NUnit.Framework;
@@ -26,17 +28,27 @@
             return null;
         }
 
-        public static byte[] ValueForKey(this BTreeDatabase store, Guid key)
+        public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, object key)
+        {
+            return ValuesForKey(store, key.ToStringAsByteArray());
+        }
+
+        public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, byte[] key)
         {
             try
             {
-                return store.Get(new DatabaseEntry(key.ToByteArray())).Value.Data;
+                return store.GetMultiple(new DatabaseEntry(key)).Value.Select(_ => _.Data);
             }
             catch(NotFoundException)
             {
                 Assert.Fail("ValueForKey: Key not found");
             }
             return null;
+        }
+
+        public static byte[] ValueForKey(this BTreeDatabase store, object key)
+        {
+            return ValueForKey(store, key.ToStringAsByteArray());
         }
 
         public static byte[] ValueForKey(this BTreeDatabase store, byte[] key)
