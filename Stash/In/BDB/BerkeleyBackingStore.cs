@@ -1,56 +1,54 @@
 namespace Stash.In.BDB
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using BerkeleyDB;
     using Engine;
-    using System.Linq;
 
     /// <summary>
     /// A backing store for Stash using BerkeleyDB.
     /// </summary>
     public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
-        public const string DbName = "stash.db";
-        private readonly string databaseDirectory;
-        private readonly BTreeDatabaseConfig secondaryDatabaseConfig;
-        private HashDatabase db;
-        public DatabaseEnvironment Environment { get; set; }
+        private const string ConcreteTypeDbName = "concreteTypes.db";
+        private const string GraphDbName = "graphs.db";
+        private readonly IBerkeleyBackingStoreParams backingStoreParams;
         private bool isDisposed;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
-        public BerkeleyBackingStore(IBerkeleyBackingStoreParams berkeleyBackingStoreParams)
+        public BerkeleyBackingStore(IBerkeleyBackingStoreParams backingStoreParams)
         {
-            databaseDirectory = berkeleyBackingStoreParams.DatabaseDirectory;
-            secondaryDatabaseConfig = berkeleyBackingStoreParams.SecondaryDatabaseConfig;
-            Directory.CreateDirectory(Path.Combine(berkeleyBackingStoreParams.DatabaseDirectory, berkeleyBackingStoreParams.DatabaseEnvironmentConfig.CreationDir));
-            openDatabase(
-                            berkeleyBackingStoreParams.DatabaseDirectory,
-                            berkeleyBackingStoreParams.DatabaseEnvironmentConfig,
-                            berkeleyBackingStoreParams.PrimaryDatabaseConfig);
+            this.backingStoreParams = backingStoreParams;
+            Directory.CreateDirectory(Path.Combine(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig.CreationDir));
+
+            dbOpen();
         }
 
+        public HashDatabase GraphDatabase { get; private set; }
+        public BTreeDatabase ConcreteTypeDatabase { get; private set; }
+        public DatabaseEnvironment Environment { get; private set; }
 
         public void Dispose()
         {
             if(isDisposed) return;
 
             isDisposed = true;
-            closeDatabase();
+
+            dbClose();
         }
 
-        private void closeDatabase()
+        public IStoredGraph Get(Guid internalId)
         {
-            if(db != null) db.Close();
-            if(Environment != null)
-            {
-                Environment.Checkpoint();
-                Environment.Close();
-            }
-            DatabaseEnvironment.Remove(databaseDirectory);
+            throw new NotImplementedException();
+        }
+
+        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
+        {
+            var storageWork = new BerkeleyStorageWork(this);
+            storageWorkActions(storageWork);
+            storageWork.Commit();
         }
 
         ~BerkeleyBackingStore()
@@ -58,31 +56,53 @@ namespace Stash.In.BDB
             Dispose();
         }
 
-        private void openDatabase(string rootDir, DatabaseEnvironmentConfig environmentConfig, HashDatabaseConfig databaseConfig)
+        private void closeConcreteTypeDatabase()
         {
-            Environment = DatabaseEnvironment.Open(rootDir, environmentConfig);
-            databaseConfig.Env = Environment;
-            db = HashDatabase.Open(DbName, databaseConfig);
+            if(ConcreteTypeDatabase != null) ConcreteTypeDatabase.Close();
         }
 
-        public void InsertGraph(ITrackedGraph trackedGraph)
+        private void closeEnvironment()
         {
-            db.PutNoOverwrite(new DatabaseEntry(trackedGraph.InternalId.ToByteArray()), new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()));
+            if(Environment != null) Environment.Close();
+            DatabaseEnvironment.Remove(backingStoreParams.DatabaseDirectory);
         }
 
-        public void UpdateGraph(ITrackedGraph trackedGraph)
+        private void closeGraphDatabase()
         {
-            throw new NotImplementedException();
+            if(GraphDatabase != null) GraphDatabase.Close();
         }
 
-        public void DeleteGraph(Guid internalId)
+        private void dbClose()
         {
-            throw new NotImplementedException();
+            closeConcreteTypeDatabase();
+            closeGraphDatabase();
+
+            closeEnvironment();
         }
 
-        public IStoredGraph Get(Guid internalId)
+        private void dbOpen()
         {
-            throw new NotImplementedException();
+            openEnvironment();
+
+            openGraphDatabase();
+            openConcreteTypeDatabase();
+        }
+
+        private void openConcreteTypeDatabase()
+        {
+            ConcreteTypeDatabase = BTreeDatabase.Open(ConcreteTypeDbName, backingStoreParams.SatelliteDatabaseConfig);
+        }
+
+        private void openEnvironment()
+        {
+            Environment = DatabaseEnvironment.Open(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig);
+            backingStoreParams.GraphDatabaseConfig.Env = Environment;
+            backingStoreParams.SatelliteDatabaseConfig.Env = Environment;
+        }
+
+        private void openGraphDatabase()
+        {
+            GraphDatabase = HashDatabase.Open(GraphDbName, backingStoreParams.GraphDatabaseConfig);
         }
     }
 }

@@ -12,13 +12,13 @@
         {
             DatabaseDirectory = databaseDirectory;
             DatabaseEnvironmentConfig = databaseEnvironmentConfig;
-            PrimaryDatabaseConfig = primaryDatabaseConfig;
-            SecondaryDatabaseConfig = secondaryDatabaseConfig;
+            GraphDatabaseConfig = primaryDatabaseConfig;
+            SatelliteDatabaseConfig = secondaryDatabaseConfig;
         }
 
         public string DatabaseDirectory { get; private set; }
         public DatabaseEnvironmentConfig DatabaseEnvironmentConfig { get; private set; }
-        public HashDatabaseConfig PrimaryDatabaseConfig { get; private set; }
-        public BTreeDatabaseConfig SecondaryDatabaseConfig { get; private set; }
+        public HashDatabaseConfig GraphDatabaseConfig { get; private set; }
+        public BTreeDatabaseConfig SatelliteDatabaseConfig { get; private set; }
     }
 }

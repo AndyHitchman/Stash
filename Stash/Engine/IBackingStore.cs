@@ -5,11 +5,7 @@ namespace Stash.Engine
 
     public interface IBackingStore
     {
-        void InsertGraph(ITrackedGraph trackedGraph);
-
-        void UpdateGraph(ITrackedGraph trackedGraph);
-
-        void DeleteGraph(Guid internalId);
+        void InTransactionDo(Action<IStorageWork> storageWorkActions);
 
         IStoredGraph Get(Guid internalId);
 

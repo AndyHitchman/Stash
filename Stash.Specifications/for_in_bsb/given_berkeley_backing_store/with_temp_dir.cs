@@ -19,8 +19,8 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseDirectory).Return(TempDir);
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseEnvironmentConfig).Return(new DefaultDatabaseEnvironmentConfig());
-            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.PrimaryDatabaseConfig).Return(new PrimaryDatabaseConfig());
-            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.SecondaryDatabaseConfig).Return(new SecondaryDatabaseConfig());
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.GraphDatabaseConfig).Return(new GraphDatabaseConfig());
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.SatelliteDatabaseConfig).Return(new SatelliteDatabaseConfig());
         }
 
         protected override void BaseTidyUp()

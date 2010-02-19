@@ -26,7 +26,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Test]
         public void it_should_create_the_primary_database()
         {
-            File.Exists(Path.Combine(TempDir, "data\\stash.db")).ShouldBeTrue();
+            File.Exists(Path.Combine(TempDir, "data\\graphs.db")).ShouldBeTrue();
         }
     }
 }

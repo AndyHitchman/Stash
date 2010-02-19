@@ -25,19 +25,25 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 
         protected override void When()
         {
-            Subject.InsertGraph(trackedGraph);
+            Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
         }
 
         [Then]
         public void it_should_persist_using_the_internal_id_as_the_key()
         {
-            Subject.ShouldHaveKeyInPrimary(trackedGraph.InternalId);
+            Subject.GraphDatabase.ShouldHaveKeyInPrimary(trackedGraph.InternalId);
         }
 
         [Then]
         public void it_should_persist_the_serialised_graph_data()
         {
-            Subject.ValueForPrimaryKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.SerialisedGraph.ToArray());
+            Subject.GraphDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.SerialisedGraph.ToArray());
+        }
+
+        [Then]
+        public void it_should_persist_the_concrete_type_of_the_graph()
+        {
+            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.ConcreteType.ToString().Select(_ => (byte)_));
         }
     }
 }

@@ -8,35 +8,46 @@
 
     public static class BerkeleyDbExtensions
     {
-        public static void ShouldHaveKeyInPrimary(this BerkeleyBackingStore store, Guid key)
+        public static void ShouldHaveKeyInPrimary(this HashDatabase store, Guid key)
         {
-            var primaryDatabaseConfig = new PrimaryDatabaseConfig {Env = store.Environment, Creation = CreatePolicy.NEVER, ReadOnly = true};
-            var db = HashDatabase.Open(BerkeleyBackingStore.DbName, primaryDatabaseConfig);
-            try
-            {
-                db.Exists(new DatabaseEntry(key.ToByteArray())).ShouldBeTrue();
-            }
-            finally
-            {
-                db.Close();
-            }
+            store.Exists(new DatabaseEntry(key.ToByteArray())).ShouldBeTrue();
         }
 
-        public static byte[] ValueForPrimaryKey(this BerkeleyBackingStore store, Guid key)
+        public static byte[] ValueForKey(this HashDatabase store, Guid key)
         {
-            var primaryDatabaseConfig = new PrimaryDatabaseConfig {Env = store.Environment, Creation = CreatePolicy.NEVER, ReadOnly = true};
-            var db = HashDatabase.Open(BerkeleyBackingStore.DbName, primaryDatabaseConfig);
             try
             {
-                return db.Get(new DatabaseEntry(key.ToByteArray())).Value.Data;
+                return store.Get(new DatabaseEntry(key.ToByteArray())).Value.Data;
             }
             catch(NotFoundException)
             {
-                Assert.Fail("ValueForPrimaryKey: Key not found");
+                Assert.Fail("ValueForKey: Key not found");
             }
-            finally
+            return null;
+        }
+
+        public static byte[] ValueForKey(this BTreeDatabase store, Guid key)
+        {
+            try
             {
-                db.Close();
+                return store.Get(new DatabaseEntry(key.ToByteArray())).Value.Data;
+            }
+            catch(NotFoundException)
+            {
+                Assert.Fail("ValueForKey: Key not found");
+            }
+            return null;
+        }
+
+        public static byte[] ValueForKey(this BTreeDatabase store, byte[] key)
+        {
+            try
+            {
+                return store.Get(new DatabaseEntry(key)).Value.Data;
+            }
+            catch(NotFoundException)
+            {
+                Assert.Fail("ValueForKey: Key not found");
             }
             return null;
         }

@@ -51,12 +51,15 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Engine\IStorageWork.cs" />
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />
     <Compile Include="Engine\IBackingStore.cs" />
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="Engine\ITrackedGraph`1.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStoreParams.cs" />
+    <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
+    <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
     <Compile Include="In\BDB\IBerkeleyBackingStoreParams.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
@@ -114,9 +117,9 @@
     <Compile Include="Engine\TypeIndexer.cs" />
     <Compile Include="Index`2.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStore.cs" />
-    <Compile Include="In\BDB\SecondaryDatabaseConfig.cs" />
+    <Compile Include="In\BDB\SatelliteDatabaseConfig.cs" />
     <Compile Include="In\BDB\DefaultDatabaseEnvironmentConfig.cs" />
-    <Compile Include="In\BDB\PrimaryDatabaseConfig.cs" />
+    <Compile Include="In\BDB\GraphDatabaseConfig.cs" />
     <Compile Include="Engine\PersistentGraph.cs" />
     <Compile Include="SessionFactory.cs" />
     <Compile Include="Stash.cs" />

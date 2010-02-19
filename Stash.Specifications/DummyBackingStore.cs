@@ -6,17 +6,7 @@ namespace Stash.Specifications
 
     public class DummyBackingStore : IBackingStore
     {
-        public void InsertGraph(ITrackedGraph trackedGraph)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateGraph(ITrackedGraph trackedGraph)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteGraph(Guid internalId)
+        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
             throw new NotImplementedException();
         }
