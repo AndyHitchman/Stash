@@ -61,6 +61,7 @@
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
     <Compile Include="In\BDB\IBerkeleyBackingStoreParams.cs" />
+    <Compile Include="In\BDB\IndexManager.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>
@@ -133,6 +134,9 @@
     <Compile Include="Tracker.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="In\BDB\Conversions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

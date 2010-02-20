@@ -25,18 +25,18 @@ namespace Stash.In.BDB
 
             BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
                 new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
-                new DatabaseEntry(trackedGraph.ConcreteType.ToStringAsByteArray()),
+                new DatabaseEntry(trackedGraph.ConcreteType.FullName.ToByteArray()),
                 Transaction);
 
             BackingStore.TypeHierarchyDatabase.Put(
-                new DatabaseEntry(trackedGraph.ConcreteType.ToStringAsByteArray()),
+                new DatabaseEntry(trackedGraph.ConcreteType.FullName.ToByteArray()),
                 new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
                 Transaction);
 
             foreach (var type in trackedGraph.SuperTypes)
             {
                 BackingStore.TypeHierarchyDatabase.Put(
-                    new DatabaseEntry(type.ToStringAsByteArray()),
+                    new DatabaseEntry(type.FullName.ToByteArray()),
                     new DatabaseEntry(trackedGraph.InternalId.ToByteArray()),
                     Transaction);
             }

@@ -74,7 +74,7 @@
     <Compile Include="for_configuration\given_map_context\when_told_not_to_persist.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_to_reduce.cs" />
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />
-    <Compile Include="DummerIndexer.cs" />
+    <Compile Include="DummyIndex.cs" />
     <Compile Include="DummyPersistentObject.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_engaging_backing_store.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_asked_for_a_graph.cs" />
@@ -106,6 +106,7 @@
     <Compile Include="for_engine\given_type_index\ClassWithTwoAncestors.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_ensuring_an_index_that_does_not_exist.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_inserting_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\BerkeleyDbExtensions.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\with_temp_dir.cs" />

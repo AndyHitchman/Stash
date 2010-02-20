@@ -10,7 +10,7 @@
 
     public static class BerkeleyDbExtensions
     {
-        public static void ShouldHaveKeyInPrimary(this HashDatabase store, Guid key)
+        public static void ShouldHaveKey(this HashDatabase store, Guid key)
         {
             store.Exists(new DatabaseEntry(key.ToByteArray())).ShouldBeTrue();
         }
@@ -30,7 +30,7 @@
 
         public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, object key)
         {
-            return ValuesForKey(store, key.ToStringAsByteArray());
+            return ValuesForKey(store, key.ToString().ToByteArray());
         }
 
         public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, byte[] key)
@@ -48,7 +48,7 @@
 
         public static byte[] ValueForKey(this BTreeDatabase store, object key)
         {
-            return ValueForKey(store, key.ToStringAsByteArray());
+            return ValueForKey(store, key.ToString().ToByteArray());
         }
 
         public static byte[] ValueForKey(this BTreeDatabase store, byte[] key)

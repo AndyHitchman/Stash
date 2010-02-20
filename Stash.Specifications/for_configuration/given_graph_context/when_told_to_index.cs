@@ -20,7 +20,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
         [Test]
         public void it_should_register_the_indexer()
         {
-            var expected = new DummerIndex();
+            var expected = new DummyIndex();
             Sut.IndexWith(expected);
             Sut.RegisteredGraph.RegisteredIndexers.ShouldContain(
                 indexer => ((RegisteredIndexer<DummyPersistentObject, object>)indexer).Index == expected);

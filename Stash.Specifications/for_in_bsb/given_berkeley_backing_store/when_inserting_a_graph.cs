@@ -21,6 +21,9 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
                 new[] { typeof(int), typeof(bool) },
                 new IProjectedIndex[] { new ProjectedIndex<int>("firstIndex", 1), new ProjectedIndex<string>("secondIndex", "wibble") }
                 );
+
+            Subject.EnsureIndex("firstIndex", typeof(int));
+            Subject.EnsureIndex("secondIndex", typeof(string));
         }
 
         protected override void When()
@@ -31,7 +34,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_using_the_internal_id_as_the_key()
         {
-            Subject.GraphDatabase.ShouldHaveKeyInPrimary(trackedGraph.InternalId);
+            Subject.GraphDatabase.ShouldHaveKey(trackedGraph.InternalId);
         }
 
         [Then]
@@ -43,7 +46,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_concrete_type_of_the_graph()
         {
-            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.ConcreteType.ToString().Select(_ => (byte)_));
+            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.ConcreteType.FullName.Select(_ => (byte)_));
         }
 
         [Then]

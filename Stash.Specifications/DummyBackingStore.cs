@@ -15,5 +15,10 @@ namespace Stash.Specifications
         {
             throw new NotImplementedException();
         }
+
+        public void EnsureIndex(string indexName, Type yieldsType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

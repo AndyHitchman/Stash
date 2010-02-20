@@ -1,6 +1,7 @@
 namespace Stash.In.BDB
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using BerkeleyDB;
     using Engine;
@@ -12,6 +13,7 @@ namespace Stash.In.BDB
     {
         private const string ConcreteTypeFileName = "concreteTypes.db";
         private const string GraphFileName = "graphs.db";
+        private const string IndexFilenamePrefix = "index-";
         private const string TypeHierarchyFileName = "typeHierarchy.db";
 
         private readonly IBerkeleyBackingStoreParams backingStoreParams;
@@ -24,6 +26,7 @@ namespace Stash.In.BDB
         {
             this.backingStoreParams = backingStoreParams;
             Directory.CreateDirectory(Path.Combine(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig.CreationDir));
+            IndexDatabases = new Dictionary<string, IndexManager>();
 
             dbOpen();
         }
@@ -33,14 +36,20 @@ namespace Stash.In.BDB
         public HashDatabase GraphDatabase { get; private set; }
         public HashDatabase ConcreteTypeDatabase { get; private set; }
         public BTreeDatabase TypeHierarchyDatabase { get; private set; }
+        public Dictionary<string, IndexManager> IndexDatabases { get; private set; }
 
         public void Dispose()
         {
             if(isDisposed) return;
-
             isDisposed = true;
 
             dbClose();
+        }
+
+        public void EnsureIndex(string indexName, Type yieldsType)
+        {
+            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + ".db", backingStoreParams.IndexDatabaseConfig);
+            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase));
         }
 
         public IStoredGraph Get(Guid internalId)
@@ -76,6 +85,14 @@ namespace Stash.In.BDB
             if(GraphDatabase != null) GraphDatabase.Close();
         }
 
+        private void closeIndexDatabases()
+        {
+            foreach(var indexManager in IndexDatabases.Values)
+            {
+                indexManager.Close();
+            }
+        }
+
         private void closeTypeHierarchyDatabase()
         {
             if(TypeHierarchyDatabase != null) TypeHierarchyDatabase.Close();
@@ -83,6 +100,7 @@ namespace Stash.In.BDB
 
         private void dbClose()
         {
+            closeIndexDatabases();
             closeTypeHierarchyDatabase();
             closeConcreteTypeDatabase();
             closeGraphDatabase();

@@ -4,11 +4,11 @@ namespace Stash.In.BDB
 
     public static class BerkeleyDbExtensions
     {
-        public static byte[] ToStringAsByteArray(this object on)
+        public static byte[] ToByteArray(this string on)
         {
-            if (on == null) return new byte[] {};
+            if(on == null) return new byte[] {};
 
-            return on.ToString().Select(_ => (byte)_).ToArray();
+            return on.Select(_ => (byte)_).ToArray();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             base.BaseContext();
 
             TempDir = Path.Combine(Path.GetTempPath(), "Stash" + Guid.NewGuid());
+            Console.WriteLine("TempDir: "+ TempDir);
             if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
 
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseDirectory).Return(TempDir);
