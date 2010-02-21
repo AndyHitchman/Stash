@@ -12,14 +12,14 @@
     {
         public static void ShouldHaveKey(this HashDatabase store, Guid key)
         {
-            store.Exists(new DatabaseEntry(key.ToByteArray())).ShouldBeTrue();
+            store.Exists(new DatabaseEntry(key.AsByteArray())).ShouldBeTrue();
         }
 
         public static byte[] ValueForKey(this HashDatabase store, Guid key)
         {
             try
             {
-                return store.Get(new DatabaseEntry(key.ToByteArray())).Value.Data;
+                return store.Get(new DatabaseEntry(key.AsByteArray())).Value.Data;
             }
             catch(NotFoundException)
             {
@@ -30,7 +30,7 @@
 
         public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, object key)
         {
-            return ValuesForKey(store, key.ToString().ToByteArray());
+            return ValuesForKey(store, key.ToString().AsByteArray());
         }
 
         public static IEnumerable<byte[]> ValuesForKey(this BTreeDatabase store, byte[] key)
@@ -48,7 +48,7 @@
 
         public static byte[] ValueForKey(this BTreeDatabase store, object key)
         {
-            return ValueForKey(store, key.ToString().ToByteArray());
+            return ValueForKey(store, key.ToString().AsByteArray());
         }
 
         public static byte[] ValueForKey(this BTreeDatabase store, byte[] key)

@@ -60,8 +60,23 @@
     <Compile Include="In\BDB\BerkeleyBackingStoreParams.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
+    <Compile Include="In\BDB\BooleanIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\CharIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\Convert.cs" />
+    <Compile Include="In\BDB\TypeIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\DateTimeIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\DoubleIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\FloatIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\GuidIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\IBerkeleyBackingStoreParams.cs" />
     <Compile Include="In\BDB\IndexManager.cs" />
+    <Compile Include="In\BDB\IntIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\LongIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\ShortIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\StringIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\UIntIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\ULongIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\UShortIndexDatabaseConfig.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>
@@ -134,9 +149,6 @@
     <Compile Include="Tracker.cs">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="In\BDB\Conversions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

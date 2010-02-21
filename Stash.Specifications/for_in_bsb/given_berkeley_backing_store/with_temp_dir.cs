@@ -1,7 +1,9 @@
 namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using BerkeleyDB;
     using In.BDB;
     using Rhino.Mocks;
     using Support;
@@ -18,10 +20,16 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             Console.WriteLine("TempDir: "+ TempDir);
             if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
 
+            var databaseConfigs = new Dictionary<Type, BTreeDatabaseConfig>
+                {
+                    {typeof(Type), new TypeIndexDatabaseConfig()},
+                    {typeof(object), new IndexDatabaseConfig()},
+                };
+
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseDirectory).Return(TempDir);
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseEnvironmentConfig).Return(new DefaultDatabaseEnvironmentConfig());
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.ValueDatabaseConfig).Return(new ValueDatabaseConfig());
-            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.IndexDatabaseConfig).Return(new IndexDatabaseConfig());
+            AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.IndexDatabaseConfigForTypes).Return(databaseConfigs);
         }
 
         protected override void BaseTidyUp()

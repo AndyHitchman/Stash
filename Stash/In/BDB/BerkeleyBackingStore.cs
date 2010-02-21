@@ -48,7 +48,11 @@ namespace Stash.In.BDB
 
         public void EnsureIndex(string indexName, Type yieldsType)
         {
-            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + ".db", backingStoreParams.IndexDatabaseConfig);
+            var indexDatabaseConfigForType = backingStoreParams.IndexDatabaseConfigForTypes.ContainsKey(yieldsType)
+                                                 ? backingStoreParams.IndexDatabaseConfigForTypes[yieldsType]
+                                                 : backingStoreParams.IndexDatabaseConfigForTypes[typeof(object)];
+
+            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + ".db", indexDatabaseConfigForType);
             IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase));
         }
 
@@ -126,7 +130,10 @@ namespace Stash.In.BDB
         {
             Environment = DatabaseEnvironment.Open(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig);
             backingStoreParams.ValueDatabaseConfig.Env = Environment;
-            backingStoreParams.IndexDatabaseConfig.Env = Environment;
+            foreach(var databaseConfigForType in backingStoreParams.IndexDatabaseConfigForTypes)
+            {
+                databaseConfigForType.Value.Env = Environment;
+            }
         }
 
         private void openGraphDatabase()
@@ -136,7 +143,7 @@ namespace Stash.In.BDB
 
         private void openTypeHierarchyDatabase()
         {
-            TypeHierarchyDatabase = BTreeDatabase.Open(TypeHierarchyFileName, backingStoreParams.IndexDatabaseConfig);
+            TypeHierarchyDatabase = BTreeDatabase.Open(TypeHierarchyFileName, backingStoreParams.IndexDatabaseConfigForTypes[typeof(Type)]);
         }
     }
 }
