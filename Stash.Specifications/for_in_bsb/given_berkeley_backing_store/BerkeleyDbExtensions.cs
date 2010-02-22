@@ -33,6 +33,11 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             store.Exists(new DatabaseEntry(key.AsByteArray())).ShouldBeTrue();
         }
 
+        public static void ShouldNotHaveKey(this HashDatabase store, Guid key)
+        {
+            store.Exists(new DatabaseEntry(key.AsByteArray())).ShouldBeFalse();
+        }
+
         public static byte[] ValueForKey(this HashDatabase store, Guid key)
         {
             try
@@ -44,6 +49,11 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
                 Assert.Fail("ValueForKey: Key not found");
             }
             return null;
+        }
+        
+        public static void ShouldNotHaveKey(this BTreeDatabase store, byte[] key)
+        {
+            store.Exists(new DatabaseEntry(key)).ShouldBeFalse();
         }
 
         public static byte[] ValueForKey(this BTreeDatabase store, object key)

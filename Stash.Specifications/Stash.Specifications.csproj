@@ -106,6 +106,8 @@
     <Compile Include="for_engine\given_type_index\ClassWithTwoAncestors.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_inserting_a_second_graph.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_deleting_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_ensuring_an_index_that_does_not_exist.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_inserting_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\BerkeleyDbExtensions.cs" />
