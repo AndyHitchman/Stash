@@ -1,12 +1,30 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
-using NUnit.Framework;
+﻿#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
 
 namespace Stash.Specifications.Support
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Xml;
+    using NUnit.Framework;
+
     /// <summary>
     /// specification extensions.
     /// </summary>
@@ -27,9 +45,10 @@ namespace Stash.Specifications.Support
         /// <returns>
         /// The attribute should equal.
         /// </returns>
-        public static object AttributeShouldEqual(this XmlElement element,
-                                                  string attributeName,
-                                                  object expected)
+        public static object AttributeShouldEqual(
+            this XmlElement element,
+            string attributeName,
+            object expected)
         {
             Assert.IsNotNull(element, "The Element is null");
 
@@ -53,8 +72,8 @@ namespace Stash.Specifications.Support
         {
             Assert.IsNotNull(element, "The Element is null");
             Assert.IsFalse(
-                                  element.HasAttribute(attributeName),
-                                  "Element should not have an attribute named " + attributeName);
+                element.HasAttribute(attributeName),
+                "Element should not have an attribute named " + attributeName);
 
             return element;
         }

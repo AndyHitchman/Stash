@@ -1,9 +1,27 @@
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
 namespace Stash.Specifications.for_engine.given_default_enlisted_repository
 {
     using Engine;
-    using Selectors;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Selectors;
 
     [TestFixture]
     public class when_doing_work
@@ -22,16 +40,17 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         }
 
         [Test]
-        public void it_should_delegate_get_tracker_for_to_the_underlying_repository()
+        public void it_should_delegate_fetch_many_to_the_underlying_repository()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
-            var graph = new DummyPersistentObject();
+            var expected = new[] {mockSelector};
 
-            sut.GetTrackerFor(graph);
+            sut.Fetch(expected);
 
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.GetTrackerFor(mockSession, graph));
+            mockUnenlistedRepository.AssertWasCalled(repository => repository.Fetch(mockSession, expected));
         }
 
         [Test]
@@ -48,17 +67,16 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         }
 
         [Test]
-        public void it_should_delegate_fetch_many_to_the_underlying_repository()
+        public void it_should_delegate_get_tracker_for_to_the_underlying_repository()
         {
             var mockSession = MockRepository.GenerateMock<InternalSession>();
             var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
-            var mockSelector = MockRepository.GenerateMock<From<DummyFrom, object, DummyPersistentObject>>((IProjectedIndex<object>)null);
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
-            var expected = new[] {mockSelector};
-            
-            sut.Fetch(expected);
+            var graph = new DummyPersistentObject();
 
-            mockUnenlistedRepository.AssertWasCalled(repository => repository.Fetch(mockSession, expected));
+            sut.GetTrackerFor(graph);
+
+            mockUnenlistedRepository.AssertWasCalled(repository => repository.GetTrackerFor(mockSession, graph));
         }
 
         [Test]

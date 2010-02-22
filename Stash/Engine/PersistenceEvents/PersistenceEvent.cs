@@ -1,4 +1,22 @@
-﻿namespace Stash.Engine.PersistenceEvents
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
+namespace Stash.Engine.PersistenceEvents
 {
     /// <summary>
     /// An event that must be handled by the active <see cref="Session"/>.
@@ -6,9 +24,9 @@
     public interface PersistenceEvent
     {
         /// <summary>
-        /// Enroll the persistence event in the session.
+        /// Get the untypes graph.
         /// </summary>
-        void EnrollInSession();
+        object UntypedGraph { get; }
 
         /// <summary>
         /// Complete all work for the persistence event.
@@ -16,9 +34,9 @@
         void Complete();
 
         /// <summary>
-        /// Get the untypes graph.
+        /// Enroll the persistence event in the session.
         /// </summary>
-        object UntypedGraph { get; }
+        void EnrollInSession();
 
         PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event);
     }

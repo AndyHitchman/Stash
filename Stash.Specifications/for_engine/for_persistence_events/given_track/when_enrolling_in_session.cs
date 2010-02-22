@@ -1,3 +1,21 @@
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
@@ -11,6 +29,17 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     [TestFixture]
     public class when_enrolling_in_session
     {
+        private class StandInTrack<TGraph> : Track<TGraph>
+        {
+            public StandInTrack(Guid internalId, TGraph graph, InternalSession session)
+                : base(internalId, graph, new MemoryStream(), session) {}
+
+            public override void PrepareEnrollment()
+            {
+                //Do nothing
+            }
+        }
+
         [Test]
         public void it_should_do_nothing_if_the_graph_is_already_tracked()
         {
@@ -52,20 +81,6 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             sut.EnrollInSession();
 
             mockSession.VerifyAllExpectations();
-        }
-
-
-        private class StandInTrack<TGraph> : Track<TGraph>
-        {
-            public StandInTrack(Guid internalId, TGraph graph, InternalSession session)
-                : base(internalId, graph, new MemoryStream(), session)
-            {
-            }
-
-            public override void PrepareEnrollment()
-            {
-                //Do nothing
-            }
         }
     }
 }

@@ -1,3 +1,21 @@
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
@@ -19,9 +37,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             public bool HasCalculatedMaps;
 
             public StandInTrack(Guid internalId, TGraph graph, Stream serializedgraph, InternalSession session)
-                : base(internalId, graph, serializedgraph, session)
-            {
-            }
+                : base(internalId, graph, serializedgraph, session) {}
 
             protected override void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
             {
@@ -32,6 +48,25 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             {
                 HasCalculatedMaps = true;
             }
+        }
+
+        [Test]
+        public void it_should_calculate_a_new_hash()
+        {
+            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockRegistry = MockRepository.GenerateMock<Registry>();
+            var mockSerializer = MockRepository.GenerateMock<Serializer>();
+            Func<Serializer> fSerializer = () => mockSerializer;
+            var graph = new DummyPersistentObject();
+            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
+
+            mockSession.Expect(_ => _.Registry).Return(mockRegistry);
+            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
+            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Stream.Null);
+
+            sut.Complete();
+
+            sut.CompletionHash.ShouldNotBeNull();
         }
 
         [Test]
@@ -123,25 +158,6 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             sut.Complete();
 
             mockSession.AssertWasNotCalled(s => s.Enroll(null), o => o.IgnoreArguments());
-        }
-
-        [Test]
-        public void it_should_calculate_a_new_hash()
-        {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Stream.Null);
-
-            sut.Complete();
-
-            sut.CompletionHash.ShouldNotBeNull();
         }
     }
 }

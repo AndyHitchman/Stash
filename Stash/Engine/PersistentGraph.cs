@@ -1,3 +1,21 @@
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
 namespace Stash.Engine
 {
     using System;
@@ -16,13 +34,11 @@ namespace Stash.Engine
         /// <param name="fSerializedGraph"></param>
         /// <param name="indexProjections"></param>
         public PersistentGraph(
-            IEnumerable<Type> types, 
+            IEnumerable<Type> types,
             IDictionary<string, List<TrackedProjection>> indexProjections,
             IDictionary<string, List<TrackedProjection>> mapProjections,
-            Func<Stream> fSerializedGraph) 
-            : this(Guid.NewGuid(), types, indexProjections, mapProjections, 0L, fSerializedGraph)
-        {
-        }
+            Func<Stream> fSerializedGraph)
+            : this(Guid.NewGuid(), types, indexProjections, mapProjections, 0L, fSerializedGraph) {}
 
         /// <summary>
         /// Manage a persistent graph.
@@ -34,11 +50,11 @@ namespace Stash.Engine
         /// <param name="fSerializedGraph"></param>
         /// <param name="indexProjections"></param>
         public PersistentGraph(
-            Guid internalID, 
+            Guid internalID,
             IEnumerable<Type> types,
             IDictionary<string, List<TrackedProjection>> indexProjections,
             IDictionary<string, List<TrackedProjection>> mapProjections,
-            long version, 
+            long version,
             Func<Stream> fSerializedGraph)
         {
             this.fSerializedGraph = fSerializedGraph;

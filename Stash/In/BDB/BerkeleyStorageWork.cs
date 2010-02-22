@@ -1,3 +1,21 @@
+#region License
+
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+
+#endregion
+
 namespace Stash.In.BDB
 {
     using System;
@@ -7,13 +25,28 @@ namespace Stash.In.BDB
 
     public class BerkeleyStorageWork : IStorageWork
     {
-        public BerkeleyBackingStore BackingStore { get; private set; }
-        public Transaction Transaction { get; private set; }
-
         public BerkeleyStorageWork(BerkeleyBackingStore backingStore)
         {
             BackingStore = backingStore;
             Transaction = backingStore.Environment.BeginTransaction();
+        }
+
+        public BerkeleyBackingStore BackingStore { get; private set; }
+        public Transaction Transaction { get; private set; }
+
+        public void Commit()
+        {
+            Transaction.Commit();
+        }
+
+        public void DeleteGraph(Guid internalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IStoredGraph Get(Guid internalId)
+        {
+            throw new NotImplementedException();
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)
@@ -33,7 +66,7 @@ namespace Stash.In.BDB
                 new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                 Transaction);
 
-            foreach (var type in trackedGraph.SuperTypes)
+            foreach(var type in trackedGraph.SuperTypes)
             {
                 BackingStore.TypeHierarchyDatabase.Put(
                     new DatabaseEntry(type.FullName.AsByteArray()),
@@ -41,7 +74,7 @@ namespace Stash.In.BDB
                     Transaction);
             }
 
-            foreach (var index in trackedGraph.Indexes)
+            foreach(var index in trackedGraph.Indexes)
             {
                 var indexDatabase = BackingStore.IndexDatabases[index.IndexName];
                 indexDatabase.IndexDatabase
@@ -55,21 +88,6 @@ namespace Stash.In.BDB
         public void UpdateGraph(ITrackedGraph trackedGraph)
         {
             throw new NotImplementedException();
-        }
-
-        public void DeleteGraph(Guid internalId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredGraph Get(Guid internalId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Commit()
-        {
-            Transaction.Commit();
         }
     }
 }
