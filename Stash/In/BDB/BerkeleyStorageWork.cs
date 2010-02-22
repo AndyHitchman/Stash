@@ -40,6 +40,16 @@ namespace Stash.In.BDB
                     new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                     Transaction);
             }
+
+            foreach (var index in trackedGraph.Indexes)
+            {
+                var indexDatabase = BackingStore.IndexDatabases[index.IndexName];
+                indexDatabase.IndexDatabase
+                    .Put(
+                        new DatabaseEntry(indexDatabase.IndexDatabaseConfig.AsByteArray(index.UntypedKey)),
+                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                        Transaction);
+            }
         }
 
         public void UpdateGraph(ITrackedGraph trackedGraph)

@@ -1,29 +1,31 @@
 namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
-    using System.IO;
     using System.Linq;
     using Engine;
     using NUnit.Framework;
     using Support;
+    using In.BDB;
 
     [TestFixture]
     public class when_inserting_a_graph : with_temp_dir
     {
         private ITrackedGraph trackedGraph;
+        private const string FirstIndexName = "firstIndex";
+        private const string SecondIndexName = "secondIndex";
 
         protected override void Given()
         {
             trackedGraph = new TrackedGraph(
-                Guid.NewGuid(), 
+                Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 typeof(string),
-                new[] { typeof(int), typeof(bool) },
-                new IProjectedIndex[] { new ProjectedIndex<int>("firstIndex", 1), new ProjectedIndex<string>("secondIndex", "wibble") }
+                new[] {typeof(int), typeof(bool)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(FirstIndexName, 1), new ProjectedIndex<string>(SecondIndexName, "wibble")}
                 );
 
-            Subject.EnsureIndex("firstIndex", typeof(int));
-            Subject.EnsureIndex("secondIndex", typeof(string));
+            Subject.EnsureIndex(FirstIndexName, typeof(int));
+            Subject.EnsureIndex(SecondIndexName, typeof(string));
         }
 
         protected override void When()
@@ -60,6 +62,26 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         {
             Subject.TypeHierarchyDatabase.ValueForKey(trackedGraph.SuperTypes.First()).ShouldEqual(trackedGraph.InternalId.ToByteArray());
             Subject.TypeHierarchyDatabase.ValueForKey(trackedGraph.SuperTypes.Skip(1).First()).ShouldEqual(trackedGraph.InternalId.ToByteArray());
+        }
+
+        [Then]
+        public void it_should_persist_the_value_of_the_first_index_projection()
+        {
+            var projectedIndex = trackedGraph.Indexes.First();
+
+            Subject.IndexDatabases[FirstIndexName].IndexDatabase
+                .ValueForKey(((int)projectedIndex.UntypedKey).AsByteArray())
+                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+        }
+
+        [Then]
+        public void it_should_persist_the_value_of_the_second_index_projection()
+        {
+            var projectedIndex = trackedGraph.Indexes.Skip(1).First();
+
+            Subject.IndexDatabases[SecondIndexName].IndexDatabase
+                .ValueForKey(((string)projectedIndex.UntypedKey).AsByteArray())
+                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }
     }
 }

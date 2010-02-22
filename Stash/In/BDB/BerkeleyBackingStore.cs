@@ -53,7 +53,7 @@ namespace Stash.In.BDB
                                                  : backingStoreParams.IndexDatabaseConfigForTypes[typeof(object)];
 
             var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + ".db", indexDatabaseConfigForType);
-            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase));
+            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase, indexDatabaseConfigForType));
         }
 
         public IStoredGraph Get(Guid internalId)

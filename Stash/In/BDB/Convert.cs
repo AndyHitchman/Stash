@@ -19,6 +19,18 @@ namespace Stash.In.BDB
             return new string(from.Select(_ => (char)_).ToArray());
         }
 
+        public static byte[] AsByteArray(this Type from)
+        {
+            return from.FullName.AsByteArray();
+        }
+
+        public static Type AsType(this byte[] from)
+        {
+            if (from == null) return null;
+
+            return Type.GetType(new string(from.Select(_ => (char)_).ToArray()));
+        }
+
         public static byte[] AsByteArray(this Guid from)
         {
             return from.ToByteArray();
@@ -27,6 +39,16 @@ namespace Stash.In.BDB
         public static Guid AsGuid(this byte[] from)
         {
             return new Guid(from);
+        }
+
+        public static byte[] AsByteArray(this TimeSpan from)
+        {
+            return from.Ticks.AsByteArray();
+        }
+
+        public static TimeSpan AsTimeSpan(this byte[] from)
+        {
+            return new TimeSpan(from.AsLong());
         }
 
         public static byte[] AsByteArray(this DateTime from)
@@ -59,6 +81,24 @@ namespace Stash.In.BDB
             return BitConverter.ToChar(from, 0);
         }
 
+        public static byte[] AsByteArray(this decimal from)
+        {
+            return decimal.GetBits(from).SelectMany(i => i.AsByteArray()).ToArray();
+        }
+
+        public static decimal AsDecimal(this byte[] from)
+        {
+            return
+                new decimal(
+                    new[]
+                        {
+                            from.asInt(0),
+                            from.asInt(4),
+                            from.asInt(8),
+                            from.asInt(12),
+                        });
+        }
+
         public static byte[] AsByteArray(this double from)
         {
             return BitConverter.GetBytes(from);
@@ -87,6 +127,11 @@ namespace Stash.In.BDB
         public static int AsInt(this byte[] from)
         {
             return BitConverter.ToInt32(from, 0);
+        }
+
+        private static int asInt(this byte[] from, int index)
+        {
+            return BitConverter.ToInt32(from, index);
         }
 
         public static byte[] AsByteArray(this long from)

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using BerkeleyDB;
+    using Configuration;
 
     public class BerkeleyBackingStoreParams : IBerkeleyBackingStoreParams
     {
@@ -29,7 +30,7 @@
             DatabaseDirectory = databaseDirectory;
             DatabaseEnvironmentConfig = databaseEnvironmentConfig;
             ValueDatabaseConfig = valueDatabaseConfig;
-            IndexDatabaseConfigForTypes = new Dictionary<Type, BTreeDatabaseConfig>
+            IndexDatabaseConfigForTypes = new Dictionary<Type, IndexDatabaseConfig>
                 {
                     {typeof(object), objectIndexDatabaseConfig},
                     {typeof(bool), booleanIndexDatabaseConfig},
@@ -52,6 +53,6 @@
         public string DatabaseDirectory { get; private set; }
         public DatabaseEnvironmentConfig DatabaseEnvironmentConfig { get; private set; }
         public HashDatabaseConfig ValueDatabaseConfig { get; private set; }
-        public Dictionary<Type, BTreeDatabaseConfig> IndexDatabaseConfigForTypes { get; private set; }
+        public Dictionary<Type, IndexDatabaseConfig> IndexDatabaseConfigForTypes { get; private set; }
     }
 }

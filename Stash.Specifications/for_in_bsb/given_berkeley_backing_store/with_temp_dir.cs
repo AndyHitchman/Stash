@@ -5,6 +5,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     using System.IO;
     using BerkeleyDB;
     using In.BDB;
+    using In.BDB.Configuration;
     using Rhino.Mocks;
     using Support;
 
@@ -20,10 +21,11 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             Console.WriteLine("TempDir: "+ TempDir);
             if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
 
-            var databaseConfigs = new Dictionary<Type, BTreeDatabaseConfig>
+            var databaseConfigs = new Dictionary<Type, IndexDatabaseConfig>
                 {
+                    {typeof(int), new IntIndexDatabaseConfig()},
                     {typeof(Type), new TypeIndexDatabaseConfig()},
-                    {typeof(object), new IndexDatabaseConfig()},
+                    {typeof(object), new ObjectIndexDatabaseConfig()},
                 };
 
             AutoMocker.Get<IBerkeleyBackingStoreParams>().Stub(_ => _.DatabaseDirectory).Return(TempDir);

@@ -2,7 +2,7 @@
 
 namespace Stash.Specifications.Support
 {
-    public class ThenAttribute : TestAttribute
+    public class Then : TestAttribute
     {
     }
 }
