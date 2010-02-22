@@ -41,7 +41,8 @@ namespace Stash.In.BDB
 
         public void DeleteGraph(Guid internalId)
         {
-            throw new NotImplementedException();
+            BackingStore.GraphDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
+            BackingStore.ConcreteTypeDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
         }
 
         public IStoredGraph Get(Guid internalId)

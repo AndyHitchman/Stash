@@ -73,7 +73,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         }
 
         [Then]
-        public void it_should_remove_the_first_index_projections()
+        public void it_should_remove_the_first_index_projection()
         {
             var projectedIndex = trackedGraph.Indexes.First();
 
