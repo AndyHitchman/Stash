@@ -90,7 +90,8 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_concrete_type_in_the_type_hierarchy_of_both_graphs()
         {
-            var valuesForKey = Subject.TypeHierarchyDatabase.ValuesForKey(commonConcreteType).Select(_ => _.AsGuid());
+            var valuesForKey = Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValuesForKey(commonConcreteType).Select(_ => _.AsGuid());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }
@@ -98,7 +99,8 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_common_super_types_in_the_type_hierarchy_of_both_graphs()
         {
-            var valuesForKey = Subject.TypeHierarchyDatabase.ValuesForKey(commonSuperType).Select(_ => _.AsGuid());
+            var valuesForKey = Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValuesForKey(commonSuperType).Select(_ => _.AsGuid());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }
@@ -106,19 +108,24 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_distinct_super_type_of_the_first_graph_in_the_type_hierarchy()
         {
-            Subject.TypeHierarchyDatabase.ValuesForKey(firstGraphDistinctSuperType).Select(_ => _.AsGuid()).ShouldContain(firstTrackedGraph.InternalId);
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValuesForKey(firstGraphDistinctSuperType).Select(_ => _.AsGuid())
+                .ShouldContain(firstTrackedGraph.InternalId);
         }
 
         [Then]
         public void it_should_persist_the_distinct_super_type_of_the_second_graph_in_the_type_hierarchy()
         {
-            Subject.TypeHierarchyDatabase.ValuesForKey(secondGraphDistinctSuperType).Select(_ => _.AsGuid()).ShouldContain(secondTrackedGraph.InternalId);
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValuesForKey(secondGraphDistinctSuperType).Select(_ => _.AsGuid())
+                .ShouldContain(secondTrackedGraph.InternalId);
         }
 
         [Then]
         public void it_should_persist_the_common_values_of_the_index_projection()
         {
-            var valuesForKey = Subject.IndexDatabases[IndexName].IndexDatabase.ValuesForKey(CommonIndexValues.AsByteArray()).Select(_ => _.AsGuid());
+            var valuesForKey = Subject.IndexDatabases[IndexName].IndexDatabase
+                .ValuesForKey(CommonIndexValues.AsByteArray()).Select(_ => _.AsGuid());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }

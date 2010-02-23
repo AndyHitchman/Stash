@@ -24,22 +24,25 @@ namespace Stash.In.BDB
 
     public class IndexManager
     {
-        public IndexManager(string indexName, Type yieldsType, BTreeDatabase indexDatabase, IndexDatabaseConfig indexDatabaseConfig)
+        public IndexManager(string indexName, Type yieldsType, BTreeDatabase indexDatabase, HashDatabase reverseIndexDatabase, IndexDatabaseConfig indexDatabaseConfig)
         {
             IndexName = indexName;
             IndexDatabase = indexDatabase;
+            ReverseIndexDatabase = reverseIndexDatabase;
             IndexDatabaseConfig = indexDatabaseConfig;
             YieldsType = yieldsType;
         }
 
         public string IndexName { get; set; }
         public BTreeDatabase IndexDatabase { get; private set; }
-        public IndexDatabaseConfig IndexDatabaseConfig { get; set; }
+        public HashDatabase ReverseIndexDatabase { get; private set; }
+        public IndexDatabaseConfig IndexDatabaseConfig { get; private set; }
         public Type YieldsType { get; private set; }
 
         public void Close()
         {
             IndexDatabase.Close();
+            ReverseIndexDatabase.Close();
         }
     }
 }

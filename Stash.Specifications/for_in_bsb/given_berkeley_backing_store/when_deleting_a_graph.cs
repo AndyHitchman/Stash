@@ -67,9 +67,12 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_remove_the_type_hierarchy()
         {
-            Subject.TypeHierarchyDatabase.ShouldNotHaveKey(trackedGraph.ConcreteType.AsByteArray());
-            Subject.TypeHierarchyDatabase.ShouldNotHaveKey(trackedGraph.SuperTypes.First().AsByteArray());
-            Subject.TypeHierarchyDatabase.ShouldNotHaveKey(trackedGraph.SuperTypes.Skip(1).First().AsByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ShouldNotHaveKey(trackedGraph.ConcreteType.AsByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ShouldNotHaveKey(trackedGraph.SuperTypes.First().AsByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ShouldNotHaveKey(trackedGraph.SuperTypes.Skip(1).First().AsByteArray());
         }
 
         [Then]

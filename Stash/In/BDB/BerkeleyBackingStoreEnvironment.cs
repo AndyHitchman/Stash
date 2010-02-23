@@ -23,13 +23,14 @@ namespace Stash.In.BDB
     using BerkeleyDB;
     using Configuration;
 
-    public class BerkeleyBackingStoreParams : IBerkeleyBackingStoreParams
+    public class BerkeleyBackingStoreEnvironment : IBerkeleyBackingStoreEnvironment
     {
-        public BerkeleyBackingStoreParams(
+        public BerkeleyBackingStoreEnvironment(
             string databaseDirectory,
             DatabaseEnvironmentConfig databaseEnvironmentConfig,
-            HashDatabaseConfig valueDatabaseConfig,
-            IndexDatabaseConfig objectIndexDatabaseConfig,
+            ValueDatabaseConfig valueDatabaseConfig,
+            ReverseIndexDatabaseConfig reverseIndexDatabaseConfig,
+            ObjectIndexDatabaseConfig objectIndexDatabaseConfig,
             BooleanIndexDatabaseConfig booleanIndexDatabaseConfig,
             CharIndexDatabaseConfig charIndexDatabaseConfig,
             DateTimeIndexDatabaseConfig dateTimeIndexDatabaseConfig,
@@ -48,6 +49,7 @@ namespace Stash.In.BDB
             DatabaseDirectory = databaseDirectory;
             DatabaseEnvironmentConfig = databaseEnvironmentConfig;
             ValueDatabaseConfig = valueDatabaseConfig;
+            ReverseIndexDatabaseConfig = reverseIndexDatabaseConfig;
             IndexDatabaseConfigForTypes = new Dictionary<Type, IndexDatabaseConfig>
                 {
                     {typeof(object), objectIndexDatabaseConfig},
@@ -66,11 +68,34 @@ namespace Stash.In.BDB
                     {typeof(ulong), uLongIndexDatabaseConfig},
                     {typeof(ushort), uShortIndexDatabaseConfig},
                 };
+
+            openEnvironment();
         }
 
         public string DatabaseDirectory { get; private set; }
         public DatabaseEnvironmentConfig DatabaseEnvironmentConfig { get; private set; }
         public HashDatabaseConfig ValueDatabaseConfig { get; private set; }
+        public HashDatabaseConfig ReverseIndexDatabaseConfig { get; private set; }
         public Dictionary<Type, IndexDatabaseConfig> IndexDatabaseConfigForTypes { get; private set; }
+        public DatabaseEnvironment Environment { get; private set; }
+
+        public void Close()
+        {
+            if(Environment != null) Environment.Close();
+            DatabaseEnvironment.Remove(DatabaseDirectory);
+        }
+
+
+        private void openEnvironment()
+        {
+            Environment = DatabaseEnvironment.Open(DatabaseDirectory, DatabaseEnvironmentConfig);
+            ValueDatabaseConfig.Env = Environment;
+            ReverseIndexDatabaseConfig.Env = Environment;
+
+            foreach(var databaseConfigForType in IndexDatabaseConfigForTypes)
+            {
+                databaseConfigForType.Value.Env = Environment;
+            }
+        }
     }
 }

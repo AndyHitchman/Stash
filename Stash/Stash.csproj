@@ -57,11 +57,12 @@
     <Compile Include="Engine\IBackingStore.cs" />
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="Engine\ITrackedGraph`1.cs" />
-    <Compile Include="In\BDB\BerkeleyBackingStoreParams.cs" />
+    <Compile Include="In\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
     <Compile Include="In\BDB\Configuration\BooleanIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\Configuration\CharIndexDatabaseConfig.cs" />
+    <Compile Include="In\BDB\Configuration\ReverseIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\Configuration\ObjectIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\Configuration\TimeSpanIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\Configuration\DoubleIndexDatabaseConfig.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="In\BDB\Configuration\UShortIndexDatabaseConfig.cs" />
     <Compile Include="In\BDB\Configuration\ValueDatabaseConfig.cs" />
     <Compile Include="In\BDB\Convert.cs" />
-    <Compile Include="In\BDB\IBerkeleyBackingStoreParams.cs" />
+    <Compile Include="In\BDB\IBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\IndexManager.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">

@@ -23,11 +23,14 @@ namespace Stash.In.BDB
     using BerkeleyDB;
     using Configuration;
 
-    public interface IBerkeleyBackingStoreParams
+    public interface IBerkeleyBackingStoreEnvironment
     {
         string DatabaseDirectory { get; }
         DatabaseEnvironmentConfig DatabaseEnvironmentConfig { get; }
         HashDatabaseConfig ValueDatabaseConfig { get; }
+        HashDatabaseConfig ReverseIndexDatabaseConfig { get; }
         Dictionary<Type, IndexDatabaseConfig> IndexDatabaseConfigForTypes { get; }
+        DatabaseEnvironment Environment { get; }
+        void Close();
     }
 }

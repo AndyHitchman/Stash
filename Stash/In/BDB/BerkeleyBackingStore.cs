@@ -22,6 +22,7 @@ namespace Stash.In.BDB
     using System.Collections.Generic;
     using System.IO;
     using BerkeleyDB;
+    using Configuration;
     using Engine;
 
     /// <summary>
@@ -29,31 +30,32 @@ namespace Stash.In.BDB
     /// </summary>
     public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
-        private const string ConcreteTypeFileName = "concreteTypes.db";
-        private const string GraphFileName = "graphs.db";
+        private const string DatabaseFileExt = ".db";
+        private const string ConcreteTypeFileName = "concreteTypes" + DatabaseFileExt;
+        private const string GraphFileName = "graphs" + DatabaseFileExt;
         private const string IndexFilenamePrefix = "index-";
-        private const string TypeHierarchyFileName = "typeHierarchy.db";
+        private const string ReverseIndexFilenamePrefix = "ridx-";
+        public const string TypeHierarchyIndexName = "stashTypeHierarchy";
 
-        private readonly IBerkeleyBackingStoreParams backingStoreParams;
+        private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private bool isDisposed;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
-        public BerkeleyBackingStore(IBerkeleyBackingStoreParams backingStoreParams)
+        public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
-            this.backingStoreParams = backingStoreParams;
-            Directory.CreateDirectory(Path.Combine(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig.CreationDir));
+            this.backingStoreEnvironment = backingStoreEnvironment;
+            Directory.CreateDirectory(Path.Combine(backingStoreEnvironment.DatabaseDirectory, backingStoreEnvironment.DatabaseEnvironmentConfig.CreationDir));
             IndexDatabases = new Dictionary<string, IndexManager>();
 
             dbOpen();
         }
 
-        public DatabaseEnvironment Environment { get; private set; }
+        public DatabaseEnvironment Environment { get { return backingStoreEnvironment.Environment; } }
 
         public HashDatabase GraphDatabase { get; private set; }
         public HashDatabase ConcreteTypeDatabase { get; private set; }
-        public BTreeDatabase TypeHierarchyDatabase { get; private set; }
         public Dictionary<string, IndexManager> IndexDatabases { get; private set; }
 
         public void Dispose()
@@ -66,12 +68,13 @@ namespace Stash.In.BDB
 
         public void EnsureIndex(string indexName, Type yieldsType)
         {
-            var indexDatabaseConfigForType = backingStoreParams.IndexDatabaseConfigForTypes.ContainsKey(yieldsType)
-                                                 ? backingStoreParams.IndexDatabaseConfigForTypes[yieldsType]
-                                                 : backingStoreParams.IndexDatabaseConfigForTypes[typeof(object)];
+            var indexDatabaseConfigForType = backingStoreEnvironment.IndexDatabaseConfigForTypes.ContainsKey(yieldsType)
+                                                 ? backingStoreEnvironment.IndexDatabaseConfigForTypes[yieldsType]
+                                                 : backingStoreEnvironment.IndexDatabaseConfigForTypes[typeof(object)];
 
-            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + ".db", indexDatabaseConfigForType);
-            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase, indexDatabaseConfigForType));
+            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + DatabaseFileExt, indexDatabaseConfigForType);
+            var rIndexDatabase = HashDatabase.Open(ReverseIndexFilenamePrefix + indexName + DatabaseFileExt, backingStoreEnvironment.ReverseIndexDatabaseConfig);
+            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase, rIndexDatabase, indexDatabaseConfigForType));
         }
 
         public IStoredGraph Get(Guid internalId)
@@ -98,8 +101,7 @@ namespace Stash.In.BDB
 
         private void closeEnvironment()
         {
-            if(Environment != null) Environment.Close();
-            DatabaseEnvironment.Remove(backingStoreParams.DatabaseDirectory);
+            backingStoreEnvironment.Close();
         }
 
         private void closeGraphDatabase()
@@ -115,15 +117,9 @@ namespace Stash.In.BDB
             }
         }
 
-        private void closeTypeHierarchyDatabase()
-        {
-            if(TypeHierarchyDatabase != null) TypeHierarchyDatabase.Close();
-        }
-
         private void dbClose()
         {
             closeIndexDatabases();
-            closeTypeHierarchyDatabase();
             closeConcreteTypeDatabase();
             closeGraphDatabase();
 
@@ -132,36 +128,20 @@ namespace Stash.In.BDB
 
         private void dbOpen()
         {
-            openEnvironment();
-
             openGraphDatabase();
             openConcreteTypeDatabase();
-            openTypeHierarchyDatabase();
+
+            EnsureIndex(TypeHierarchyIndexName, typeof(Type));
         }
 
         private void openConcreteTypeDatabase()
         {
-            ConcreteTypeDatabase = HashDatabase.Open(ConcreteTypeFileName, backingStoreParams.ValueDatabaseConfig);
-        }
-
-        private void openEnvironment()
-        {
-            Environment = DatabaseEnvironment.Open(backingStoreParams.DatabaseDirectory, backingStoreParams.DatabaseEnvironmentConfig);
-            backingStoreParams.ValueDatabaseConfig.Env = Environment;
-            foreach(var databaseConfigForType in backingStoreParams.IndexDatabaseConfigForTypes)
-            {
-                databaseConfigForType.Value.Env = Environment;
-            }
+            ConcreteTypeDatabase = HashDatabase.Open(ConcreteTypeFileName, backingStoreEnvironment.ValueDatabaseConfig);
         }
 
         private void openGraphDatabase()
         {
-            GraphDatabase = HashDatabase.Open(GraphFileName, backingStoreParams.ValueDatabaseConfig);
-        }
-
-        private void openTypeHierarchyDatabase()
-        {
-            TypeHierarchyDatabase = BTreeDatabase.Open(TypeHierarchyFileName, backingStoreParams.IndexDatabaseConfigForTypes[typeof(Type)]);
+            GraphDatabase = HashDatabase.Open(GraphFileName, backingStoreEnvironment.ValueDatabaseConfig);
         }
     }
 }

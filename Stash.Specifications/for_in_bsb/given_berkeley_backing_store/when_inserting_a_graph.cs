@@ -72,14 +72,20 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_concrete_type_in_the_type_hierarchy_of_the_graph()
         {
-            Subject.TypeHierarchyDatabase.ValueForKey(trackedGraph.ConcreteType).ShouldEqual(trackedGraph.InternalId.ToByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValueForKey(trackedGraph.ConcreteType)
+                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }
 
         [Then]
         public void it_should_persist_the_super_types_in_the_type_hierarchy_of_the_graph()
         {
-            Subject.TypeHierarchyDatabase.ValueForKey(trackedGraph.SuperTypes.First()).ShouldEqual(trackedGraph.InternalId.ToByteArray());
-            Subject.TypeHierarchyDatabase.ValueForKey(trackedGraph.SuperTypes.Skip(1).First()).ShouldEqual(trackedGraph.InternalId.ToByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValueForKey(trackedGraph.SuperTypes.First())
+                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
+                .ValueForKey(trackedGraph.SuperTypes.Skip(1).First())
+                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }
 
         [Then]

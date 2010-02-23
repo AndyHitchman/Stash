@@ -43,6 +43,12 @@ namespace Stash.In.BDB
         {
             BackingStore.GraphDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
             BackingStore.ConcreteTypeDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
+
+            //How to delete indexes:
+            //We aren't using secondary associated indexes in BDB because:
+            // 1) (the .NET wrapper at least) only returns a single key for the data. We want to yield multiple keys.
+            // 2) The key generator works on primitive byte arrays, which means we'd have to deserialise our graphs to calc indexes. Expensive.
+            //So, we actually maintain a reverse index to give us a fast lookup of which index keys to delete. Disk space is cheap.
         }
 
         public IStoredGraph Get(Guid internalId)
@@ -59,22 +65,20 @@ namespace Stash.In.BDB
 
             BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
                 new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.ConcreteType.FullName.AsByteArray()),
+                new DatabaseEntry(trackedGraph.ConcreteType.AsByteArray()),
                 Transaction);
 
-            BackingStore.TypeHierarchyDatabase.Put(
-                new DatabaseEntry(trackedGraph.ConcreteType.FullName.AsByteArray()),
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                Transaction);
+            insertTypeHierarchy(trackedGraph);
+            insertIndexes(trackedGraph);
+        }
 
-            foreach(var type in trackedGraph.SuperTypes)
-            {
-                BackingStore.TypeHierarchyDatabase.Put(
-                    new DatabaseEntry(type.FullName.AsByteArray()),
-                    new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                    Transaction);
-            }
+        public void UpdateGraph(ITrackedGraph trackedGraph)
+        {
+            throw new NotImplementedException();
+        }
 
+        private void insertIndexes(ITrackedGraph trackedGraph)
+        {
             foreach(var index in trackedGraph.Indexes)
             {
                 var indexDatabase = BackingStore.IndexDatabases[index.IndexName];
@@ -83,12 +87,42 @@ namespace Stash.In.BDB
                         new DatabaseEntry(indexDatabase.IndexDatabaseConfig.AsByteArray(index.UntypedKey)),
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                         Transaction);
+                indexDatabase.ReverseIndexDatabase
+                    .Put(
+                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                        new DatabaseEntry(indexDatabase.IndexDatabaseConfig.AsByteArray(index.UntypedKey)),
+                        Transaction);
             }
         }
 
-        public void UpdateGraph(ITrackedGraph trackedGraph)
+        private void insertTypeHierarchy(ITrackedGraph trackedGraph)
         {
-            throw new NotImplementedException();
+            var typeHierarchyDatabase = BackingStore.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName];
+
+            typeHierarchyDatabase.IndexDatabase
+                .Put(
+                    new DatabaseEntry(trackedGraph.ConcreteType.AsByteArray()),
+                    new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                    Transaction);
+            typeHierarchyDatabase.ReverseIndexDatabase
+                .Put(
+                    new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                    new DatabaseEntry(trackedGraph.ConcreteType.AsByteArray()),
+                    Transaction);
+
+            foreach(var type in trackedGraph.SuperTypes)
+            {
+                typeHierarchyDatabase.IndexDatabase
+                    .Put(
+                        new DatabaseEntry(type.FullName.AsByteArray()),
+                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                        Transaction);
+                typeHierarchyDatabase.ReverseIndexDatabase
+                    .Put(
+                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                        new DatabaseEntry(type.FullName.AsByteArray()),
+                        Transaction);
+            }
         }
     }
 }
