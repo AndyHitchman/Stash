@@ -62,6 +62,7 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_deleting_a_second_graph.cs" />
     <Compile Include="IntIndex.cs" />
     <Compile Include="OtherClassWithTwoAncestors.cs" />
     <Compile Include="DummyFrom.cs" />

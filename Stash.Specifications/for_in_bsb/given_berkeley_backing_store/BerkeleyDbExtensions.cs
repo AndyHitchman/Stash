@@ -51,6 +51,11 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             return null;
         }
         
+        public static void ShouldHaveKey(this BTreeDatabase store, byte[] key)
+        {
+            store.Exists(new DatabaseEntry(key)).ShouldBeTrue();
+        }
+        
         public static void ShouldNotHaveKey(this BTreeDatabase store, byte[] key)
         {
             store.Exists(new DatabaseEntry(key)).ShouldBeFalse();
