@@ -10,7 +10,7 @@ namespace Stash.Configuration
         Type GraphType { get; }
 
         /// <summary>
-        /// The type hierarchy (not incuding <see cref="object"/> of the <see cref="GraphType"/>, including itself.
+        /// The type hierarchy of the <see cref="GraphType"/>, including itself but excluding <see cref="object"/>.
         /// </summary>
         IEnumerable<Type> TypeHierarchy { get; }
 
