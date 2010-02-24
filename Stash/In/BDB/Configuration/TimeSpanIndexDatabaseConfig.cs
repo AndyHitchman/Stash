@@ -27,7 +27,7 @@ namespace Stash.In.BDB.Configuration
             BTreeCompare = (dbt1, dbt2) => dbt1.Data.AsTimeSpan().CompareTo(dbt2.Data.AsTimeSpan());
         }
 
-        public override byte[] AsByteArray(object key)
+        public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((TimeSpan)key).AsByteArray();
         }

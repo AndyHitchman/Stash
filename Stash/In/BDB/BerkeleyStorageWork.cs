@@ -28,16 +28,16 @@ namespace Stash.In.BDB
     {
         public BerkeleyStorageWork(BerkeleyBackingStore backingStore)
         {
-            BackingStore = backingStore;
-            Transaction = backingStore.Environment.BeginTransaction();
+            this.backingStore = backingStore;
+            transaction = backingStore.Environment.BeginTransaction();
         }
 
-        public BerkeleyBackingStore BackingStore { get; private set; }
-        public Transaction Transaction { get; private set; }
+        private BerkeleyBackingStore backingStore { get; set; }
+        private Transaction transaction { get; set; }
 
         public void Commit()
         {
-            Transaction.Commit();
+            transaction.Commit();
         }
 
         public void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph)
@@ -45,28 +45,20 @@ namespace Stash.In.BDB
             var graphKey = new DatabaseEntry(internalId.AsByteArray());
 
             deleteIndexes(graphKey, registeredGraph);
-            deleteTypeHierarchy(graphKey, registeredGraph);
-            BackingStore.ConcreteTypeDatabase.Delete(graphKey, Transaction);
-            BackingStore.GraphDatabase.Delete(graphKey, Transaction);
+            deleteTypeHierarchy(graphKey);
+            deleteConcreteType(graphKey);
+            deleteGraph(graphKey);
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
             throw new NotImplementedException();
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)
         {
-            BackingStore.GraphDatabase.PutNoOverwrite(
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
-                Transaction);
-
-            BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.GraphType.AsByteArray()),
-                Transaction);
-
+            insertGraph(trackedGraph);
+            insertConcreteType(trackedGraph);
             insertTypeHierarchy(trackedGraph);
             insertIndexes(trackedGraph);
         }
@@ -81,25 +73,35 @@ namespace Stash.In.BDB
             //Get all reverse index values for the internal id.
             var reverseIndexKey =
                 managedIndex.ReverseIndex
-                    .GetMultiple(graphKey, (int)managedIndex.ReverseIndex.Pagesize, Transaction);
+                    .GetMultiple(graphKey, (int)managedIndex.ReverseIndex.Pagesize, transaction);
 
             //In the forward index, get all keys for each reverse index value and delete the record if the value matches 
             //the internal id of the graph we are deleting.
             foreach(var cursor in
                 from indexKey in reverseIndexKey.Value
-                let cursor = managedIndex.Index.Cursor(new CursorConfig(), Transaction)
+                let cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction)
                 where cursor.Move(indexKey, true)
                 select cursor)
             {
                 do
-                {
                     if(cursor.Current.Value.Data.SequenceEqual(reverseIndexKey.Key.Data))
                         cursor.Delete();
-                } while(cursor.MoveNextDuplicate());
+                while(cursor.MoveNextDuplicate());
+
                 cursor.Close();
             }
 
-            managedIndex.ReverseIndex.Delete(graphKey, Transaction);
+            managedIndex.ReverseIndex.Delete(graphKey, transaction);
+        }
+
+        private void deleteConcreteType(DatabaseEntry graphKey)
+        {
+            backingStore.ConcreteTypeDatabase.Delete(graphKey, transaction);
+        }
+
+        private void deleteGraph(DatabaseEntry graphKey)
+        {
+            backingStore.GraphDatabase.Delete(graphKey, transaction);
         }
 
         /// <summary>
@@ -115,40 +117,57 @@ namespace Stash.In.BDB
         /// <param name="registeredGraph"></param>
         private void deleteIndexes(DatabaseEntry graphKey, IRegisteredGraph registeredGraph)
         {
-            foreach(var index in registeredGraph.Indexes)
+            foreach(var managedIndex in registeredGraph.Indexes.Select(index => backingStore.IndexDatabases[index.IndexName]))
             {
-                var managedIndex = BackingStore.IndexDatabases[index.IndexName];
                 deleteAllIndexEntriesForGraphKey(managedIndex, graphKey);
             }
         }
 
-        private void deleteTypeHierarchy(DatabaseEntry graphKey, IRegisteredGraph registeredGraph)
+        private void deleteTypeHierarchy(DatabaseEntry graphKey)
         {
-            var typeHierarchyDatabase = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
+            var typeHierarchyDatabase = backingStore.IndexDatabases[backingStore.RegisteredTypeHierarchyIndex.IndexName];
             deleteAllIndexEntriesForGraphKey(typeHierarchyDatabase, graphKey);
+        }
+
+        private void insertConcreteType(ITrackedGraph trackedGraph)
+        {
+            backingStore.ConcreteTypeDatabase.PutNoOverwrite(
+                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                new DatabaseEntry(trackedGraph.GraphType.AsByteArray()),
+                transaction);
+        }
+
+        private void insertGraph(ITrackedGraph trackedGraph)
+        {
+            backingStore.GraphDatabase.PutNoOverwrite(
+                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
+                new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
+                transaction);
         }
 
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
-            foreach(var index in trackedGraph.ProjectedIndices)
+            foreach(var each in 
+                from projection in trackedGraph.ProjectedIndices
+                let managedIndex = backingStore.IndexDatabases[projection.IndexName]
+                select new {projection, managedIndex})
             {
-                var indexDatabase = BackingStore.IndexDatabases[index.IndexName];
-                indexDatabase.Index
+                each.managedIndex.Index
                     .Put(
-                        new DatabaseEntry(indexDatabase.Config.AsByteArray(index.UntypedKey)),
+                        new DatabaseEntry(each.managedIndex.Config.PresentKeyAsByteArray(each.projection.UntypedKey)),
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        Transaction);
-                indexDatabase.ReverseIndex
+                        transaction);
+                each.managedIndex.ReverseIndex
                     .Put(
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        new DatabaseEntry(indexDatabase.Config.AsByteArray(index.UntypedKey)),
-                        Transaction);
+                        new DatabaseEntry(each.managedIndex.Config.PresentKeyAsByteArray(each.projection.UntypedKey)),
+                        transaction);
             }
         }
 
         private void insertTypeHierarchy(ITrackedGraph trackedGraph)
         {
-            var typeHierarchyDatabase = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
+            var typeHierarchyDatabase = backingStore.IndexDatabases[backingStore.RegisteredTypeHierarchyIndex.IndexName];
 
             foreach(var type in trackedGraph.TypeHierarchy)
             {
@@ -156,12 +175,12 @@ namespace Stash.In.BDB
                     .Put(
                         new DatabaseEntry(type.FullName.AsByteArray()),
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        Transaction);
+                        transaction);
                 typeHierarchyDatabase.ReverseIndex
                     .Put(
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                         new DatabaseEntry(type.FullName.AsByteArray()),
-                        Transaction);
+                        transaction);
             }
         }
     }

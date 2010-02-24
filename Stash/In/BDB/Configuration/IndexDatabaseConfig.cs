@@ -36,6 +36,6 @@ namespace Stash.In.BDB.Configuration
             AutoCommit = true;
         }
 
-        public abstract Byte[] AsByteArray(object key);
+        public abstract Byte[] PresentKeyAsByteArray(object key);
     }
 }

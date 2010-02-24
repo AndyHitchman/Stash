@@ -20,7 +20,7 @@ namespace Stash.In.BDB.Configuration
 {
     public class StringIndexDatabaseConfig : IndexDatabaseConfig
     {
-        public override byte[] AsByteArray(object key)
+        public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((string)key).AsByteArray();
         }

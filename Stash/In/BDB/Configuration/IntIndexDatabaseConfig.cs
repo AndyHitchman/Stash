@@ -25,7 +25,7 @@ namespace Stash.In.BDB.Configuration
             BTreeCompare = (dbt1, dbt2) => dbt1.Data.AsInt().CompareTo(dbt2.Data.AsInt());
         }
 
-        public override byte[] AsByteArray(object key)
+        public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((int)key).AsByteArray();
         }

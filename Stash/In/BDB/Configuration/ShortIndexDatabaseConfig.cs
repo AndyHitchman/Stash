@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright 2009 Andrew Hitchman
 // 
@@ -25,7 +25,7 @@ namespace Stash.In.BDB.Configuration
             BTreeCompare = (dbt1, dbt2) => dbt1.Data.AsShort().CompareTo(dbt2.Data.AsShort());
         }
 
-        public override byte[] AsByteArray(object key)
+        public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((short)key).AsByteArray();
         }

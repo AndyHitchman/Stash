@@ -25,7 +25,7 @@ namespace Stash.Engine
     {
         void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
 
-        IStoredGraph Get(Guid internalId);
+        IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
         void InsertGraph(ITrackedGraph trackedGraph);
 
         void UpdateGraph(ITrackedGraph trackedGraph);

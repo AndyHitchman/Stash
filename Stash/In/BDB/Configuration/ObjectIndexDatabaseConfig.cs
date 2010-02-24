@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright 2009 Andrew Hitchman
 // 
@@ -20,7 +20,7 @@ namespace Stash.In.BDB.Configuration
 {
     public class ObjectIndexDatabaseConfig : IndexDatabaseConfig
     {
-        public override byte[] AsByteArray(object key)
+        public override byte[] PresentKeyAsByteArray(object key)
         {
             return (key).ToString().AsByteArray();
         }
