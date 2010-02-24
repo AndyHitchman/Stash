@@ -20,12 +20,11 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
+    using Configuration;
 
-    public interface IStoredGraph
+    public interface IStoredGraph : IRegisteredGraph
     {
         Guid InternalId { get; }
         IEnumerable<byte> SerialisedGraph { get; }
-        Type ConcreteType { get; }
-        IEnumerable<Type> SuperTypes { get; }
     }
 }

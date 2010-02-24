@@ -19,10 +19,11 @@
 namespace Stash.Engine
 {
     using System;
+    using Configuration;
 
     public interface IStorageWork
     {
-        void DeleteGraph(Guid internalId);
+        void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
 
         IStoredGraph Get(Guid internalId);
         void InsertGraph(ITrackedGraph trackedGraph);

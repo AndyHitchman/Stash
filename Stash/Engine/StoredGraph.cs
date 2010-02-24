@@ -20,20 +20,34 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
+    using Configuration;
 
     public class StoredGraph : IStoredGraph
     {
-        protected StoredGraph(Guid internalId, IEnumerable<byte> graph, Type concreteType, IEnumerable<Type> superTypes)
+        protected StoredGraph(Guid internalId, IEnumerable<byte> graph, IRegisteredGraph registeredGraph)
         {
             InternalId = internalId;
             SerialisedGraph = graph;
-            ConcreteType = concreteType;
-            SuperTypes = superTypes;
+            RegisteredGraph = registeredGraph;
         }
 
         public Guid InternalId { get; private set; }
         public IEnumerable<byte> SerialisedGraph { get; private set; }
-        public Type ConcreteType { get; private set; }
-        public IEnumerable<Type> SuperTypes { get; private set; }
+        public IRegisteredGraph RegisteredGraph { get; set; }
+
+        public Type GraphType
+        {
+            get { return RegisteredGraph.GraphType; }
+        }
+
+        public IEnumerable<Type> TypeHierarchy
+        {
+            get { return RegisteredGraph.TypeHierarchy; }
+        }
+
+        public IEnumerable<IRegisteredIndexer> Indexes
+        {
+            get { return RegisteredGraph.Indexes; }
+        }
     }
 }

@@ -21,12 +21,10 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
 
-    public class TypeIndex : Index<object, Type>
+    public class StashTypeHierarchy : Index<Type, Type>
     {
-        protected virtual IEnumerable<Type> GetTypeHierarchyFor(object o)
+        protected virtual IEnumerable<Type> GetTypeHierarchyFor(Type t)
         {
-            var t = o.GetType();
-
             do
             {
                 yield return t;
@@ -34,9 +32,9 @@ namespace Stash.Engine
             } while(t != null && t != typeof(object));
         }
 
-        public IEnumerable<Type> Yield(object graph)
+        public IEnumerable<Type> Yield(Type t)
         {
-            return GetTypeHierarchyFor(graph);
+            return GetTypeHierarchyFor(t);
         }
     }
 }

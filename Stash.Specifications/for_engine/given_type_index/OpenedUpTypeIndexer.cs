@@ -22,11 +22,11 @@ namespace Stash.Specifications.for_engine.given_type_index
     using System.Collections.Generic;
     using Engine;
 
-    public class OpenedUpTypeIndex : TypeIndex
+    public class OpenedUpStashTypeHierarchy : StashTypeHierarchy
     {
-        public IEnumerable<Type> OpenedGetTypeHierarchyFor(object o)
+        public IEnumerable<Type> OpenedGetTypeHierarchyFor(Type t)
         {
-            return base.GetTypeHierarchyFor(o);
+            return base.GetTypeHierarchyFor(t);
         }
     }
 }

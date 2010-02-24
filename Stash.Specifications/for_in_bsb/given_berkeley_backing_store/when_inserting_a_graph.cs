@@ -20,6 +20,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
     using System.Linq;
+    using Configuration;
     using Engine;
     using In.BDB;
     using NUnit.Framework;
@@ -29,21 +30,27 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     public class when_inserting_a_graph : with_temp_dir
     {
         private ITrackedGraph trackedGraph;
-        private const string FirstIndexName = "firstIndex";
-        private const string SecondIndexName = "secondIndex";
+        private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
+        private RegisteredIndexer<ClassWithTwoAncestors, int> firstRegisteredIndexer;
+        private RegisteredIndexer<ClassWithTwoAncestors, string> secondRegisteredIndexer;
 
         protected override void Given()
         {
+            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>();
+            firstRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
+            secondRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex());
+            registeredGraph.RegisteredIndexers.Add(firstRegisteredIndexer);
+            registeredGraph.RegisteredIndexers.Add(secondRegisteredIndexer);
+
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                typeof(string),
-                new[] {typeof(int), typeof(bool)},
-                new IProjectedIndex[] {new ProjectedIndex<int>(FirstIndexName, 1), new ProjectedIndex<string>(SecondIndexName, "wibble")}
+                new IProjectedIndex[] {new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")},
+                registeredGraph
                 );
 
-            Subject.EnsureIndex(FirstIndexName, typeof(int));
-            Subject.EnsureIndex(SecondIndexName, typeof(string));
+            Subject.EnsureIndex(firstRegisteredIndexer);
+            Subject.EnsureIndex(secondRegisteredIndexer);
         }
 
         protected override void When()
@@ -66,34 +73,29 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_concrete_type_of_the_graph()
         {
-            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.ConcreteType.FullName.Select(_ => (byte)_));
+            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.GraphType.FullName.Select(_ => (byte)_));
         }
 
         [Then]
-        public void it_should_persist_the_concrete_type_in_the_type_hierarchy_of_the_graph()
+        public void it_should_persist_the_type_hierarchy_of_the_graph()
         {
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ValueForKey(trackedGraph.ConcreteType)
+            Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
+                .ValueForKey(trackedGraph.TypeHierarchy.First())
                 .ShouldEqual(trackedGraph.InternalId.ToByteArray());
-        }
-
-        [Then]
-        public void it_should_persist_the_super_types_in_the_type_hierarchy_of_the_graph()
-        {
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ValueForKey(trackedGraph.SuperTypes.First())
+            Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
+                .ValueForKey(trackedGraph.TypeHierarchy.Skip(1).First())
                 .ShouldEqual(trackedGraph.InternalId.ToByteArray());
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ValueForKey(trackedGraph.SuperTypes.Skip(1).First())
+            Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
+                .ValueForKey(trackedGraph.TypeHierarchy.Skip(2).First())
                 .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }
 
         [Then]
         public void it_should_persist_the_value_of_the_first_index_projection()
         {
-            var projectedIndex = trackedGraph.Indexes.First();
+            var projectedIndex = trackedGraph.ProjectedIndices.First();
 
-            Subject.IndexDatabases[FirstIndexName].IndexDatabase
+            Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index
                 .ValueForKey(((int)projectedIndex.UntypedKey).AsByteArray())
                 .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }
@@ -101,9 +103,9 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_value_of_the_second_index_projection()
         {
-            var projectedIndex = trackedGraph.Indexes.Skip(1).First();
+            var projectedIndex = trackedGraph.ProjectedIndices.Skip(1).First();
 
-            Subject.IndexDatabases[SecondIndexName].IndexDatabase
+            Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index
                 .ValueForKey(((string)projectedIndex.UntypedKey).AsByteArray())
                 .ShouldEqual(trackedGraph.InternalId.ToByteArray());
         }

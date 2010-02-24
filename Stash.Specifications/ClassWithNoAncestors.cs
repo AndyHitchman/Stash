@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Stash.Specifications.for_engine.given_type_index
+namespace Stash.Specifications
 {
-    public class ClassWithTwoAncestors : ClassWithOneAncestors {}
+    public class ClassWithNoAncestors {}
 }

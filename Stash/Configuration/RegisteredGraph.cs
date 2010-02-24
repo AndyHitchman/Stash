@@ -19,14 +19,17 @@
 namespace Stash.Configuration
 {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using Engine;
 
     /// <summary>
     /// An abstract configured graph.
     /// </summary>
-    public abstract class RegisteredGraph
+    public abstract class RegisteredGraph : IRegisteredGraph
     {
+        private IEnumerable<Type> superTypes;
+
         protected RegisteredGraph(Type aggregateType)
         {
             GraphType = aggregateType;
@@ -36,6 +39,19 @@ namespace Stash.Configuration
         /// The <see cref="Type"/> of the root of the object graph.
         /// </summary>
         public virtual Type GraphType { get; private set; }
+
+        public IEnumerable<Type> TypeHierarchy
+        {
+            get
+            {
+                if(superTypes != null) return superTypes;
+
+                superTypes = new StashTypeHierarchy().Yield(GraphType);
+                return superTypes;
+            }
+        }
+
+        public abstract IEnumerable<IRegisteredIndexer> Indexes { get; }
 
         public virtual ISerializationSurrogate RegisteredSerializationSurrogate { get; set; }
 

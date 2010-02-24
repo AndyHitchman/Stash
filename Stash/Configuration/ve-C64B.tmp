@@ -18,35 +18,35 @@
 
 namespace Stash.Configuration
 {
-    using System;
     using System.Collections.Generic;
-    using Engine;
     using System.Linq;
+    using Engine;
 
     /// <summary>
-    /// A configured object graph.
+    /// A configured Index.
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
-    public class RegisteredGraph<TGraph> : RegisteredGraph
+    /// <typeparam name="TKey"></typeparam>
+    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph> where TGraph : class
     {
-        public RegisteredGraph() : base(typeof(TGraph))
+        public RegisteredIndexer(Index<TGraph, TKey> index)
         {
-            RegisteredIndexers = new List<RegisteredIndexer<TGraph>>();
-            RegisteredMappers = new List<RegisteredMapper<TGraph>>();
+            Index = index;
         }
 
-        public virtual IList<RegisteredIndexer<TGraph>> RegisteredIndexers { get; private set; }
-        public virtual IList<RegisteredMapper<TGraph>> RegisteredMappers { get; private set; }
-
-        public override IEnumerable<IRegisteredIndexer> Indexes
-        {
-            get { return RegisteredIndexers.Cast<IRegisteredIndexer>(); }
-        }
+        /// <summary>
+        /// The Index.
+        /// </summary>
+        public virtual Index<TGraph, TKey> Index { get; private set; }
 
         public override void EngageBackingStore(IBackingStore backingStore)
         {
-            foreach(var registeredIndexer in RegisteredIndexers)
-                registeredIndexer.EngageBackingStore(backingStore);
+            //            backingStore.EnsureIndex(Index);
+        }
+
+        public override IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph)
+        {
+            return Index.Yield(graph).Cast<IProjectedIndex>();
         }
     }
 }

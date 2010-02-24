@@ -59,6 +59,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassWithNoAncestors.cs" />
+    <Compile Include="ClassWithOneAncestors.cs" />
+    <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="IntIndex.cs" />
+    <Compile Include="OtherClassWithTwoAncestors.cs" />
     <Compile Include="DummyFrom.cs" />
     <Compile Include="DummyReduction.cs" />
     <Compile Include="DummyMap.cs" />
@@ -101,9 +106,6 @@
     <Compile Include="for_engine\given_default_unenlisted_repository\when_fetching.cs" />
     <Compile Include="for_engine\given_default_unenlisted_repository\when_deleting.cs" />
     <Compile Include="for_engine\given_default_unenlisted_repository\when_persisting.cs" />
-    <Compile Include="for_engine\given_type_index\ClassWithNoAncestors.cs" />
-    <Compile Include="for_engine\given_type_index\ClassWithOneAncestors.cs" />
-    <Compile Include="for_engine\given_type_index\ClassWithTwoAncestors.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_inserting_a_second_graph.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_instantiating.cs" />
     <Compile Include="OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringIndex.cs" />
     <Compile Include="Support\MethodThatThrows.cs" />
     <Compile Include="Support\Specification.cs" />
     <Compile Include="Support\SpecificationExtensions.cs" />

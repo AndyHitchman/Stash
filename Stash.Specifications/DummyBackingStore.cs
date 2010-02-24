@@ -19,11 +19,12 @@
 namespace Stash.Specifications
 {
     using System;
+    using Configuration;
     using Engine;
 
     public class DummyBackingStore : IBackingStore
     {
-        public void EnsureIndex(string indexName, Type yieldsType)
+        public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
             throw new NotImplementedException();
         }

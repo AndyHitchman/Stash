@@ -22,27 +22,27 @@ namespace Stash.In.BDB
     using BerkeleyDB;
     using Configuration;
 
-    public class IndexManager
+    public class ManagedIndex
     {
-        public IndexManager(string indexName, Type yieldsType, BTreeDatabase indexDatabase, HashDatabase reverseIndexDatabase, IndexDatabaseConfig indexDatabaseConfig)
+        public ManagedIndex(string indexName, Type yieldsType, BTreeDatabase indexDatabase, HashDatabase reverseIndexDatabase, IndexDatabaseConfig indexDatabaseConfig)
         {
-            IndexName = indexName;
-            IndexDatabase = indexDatabase;
-            ReverseIndexDatabase = reverseIndexDatabase;
-            IndexDatabaseConfig = indexDatabaseConfig;
+            Name = indexName;
+            Index = indexDatabase;
+            ReverseIndex = reverseIndexDatabase;
+            Config = indexDatabaseConfig;
             YieldsType = yieldsType;
         }
 
-        public string IndexName { get; set; }
-        public BTreeDatabase IndexDatabase { get; private set; }
-        public HashDatabase ReverseIndexDatabase { get; private set; }
-        public IndexDatabaseConfig IndexDatabaseConfig { get; private set; }
+        public string Name { get; set; }
+        public BTreeDatabase Index { get; private set; }
+        public HashDatabase ReverseIndex { get; private set; }
+        public IndexDatabaseConfig Config { get; private set; }
         public Type YieldsType { get; private set; }
 
         public void Close()
         {
-            IndexDatabase.Close();
-            ReverseIndexDatabase.Close();
+            Index.Close();
+            ReverseIndex.Close();
         }
     }
 }

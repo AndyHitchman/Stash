@@ -18,6 +18,7 @@
 
 namespace Stash.Configuration
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Engine;
@@ -39,9 +40,24 @@ namespace Stash.Configuration
         /// </summary>
         public virtual Index<TGraph, TKey> Index { get; private set; }
 
+        public override Type IndexType
+        {
+            get { return Index.GetType(); }
+        }
+
+        public override string IndexName
+        {
+            get { return IndexType.FullName; }
+        }
+
+        public override Type YieldType
+        {
+            get { return IndexType.GetMethod("Yield").ReturnType.GetGenericArguments()[0]; }
+        }
+
         public override void EngageBackingStore(IBackingStore backingStore)
         {
-            //            backingStore.EnsureIndex(Index);
+            backingStore.EnsureIndex(this);
         }
 
         public override IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph)

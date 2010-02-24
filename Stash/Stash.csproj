@@ -41,6 +41,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\IRegisteredGraph.cs" />
+    <Compile Include="Configuration\IRegisteredIndexer.cs" />
     <Compile Include="Configuration\RegisteredMapper%273.cs" />
     <Compile Include="Configuration\Registry.cs" />
     <Compile Include="Configuration\Registrar.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="In\BDB\Configuration\ValueDatabaseConfig.cs" />
     <Compile Include="In\BDB\Convert.cs" />
     <Compile Include="In\BDB\IBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="In\BDB\IndexManager.cs" />
+    <Compile Include="In\BDB\ManagedIndex.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>

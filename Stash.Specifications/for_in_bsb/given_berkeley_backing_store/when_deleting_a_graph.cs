@@ -20,6 +20,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 {
     using System;
     using System.Linq;
+    using Configuration;
     using Engine;
     using In.BDB;
     using NUnit.Framework;
@@ -29,27 +30,31 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     public class when_deleting_a_graph : with_temp_dir
     {
         private ITrackedGraph trackedGraph;
-        private const string FirstIndexName = "firstIndex";
-        private const string SecondIndexName = "secondIndex";
+        private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
+        private const string firstIndexName = "firstIndex";
+        private const string secondIndexName = "secondIndex";
 
         protected override void Given()
         {
+            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>();
+            registeredGraph.RegisteredIndexers.Add(new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex()));
+            registeredGraph.RegisteredIndexers.Add(new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex()));
+
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                typeof(string),
-                new[] {typeof(int), typeof(bool)},
-                new IProjectedIndex[] {new ProjectedIndex<int>(FirstIndexName, 1), new ProjectedIndex<string>(SecondIndexName, "wibble")}
+                new IProjectedIndex[] {new ProjectedIndex<int>(firstIndexName, 1), new ProjectedIndex<string>(secondIndexName, "wibble")},
+                registeredGraph
                 );
 
-            Subject.EnsureIndex(FirstIndexName, typeof(int));
-            Subject.EnsureIndex(SecondIndexName, typeof(string));
+            Subject.EnsureIndex(registeredGraph.RegisteredIndexers[0]);
+            Subject.EnsureIndex(registeredGraph.RegisteredIndexers[1]);
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
         }
 
         protected override void When()
         {
-            Subject.InTransactionDo(_ => _.DeleteGraph(trackedGraph.InternalId));
+            Subject.InTransactionDo(_ => _.DeleteGraph(trackedGraph.InternalId, registeredGraph));
         }
 
         [Then]
@@ -67,28 +72,26 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_remove_the_type_hierarchy()
         {
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ShouldNotHaveKey(trackedGraph.ConcreteType.AsByteArray());
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ShouldNotHaveKey(trackedGraph.SuperTypes.First().AsByteArray());
-            Subject.IndexDatabases[BerkeleyBackingStore.TypeHierarchyIndexName].IndexDatabase
-                .ShouldNotHaveKey(trackedGraph.SuperTypes.Skip(1).First().AsByteArray());
+            Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
+                .ShouldNotHaveKey(trackedGraph.TypeHierarchy.First().AsByteArray());
+            Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
+                .ShouldNotHaveKey(trackedGraph.TypeHierarchy.Skip(1).First().AsByteArray());
         }
 
         [Then]
         public void it_should_remove_the_first_index_projection()
         {
-            var projectedIndex = trackedGraph.Indexes.First();
+            var projectedIndex = trackedGraph.ProjectedIndices.First();
 
-            Subject.IndexDatabases[FirstIndexName].IndexDatabase.ShouldNotHaveKey(((int)projectedIndex.UntypedKey).AsByteArray());
+            Subject.IndexDatabases[firstIndexName].Index.ShouldNotHaveKey(((int)projectedIndex.UntypedKey).AsByteArray());
         }
 
         [Then]
         public void it_should_remove_the_second_index_projection()
         {
-            var projectedIndex = trackedGraph.Indexes.Skip(1).First();
+            var projectedIndex = trackedGraph.ProjectedIndices.Skip(1).First();
 
-            Subject.IndexDatabases[SecondIndexName].IndexDatabase.ShouldNotHaveKey(((string)projectedIndex.UntypedKey).AsByteArray());
+            Subject.IndexDatabases[secondIndexName].Index.ShouldNotHaveKey(((string)projectedIndex.UntypedKey).AsByteArray());
         }
     }
 }

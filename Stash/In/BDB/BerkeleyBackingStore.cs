@@ -22,20 +22,19 @@ namespace Stash.In.BDB
     using System.Collections.Generic;
     using System.IO;
     using BerkeleyDB;
-    using Configuration;
     using Engine;
+    using global::Stash.Configuration;
 
     /// <summary>
     /// A backing store for Stash using BerkeleyDB.
     /// </summary>
     public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
-        private const string DatabaseFileExt = ".db";
-        private const string ConcreteTypeFileName = "concreteTypes" + DatabaseFileExt;
-        private const string GraphFileName = "graphs" + DatabaseFileExt;
-        private const string IndexFilenamePrefix = "index-";
-        private const string ReverseIndexFilenamePrefix = "ridx-";
-        public const string TypeHierarchyIndexName = "stashTypeHierarchy";
+        public const string DatabaseFileExt = ".db";
+        public const string IndexFilenamePrefix = "index-";
+        public const string ReverseIndexFilenamePrefix = "ridx-";
+        private const string concreteTypeFileName = "concreteTypes" + DatabaseFileExt;
+        private const string graphFileName = "graphs" + DatabaseFileExt;
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private bool isDisposed;
@@ -46,17 +45,22 @@ namespace Stash.In.BDB
         public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
             this.backingStoreEnvironment = backingStoreEnvironment;
-            Directory.CreateDirectory(Path.Combine(backingStoreEnvironment.DatabaseDirectory, backingStoreEnvironment.DatabaseEnvironmentConfig.CreationDir));
-            IndexDatabases = new Dictionary<string, IndexManager>();
+            IndexDatabases = new Dictionary<string, ManagedIndex>();
 
+            ensureStashDirectory(backingStoreEnvironment);
             dbOpen();
         }
 
-        public DatabaseEnvironment Environment { get { return backingStoreEnvironment.Environment; } }
+        public RegisteredIndexer<Type, Type> RegisteredTypeHierarchyIndex { get; private set; }
+
+        public DatabaseEnvironment Environment
+        {
+            get { return backingStoreEnvironment.Environment; }
+        }
 
         public HashDatabase GraphDatabase { get; private set; }
         public HashDatabase ConcreteTypeDatabase { get; private set; }
-        public Dictionary<string, IndexManager> IndexDatabases { get; private set; }
+        public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
 
         public void Dispose()
         {
@@ -66,15 +70,25 @@ namespace Stash.In.BDB
             dbClose();
         }
 
-        public void EnsureIndex(string indexName, Type yieldsType)
+        public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
-            var indexDatabaseConfigForType = backingStoreEnvironment.IndexDatabaseConfigForTypes.ContainsKey(yieldsType)
-                                                 ? backingStoreEnvironment.IndexDatabaseConfigForTypes[yieldsType]
-                                                 : backingStoreEnvironment.IndexDatabaseConfigForTypes[typeof(object)];
+            var configForType = backingStoreEnvironment.IndexDatabaseConfigForTypes.ContainsKey(registeredIndexer.YieldType)
+                                    ? backingStoreEnvironment.IndexDatabaseConfigForTypes[registeredIndexer.YieldType]
+                                    : backingStoreEnvironment.IndexDatabaseConfigForTypes[typeof(object)];
 
-            var indexDatabase = BTreeDatabase.Open(IndexFilenamePrefix + indexName + DatabaseFileExt, indexDatabaseConfigForType);
-            var rIndexDatabase = HashDatabase.Open(ReverseIndexFilenamePrefix + indexName + DatabaseFileExt, backingStoreEnvironment.ReverseIndexDatabaseConfig);
-            IndexDatabases.Add(indexName, new IndexManager(indexName, yieldsType, indexDatabase, rIndexDatabase, indexDatabaseConfigForType));
+            var indexDatabase =
+                BTreeDatabase.Open(
+                    IndexFilenamePrefix + registeredIndexer.IndexName + DatabaseFileExt,
+                    configForType);
+
+            var rIndexDatabase =
+                HashDatabase.Open(
+                    ReverseIndexFilenamePrefix + registeredIndexer.IndexName + DatabaseFileExt,
+                    backingStoreEnvironment.ReverseIndexDatabaseConfig);
+
+            IndexDatabases.Add(
+                registeredIndexer.IndexName,
+                new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
         }
 
         public IStoredGraph Get(Guid internalId)
@@ -131,17 +145,23 @@ namespace Stash.In.BDB
             openGraphDatabase();
             openConcreteTypeDatabase();
 
-            EnsureIndex(TypeHierarchyIndexName, typeof(Type));
+            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, Type>(new StashTypeHierarchy());
+            EnsureIndex(RegisteredTypeHierarchyIndex);
+        }
+
+        private static void ensureStashDirectory(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
+        {
+            Directory.CreateDirectory(Path.Combine(backingStoreEnvironment.DatabaseDirectory, backingStoreEnvironment.DatabaseEnvironmentConfig.CreationDir));
         }
 
         private void openConcreteTypeDatabase()
         {
-            ConcreteTypeDatabase = HashDatabase.Open(ConcreteTypeFileName, backingStoreEnvironment.ValueDatabaseConfig);
+            ConcreteTypeDatabase = HashDatabase.Open(concreteTypeFileName, backingStoreEnvironment.ValueDatabaseConfig);
         }
 
         private void openGraphDatabase()
         {
-            GraphDatabase = HashDatabase.Open(GraphFileName, backingStoreEnvironment.ValueDatabaseConfig);
+            GraphDatabase = HashDatabase.Open(graphFileName, backingStoreEnvironment.ValueDatabaseConfig);
         }
     }
 }

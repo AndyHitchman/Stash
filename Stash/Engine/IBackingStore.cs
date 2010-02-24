@@ -19,10 +19,11 @@
 namespace Stash.Engine
 {
     using System;
+    using Configuration;
 
     public interface IBackingStore
     {
-        void EnsureIndex(string indexName, Type yieldsType);
+        void EnsureIndex(IRegisteredIndexer registeredIndexer);
         IStoredGraph Get(Guid internalId);
         void InTransactionDo(Action<IStorageWork> storageWorkActions);
     }
