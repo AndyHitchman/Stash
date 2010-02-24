@@ -42,10 +42,11 @@ namespace Stash.In.BDB
 
         public void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            BackingStore.GraphDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
-            BackingStore.ConcreteTypeDatabase.Delete(new DatabaseEntry(internalId.AsByteArray()), Transaction);
+            var graphKey = new DatabaseEntry(internalId.AsByteArray());
 
-            deleteIndexes(internalId, registeredGraph);
+            deleteIndexes(graphKey, registeredGraph);
+            BackingStore.ConcreteTypeDatabase.Delete(graphKey, Transaction);
+            BackingStore.GraphDatabase.Delete(graphKey, Transaction);
         }
 
         public IStoredGraph Get(Guid internalId)
@@ -83,27 +84,24 @@ namespace Stash.In.BDB
         /// Internally BDB calculates the key by calling the delegate and then opens a cursor to delete the matching keys for the primary key.
         /// The reverse index should be faster, but obviously consumed double the space for each index.
         /// </summary>
-        /// <param name="internalId"></param>
+        /// <param name="graphKey"></param>
         /// <param name="registeredGraph"></param>
-        private void deleteIndexes(Guid internalId, IRegisteredGraph registeredGraph)
+        private void deleteIndexes(DatabaseEntry graphKey, IRegisteredGraph registeredGraph)
         {
             foreach(var index in registeredGraph.Indexes)
             {
-                var indexDatabase = BackingStore.IndexDatabases[index.IndexName];
+                var managedIndex = BackingStore.IndexDatabases[index.IndexName];
 
                 //Get all reverse index values for the internal id.
                 var reverseIndexKey =
-                    indexDatabase.ReverseIndex
-                        .GetMultiple(
-                            new DatabaseEntry(internalId.AsByteArray()),
-                            (int)indexDatabase.ReverseIndex.Pagesize,
-                            Transaction);
+                    managedIndex.ReverseIndex
+                        .GetMultiple(graphKey, (int)managedIndex.ReverseIndex.Pagesize, Transaction);
 
                 //In the forward index, get all keys for each reverse index value and delete the record if the value matches 
                 //the internal id of the graph we are deleting.
                 foreach(var cursor in
                     from indexKey in reverseIndexKey.Value
-                    let cursor = indexDatabase.Index.Cursor(new CursorConfig(), Transaction)
+                    let cursor = managedIndex.Index.Cursor(new CursorConfig(), Transaction)
                     where cursor.Move(indexKey, true)
                     select cursor)
                 {
@@ -112,7 +110,10 @@ namespace Stash.In.BDB
                         if(cursor.Current.Value.Data.SequenceEqual(reverseIndexKey.Key.Data))
                             cursor.Delete();
                     } while(cursor.MoveNextDuplicate());
+                    cursor.Close();
                 }
+
+                managedIndex.ReverseIndex.Delete(graphKey, Transaction);
             }
         }
 
