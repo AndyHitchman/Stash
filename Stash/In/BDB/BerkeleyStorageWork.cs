@@ -77,7 +77,7 @@ namespace Stash.In.BDB
             foreach (var index in trackedGraph.Indexes
                 .Select(index => new
                     {
-                        keys = trackedGraph.ProjectedIndices.Where(_ => _.IndexName == index.IndexName).Select(_ => _.UntypedKey), 
+                        keys = trackedGraph.ProjectedIndexes.Where(_ => _.IndexName == index.IndexName).Select(_ => _.UntypedKey), 
                         managedIndex = backingStore.IndexDatabases[index.IndexName]
                     }))
             {
@@ -186,7 +186,7 @@ namespace Stash.In.BDB
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
             foreach(var each in 
-                from projection in trackedGraph.ProjectedIndices
+                from projection in trackedGraph.ProjectedIndexes
                 let managedIndex = backingStore.IndexDatabases[projection.IndexName]
                 select new {projection, managedIndex})
             {

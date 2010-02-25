@@ -22,6 +22,6 @@ namespace Stash.Engine
 
     public interface ITrackedGraph : IStoredGraph
     {
-        IEnumerable<IProjectedIndex> ProjectedIndices { get; }
+        IEnumerable<IProjectedIndex> ProjectedIndexes { get; }
     }
 }

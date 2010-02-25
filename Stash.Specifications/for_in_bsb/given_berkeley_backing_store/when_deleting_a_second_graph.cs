@@ -104,7 +104,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_not_remove_the_first_index_projection_of_the_first_graph()
         {
-            var projectedIndex = firstTrackedGraph.ProjectedIndices.First();
+            var projectedIndex = firstTrackedGraph.ProjectedIndexes.First();
 
             Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index.ShouldHaveKey(((int)projectedIndex.UntypedKey).AsByteArray());
         }
@@ -112,7 +112,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_remove_the_second_index_projection_of_the_first_graph()
         {
-            var projectedIndex = firstTrackedGraph.ProjectedIndices.Skip(1).First();
+            var projectedIndex = firstTrackedGraph.ProjectedIndexes.Skip(1).First();
 
             Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index.ShouldHaveKey(((string)projectedIndex.UntypedKey).AsByteArray());
         }

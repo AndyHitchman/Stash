@@ -93,7 +93,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_value_of_the_first_index_projection()
         {
-            var projectedIndex = trackedGraph.ProjectedIndices.First();
+            var projectedIndex = trackedGraph.ProjectedIndexes.First();
 
             Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index
                 .ValueForKey(((int)projectedIndex.UntypedKey).AsByteArray())
@@ -103,7 +103,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_value_of_the_second_index_projection()
         {
-            var projectedIndex = trackedGraph.ProjectedIndices.Skip(1).First();
+            var projectedIndex = trackedGraph.ProjectedIndexes.Skip(1).First();
 
             Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index
                 .ValueForKey(((string)projectedIndex.UntypedKey).AsByteArray())

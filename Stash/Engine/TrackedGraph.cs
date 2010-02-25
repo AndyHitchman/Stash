@@ -31,9 +31,9 @@ namespace Stash.Engine
             IRegisteredGraph registeredGraph)
             : base(internalId, graph, registeredGraph)
         {
-            ProjectedIndices = projectedIndices;
+            ProjectedIndexes = projectedIndices;
         }
 
-        public IEnumerable<IProjectedIndex> ProjectedIndices { get; private set; }
+        public IEnumerable<IProjectedIndex> ProjectedIndexes { get; private set; }
     }
 }
