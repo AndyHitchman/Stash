@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;h</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="libdb_dotnet48, Version=4.8.26.0, Culture=neutral, processorArchitecture=MSIL">
@@ -62,6 +63,7 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_updating_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_deleting_a_second_graph.cs" />
     <Compile Include="IntIndex.cs" />
     <Compile Include="OtherClassWithTwoAncestors.cs" />

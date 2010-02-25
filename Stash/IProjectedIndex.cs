@@ -19,9 +19,11 @@
 namespace Stash
 {
     using System;
+    using Configuration;
 
     public interface IProjectedIndex
     {
+        IRegisteredIndexer Indexer { get; }
         string IndexName { get; }
         Type TypeOfKey { get; }
         object UntypedKey { get; }

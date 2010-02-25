@@ -29,15 +29,21 @@ namespace Stash.In.BDB
             Name = indexName;
             Index = indexDatabase;
             ReverseIndex = reverseIndexDatabase;
-            Config = indexDatabaseConfig;
+            config = indexDatabaseConfig;
             YieldsType = yieldsType;
         }
 
         public string Name { get; set; }
         public BTreeDatabase Index { get; private set; }
         public HashDatabase ReverseIndex { get; private set; }
-        public IndexDatabaseConfig Config { get; private set; }
+        private IndexDatabaseConfig config;
+
         public Type YieldsType { get; private set; }
+
+        public byte[] PresentKeyAsByteArray(object key)
+        {
+            return config.PresentKeyAsByteArray(key);
+        }
 
         public void Close()
         {

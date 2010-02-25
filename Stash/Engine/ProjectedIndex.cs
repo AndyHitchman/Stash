@@ -19,18 +19,23 @@
 namespace Stash.Engine
 {
     using System;
+    using Configuration;
 
     public class ProjectedIndex<TKey> : IProjectedIndex<TKey>
     {
-        public ProjectedIndex(string indexName, TKey key)
+        public ProjectedIndex(IRegisteredIndexer indexer, TKey key)
         {
-            IndexName = indexName;
+            Indexer = indexer;
             Key = key;
         }
 
+        public IRegisteredIndexer Indexer { get; set; }
         public TKey Key { get; private set; }
 
-        public string IndexName { get; private set; }
+        public string IndexName
+        {
+            get { return Indexer.IndexName; }
+        }
 
         public Type TypeOfKey
         {

@@ -45,7 +45,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")},
+                new IProjectedIndex[] {new ProjectedIndex<int>(firstRegisteredIndexer, 1), new ProjectedIndex<string>(secondRegisteredIndexer, "wibble")},
                 registeredGraph
                 );
 
