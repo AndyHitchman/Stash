@@ -53,7 +53,7 @@ namespace Stash.In.BDB
 
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            throw new NotImplementedException();
+            return backingStore.Get(internalId, registeredGraph);
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)

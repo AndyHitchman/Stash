@@ -63,6 +63,9 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_getting_a_graph_that_isnt_stored.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_getting_a_graph_with_the_wrong_registered_graph.cs" />
+    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_getting_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_updating_a_second_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_updating_a_graph.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\when_deleting_a_second_graph.cs" />

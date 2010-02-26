@@ -24,7 +24,7 @@ namespace Stash.Engine
 
     public class StoredGraph : IStoredGraph
     {
-        protected StoredGraph(Guid internalId, IEnumerable<byte> graph, IRegisteredGraph registeredGraph)
+        public StoredGraph(Guid internalId, IEnumerable<byte> graph, IRegisteredGraph registeredGraph)
         {
             InternalId = internalId;
             SerialisedGraph = graph;

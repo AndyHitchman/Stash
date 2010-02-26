@@ -29,12 +29,12 @@ namespace Stash.Specifications
             throw new NotImplementedException();
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
             throw new NotImplementedException();
         }
 
-        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
+        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
             throw new NotImplementedException();
         }

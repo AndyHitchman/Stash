@@ -53,6 +53,8 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
+    <Compile Include="Engine\AttemptToGetWithWrongRegisteredGraphException.cs" />
+    <Compile Include="Engine\GraphForKeyNotFoundException.cs" />
     <Compile Include="Engine\IStorageWork.cs" />
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />

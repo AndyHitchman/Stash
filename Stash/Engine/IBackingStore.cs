@@ -24,7 +24,7 @@ namespace Stash.Engine
     public interface IBackingStore
     {
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
-        IStoredGraph Get(Guid internalId);
         void InTransactionDo(Action<IStorageWork> storageWorkActions);
+        IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
     }
 }

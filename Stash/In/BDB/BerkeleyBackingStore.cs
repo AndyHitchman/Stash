@@ -91,9 +91,22 @@ namespace Stash.In.BDB
                 new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var key = new DatabaseEntry(internalId.AsByteArray());
+                var storedConcreteType = ConcreteTypeDatabase.Get(key).Value.Data.AsString();
+                if(storedConcreteType != registeredGraph.GraphType.FullName)
+                    throw new AttemptToGetWithWrongRegisteredGraphException(internalId, storedConcreteType, registeredGraph);
+
+                var entry = GraphDatabase.Get(key);
+                return new StoredGraph(internalId, entry.Value.Data, registeredGraph);
+            }
+            catch(NotFoundException knfe)
+            {
+                throw new GraphForKeyNotFoundException(internalId, registeredGraph, knfe);
+            }
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
