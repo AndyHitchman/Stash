@@ -40,9 +40,14 @@ namespace Stash.In.BDB.BerkeleyQueries
         public TKey LowerKey { get; private set; }
         public TKey UpperKey { get; private set; }
 
-        public QueryCost QueryCost
+        public QueryCostScale QueryCostScale
         {
-            get { return QueryCost.ClosedRangeScan; }
+            get { return QueryCostScale.ClosedRangeScan; }
+        }
+
+        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -53,13 +58,13 @@ namespace Stash.In.BDB.BerkeleyQueries
                 var comparer = managedIndex.Comparer;
                 var keyAsBytes = managedIndex.KeyAsByteArray(LowerKey);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if (cursor.MoveMultipleKey(new DatabaseEntry(keyAsBytes), false, bufferSize))
+                if(cursor.MoveMultipleKey(new DatabaseEntry(keyAsBytes), false, bufferSize))
                 {
                     do
                     {
-                        foreach (var guid in
+                        foreach(var guid in
                             cursor.CurrentMultipleKey
-                                .Select(_ => new { key = _.Key.Data, value = _.Value.Data.AsGuid() })
+                                .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
                                 .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) <= 0)
                                 .Select(_ => _.value))
                         {
@@ -73,11 +78,6 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 cursor.Close();
             }
-        }
-
-        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
-        {
-            throw new NotImplementedException();
         }
     }
 }

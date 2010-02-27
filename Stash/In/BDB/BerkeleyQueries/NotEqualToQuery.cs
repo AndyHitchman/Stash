@@ -38,9 +38,15 @@ namespace Stash.In.BDB.BerkeleyQueries
         public IRegisteredIndexer Indexer { get; private set; }
         public TKey Key { get; private set; }
 
-        public QueryCost QueryCost
+        public QueryCostScale QueryCostScale
         {
-            get { return QueryCost.FullScan; }
+            get { return QueryCostScale.FullScan; }
+        }
+
+        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return managedIndex.Index.FastStats().nPages *
+                   (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -68,12 +74,6 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 cursor.Close();
             }
-        }
-
-        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
-        {
-            return managedIndex.Index.FastStats().nPages *
-                   (double)QueryCost;
         }
     }
 }

@@ -18,14 +18,12 @@
 
 namespace Stash.In.BDB.BerkeleyQueries
 {
-    using System;
-    using System.Collections.Generic;
-    using BerkeleyDB;
-
-    public interface IBerkeleyQuery
+    public enum QueryCostScale
     {
-        QueryCostScale QueryCostScale { get; }
-        double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction);
-        IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction);
+        SingleGet = 1,
+        MultiGet = 2,
+        ClosedRangeScan = 5,
+        OpenRangeScan = 10,
+        FullScan = 20,
     }
 }

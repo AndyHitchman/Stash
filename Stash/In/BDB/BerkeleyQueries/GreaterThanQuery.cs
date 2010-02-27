@@ -38,16 +38,16 @@ namespace Stash.In.BDB.BerkeleyQueries
         public IRegisteredIndexer Indexer { get; private set; }
         public TKey Key { get; private set; }
 
-        public QueryCost QueryCost
+        public QueryCostScale QueryCostScale
         {
-            get { return QueryCost.OpenRangeScan; }
+            get { return QueryCostScale.OpenRangeScan; }
         }
 
-        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
             return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Greater *
                    managedIndex.Index.FastStats().nPages *
-                   (double)QueryCost;
+                   (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

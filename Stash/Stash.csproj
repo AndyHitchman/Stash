@@ -71,7 +71,7 @@
     <Compile Include="In\BDB\BerkeleyQueries\GreaterThanEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\NotEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\IBerkeleyQuery.cs" />
-    <Compile Include="In\BDB\BerkeleyQueries\QueryCost.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\QueryCostScale.cs" />
     <Compile Include="In\BDB\BerkeleyQueryFactory.cs" />
     <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
     <Compile Include="In\BDB\BerkeleyConfigs\BooleanIndexDatabaseConfig.cs" />

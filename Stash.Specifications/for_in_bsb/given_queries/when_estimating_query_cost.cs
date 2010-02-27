@@ -10,7 +10,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_estimating_scan_cost : with_int_indexer
+    public class when_estimating_query_cost : with_int_indexer
     {
         private TrackedGraph equaltrackedGraph;
         private ITrackedGraph lessThanTrackedGraph;
@@ -57,7 +57,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             actual = Subject.InTransactionDo(_ =>
                                                  {
                                                      var berkeleyStorageWork = ((BerkeleyStorageWork)_);
-                                                     return query.EstimatedScanCost(
+                                                     return query.EstimatedQueryCost(
                                                          berkeleyStorageWork.BackingStore.IndexDatabases[registeredIndexer.IndexName], 
                                                          berkeleyStorageWork.Transaction);
                                                  });

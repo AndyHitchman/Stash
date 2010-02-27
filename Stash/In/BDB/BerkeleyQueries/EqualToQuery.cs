@@ -23,7 +23,6 @@ namespace Stash.In.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
-    using Engine;
     using Queries;
 
     public class EqualToQuery<TKey> : IBerkeleyQuery, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -37,9 +36,14 @@ namespace Stash.In.BDB.BerkeleyQueries
         public IRegisteredIndexer Indexer { get; private set; }
         public TKey Key { get; private set; }
 
-        public QueryCost QueryCost
+        public QueryCostScale QueryCostScale
         {
-            get { return QueryCost.SingleGet; }
+            get { return QueryCostScale.SingleGet; }
+        }
+
+        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -55,11 +59,6 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 return Enumerable.Empty<Guid>();
             }
-        }
-
-        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
-        {
-            return (double)QueryCost;
         }
     }
 }
