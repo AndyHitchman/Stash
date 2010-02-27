@@ -40,7 +40,7 @@ namespace Stash.Engine
             get { return RegisteredGraph.GraphType; }
         }
 
-        public IEnumerable<Type> TypeHierarchy
+        public IEnumerable<string> TypeHierarchy
         {
             get { return RegisteredGraph.TypeHierarchy; }
         }

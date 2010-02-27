@@ -20,8 +20,8 @@ namespace Stash.In.BDB
 {
     using System;
     using System.Collections.Generic;
+    using BerkeleyConfigs;
     using BerkeleyDB;
-    using Configuration;
 
     public class BerkeleyBackingStoreEnvironment : IBerkeleyBackingStoreEnvironment
     {

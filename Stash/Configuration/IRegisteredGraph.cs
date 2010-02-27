@@ -12,7 +12,7 @@ namespace Stash.Configuration
         /// <summary>
         /// The type hierarchy of the <see cref="GraphType"/>, including itself but excluding <see cref="object"/>.
         /// </summary>
-        IEnumerable<Type> TypeHierarchy { get; }
+        IEnumerable<string> TypeHierarchy { get; }
 
         /// <summary>
         /// All registered indexes for the graph.

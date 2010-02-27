@@ -29,7 +29,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
         [Test]
         public void it_should_complain_if_the_indexer_is_null()
         {
-            Index<DummyPersistentObject, object> expected = null;
+            IIndex<DummyPersistentObject, int> expected = null;
 
             typeof(ArgumentNullException)
                 .ShouldBeThrownBy(() => Sut.IndexWith(expected));

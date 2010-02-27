@@ -45,7 +45,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="index"></param>
         /// <typeparam name="TKey"></typeparam>
-        public virtual void IndexWith<TKey>(Index<TGraph, TKey> index)
+        public virtual void IndexWith<TKey>(IIndex<TGraph, TKey> index) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             if(index == null) throw new ArgumentNullException("index");
             var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);

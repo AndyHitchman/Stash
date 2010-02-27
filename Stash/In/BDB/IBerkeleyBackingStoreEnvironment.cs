@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // Copyright 2009 Andrew Hitchman
 // 
@@ -20,8 +20,8 @@ namespace Stash.In.BDB
 {
     using System;
     using System.Collections.Generic;
+    using BerkeleyConfigs;
     using BerkeleyDB;
-    using Configuration;
 
     public interface IBerkeleyBackingStoreEnvironment
     {

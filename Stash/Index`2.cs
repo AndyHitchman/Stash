@@ -18,6 +18,7 @@
 
 namespace Stash
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -25,7 +26,7 @@ namespace Stash
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public interface Index<TGraph, TKey>
+    public interface IIndex<TGraph, TKey> : IIndex<TGraph> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         /// <summary>
         /// The index function that accepts the persisted object and yields a set of <typeparamref name="TKey"/>"/>

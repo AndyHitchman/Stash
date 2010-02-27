@@ -21,7 +21,6 @@ namespace Stash.Engine
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Selectors;
 
     public class DefaultUnenlistedRepository : UnenlistedRepository
     {
@@ -66,23 +65,23 @@ namespace Stash.Engine
         //            return fetched;
         //        }
 
-        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params From<TFromThis, TProjection>[] from)
-            where TFromThis : From<TFromThis, TProjection>
-        {
-            return Fetch(getSession(), from);
-        }
-
-        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(
-            InternalSession session, params From<TFromThis, TProjection>[] @from)
-            where TFromThis : From<TFromThis, TProjection>
-        {
-            var fetched = new[] {default(TProjection)};
-            foreach(var projection in fetched)
-            {
-                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection, new MemoryStream(), session).EnrollInSession();
-            }
-            return fetched;
-        }
+//        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params IFrom<TFromThis, TProjection>[] from)
+//            where TFromThis : IFrom<TFromThis, TProjection>
+//        {
+//            return Fetch(getSession(), from);
+//        }
+//
+//        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(
+//            InternalSession session, params IFrom<TFromThis, TProjection>[] @from)
+//            where TFromThis : IFrom<TFromThis, TProjection>
+//        {
+//            var fetched = new[] {default(TProjection)};
+//            foreach(var projection in fetched)
+//            {
+//                session.PersistenceEventFactory.MakeTrack(Guid.Empty, projection, new MemoryStream(), session).EnrollInSession();
+//            }
+//            return fetched;
+//        }
 
         public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph) where TGraph : class
         {

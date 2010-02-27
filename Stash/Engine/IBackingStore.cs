@@ -20,11 +20,14 @@ namespace Stash.Engine
 {
     using System;
     using Configuration;
+    using Queries;
 
     public interface IBackingStore
     {
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
         void InTransactionDo(Action<IStorageWork> storageWorkActions);
         IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
+        IQueryFactory QueryFactory { get; }
+        TReturn InTransactionDo<TReturn>(Func<IStorageWork,TReturn> storageWorkFunction);
     }
 }

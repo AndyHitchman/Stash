@@ -28,7 +28,7 @@ namespace Stash.Configuration
     /// </summary>
     public abstract class RegisteredGraph : IRegisteredGraph
     {
-        private IEnumerable<Type> superTypes;
+        private IEnumerable<string> superTypes;
 
         protected RegisteredGraph(Type aggregateType)
         {
@@ -40,7 +40,7 @@ namespace Stash.Configuration
         /// </summary>
         public virtual Type GraphType { get; private set; }
 
-        public IEnumerable<Type> TypeHierarchy
+        public IEnumerable<string> TypeHierarchy
         {
             get
             {

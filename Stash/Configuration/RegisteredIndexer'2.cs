@@ -28,9 +28,9 @@ namespace Stash.Configuration
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph> where TGraph : class
+    public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public RegisteredIndexer(Index<TGraph, TKey> index)
+        public RegisteredIndexer(IIndex<TGraph, TKey> index)
         {
             Index = index;
         }
@@ -38,7 +38,7 @@ namespace Stash.Configuration
         /// <summary>
         /// The Index.
         /// </summary>
-        public virtual Index<TGraph, TKey> Index { get; private set; }
+        public virtual IIndex<TGraph, TKey> Index { get; private set; }
 
         public override Type IndexType
         {

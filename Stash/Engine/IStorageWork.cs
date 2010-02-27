@@ -19,15 +19,17 @@
 namespace Stash.Engine
 {
     using System;
+    using System.Collections.Generic;
     using Configuration;
+    using In.BDB.BerkeleyQueries;
+    using Queries;
 
     public interface IStorageWork
     {
         void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
-
+        IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
         IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
         void InsertGraph(ITrackedGraph trackedGraph);
-
         void UpdateGraph(ITrackedGraph trackedGraph);
     }
 }

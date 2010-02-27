@@ -22,8 +22,10 @@ namespace Stash.In.BDB
     using System.Collections.Generic;
     using System.Linq;
     using BerkeleyDB;
+    using BerkeleyQueries;
     using Engine;
     using global::Stash.Configuration;
+    using Queries;
 
     public class BerkeleyStorageWork : IStorageWork
     {
@@ -51,9 +53,29 @@ namespace Stash.In.BDB
             deleteGraphData(graphKey);
         }
 
+        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            var berkeleyQuery = (IBerkeleyQuery)query;
+            var managedIndex = backingStore.IndexDatabases[query.Indexer.IndexName];
+            return berkeleyQuery.Execute(managedIndex, transaction);
+        }
+
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            return backingStore.Get(internalId, registeredGraph);
+            try
+            {
+                var key = new DatabaseEntry(internalId.AsByteArray());
+                var storedConcreteType = backingStore.ConcreteTypeDatabase.Get(key, transaction).Value.Data.AsString();
+                if (storedConcreteType != registeredGraph.GraphType.FullName)
+                    throw new AttemptToGetWithWrongRegisteredGraphException(internalId, storedConcreteType, registeredGraph);
+
+                var entry = backingStore.GraphDatabase.Get(key, transaction);
+                return new StoredGraph(internalId, entry.Value.Data, registeredGraph);
+            }
+            catch (NotFoundException knfe)
+            {
+                throw new GraphForKeyNotFoundException(internalId, registeredGraph, knfe);
+            }
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)
@@ -211,15 +233,20 @@ namespace Stash.In.BDB
             {
                 typeHierarchyDatabase.Index
                     .Put(
-                        new DatabaseEntry(type.FullName.AsByteArray()),
+                        new DatabaseEntry(type.AsByteArray()),
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                         transaction);
                 typeHierarchyDatabase.ReverseIndex
                     .Put(
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        new DatabaseEntry(type.FullName.AsByteArray()),
+                        new DatabaseEntry(type.AsByteArray()),
                         transaction);
             }
+        }
+
+        public void Abort()
+        {
+            transaction.Abort();
         }
     }
 }

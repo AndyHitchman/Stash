@@ -21,6 +21,7 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
     using Configuration;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
 
     [TestFixture]
     public class when_engaging_backing_store
@@ -29,7 +30,7 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
         public void it_should_tell_registered_indexers_to_engage_themselves()
         {
             var mockRegisteredIndexer =
-                MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, object>>((Index<DummyPersistentObject, object>)null);
+                MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, int>>((IIndex<DummyPersistentObject, int>)null);
             var sut = new RegisteredGraph<DummyPersistentObject>();
             sut.RegisteredIndexers.Add(mockRegisteredIndexer);
 

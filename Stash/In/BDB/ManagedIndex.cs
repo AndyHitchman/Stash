@@ -19,8 +19,8 @@
 namespace Stash.In.BDB
 {
     using System;
+    using BerkeleyConfigs;
     using BerkeleyDB;
-    using Configuration;
 
     public class ManagedIndex
     {

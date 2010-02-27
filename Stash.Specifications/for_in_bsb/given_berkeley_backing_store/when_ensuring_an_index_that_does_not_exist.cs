@@ -21,7 +21,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     using System.IO;
     using Configuration;
     using In.BDB;
-    using In.BDB.Configuration;
+    using In.BDB.BerkeleyConfigs;
     using NUnit.Framework;
     using Support;
 

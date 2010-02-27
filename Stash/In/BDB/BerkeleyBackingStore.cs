@@ -22,8 +22,10 @@ namespace Stash.In.BDB
     using System.Collections.Generic;
     using System.IO;
     using BerkeleyDB;
+    using BerkeleyQueries;
     using Engine;
     using global::Stash.Configuration;
+    using Queries;
 
     /// <summary>
     /// A backing store for Stash using BerkeleyDB.
@@ -38,12 +40,14 @@ namespace Stash.In.BDB
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private bool isDisposed;
+        private BerkeleyQueryFactory queryFactory;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
         public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
+            this.queryFactory = new BerkeleyQueryFactory();
             this.backingStoreEnvironment = backingStoreEnvironment;
             IndexDatabases = new Dictionary<string, ManagedIndex>();
 
@@ -51,7 +55,7 @@ namespace Stash.In.BDB
             dbOpen();
         }
 
-        public RegisteredIndexer<Type, Type> RegisteredTypeHierarchyIndex { get; private set; }
+        public RegisteredIndexer<Type, string> RegisteredTypeHierarchyIndex { get; private set; }
 
         public DatabaseEnvironment Environment
         {
@@ -93,27 +97,48 @@ namespace Stash.In.BDB
 
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            try
-            {
-                var key = new DatabaseEntry(internalId.AsByteArray());
-                var storedConcreteType = ConcreteTypeDatabase.Get(key).Value.Data.AsString();
-                if(storedConcreteType != registeredGraph.GraphType.FullName)
-                    throw new AttemptToGetWithWrongRegisteredGraphException(internalId, storedConcreteType, registeredGraph);
+            return InTransactionDo(work => work.Get(internalId, registeredGraph));
+        }      
 
-                var entry = GraphDatabase.Get(key);
-                return new StoredGraph(internalId, entry.Value.Data, registeredGraph);
-            }
-            catch(NotFoundException knfe)
-            {
-                throw new GraphForKeyNotFoundException(internalId, registeredGraph, knfe);
-            }
+        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            return InTransactionDo(work => work.Find(registeredGraph, query));
+        }
+
+        public IQueryFactory QueryFactory
+        {
+            get { return queryFactory; }
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
             var storageWork = new BerkeleyStorageWork(this);
-            storageWorkActions(storageWork);
-            storageWork.Commit();
+            try
+            {
+                storageWorkActions(storageWork);
+                storageWork.Commit();
+            }
+            catch
+            {
+                storageWork.Abort();
+                throw;
+            }
+        }
+
+        public TReturn InTransactionDo<TReturn>(Func<IStorageWork,TReturn> storageWorkFunction)
+        {
+            var storageWork = new BerkeleyStorageWork(this);
+            try
+            {
+                var result = storageWorkFunction(storageWork);
+                storageWork.Commit();
+                return result;
+            }
+            catch
+            {
+                storageWork.Abort();
+                throw;
+            }
         }
 
         ~BerkeleyBackingStore()
@@ -158,7 +183,7 @@ namespace Stash.In.BDB
             openGraphDatabase();
             openConcreteTypeDatabase();
 
-            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, Type>(new StashTypeHierarchy());
+            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, string>(new StashTypeHierarchy());
             EnsureIndex(RegisteredTypeHierarchyIndex);
         }
 

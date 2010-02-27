@@ -21,6 +21,7 @@ namespace Stash.Specifications
     using System;
     using Configuration;
     using Engine;
+    using Queries;
 
     public class DummyBackingStore : IBackingStore
     {
@@ -35,6 +36,16 @@ namespace Stash.Specifications
         }
 
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryFactory QueryFactory
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             throw new NotImplementedException();
         }

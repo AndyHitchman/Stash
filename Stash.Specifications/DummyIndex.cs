@@ -21,7 +21,7 @@ namespace Stash.Specifications
     using System;
     using System.Collections.Generic;
 
-    public class DummyIndex : Index<DummyPersistentObject, int>
+    public class DummyIndex : IIndex<DummyPersistentObject, int>
     {
         public IEnumerable<int> Yield(DummyPersistentObject graph)
         {

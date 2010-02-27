@@ -3,7 +3,7 @@ namespace Stash.Specifications
     using System;
     using System.Collections.Generic;
 
-    public class StringIndex : Index<ClassWithTwoAncestors, string>
+    public class StringIndex : IIndex<ClassWithTwoAncestors, string>
     {
         public IEnumerable<string> Yield(ClassWithTwoAncestors graph)
         {

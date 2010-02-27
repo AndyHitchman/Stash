@@ -48,5 +48,10 @@ namespace Stash.Configuration
             foreach(var registeredIndexer in RegisteredIndexers)
                 registeredIndexer.EngageBackingStore(backingStore);
         }
+
+        public IRegisteredIndexer GetRegisteredIndexerFor<TIndex>() where TIndex : IIndex<TGraph>
+        {
+            return Indexes.Where(_ => _.IndexType == typeof(TIndex)).FirstOrDefault();
+        }
     }
 }
