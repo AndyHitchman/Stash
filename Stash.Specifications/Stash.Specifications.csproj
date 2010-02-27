@@ -63,6 +63,8 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_queries\Copy of when_between.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_greater_than_with_only_greater.cs" />
     <Compile Include="for_in_bsb\given_queries\when_estimating_query_cost.cs" />
     <Compile Include="for_in_bsb\given_queries\when_between.cs" />
     <Compile Include="for_in_bsb\given_queries\when_less_than.cs" />

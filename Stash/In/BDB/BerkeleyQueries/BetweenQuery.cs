@@ -47,7 +47,10 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            throw new NotImplementedException();
+            return (managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(UpperKey)), transaction).Less -
+                    managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater) *
+                   managedIndex.Index.FastStats().nPages *
+                   (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

@@ -25,27 +25,30 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class GreaterThanQuery<TKey> : IBerkeleyQuery, IGreaterThanQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class InsideQuery<TKey> : IBerkeleyQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 32;
 
-        public GreaterThanQuery(IRegisteredIndexer indexer, TKey key)
+        public InsideQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
             Indexer = indexer;
-            Key = key;
+            LowerKey = lowerKey;
+            UpperKey = upperKey;
         }
 
         public IRegisteredIndexer Indexer { get; private set; }
-        public TKey Key { get; private set; }
+        public TKey LowerKey { get; private set; }
+        public TKey UpperKey { get; private set; }
 
         public QueryCostScale QueryCostScale
         {
-            get { return QueryCostScale.OpenRangeScan; }
+            get { return QueryCostScale.ClosedRangeScan; }
         }
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Greater *
+            return (managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(UpperKey)), transaction).Less -
+                    managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater) *
                    managedIndex.Index.FastStats().nPages *
                    (double)QueryCostScale;
         }
@@ -55,13 +58,18 @@ namespace Stash.In.BDB.BerkeleyQueries
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
             {
-                var keyAsBytes = managedIndex.KeyAsByteArray(Key);
+                var comparer = managedIndex.Comparer;
+                var keyAsBytes = managedIndex.KeyAsByteArray(LowerKey);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.Move(new DatabaseEntry(keyAsBytes), true) | cursor.MoveNextUniqueMultipleKey(bufferSize))
+                if (cursor.Move(new DatabaseEntry(keyAsBytes), true) | cursor.MoveNextUniqueMultipleKey(bufferSize))
                 {
                     do
                     {
-                        foreach(var guid in cursor.CurrentMultipleKey.Select(_ => _.Value.Data.AsGuid()))
+                        foreach(var guid in
+                            cursor.CurrentMultipleKey
+                                .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
+                                .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) < 0)
+                                .Select(_ => _.value))
                         {
                             yield return guid;
                         }
