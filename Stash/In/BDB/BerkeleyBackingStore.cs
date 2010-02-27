@@ -97,7 +97,7 @@ namespace Stash.In.BDB
 
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            return InTransactionDo(work => work.Get(internalId, registeredGraph));
+            return InTransactionDo(work => work.Get(registeredGraph, internalId));
         }      
 
         public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)

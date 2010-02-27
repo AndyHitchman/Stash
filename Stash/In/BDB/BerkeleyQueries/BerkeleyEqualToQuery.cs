@@ -20,6 +20,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using BerkeleyDB;
     using Configuration;
     using Engine;
@@ -41,28 +42,12 @@ namespace Stash.In.BDB.BerkeleyQueries
             get { return QueryCost.SingleGet; }
         }
 
-        public IEnumerable<IStoredGraph> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            throw new NotImplementedException();
+            return managedIndex.Index
+                .GetMultiple(new DatabaseEntry(managedIndex.PresentKeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
+                .Value
+                .Select(graphKey => graphKey.Data.AsGuid());
         }
-    }
-
-    public interface IBerkeleyQuery<TKey> : IBerkeleyQuery, IQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
-    {
-        
-    }
-
-    public enum QueryCost
-    {
-        SingleGet = 1,
-        MultiGet = 10,
-        RangeScan = 50,
-        FullScan = 100,
-    }
-
-    public interface IBerkeleyQuery
-    {
-        QueryCost QueryCost { get; }
-        IEnumerable<IStoredGraph> Execute(ManagedIndex managedIndex, Transaction transaction);
     }
 }
