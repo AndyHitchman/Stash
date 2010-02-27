@@ -51,7 +51,7 @@ namespace Stash.In.BDB.BerkeleyQueries
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
                 if(cursor.MoveFirstMultipleKey(bufferSize))
                 {
-                    var keyAsBytes = managedIndex.PresentKeyAsByteArray(Key);
+                    var keyAsBytes = managedIndex.KeyAsByteArray(Key);
                     do
                     {
                         foreach(var guid in cursor.CurrentMultipleKey

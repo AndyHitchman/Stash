@@ -54,7 +54,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
             BTreeCompare = (dbt1, dbt2) => dbt1.Data.AsShort().CompareTo(dbt2.Data.AsShort());
         }
 
-        public override byte[] PresentKeyAsByteArray(object key)
+        public override byte[] KeyAsByteArray(object key)
         {
             return ((short)key).AsByteArray();
         }
@@ -64,7 +64,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
             return Comparer<short>.Default;
         }
 
-        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        public override object ByteArrayAsKey(byte[] bytes)
         {
             return bytes.AsShort();
         }

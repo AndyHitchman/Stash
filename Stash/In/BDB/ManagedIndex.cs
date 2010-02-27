@@ -19,6 +19,7 @@
 namespace Stash.In.BDB
 {
     using System;
+    using System.Collections;
     using BerkeleyConfigs;
     using BerkeleyDB;
 
@@ -40,14 +41,16 @@ namespace Stash.In.BDB
 
         public Type YieldsType { get; private set; }
 
-        public byte[] PresentKeyAsByteArray(object key)
+        public byte[] KeyAsByteArray(object key)
         {
-            return config.PresentKeyAsByteArray(key);
+            return config.KeyAsByteArray(key);
         }
 
-        public object PresentByteArrayAsComparableKey(byte[] bytes)
+        public IComparer Comparer { get { return config.GetComparer(); } }
+
+        public object ByteArrayAsKey(byte[] bytes)
         {
-            return config.PresentByteArrayAsComparableKey(bytes);
+            return config.ByteArrayAsKey(bytes);
         }
 
         public void Close()

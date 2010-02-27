@@ -61,9 +61,9 @@ namespace Stash.In.BDB.BerkeleyConfigs
             AutoCommit = true;
         }
 
-        public abstract byte[] PresentKeyAsByteArray(object key);
+        public abstract byte[] KeyAsByteArray(object key);
 
         public abstract IComparer GetComparer();
-        public abstract object PresentByteArrayAsComparableKey(byte[] bytes);
+        public abstract object ByteArrayAsKey(byte[] bytes);
     }
 }

@@ -64,6 +64,7 @@
     <Compile Include="IIndex.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\LessThanEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\GreaterThanEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\NotEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\IBerkeleyQuery.cs" />

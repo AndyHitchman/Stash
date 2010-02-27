@@ -53,7 +53,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
             BTreeCompare = (dbt1, dbt2) => dbt1.Data.AsUInt().CompareTo(dbt2.Data.AsUInt());
         }
 
-        public override byte[] PresentKeyAsByteArray(object key)
+        public override byte[] KeyAsByteArray(object key)
         {
             return ((uint)key).AsByteArray();
         }
@@ -63,7 +63,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
             return Comparer<uint>.Default;
         }
 
-        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        public override object ByteArrayAsKey(byte[] bytes)
         {
             return bytes.AsUInt();
         }

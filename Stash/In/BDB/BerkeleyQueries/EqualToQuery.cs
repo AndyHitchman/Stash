@@ -47,7 +47,7 @@ namespace Stash.In.BDB.BerkeleyQueries
             try
             {
                 return managedIndex.Index
-                    .GetMultiple(new DatabaseEntry(managedIndex.PresentKeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
+                    .GetMultiple(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
                     .Value
                     .Select(graphKey => graphKey.Data.AsGuid());
             }

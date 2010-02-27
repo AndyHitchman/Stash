@@ -49,7 +49,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
 
     public class ObjectIndexDatabaseConfig : IndexDatabaseConfig
     {
-        public override byte[] PresentKeyAsByteArray(object key)
+        public override byte[] KeyAsByteArray(object key)
         {
             return (key).ToString().AsByteArray();
         }
@@ -59,7 +59,7 @@ namespace Stash.In.BDB.BerkeleyConfigs
             return Comparer<object>.Default;
         }
 
-        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        public override object ByteArrayAsKey(byte[] bytes)
         {
             throw new NotImplementedException();
         }

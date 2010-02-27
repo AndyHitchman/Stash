@@ -25,11 +25,11 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class GreaterThanEqualToQuery<TKey> : IBerkeleyQuery, IGreaterThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class LessThanEqualToQuery<TKey> : IBerkeleyQuery, ILessThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 4;
 
-        public GreaterThanEqualToQuery(IRegisteredIndexer indexer, TKey key)
+        public LessThanEqualToQuery(IRegisteredIndexer indexer, TKey key)
         {
             Indexer = indexer;
             Key = key;
@@ -48,13 +48,17 @@ namespace Stash.In.BDB.BerkeleyQueries
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
             {
-                var keyAsBytes = managedIndex.KeyAsByteArray(Key);
+                var comparer = managedIndex.Comparer;
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveMultipleKey(new DatabaseEntry(keyAsBytes), false, bufferSize))
+                if(cursor.MoveFirstMultipleKey(bufferSize))
                 {
                     do
                     {
-                        foreach(var guid in cursor.CurrentMultipleKey.Select(_ => _.Value.Data.AsGuid()))
+                        foreach(var guid in
+                            cursor.CurrentMultipleKey
+                                .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
+                                .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), Key) <= 0)
+                                .Select(_ => _.value))
                         {
                             yield return guid;
                         }

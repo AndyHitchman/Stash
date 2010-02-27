@@ -217,13 +217,13 @@ namespace Stash.In.BDB
             {
                 each.managedIndex.Index
                     .Put(
-                        new DatabaseEntry(each.managedIndex.PresentKeyAsByteArray(each.projection.UntypedKey)),
+                        new DatabaseEntry(each.managedIndex.KeyAsByteArray(each.projection.UntypedKey)),
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                         transaction);
                 each.managedIndex.ReverseIndex
                     .Put(
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        new DatabaseEntry(each.managedIndex.PresentKeyAsByteArray(each.projection.UntypedKey)),
+                        new DatabaseEntry(each.managedIndex.KeyAsByteArray(each.projection.UntypedKey)),
                         transaction);
             }
         }
