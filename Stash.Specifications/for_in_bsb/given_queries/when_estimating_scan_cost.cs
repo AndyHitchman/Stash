@@ -5,17 +5,18 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using System.Linq;
     using Engine;
     using given_berkeley_backing_store;
+    using In.BDB;
     using In.BDB.BerkeleyQueries;
     using Queries;
     using Support;
 
-    public class when_greater_than : with_int_indexer
+    public class when_estimating_scan_cost : with_int_indexer
     {
         private TrackedGraph equaltrackedGraph;
-        private TrackedGraph lessThanTrackedGraph;
+        private ITrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
-        private IQuery query;
-        private IEnumerable<IStoredGraph> actual;
+        private GreaterThanQuery<int> query;
+        private double actual;
 
         protected override void Given()
         {
@@ -53,19 +54,14 @@ namespace Stash.Specifications.for_in_bsb.given_queries
 
         protected override void When()
         {
-            actual = Subject.InTransactionDo(_ => _.Find(registeredGraph, query));
-        }
-
-        [Then]
-        public void it_should_find_one()
-        {
-            actual.ShouldHaveCount(1);
-        }
-
-        [Then]
-        public void it_should_get_the_correct_graphs()
-        {
-            actual.Any(_ => _.InternalId == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
+            actual = Subject.InTransactionDo(_ =>
+                                                 {
+                                                     var berkeleyStorageWork = ((BerkeleyStorageWork)_);
+                                                     return query.EstimatedScanCost(
+                                                         berkeleyStorageWork.BackingStore.IndexDatabases[registeredIndexer.IndexName], 
+                                                         berkeleyStorageWork.Transaction);
+                                                 });
+            Console.WriteLine(actual);
         }
     }
 }

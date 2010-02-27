@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class GreaterThanQuery<TKey> : IBerkeleyQuery, IGreaterThanQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 4;
+        private const int pageSizeBufferMultipler = 32;
 
         public GreaterThanQuery(IRegisteredIndexer indexer, TKey key)
         {
@@ -40,7 +40,14 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public QueryCost QueryCost
         {
-            get { return QueryCost.RangeScan; }
+            get { return QueryCost.OpenRangeScan; }
+        }
+
+        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Greater *
+                   managedIndex.Index.FastStats().nPages *
+                   (double)QueryCost;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

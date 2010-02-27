@@ -69,5 +69,11 @@ namespace Stash.In.BDB.BerkeleyQueries
                 cursor.Close();
             }
         }
+
+        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return managedIndex.Index.FastStats().nPages *
+                   (double)QueryCost;
+        }
     }
 }

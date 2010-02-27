@@ -56,5 +56,10 @@ namespace Stash.In.BDB.BerkeleyQueries
                 return Enumerable.Empty<Guid>();
             }
         }
+
+        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return (double)QueryCost;
+        }
     }
 }

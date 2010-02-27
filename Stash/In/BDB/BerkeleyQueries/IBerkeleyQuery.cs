@@ -9,5 +9,6 @@ namespace Stash.In.BDB.BerkeleyQueries
     {
         QueryCost QueryCost { get; }
         IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction);
+        double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction);
     }
 }

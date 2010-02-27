@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class LessThanEqualToQuery<TKey> : IBerkeleyQuery, ILessThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 4;
+        private const int pageSizeBufferMultipler = 32;
 
         public LessThanEqualToQuery(IRegisteredIndexer indexer, TKey key)
         {
@@ -40,7 +40,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public QueryCost QueryCost
         {
-            get { return QueryCost.RangeScan; }
+            get { return QueryCost.OpenRangeScan; }
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -70,6 +70,13 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 cursor.Close();
             }
+        }
+
+        public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
+        {
+            return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Less *
+                   managedIndex.Index.FastStats().nPages *
+                   (double)QueryCost;
         }
     }
 }

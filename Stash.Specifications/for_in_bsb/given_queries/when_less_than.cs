@@ -12,7 +12,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     public class when_less_than : with_int_indexer
     {
         private TrackedGraph equaltrackedGraph;
-        private ITrackedGraph lessThanTrackedGraph;
+        private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;

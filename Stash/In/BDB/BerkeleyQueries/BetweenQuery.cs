@@ -25,22 +25,24 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class LessThanQuery<TKey> : IBerkeleyQuery, ILessThanQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class BetweenQuery<TKey> : IBerkeleyQuery, IBetweenQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 32;
 
-        public LessThanQuery(IRegisteredIndexer indexer, TKey key)
+        public BetweenQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
             Indexer = indexer;
-            Key = key;
+            LowerKey = lowerKey;
+            UpperKey = upperKey;
         }
 
         public IRegisteredIndexer Indexer { get; private set; }
-        public TKey Key { get; private set; }
+        public TKey LowerKey { get; private set; }
+        public TKey UpperKey { get; private set; }
 
         public QueryCost QueryCost
         {
-            get { return QueryCost.OpenRangeScan; }
+            get { return QueryCost.ClosedRangeScan; }
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -49,15 +51,16 @@ namespace Stash.In.BDB.BerkeleyQueries
             try
             {
                 var comparer = managedIndex.Comparer;
+                var keyAsBytes = managedIndex.KeyAsByteArray(LowerKey);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveFirstMultipleKey(bufferSize))
+                if (cursor.MoveMultipleKey(new DatabaseEntry(keyAsBytes), false, bufferSize))
                 {
                     do
                     {
-                        foreach(var guid in
+                        foreach (var guid in
                             cursor.CurrentMultipleKey
-                                .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
-                                .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), Key) < 0)
+                                .Select(_ => new { key = _.Key.Data, value = _.Value.Data.AsGuid() })
+                                .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) <= 0)
                                 .Select(_ => _.value))
                         {
                             yield return guid;
@@ -74,9 +77,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public double EstimatedScanCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Less *
-                   managedIndex.Index.FastStats().nPages *
-                   (double)QueryCost;
+            throw new NotImplementedException();
         }
     }
 }

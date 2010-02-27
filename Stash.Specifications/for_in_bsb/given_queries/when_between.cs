@@ -9,9 +9,11 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_greater_than : with_int_indexer
+    public class when_between : with_int_indexer
     {
-        private TrackedGraph equaltrackedGraph;
+        private TrackedGraph insideTrackedGraph;
+        private TrackedGraph lowerTrackedGraph;
+        private TrackedGraph upperTrackedGraph;
         private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
         private IQuery query;
@@ -19,10 +21,24 @@ namespace Stash.Specifications.for_in_bsb.given_queries
 
         protected override void Given()
         {
-            equaltrackedGraph = new TrackedGraph(
+            insideTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
+                registeredGraph
+                );
+
+            lowerTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
+                registeredGraph
+                );
+
+            upperTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
                 registeredGraph
                 );
 
@@ -36,19 +52,21 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             greaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
                 registeredGraph
                 );
 
             Subject.InTransactionDo(
                 _ =>
                     {
-                        _.InsertGraph(equaltrackedGraph);
+                        _.InsertGraph(insideTrackedGraph);
+                        _.InsertGraph(lowerTrackedGraph);
+                        _.InsertGraph(upperTrackedGraph);
                         _.InsertGraph(lessThanTrackedGraph);
                         _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new GreaterThanQuery<int>(registeredIndexer, 100);
+            query = new BetweenQuery<int>(registeredIndexer, 100, 102);
         }
 
         protected override void When()
@@ -57,15 +75,17 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_one()
+        public void it_should_find_three()
         {
-            actual.ShouldHaveCount(1);
+            actual.ShouldHaveCount(3);
         }
 
         [Then]
         public void it_should_get_the_correct_graphs()
         {
-            actual.Any(_ => _.InternalId == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == lowerTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == insideTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == upperTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }
