@@ -63,6 +63,9 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_queries\Copy of when_greater_than_equal_to_matches_none.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_greater_than_equal_to_matches_none.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_greater_than_equal_to.cs" />
     <Compile Include="for_in_bsb\given_queries\when_not_equal_to.cs" />
     <Compile Include="for_in_bsb\given_queries\when_equal_to_is_false.cs" />
     <Compile Include="for_in_bsb\given_queries\when_equal_to.cs" />

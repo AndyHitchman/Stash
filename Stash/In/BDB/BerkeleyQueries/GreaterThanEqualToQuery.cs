@@ -25,11 +25,11 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class NotEqualToQuery<TKey> : IBerkeleyQuery, INotEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class GreaterThanEqualToQuery<TKey> : IBerkeleyQuery, IGreaterThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 128;
 
-        public NotEqualToQuery(IRegisteredIndexer indexer, TKey key)
+        public GreaterThanEqualToQuery(IRegisteredIndexer indexer, TKey key)
         {
             Indexer = indexer;
             Key = key;
@@ -48,15 +48,13 @@ namespace Stash.In.BDB.BerkeleyQueries
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
             {
+                var keyAsBytes = managedIndex.PresentKeyAsByteArray(Key);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveFirstMultipleKey(bufferSize))
+                if(cursor.MoveMultipleKey(new DatabaseEntry(keyAsBytes), false, bufferSize))
                 {
-                    var keyAsBytes = managedIndex.PresentKeyAsByteArray(Key);
                     do
                     {
-                        foreach(var guid in cursor.CurrentMultipleKey
-                            .Where(_ => !_.Key.Data.SequenceEqual(keyAsBytes))
-                            .Select(_ => _.Value.Data.AsGuid()))
+                        foreach(var guid in cursor.CurrentMultipleKey.Select(_ => _.Value.Data.AsGuid()))
                         {
                             yield return guid;
                         }

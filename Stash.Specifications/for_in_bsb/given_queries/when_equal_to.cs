@@ -6,12 +6,13 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Engine;
     using given_berkeley_backing_store;
     using In.BDB.BerkeleyQueries;
+    using Queries;
     using Support;
 
     public class when_equal_to : with_int_indexer
     {
         private ITrackedGraph trackedGraph;
-        private EqualToQuery<int> query;
+        private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
         protected override void Given()
