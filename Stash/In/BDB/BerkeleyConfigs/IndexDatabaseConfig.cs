@@ -43,6 +43,7 @@
 namespace Stash.In.BDB.BerkeleyConfigs
 {
     using System;
+    using System.Collections;
     using BerkeleyDB;
 
     /// <summary>
@@ -60,6 +61,9 @@ namespace Stash.In.BDB.BerkeleyConfigs
             AutoCommit = true;
         }
 
-        public abstract Byte[] PresentKeyAsByteArray(object key);
+        public abstract byte[] PresentKeyAsByteArray(object key);
+
+        public abstract IComparer GetComparer();
+        public abstract object PresentByteArrayAsComparableKey(byte[] bytes);
     }
 }

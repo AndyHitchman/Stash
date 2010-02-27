@@ -42,6 +42,10 @@
 
 namespace Stash.In.BDB.BerkeleyConfigs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class DoubleIndexDatabaseConfig : IndexDatabaseConfig
     {
         public DoubleIndexDatabaseConfig()
@@ -52,6 +56,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((double)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<double>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsDouble();
         }
     }
 }

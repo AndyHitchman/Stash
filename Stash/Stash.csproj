@@ -64,8 +64,8 @@
     <Compile Include="IIndex.cs" />
     <Compile Include="In\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\NotEqualToQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\IBerkeleyQuery.cs" />
-    <Compile Include="In\BDB\BerkeleyQueries\IBerkeleyQuery`1.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\QueryCost.cs" />
     <Compile Include="In\BDB\BerkeleyQueryFactory.cs" />
     <Compile Include="In\BDB\BerkeleyStorageWork.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="In\BDB\Convert.cs" />
     <Compile Include="In\BDB\IBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\ManagedIndex.cs" />
-    <Compile Include="In\BDB\BerkeleyQueries\BerkeleyEqualToQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>

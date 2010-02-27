@@ -42,6 +42,11 @@
 
 namespace Stash.In.BDB.BerkeleyConfigs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using BerkeleyDB;
+
     public class LongIndexDatabaseConfig : IndexDatabaseConfig
     {
         public LongIndexDatabaseConfig()
@@ -52,6 +57,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((long)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<long>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsLong();
         }
     }
 }

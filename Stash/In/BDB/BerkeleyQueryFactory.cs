@@ -25,7 +25,7 @@ namespace Stash.In.BDB
 
         public IEqualToQuery<TKey> EqualTo<TGraph, TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new BerkeleyEqualToQuery<TKey>(indexer, key);
+            return new EqualToQuery<TKey>(indexer, key);
         }
 
         public IGreaterThanQuery<TKey> GreaterThan<TGraph, TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>

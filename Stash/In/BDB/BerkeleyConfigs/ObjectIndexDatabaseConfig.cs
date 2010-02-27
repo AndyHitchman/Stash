@@ -42,11 +42,26 @@
 
 namespace Stash.In.BDB.BerkeleyConfigs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using BerkeleyDB;
+
     public class ObjectIndexDatabaseConfig : IndexDatabaseConfig
     {
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return (key).ToString().AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<object>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }

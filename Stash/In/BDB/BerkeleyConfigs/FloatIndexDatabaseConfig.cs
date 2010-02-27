@@ -42,6 +42,10 @@
 
 namespace Stash.In.BDB.BerkeleyConfigs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class FloatIndexDatabaseConfig : IndexDatabaseConfig
     {
         public FloatIndexDatabaseConfig()
@@ -52,6 +56,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((float)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<float>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsFloat();
         }
     }
 }

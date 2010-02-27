@@ -1,16 +1,17 @@
-namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
+namespace Stash.Specifications.for_in_bsb.given_queries
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using Engine;
+    using given_berkeley_backing_store;
     using In.BDB.BerkeleyQueries;
     using Support;
 
-    public class when_is_equal_to : with_int_indexer
+    public class when_equal_to : with_int_indexer
     {
         private ITrackedGraph trackedGraph;
-        private BerkeleyEqualToQuery<int> equalToQuery;
+        private EqualToQuery<int> query;
         private IEnumerable<IStoredGraph> actual;
 
         protected override void Given()
@@ -24,12 +25,12 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
 
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
 
-            equalToQuery = new BerkeleyEqualToQuery<int>(registeredIndexer, 100);
+            query = new EqualToQuery<int>(registeredIndexer, 100);
         }
 
         protected override void When()
         {
-            actual = Subject.InTransactionDo(_ => _.Find(registeredGraph, equalToQuery));
+            actual = Subject.InTransactionDo(_ => _.Find(registeredGraph, query));
         }
 
         [Then]
@@ -43,5 +44,5 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
         {
             actual.First().InternalId.ShouldEqual(trackedGraph.InternalId);
         }
-     }
+    }
 }

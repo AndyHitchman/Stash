@@ -45,6 +45,11 @@ namespace Stash.In.BDB
             return config.PresentKeyAsByteArray(key);
         }
 
+        public object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return config.PresentByteArrayAsComparableKey(bytes);
+        }
+
         public void Close()
         {
             Index.Close();

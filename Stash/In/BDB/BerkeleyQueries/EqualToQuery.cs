@@ -26,9 +26,9 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Engine;
     using Queries;
 
-    public class BerkeleyEqualToQuery<TKey> : IBerkeleyQuery<TKey>, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class EqualToQuery<TKey> : IBerkeleyQuery, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public BerkeleyEqualToQuery(IRegisteredIndexer indexer, TKey key)
+        public EqualToQuery(IRegisteredIndexer indexer, TKey key)
         {
             Indexer = indexer;
             Key = key;
@@ -44,10 +44,17 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            return managedIndex.Index
-                .GetMultiple(new DatabaseEntry(managedIndex.PresentKeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
-                .Value
-                .Select(graphKey => graphKey.Data.AsGuid());
+            try
+            {
+                return managedIndex.Index
+                    .GetMultiple(new DatabaseEntry(managedIndex.PresentKeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
+                    .Value
+                    .Select(graphKey => graphKey.Data.AsGuid());
+            }
+            catch(NotFoundException)
+            {
+                return Enumerable.Empty<Guid>();
+            }
         }
     }
 }

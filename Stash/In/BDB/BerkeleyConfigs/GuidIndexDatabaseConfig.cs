@@ -43,6 +43,8 @@
 namespace Stash.In.BDB.BerkeleyConfigs
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     public class GuidIndexDatabaseConfig : IndexDatabaseConfig
     {
@@ -54,6 +56,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((Guid)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<Guid>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsGuid();
         }
     }
 }

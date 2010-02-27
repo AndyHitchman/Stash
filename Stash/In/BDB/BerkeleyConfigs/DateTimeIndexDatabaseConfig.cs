@@ -43,6 +43,8 @@
 namespace Stash.In.BDB.BerkeleyConfigs
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     public class DateTimeIndexDatabaseConfig : IndexDatabaseConfig
     {
@@ -54,6 +56,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((DateTime)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<DateTime>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsDateTime();
         }
     }
 }

@@ -63,7 +63,9 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
-    <Compile Include="for_in_bsb\given_berkeley_backing_store\when_is_equal_to.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_not_equal_to.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_equal_to_is_false.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_equal_to.cs" />
     <Compile Include="for_in_bsb\given_berkeley_backing_store\with_int_indexer.cs" />
     <Compile Include="OtherDummyIndex.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_getting_registered_indexers.cs" />

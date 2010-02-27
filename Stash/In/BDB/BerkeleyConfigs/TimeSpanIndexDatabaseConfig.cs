@@ -43,6 +43,9 @@
 namespace Stash.In.BDB.BerkeleyConfigs
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using BerkeleyDB;
 
     public class TimeSpanIndexDatabaseConfig : IndexDatabaseConfig
     {
@@ -54,6 +57,16 @@ namespace Stash.In.BDB.BerkeleyConfigs
         public override byte[] PresentKeyAsByteArray(object key)
         {
             return ((TimeSpan)key).AsByteArray();
+        }
+
+        public override IComparer GetComparer()
+        {
+            return Comparer<TimeSpan>.Default;
+        }
+
+        public override object PresentByteArrayAsComparableKey(byte[] bytes)
+        {
+            return bytes.AsTimeSpan();
         }
     }
 }
