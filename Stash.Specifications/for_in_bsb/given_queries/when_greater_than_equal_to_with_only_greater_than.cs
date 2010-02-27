@@ -36,7 +36,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_get_the_graphs_not_matching_index_key()
+        public void it_should_find_one()
         {
             actual.ShouldHaveCount(1);
         }
