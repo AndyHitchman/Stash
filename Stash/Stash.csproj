@@ -148,6 +148,7 @@
     <Compile Include="Projector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queries\IAndQuery.cs" />
     <Compile Include="Queries\INotAllOfQuery.cs" />
     <Compile Include="Queries\IAllOfQuery.cs" />
     <Compile Include="Queries\IAnyOfQuery.cs" />
@@ -160,10 +161,11 @@
     <Compile Include="Queries\ILessThanQuery.cs" />
     <Compile Include="Queries\INotAnyOfQuery.cs" />
     <Compile Include="Queries\INotEqualToQuery.cs" />
+    <Compile Include="Queries\IInverseQuery.cs" />
+    <Compile Include="Queries\IOrQuery.cs" />
     <Compile Include="Queries\IOutsideQuery.cs" />
     <Compile Include="Queries\IQuery.cs" />
     <Compile Include="Queries\IQueryFactory.cs" />
-    <Compile Include="Queries\IQuery`1.cs" />
     <Compile Include="Reduction.cs">
       <SubType>Code</SubType>
     </Compile>

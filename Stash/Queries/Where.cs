@@ -78,10 +78,16 @@ namespace Stash.Queries
             return Stash.Registry.BackingStore.QueryFactory.LessThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
-        public static INotAnyOfQuery<TKey> NoneOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
+        public static INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.NoneOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Stash.Registry.BackingStore.QueryFactory.NotAnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+        }
+
+        public static INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
+            where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            return Stash.Registry.BackingStore.QueryFactory.NotAllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
         }
 
         public static INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
@@ -94,6 +100,16 @@ namespace Stash.Queries
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return Stash.Registry.BackingStore.QueryFactory.Outside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+        }
+
+        public static IAndQuery And(this IQuery lhs, IQuery rhs)
+        {
+            return Stash.Registry.BackingStore.QueryFactory.And(lhs, rhs);
+        }
+
+        public static IAndQuery Or(this IQuery lhs, IQuery rhs)
+        {
+            return Stash.Registry.BackingStore.QueryFactory.Or(lhs, rhs);
         }
 
         private static IRegisteredIndexer getRegisteredIndexer<TGraph, TKey>() where TKey : IComparable<TKey>, IEquatable<TKey>

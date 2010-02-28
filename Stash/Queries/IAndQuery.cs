@@ -18,8 +18,5 @@
 
 namespace Stash.Queries
 {
-    using System;
-
-    public interface INotEqualToQuery<TKey> : IQuery, IInverseQuery<IEqualToQuery<TKey>> where TKey : IEquatable<TKey>
-    { }
+    public interface IAndQuery : IQuery {}
 }
