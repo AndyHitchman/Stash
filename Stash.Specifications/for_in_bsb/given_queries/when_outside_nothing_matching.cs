@@ -9,13 +9,11 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_inside : with_int_indexer
+    public class when_outside_nothing_matching : with_int_indexer
     {
         private TrackedGraph insideTrackedGraph;
         private TrackedGraph lowerTrackedGraph;
         private TrackedGraph upperTrackedGraph;
-        private TrackedGraph lessThanTrackedGraph;
-        private TrackedGraph greaterThanTrackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
@@ -42,31 +40,15 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                 registeredGraph
                 );
 
-            lessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 99)},
-                registeredGraph
-                );
-
-            greaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
-                registeredGraph
-                );
-
             Subject.InTransactionDo(
                 _ =>
                     {
                         _.InsertGraph(insideTrackedGraph);
                         _.InsertGraph(lowerTrackedGraph);
                         _.InsertGraph(upperTrackedGraph);
-                        _.InsertGraph(lessThanTrackedGraph);
-                        _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new InsideQuery<int>(registeredIndexer, 100, 102);
+            query = new OutsideQuery<int>(registeredIndexer, 100, 102);
         }
 
         protected override void When()
@@ -75,15 +57,9 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_one()
+        public void it_should_find_nothing()
         {
-            actual.ShouldHaveCount(1);
-        }
-
-        [Then]
-        public void it_should_get_the_correct_graphs()
-        {
-            actual.Any(_ => _.InternalId == insideTrackedGraph.InternalId).ShouldBeTrue();
+            actual.ShouldHaveCount(0);
         }
     }
 }

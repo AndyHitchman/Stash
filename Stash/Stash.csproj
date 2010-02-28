@@ -65,6 +65,7 @@
     <Compile Include="In\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\BetweenQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\OutsideQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\InsideQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\LessThanQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\GreaterThanQuery.cs" />
