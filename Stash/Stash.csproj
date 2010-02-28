@@ -65,6 +65,10 @@
     <Compile Include="In\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="In\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\BetweenQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\AnyOfQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\AllOfQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\NotAnyOfQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\NotAllOfQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\OutsideQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\InsideQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\LessThanQuery.cs" />
@@ -144,6 +148,7 @@
     <Compile Include="Projector.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Queries\INotAllOfQuery.cs" />
     <Compile Include="Queries\IAllOfQuery.cs" />
     <Compile Include="Queries\IAnyOfQuery.cs" />
     <Compile Include="Queries\IBetweenQuery.cs" />
@@ -153,7 +158,7 @@
     <Compile Include="Queries\IInsideQuery.cs" />
     <Compile Include="Queries\ILessThanEqualQuery.cs" />
     <Compile Include="Queries\ILessThanQuery.cs" />
-    <Compile Include="Queries\INoneOfQuery.cs" />
+    <Compile Include="Queries\INotAnyOfQuery.cs" />
     <Compile Include="Queries\INotEqualToQuery.cs" />
     <Compile Include="Queries\IOutsideQuery.cs" />
     <Compile Include="Queries\IQuery.cs" />

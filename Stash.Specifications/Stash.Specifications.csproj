@@ -63,6 +63,12 @@
     <Compile Include="ClassWithNoAncestors.cs" />
     <Compile Include="ClassWithOneAncestors.cs" />
     <Compile Include="ClassWithTwoAncestors.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_not_any_of.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_not_all_of.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_all_of_having_a_smaller_number_of_graphs_than_keys_in_set.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_all_of.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_any_of_having_query_key_that_doesnt_exist.cs" />
+    <Compile Include="for_in_bsb\given_queries\when_any_of.cs" />
     <Compile Include="for_in_bsb\given_queries\when_outside_having_nothing_inside.cs" />
     <Compile Include="for_in_bsb\given_queries\when_outside_nothing_matching.cs" />
     <Compile Include="for_in_bsb\given_queries\when_outside.cs" />

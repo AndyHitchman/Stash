@@ -25,18 +25,18 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class NotEqualToQuery<TKey> : IBerkeleyQuery, INotEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class NotAllOfQuery<TKey> : IBerkeleyQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 128;
 
-        public NotEqualToQuery(IRegisteredIndexer indexer, TKey key)
+        public NotAllOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
             Indexer = indexer;
-            Key = key;
+            Set = set;
         }
 
         public IRegisteredIndexer Indexer { get; private set; }
-        public TKey Key { get; private set; }
+        public IEnumerable<TKey> Set { get; private set; }
 
         public QueryCostScale QueryCostScale
         {
@@ -50,23 +50,23 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
+            var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), transaction);
             try
             {
-                var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveFirstMultipleKey(bufferSize))
+                var bufferSize = (int)managedIndex.ReverseIndex.Pagesize * pageSizeBufferMultipler;
+                if (cursor.MoveFirstMultipleKey(bufferSize))
                 {
-                    var keyAsBytes = managedIndex.KeyAsByteArray(Key);
+                    var setKeysAsBytes = Set.Select(key => managedIndex.KeyAsByteArray(key)).ToList();
                     do
                     {
-                        foreach(var guid in cursor.CurrentMultipleKey
-                            .Where(_ => !_.Key.Data.SequenceEqual(keyAsBytes))
-                            .Select(_ => _.Value.Data.AsGuid()))
+                        foreach (var guid in cursor.CurrentMultipleKey
+                            .Where(pair => !setKeysAsBytes.Any(setKey => pair.Value.Data.SequenceEqual(setKey)))
+                            .Select(pair => pair.Key.Data.AsGuid()))
                         {
                             yield return guid;
                         }
                     }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                    while (cursor.MoveNextDuplicateMultipleKey(bufferSize));
                 }
             }
             finally

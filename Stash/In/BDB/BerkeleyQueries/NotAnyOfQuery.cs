@@ -25,18 +25,18 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class NotEqualToQuery<TKey> : IBerkeleyQuery, INotEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class NotAnyOfQuery<TKey> : IBerkeleyQuery, INotAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 128;
 
-        public NotEqualToQuery(IRegisteredIndexer indexer, TKey key)
+        public NotAnyOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
             Indexer = indexer;
-            Key = key;
+            Set = set;
         }
 
         public IRegisteredIndexer Indexer { get; private set; }
-        public TKey Key { get; private set; }
+        public IEnumerable<TKey> Set { get; private set; }
 
         public QueryCostScale QueryCostScale
         {
@@ -50,23 +50,15 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
+            var matchingAny = new AnyOfQuery<TKey>(Indexer, Set).Execute(managedIndex, transaction).ToList();
+
+            var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), transaction);
             try
             {
-                var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveFirstMultipleKey(bufferSize))
+                while (cursor.MoveNextUnique())
                 {
-                    var keyAsBytes = managedIndex.KeyAsByteArray(Key);
-                    do
-                    {
-                        foreach(var guid in cursor.CurrentMultipleKey
-                            .Where(_ => !_.Key.Data.SequenceEqual(keyAsBytes))
-                            .Select(_ => _.Value.Data.AsGuid()))
-                        {
-                            yield return guid;
-                        }
-                    }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                    if (!matchingAny.Any(matchingKey => cursor.Current.Key.Data.AsGuid() == matchingKey))
+                        yield return cursor.Current.Key.Data.AsGuid();
                 }
             }
             finally

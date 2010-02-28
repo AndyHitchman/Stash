@@ -53,7 +53,7 @@ namespace Stash.In.BDB
             throw new NotImplementedException();
         }
 
-        public INoneOfQuery<TKey> NoneOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
+        public INotAnyOfQuery<TKey> NoneOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             throw new NotImplementedException();
         }

@@ -78,7 +78,7 @@ namespace Stash.Queries
             return Stash.Registry.BackingStore.QueryFactory.LessThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
-        public static INoneOfQuery<TKey> NoneOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
+        public static INotAnyOfQuery<TKey> NoneOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return Stash.Registry.BackingStore.QueryFactory.NoneOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
