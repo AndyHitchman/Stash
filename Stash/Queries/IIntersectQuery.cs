@@ -16,17 +16,7 @@
 
 #endregion
 
-namespace Stash.In.BDB.BerkeleyQueries
+namespace Stash.Queries
 {
-    using System;
-    using System.Collections.Generic;
-    using BerkeleyDB;
-    using Queries;
-
-    public interface IBerkeleyQuery : IQuery
-    {
-        QueryCostScale QueryCostScale { get; }
-        double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction);
-        IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction);
-    }
+    public interface IIntersectQuery : IQuery {}
 }

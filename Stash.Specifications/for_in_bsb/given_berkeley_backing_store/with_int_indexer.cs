@@ -11,7 +11,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     {
         protected RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         protected RegisteredIndexer<ClassWithTwoAncestors, int> registeredIndexer;
-        
+
         protected override void WithContext()
         {
             base.WithContext();

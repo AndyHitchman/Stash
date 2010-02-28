@@ -63,12 +63,12 @@ namespace Stash.In.BDB
             throw new NotImplementedException();
         }
 
-        public IAndQuery And(IQuery lhs, IQuery rhs)
+        public IIntersectQuery And(IQuery lhs, IQuery rhs)
         {
             throw new NotImplementedException();
         }
 
-        public IAndQuery Or(IQuery lhs, IQuery rhs)
+        public IIntersectQuery Or(IQuery lhs, IQuery rhs)
         {
             throw new NotImplementedException();
         }

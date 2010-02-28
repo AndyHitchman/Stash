@@ -25,7 +25,7 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class InsideQuery<TKey> : IBerkeleyQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class InsideQuery<TKey> : IBerkeleyIndexQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 32;
 

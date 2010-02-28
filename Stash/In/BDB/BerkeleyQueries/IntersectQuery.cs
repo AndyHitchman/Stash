@@ -25,40 +25,38 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class EqualToQuery<TKey> : IBerkeleyIndexQuery, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class IntersectQuery : IBerkeleyQuery, IIntersectQuery
     {
-        public EqualToQuery(IRegisteredIndexer indexer, TKey key)
-        {
-            Indexer = indexer;
-            Key = key;
-        }
+        private readonly IBerkeleyQuery lhs;
+        private readonly IBerkeleyQuery rhs;
+        private JoinExecutionOrder joinExecutionOrder;
 
-        public IRegisteredIndexer Indexer { get; private set; }
-        public TKey Key { get; private set; }
+        public IntersectQuery(IQuery lhs, IQuery rhs)
+        {
+            this.lhs = (IBerkeleyQuery)lhs;
+            this.rhs = (IBerkeleyQuery)rhs;
+        }
 
         public QueryCostScale QueryCostScale
         {
-            get { return QueryCostScale.SingleGet; }
+            get { return QueryCostScale.MultiGet; }
         }
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            return (double)QueryCostScale;
+            var lhsCost = lhs.EstimatedQueryCost(managedIndex, transaction);
+            var rhsCost = rhs.EstimatedQueryCost(managedIndex, transaction);
+            joinExecutionOrder = lhsCost < rhsCost ? JoinExecutionOrder.LeftFirst : JoinExecutionOrder.RightFirst;
+            return lhsCost + rhsCost;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            try
-            {
-                return managedIndex.Index
-                    .GetMultiple(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
-                    .Value
-                    .Select(graphKey => graphKey.Data.AsGuid());
-            }
-            catch(NotFoundException)
-            {
-                return Enumerable.Empty<Guid>();
-            }
+            //TODO: After we execute the cheaper side, pass the results to the other side to act as a filter.
+            //Will probably mean all queries need to be reworked.
+            //Ignore execution order for now.
+
+            return lhs.Execute(managedIndex, transaction).Intersect(rhs.Execute(managedIndex, transaction));
         }
     }
 }

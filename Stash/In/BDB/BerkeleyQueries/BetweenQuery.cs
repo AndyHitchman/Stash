@@ -25,7 +25,7 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class BetweenQuery<TKey> : IBerkeleyQuery, IBetweenQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class BetweenQuery<TKey> : IBerkeleyIndexQuery, IBetweenQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 32;
 

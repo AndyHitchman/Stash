@@ -22,6 +22,5 @@ namespace Stash.Queries
 
     public interface IQuery
     {
-        IRegisteredIndexer Indexer { get; }
     }
 }

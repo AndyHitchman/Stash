@@ -25,7 +25,7 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class GreaterThanEqualToQuery<TKey> : IBerkeleyQuery, IGreaterThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class GreaterThanEqualToQuery<TKey> : IBerkeleyIndexQuery, IGreaterThanEqualQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 32;
 

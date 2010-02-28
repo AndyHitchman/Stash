@@ -25,7 +25,7 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class AllOfQuery<TKey> : IBerkeleyQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class AllOfQuery<TKey> : IBerkeleyIndexQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         public AllOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {

@@ -26,7 +26,7 @@ namespace Stash.Specifications.for_in_bsb.given_berkeley_backing_store
     using In.BDB.BerkeleyConfigs;
     using Support;
 
-    public abstract class with_temp_dir : Specification<BerkeleyBackingStore>
+    public abstract class with_temp_dir : AutoMockedSpecification<BerkeleyBackingStore>
     {
         protected string TempDir;
 

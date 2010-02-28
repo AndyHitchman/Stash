@@ -25,7 +25,7 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class NotAllOfQuery<TKey> : IBerkeleyQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class NotAllOfQuery<TKey> : IBerkeleyIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 128;
 

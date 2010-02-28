@@ -16,7 +16,12 @@
 
 #endregion
 
-namespace Stash.Queries
+namespace Stash.In.BDB.BerkeleyQueries
 {
-    public interface IAndQuery : IQuery {}
+    using Configuration;
+
+    public interface IBerkeleyIndexQuery : IBerkeleyQuery
+    {
+        IRegisteredIndexer Indexer { get; }
+    }
 }
