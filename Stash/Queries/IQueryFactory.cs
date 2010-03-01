@@ -37,7 +37,7 @@ namespace Stash.Queries
         IOutsideQuery<TKey> Outside<TGraph, TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>;
         INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
         INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
-        IIntersectQuery And(IQuery lhs, IQuery rhs);
-        IIntersectQuery Or(IQuery lhs, IQuery rhs);
+        IIntersectOperator And(IQuery lhs, IQuery rhs);
+        IIntersectOperator Or(IQuery lhs, IQuery rhs);
     }
 }

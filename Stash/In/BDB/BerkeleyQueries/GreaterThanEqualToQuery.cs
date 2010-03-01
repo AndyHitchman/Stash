@@ -74,5 +74,16 @@ namespace Stash.In.BDB.BerkeleyQueries
                 cursor.Close();
             }
         }
+
+        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        {
+            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
+            return Execute(managedIndex, transaction);
+        }
+
+        public ILessThanQuery<TKey> GetComplementaryQuery()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

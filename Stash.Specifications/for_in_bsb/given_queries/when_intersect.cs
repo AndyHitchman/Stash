@@ -20,21 +20,19 @@ namespace Stash.Specifications.for_in_bsb.given_queries
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using In.BDB.BerkeleyQueries;
     using Rhino.Mocks;
-    using StructureMap.AutoMocking;
     using Support;
 
     public class when_intersect : Specification
     {
-        private IBerkeleyQuery lhs;
-        private IBerkeleyQuery rhs;
-        private IntersectQuery sut;
         private IEnumerable<Guid> actual;
-        private IEnumerable<Guid> lhsSet;
-        private IEnumerable<Guid> rhsSet;
         private Guid commonGuid;
+        private IBerkeleyQuery lhs;
+        private IEnumerable<Guid> lhsSet;
+        private IBerkeleyQuery rhs;
+        private IEnumerable<Guid> rhsSet;
+        private IntersectOperator sut;
 
         protected override void Given()
         {
@@ -45,10 +43,15 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             lhsSet = new[] {commonGuid, Guid.NewGuid()};
             rhsSet = new[] {Guid.NewGuid(), commonGuid};
 
+            //A bit weak. We're not sure which side will execute first: The second to execute 
+            //will call ExecuteInsideIntersect. Cheat by ignoring this and having the pair of methods
+            //return the same result.
             lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
+            lhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(lhsSet);
             rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
-            
-            sut = new IntersectQuery(lhs, rhs);
+            rhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(rhsSet);
+
+            sut = new IntersectOperator(lhs, rhs);
         }
 
         protected override void When()
@@ -57,15 +60,15 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_produce_the_intersect_of_the_two_sides()
-        {
-            actual.ShouldContain(commonGuid);
-        }
-
-        [Then]
         public void it_should_produce_only_elements_present_in_both_sides()
         {
             actual.ShouldHaveCount(1);
+        }
+
+        [Then]
+        public void it_should_produce_the_intersect_of_the_two_sides()
+        {
+            actual.ShouldContain(commonGuid);
         }
     }
 }

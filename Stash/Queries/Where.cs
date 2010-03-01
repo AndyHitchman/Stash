@@ -102,12 +102,12 @@ namespace Stash.Queries
             return Stash.Registry.BackingStore.QueryFactory.Outside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
         }
 
-        public static IIntersectQuery And(this IQuery lhs, IQuery rhs)
+        public static IIntersectOperator And(this IQuery lhs, IQuery rhs)
         {
             return Stash.Registry.BackingStore.QueryFactory.And(lhs, rhs);
         }
 
-        public static IIntersectQuery Or(this IQuery lhs, IQuery rhs)
+        public static IIntersectOperator Or(this IQuery lhs, IQuery rhs)
         {
             return Stash.Registry.BackingStore.QueryFactory.Or(lhs, rhs);
         }

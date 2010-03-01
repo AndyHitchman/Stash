@@ -51,6 +51,12 @@ namespace Stash.In.BDB.BerkeleyQueries
             return Set.Aggregate(Enumerable.Empty<Guid>(), (current, key) => current.Union(getMatching(managedIndex, key, transaction)));
         }
 
+        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        {
+            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
+            return Execute(managedIndex, transaction);
+        }
+
         private static IEnumerable<Guid> getMatching(ManagedIndex managedIndex, TKey key, Transaction transaction)
         {
             try
@@ -63,6 +69,11 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 return Enumerable.Empty<Guid>();
             }
+        }
+
+        public INotAnyOfQuery<TKey> GetComplementaryQuery()
+        {
+            return new NotAnyOfQuery<TKey>(Indexer, Set);
         }
     }
 }

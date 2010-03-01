@@ -25,16 +25,16 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class IntersectQuery : IBerkeleyQuery, IIntersectQuery
+    public class UnionOperator : IBerkeleyQuery, IUnionOperator
     {
         private readonly IBerkeleyQuery lhs;
         private readonly IBerkeleyQuery rhs;
         private JoinExecutionOrder joinExecutionOrder;
 
-        public IntersectQuery(IQuery lhs, IQuery rhs)
+        public UnionOperator(IBerkeleyQuery lhs, IBerkeleyQuery rhs)
         {
-            this.lhs = (IBerkeleyQuery)lhs;
-            this.rhs = (IBerkeleyQuery)rhs;
+            this.lhs = lhs;
+            this.rhs = rhs;
         }
 
         public QueryCostScale QueryCostScale
@@ -52,11 +52,14 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            //TODO: After we execute the cheaper side, pass the results to the other side to act as a filter.
-            //Will probably mean all queries need to be reworked.
-            //Ignore execution order for now.
+            return lhs.Execute(managedIndex, transaction).Union(rhs.Execute(managedIndex, transaction));
+        }
 
-            return lhs.Execute(managedIndex, transaction).Intersect(rhs.Execute(managedIndex, transaction));
+        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        {
+            return
+                lhs.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint)
+                    .Union(rhs.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint));
         }
     }
 }

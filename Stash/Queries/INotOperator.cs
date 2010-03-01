@@ -18,5 +18,5 @@
 
 namespace Stash.Queries
 {
-    public interface IIntersectQuery : IQuery {}
+    public interface INotOperator : IQuery {}
 }

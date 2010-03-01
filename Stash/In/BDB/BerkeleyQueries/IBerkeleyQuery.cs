@@ -28,5 +28,6 @@ namespace Stash.In.BDB.BerkeleyQueries
         QueryCostScale QueryCostScale { get; }
         double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction);
         IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction);
+        IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint);
     }
 }

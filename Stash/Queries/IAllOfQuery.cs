@@ -20,5 +20,5 @@ namespace Stash.Queries
 {
     using System;
 
-    public interface IAllOfQuery<TKey> : IQuery, IInverseQuery<INotAllOfQuery<TKey>> where TKey : IEquatable<TKey> {}
+    public interface IAllOfQuery<TKey> : IComplementaryQuery<INotAllOfQuery<TKey>>, ISetQuery<TKey> where TKey : IEquatable<TKey> {}
 }

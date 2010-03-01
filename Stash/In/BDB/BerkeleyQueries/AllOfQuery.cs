@@ -61,6 +61,12 @@ namespace Stash.In.BDB.BerkeleyQueries
                        : Set.Skip(1).Aggregate(matchingFirst, (current, key) => current.Intersect(getMatching(managedIndex, key, transaction)));
         }
 
+        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        {
+            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
+            return Execute(managedIndex, transaction);
+        }
+
         private static IEnumerable<Guid> getMatching(ManagedIndex managedIndex, TKey key, Transaction transaction)
         {
             try
@@ -87,6 +93,11 @@ namespace Stash.In.BDB.BerkeleyQueries
             {
                 return Enumerable.Empty<TKey>();
             }
+        }
+
+        public INotAllOfQuery<TKey> GetComplementaryQuery()
+        {
+            return new NotAllOfQuery<TKey>(Indexer, Set);
         }
     }
 }

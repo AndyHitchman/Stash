@@ -23,17 +23,16 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using System.Linq;
     using In.BDB.BerkeleyQueries;
     using Rhino.Mocks;
-    using StructureMap.AutoMocking;
     using Support;
 
     public class when_union : Specification
     {
-        private IBerkeleyQuery lhs;
-        private IBerkeleyQuery rhs;
-        private UnionQuery sut;
         private IEnumerable<Guid> actual;
+        private IBerkeleyQuery lhs;
         private IEnumerable<Guid> lhsSet;
+        private IBerkeleyQuery rhs;
         private IEnumerable<Guid> rhsSet;
+        private UnionOperator sut;
 
         protected override void Given()
         {
@@ -46,8 +45,8 @@ namespace Stash.Specifications.for_in_bsb.given_queries
 
             lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
             rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
-            
-            sut = new UnionQuery(lhs, rhs);
+
+            sut = new UnionOperator(lhs, rhs);
         }
 
         protected override void When()

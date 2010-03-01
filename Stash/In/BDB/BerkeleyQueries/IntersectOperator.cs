@@ -25,16 +25,16 @@ namespace Stash.In.BDB.BerkeleyQueries
     using Configuration;
     using Queries;
 
-    public class UnionQuery : IBerkeleyQuery, IIntersectQuery
+    public class IntersectOperator : IBerkeleyQuery, IIntersectOperator
     {
         private readonly IBerkeleyQuery lhs;
         private readonly IBerkeleyQuery rhs;
         private JoinExecutionOrder joinExecutionOrder;
 
-        public UnionQuery(IBerkeleyQuery lhs, IBerkeleyQuery rhs)
+        public IntersectOperator(IQuery lhs, IQuery rhs)
         {
-            this.lhs = lhs;
-            this.rhs = rhs;
+            this.lhs = (IBerkeleyQuery)lhs;
+            this.rhs = (IBerkeleyQuery)rhs;
         }
 
         public QueryCostScale QueryCostScale
@@ -52,11 +52,26 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            //TODO: After we execute the cheaper side, pass the results to the other side to act as a filter.
-            //Will probably mean all queries need to be reworked.
-            //Ignore execution order for now.
+            EstimatedQueryCost(managedIndex, transaction);
 
-            return lhs.Execute(managedIndex, transaction).Union(rhs.Execute(managedIndex, transaction));
+            var cheapQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? lhs : rhs;
+            var expensiveQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? rhs : lhs;
+
+            var cheapResults = cheapQuery.Execute(managedIndex, transaction).ToList();
+            var expensiveResults = expensiveQuery.ExecuteInsideIntersect(managedIndex, transaction, cheapResults);
+            return cheapResults.Intersect(expensiveResults);
+        }
+
+        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        {
+            EstimatedQueryCost(managedIndex, transaction);
+
+            var cheapQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? lhs : rhs;
+            var expensiveQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? rhs : lhs;
+
+            var cheapResults = cheapQuery.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint).ToList();
+            var expensiveResults = expensiveQuery.ExecuteInsideIntersect(managedIndex, transaction, cheapResults);
+            return cheapResults.Intersect(expensiveResults);
         }
     }
 }
