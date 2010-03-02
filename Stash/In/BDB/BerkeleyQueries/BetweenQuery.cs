@@ -84,7 +84,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            if (joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
+            if (joinConstraint.Count() < EstimatedQueryCost(managedIndex, transaction))
                 return Execute(managedIndex, transaction);
 
             return
