@@ -9,24 +9,25 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_equal_to : with_int_indexer
+    public class when_executing_greater_than_equal_to_with_only_greater_than : with_int_indexer
     {
-        private ITrackedGraph trackedGraph;
+        private ITrackedGraph greaterThanTrackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
         protected override void Given()
         {
-            trackedGraph = new TrackedGraph(
+            greaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
                 registeredGraph
                 );
 
-            Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
+            Subject.InTransactionDo(
+                _ => _.InsertGraph(greaterThanTrackedGraph));
 
-            query = new EqualToQuery<int>(registeredIndexer, 100);
+            query = new GreaterThanEqualToQuery<int>(registeredIndexer, 100);
         }
 
         protected override void When()
@@ -35,15 +36,9 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_get_the_only_graph_with_the_matching_index_key()
+        public void it_should_find_one()
         {
             actual.ShouldHaveCount(1);
-        }
-
-        [Then]
-        public void it_should_get_the_correct_graph()
-        {
-            actual.First().InternalId.ShouldEqual(trackedGraph.InternalId);
         }
     }
 }

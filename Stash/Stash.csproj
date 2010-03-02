@@ -67,6 +67,7 @@
     <Compile Include="In\BDB\BerkeleyQueries\BetweenQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\AnyOfQuery.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\AllOfQuery.cs" />
+    <Compile Include="In\BDB\BerkeleyQueries\IndexMatching.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\UnionOperator.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\IntersectOperator.cs" />
     <Compile Include="In\BDB\BerkeleyQueries\IBerkeleyQuery.cs" />

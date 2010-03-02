@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class NotAllOfQuery<TKey> : IBerkeleyIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 128;
+        private const int pageSizeBufferMultipler = 4;
 
         public NotAllOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
@@ -45,7 +45,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            return managedIndex.Index.FastStats().nPages * (double)QueryCostScale;
+            return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

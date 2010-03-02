@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_any_of : with_int_indexer
+    public class when_executing_all_of_having_a_smaller_number_of_graphs_than_keys_in_set : with_int_indexer
     {
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
@@ -23,14 +23,14 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             firstMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 101) },
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 102), new ProjectedIndex<int>(registeredIndexer, 101), new ProjectedIndex<int>(registeredIndexer, 100) },
                 registeredGraph
                 );
 
             secondMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 99) },
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 102), new ProjectedIndex<int>(registeredIndexer, 99), new ProjectedIndex<int>(registeredIndexer, 101), new ProjectedIndex<int>(registeredIndexer, 100) },
                 registeredGraph
                 );
 
@@ -44,7 +44,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             secondtNonMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 103) },
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 101) },
                 registeredGraph
                 );
 
@@ -57,7 +57,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                     _.InsertGraph(secondtNonMatchingTrackedGraph);
                 });
 
-            query = new AnyOfQuery<int>(registeredIndexer, new[] {101, 99});
+            query = new AllOfQuery<int>(registeredIndexer, new[] {102, 100, 101});
         }
 
         protected override void When()

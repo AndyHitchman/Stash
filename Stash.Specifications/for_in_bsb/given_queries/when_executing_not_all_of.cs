@@ -9,55 +9,55 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_any_of_having_query_key_that_doesnt_exist : with_int_indexer
+    public class when_executing_not_all_of : with_int_indexer
     {
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
-        private TrackedGraph firstMatchingTrackedGraph;
-        private TrackedGraph secondMatchingTrackedGraph;
+        private TrackedGraph thirdNonMatchingTrackedGraph;
+        private TrackedGraph matchingTrackedGraph;
         private TrackedGraph firstNonMatchingTrackedGraph;
-        private TrackedGraph secondtNonMatchingTrackedGraph;
+        private TrackedGraph secondNonMatchingTrackedGraph;
 
         protected override void Given()
         {
-            firstMatchingTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 101) },
-                registeredGraph
-                );
-
-            secondMatchingTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 99) },
-                registeredGraph
-                );
-
             firstNonMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 100) },
                 registeredGraph
                 );
-
-            secondtNonMatchingTrackedGraph = new TrackedGraph(
+            
+            matchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 103) },
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 99), new ProjectedIndex<int>(registeredIndexer, 101), new ProjectedIndex<int>(registeredIndexer, 100) },
+                registeredGraph
+                );
+            
+            thirdNonMatchingTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 101), new ProjectedIndex<int>(registeredIndexer, 100) },
+                registeredGraph
+                );
+
+            secondNonMatchingTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] { new ProjectedIndex<int>(registeredIndexer, 101) },
                 registeredGraph
                 );
 
             Subject.InTransactionDo(
                 _ =>
                 {
-                    _.InsertGraph(firstMatchingTrackedGraph);
-                    _.InsertGraph(secondMatchingTrackedGraph);
+                    _.InsertGraph(thirdNonMatchingTrackedGraph);
+                    _.InsertGraph(matchingTrackedGraph);
                     _.InsertGraph(firstNonMatchingTrackedGraph);
-                    _.InsertGraph(secondtNonMatchingTrackedGraph);
+                    _.InsertGraph(secondNonMatchingTrackedGraph);
                 });
 
-            query = new AnyOfQuery<int>(registeredIndexer, new[] {101, 98, 99});
+            query = new NotAllOfQuery<int>(registeredIndexer, new[] {101, 100});
         }
 
         protected override void When()
@@ -66,16 +66,15 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_two()
+        public void it_should_find_one()
         {
-            actual.ShouldHaveCount(2);
+            actual.ShouldHaveCount(1);
         }
 
         [Then]
         public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _.InternalId == firstMatchingTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == secondMatchingTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == matchingTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }

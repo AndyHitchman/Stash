@@ -25,7 +25,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Rhino.Mocks;
     using Support;
 
-    public class when_union : Specification
+    public class when_executing_union : Specification
     {
         private IEnumerable<Guid> actual;
         private IBerkeleyQuery lhs;

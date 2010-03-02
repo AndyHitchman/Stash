@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class OutsideQuery<TKey> : IBerkeleyIndexQuery, IOutsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 32;
+        private const int pageSizeBufferMultipler = 4;
 
         public OutsideQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
@@ -47,8 +47,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            return managedIndex.Index.FastStats().nPages *
-                   (double)QueryCostScale;
+            return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

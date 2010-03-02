@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_greater_than_equal_to_matches_none : with_int_indexer
+    public class when_executing_greater_than_equal_to_matches_none : with_int_indexer
     {
         private ITrackedGraph lessThanTrackedGraph;
         private IQuery query;

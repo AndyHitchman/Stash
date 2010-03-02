@@ -9,34 +9,43 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_outside_having_nothing_inside : with_int_indexer
+    public class when_executing_outside_nothing_matching : with_int_indexer
     {
-        private TrackedGraph lessThanTrackedGraph;
-        private TrackedGraph greaterThanTrackedGraph;
+        private TrackedGraph insideTrackedGraph;
+        private TrackedGraph lowerTrackedGraph;
+        private TrackedGraph upperTrackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
         protected override void Given()
         {
-            lessThanTrackedGraph = new TrackedGraph(
+            insideTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 99)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
                 registeredGraph
                 );
 
-            greaterThanTrackedGraph = new TrackedGraph(
+            lowerTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
+                registeredGraph
+                );
+
+            upperTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
                 registeredGraph
                 );
 
             Subject.InTransactionDo(
                 _ =>
                     {
-                        _.InsertGraph(lessThanTrackedGraph);
-                        _.InsertGraph(greaterThanTrackedGraph);
+                        _.InsertGraph(insideTrackedGraph);
+                        _.InsertGraph(lowerTrackedGraph);
+                        _.InsertGraph(upperTrackedGraph);
                     });
 
             query = new OutsideQuery<int>(registeredIndexer, 100, 102);
@@ -48,16 +57,9 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_two()
+        public void it_should_find_nothing()
         {
-            actual.ShouldHaveCount(2);
-        }
-
-        [Then]
-        public void it_should_get_the_correct_graphs()
-        {
-            actual.Any(_ => _.InternalId == lessThanTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
+            actual.ShouldHaveCount(0);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_not_equal_to : with_int_indexer
+    public class when_executing_not_equal_to : with_int_indexer
     {
         private TrackedGraph equaltrackedGraph;
         private ITrackedGraph notEqualtrackedGraph;

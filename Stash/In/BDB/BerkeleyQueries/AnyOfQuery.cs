@@ -48,27 +48,12 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            return Set.Aggregate(Enumerable.Empty<Guid>(), (current, key) => current.Union(getMatching(managedIndex, key, transaction)));
+            return Set.Aggregate(Enumerable.Empty<Guid>(), (current, key) => current.Union(IndexMatching.GetMatching(managedIndex, transaction, key)));
         }
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
             return Execute(managedIndex, transaction);
-        }
-
-        private static IEnumerable<Guid> getMatching(ManagedIndex managedIndex, TKey key, Transaction transaction)
-        {
-            try
-            {
-                return managedIndex.Index.GetMultiple(new DatabaseEntry(managedIndex.KeyAsByteArray(key)), (int)managedIndex.Index.Pagesize, transaction)
-                    .Value
-                    .Select(graphKey => graphKey.Data.AsGuid());
-            }
-            catch(NotFoundException)
-            {
-                return Enumerable.Empty<Guid>();
-            }
         }
 
         public INotAnyOfQuery<TKey> GetComplementaryQuery()

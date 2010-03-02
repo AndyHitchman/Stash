@@ -9,25 +9,24 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_less_than_equal_to_matches_none : with_int_indexer
+    public class when_executing_equal_to_is_false : with_int_indexer
     {
-        private TrackedGraph greaterThanTrackedGraph;
+        private ITrackedGraph trackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
         protected override void Given()
         {
-            greaterThanTrackedGraph = new TrackedGraph(
+            trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
                 registeredGraph
                 );
 
-            Subject.InTransactionDo(
-                _ => _.InsertGraph(greaterThanTrackedGraph));
+            Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
 
-            query = new LessThanEqualToQuery<int>(registeredIndexer, 100);
+            query = new EqualToQuery<int>(registeredIndexer, 99);
         }
 
         protected override void When()
@@ -36,7 +35,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_none()
+        public void it_should_not_find_anything()
         {
             actual.ShouldHaveCount(0);
         }

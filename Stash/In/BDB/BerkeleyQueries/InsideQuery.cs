@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class InsideQuery<TKey> : IBerkeleyIndexQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 32;
+        private const int pageSizeBufferMultipler = 4;
 
         public InsideQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
@@ -48,9 +48,8 @@ namespace Stash.In.BDB.BerkeleyQueries
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
             return (managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(UpperKey)), transaction).Less -
-                    managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater) *
-                   managedIndex.Index.FastStats().nPages *
-                   (double)QueryCostScale;
+                    (1 - managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater)) *
+                   managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)

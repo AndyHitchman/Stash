@@ -5,19 +5,21 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using System.Linq;
     using Engine;
     using given_berkeley_backing_store;
+    using In.BDB;
     using In.BDB.BerkeleyQueries;
     using Queries;
     using Support;
 
-    public class when_between : with_int_indexer
+    public class when_executing_between_inside_intersect : with_int_indexer
     {
         private TrackedGraph insideTrackedGraph;
         private TrackedGraph lowerTrackedGraph;
         private TrackedGraph upperTrackedGraph;
         private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
-        private IQuery query;
-        private IEnumerable<IStoredGraph> actual;
+        private IBerkeleyQuery query;
+        private IEnumerable<Guid> actual;
+        private Guid[] joinConstraint;
 
         protected override void Given()
         {
@@ -38,7 +40,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             upperTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
                 registeredGraph
                 );
 
@@ -52,7 +54,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             greaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 104)},
                 registeredGraph
                 );
 
@@ -64,28 +66,46 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                         _.InsertGraph(upperTrackedGraph);
                         _.InsertGraph(lessThanTrackedGraph);
                         _.InsertGraph(greaterThanTrackedGraph);
+
+                        //Generate some records
+                        for(var i = 0; i < 2000; i++)
+                        {
+                            _.InsertGraph(
+                                new TrackedGraph(
+                                    Guid.NewGuid(),
+                                    "letspretendthisisserialiseddata".Select(b => (byte)b),
+                                    new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
+                                    registeredGraph
+                                    ));
+                            
+                        }
                     });
 
-            query = new BetweenQuery<int>(registeredIndexer, 100, 102);
+            query = new BetweenQuery<int>(registeredIndexer, 100, 103);
+
+            joinConstraint = new[] { insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId };
         }
 
         protected override void When()
         {
-            actual = Subject.InTransactionDo(_ => _.Find(registeredGraph, query));
+            actual = Subject.InTransactionDo(
+                _ =>
+                {
+                    var bsw = (BerkeleyStorageWork)_;
+                    return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, joinConstraint).ToList();
+                });
         }
 
         [Then]
-        public void it_should_find_three()
+        public void it_should_find_one()
         {
-            actual.ShouldHaveCount(3);
+            actual.ShouldHaveCount(1);
         }
 
         [Then]
-        public void it_should_get_the_correct_graphs()
+        public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _.InternalId == lowerTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == insideTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == upperTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == insideTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }

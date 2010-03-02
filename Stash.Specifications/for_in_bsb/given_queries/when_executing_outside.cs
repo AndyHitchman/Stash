@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_inside : with_int_indexer
+    public class when_executing_outside : with_int_indexer
     {
         private TrackedGraph insideTrackedGraph;
         private TrackedGraph lowerTrackedGraph;
@@ -66,7 +66,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                         _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new InsideQuery<int>(registeredIndexer, 100, 102);
+            query = new OutsideQuery<int>(registeredIndexer, 100, 102);
         }
 
         protected override void When()
@@ -75,15 +75,16 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_should_find_one()
+        public void it_should_find_two()
         {
-            actual.ShouldHaveCount(1);
+            actual.ShouldHaveCount(2);
         }
 
         [Then]
         public void it_should_get_the_correct_graphs()
         {
-            actual.Any(_ => _.InternalId == insideTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == lessThanTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }

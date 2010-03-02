@@ -69,6 +69,7 @@ namespace Stash.In.BDB.BerkeleyQueries
             var cheapQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? lhs : rhs;
             var expensiveQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? rhs : lhs;
 
+            //Materialise cheap results now, as we don't know how the other side will use this. We want to prevent multiple enumerations.
             var cheapResults = cheapQuery.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint).ToList();
             var expensiveResults = expensiveQuery.ExecuteInsideIntersect(managedIndex, transaction, cheapResults);
             return cheapResults.Intersect(expensiveResults);

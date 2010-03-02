@@ -27,7 +27,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
     public class BetweenQuery<TKey> : IBerkeleyIndexQuery, IBetweenQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 32;
+        private const int pageSizeBufferMultipler = 4;
 
         public BetweenQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
@@ -48,9 +48,8 @@ namespace Stash.In.BDB.BerkeleyQueries
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
             return (managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(UpperKey)), transaction).Less -
-                    managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater) *
-                   managedIndex.Index.FastStats().nPages *
-                   (double)QueryCostScale;
+                    (1 - managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Greater)) *
+                   managedIndex.Index.FastStats().nPages / pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -85,8 +84,17 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
-            return Execute(managedIndex, transaction);
+            if (joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
+                return Execute(managedIndex, transaction);
+
+            return
+                joinConstraint.Aggregate(
+                    Enumerable.Empty<Guid>(),
+                    (keys, guid) => keys.Union(
+                        IndexMatching
+                            .GetReverseMatching<TKey>(managedIndex, transaction, guid)
+                            .Where(key => key.CompareTo(LowerKey) >= 0 & key.CompareTo(UpperKey) <= 0)
+                            .Select(_ => guid)));
         }
 
         public IOutsideQuery<TKey> GetComplementaryQuery()

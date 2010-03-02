@@ -63,7 +63,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
+            //Can't do better than this.
             return Execute(managedIndex, transaction);
         }
 

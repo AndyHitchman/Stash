@@ -48,51 +48,31 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            var matchingFirst = getMatching(managedIndex, Set.First(), transaction);
-            //If the number of graphs in the seed is less than the size of the set,
-            //then it should be quicker to hit the reverse index for all graphs and eliminate,
-            //rather than aggregrating the intersection.
-            return matchingFirst.Count() < Set.Count()
-                       ? matchingFirst.Where(internalId =>
-                                                 {
-                                                     var reverseMatching = getReverseMatching(managedIndex, internalId, transaction);
-                                                     return Set.All(key => reverseMatching.Contains(key));
-                                                 })
-                       : Set.Skip(1).Aggregate(matchingFirst, (current, key) => current.Intersect(getMatching(managedIndex, key, transaction)));
+            //The seed of the aggregate is the matches for the first element of the set. The remaineder of the set
+            //is passed as the comparison set.
+            var matchingFirst = IndexMatching.GetMatching(managedIndex, transaction, Set.First());
+            return execute(managedIndex, transaction, matchingFirst, Set.Skip(1));
         }
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
-            return Execute(managedIndex, transaction);
+            //The seed of the aggregate is the join constraint. The full set is passed as the comparison set.
+            return execute(managedIndex, transaction, joinConstraint, Set);
         }
 
-        private static IEnumerable<Guid> getMatching(ManagedIndex managedIndex, TKey key, Transaction transaction)
+        private IEnumerable<Guid> execute(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> seed, IEnumerable<TKey> comparisonSubset)
         {
-            try
-            {
-                return managedIndex.Index.GetMultiple(new DatabaseEntry(managedIndex.KeyAsByteArray(key)), (int)managedIndex.Index.Pagesize, transaction)
-                    .Value
-                    .Select(graphKey => graphKey.Data.AsGuid());
-            }
-            catch(NotFoundException)
-            {
-                return Enumerable.Empty<Guid>();
-            }
-        }
-
-        private static IEnumerable<TKey> getReverseMatching(ManagedIndex managedIndex, Guid guid, Transaction transaction)
-        {
-            try
-            {
-                return managedIndex.ReverseIndex.GetMultiple(new DatabaseEntry(guid.AsByteArray()), (int)managedIndex.Index.Pagesize, transaction)
-                    .Value
-                    .Select(graphKey => (TKey)managedIndex.ByteArrayAsKey(graphKey.Data));
-            }
-            catch(NotFoundException)
-            {
-                return Enumerable.Empty<TKey>();
-            }
+            //If the number of graphs in the constraint is less than the size of the set,
+            //then it should be quicker to hit the reverse index for all graphs and eliminate,
+            //rather than aggregrating the intersection.
+            return seed.Count() < Set.Count()
+                       ? seed.Where(
+                           internalId =>
+                               {
+                                   var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, transaction, internalId);
+                                   return Set.All(key => reverseMatching.Contains(key));
+                               })
+                       : comparisonSubset.Aggregate(seed, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, transaction, key)));
         }
 
         public INotAllOfQuery<TKey> GetComplementaryQuery()

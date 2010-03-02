@@ -9,9 +9,9 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using Queries;
     using Support;
 
-    public class when_greater_than_equal_to_with_only_greater_than : with_int_indexer
+    public class when_executing_greater_than_with_only_greater : with_int_indexer
     {
-        private ITrackedGraph greaterThanTrackedGraph;
+        private TrackedGraph greaterThanTrackedGraph;
         private IQuery query;
         private IEnumerable<IStoredGraph> actual;
 
@@ -27,7 +27,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
             Subject.InTransactionDo(
                 _ => _.InsertGraph(greaterThanTrackedGraph));
 
-            query = new GreaterThanEqualToQuery<int>(registeredIndexer, 100);
+            query = new GreaterThanQuery<int>(registeredIndexer, 100);
         }
 
         protected override void When()
@@ -39,6 +39,12 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         public void it_should_find_one()
         {
             actual.ShouldHaveCount(1);
+        }
+
+        [Then]
+        public void it_should_get_the_correct_graphs()
+        {
+            actual.Any(_ => _.InternalId == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }
