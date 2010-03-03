@@ -19,6 +19,7 @@
 namespace Stash.Specifications
 {
     using System;
+    using System.Collections.Generic;
     using Configuration;
     using Engine;
     using Queries;
@@ -46,6 +47,16 @@ namespace Stash.Specifications
         }
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count(IRegisteredGraph registeredGraph, IQuery query)
         {
             throw new NotImplementedException();
         }

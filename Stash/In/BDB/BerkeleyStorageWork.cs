@@ -55,12 +55,20 @@ namespace Stash.In.BDB
 
         public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
         {
-            var berkeleyQuery = (IBerkeleyIndexQuery)query;
-            var managedIndex = BackingStore.IndexDatabases[berkeleyQuery.Indexer.IndexName];
-            return berkeleyQuery
-                .Execute(managedIndex, Transaction)
+            return executeQuery(query)
                 .Select(internalId => Get(registeredGraph, internalId))
                 .ToList();
+        }
+
+        private IEnumerable<Guid> executeQuery(IQuery query) {
+            var berkeleyQuery = (IBerkeleyIndexQuery)query;
+            var managedIndex = BackingStore.IndexDatabases[berkeleyQuery.Indexer.IndexName];
+            return berkeleyQuery.Execute(managedIndex, Transaction);
+        }
+
+        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            return executeQuery(query).Count();
         }
 
         public IStoredGraph Get(IRegisteredGraph registeredGraph, Guid internalId)

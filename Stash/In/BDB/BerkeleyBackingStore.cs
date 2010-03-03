@@ -40,7 +40,7 @@ namespace Stash.In.BDB
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private bool isDisposed;
-        private BerkeleyQueryFactory queryFactory;
+        private readonly BerkeleyQueryFactory queryFactory;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
@@ -103,6 +103,11 @@ namespace Stash.In.BDB
         public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
         {
             return InTransactionDo(work => work.Find(registeredGraph, query));
+        }
+
+        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            return InTransactionDo(work => work.Count(registeredGraph, query));
         }
 
         public IQueryFactory QueryFactory

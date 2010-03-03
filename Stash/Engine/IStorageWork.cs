@@ -28,6 +28,7 @@ namespace Stash.Engine
     {
         void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
         IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
+        int Count(IRegisteredGraph registeredGraph, IQuery query);
         IStoredGraph Get(IRegisteredGraph registeredGraph, Guid internalId);
         void InsertGraph(ITrackedGraph trackedGraph);
         void UpdateGraph(ITrackedGraph trackedGraph);
