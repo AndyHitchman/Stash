@@ -46,7 +46,7 @@ namespace Stash.In.BDB.BerkeleyQueries
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
             return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Greater *
-                   managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
+                   managedIndex.Index.FastStats().nPages / pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
@@ -76,13 +76,24 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
-            return Execute(managedIndex, transaction);
+            if (joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
+                return Execute(managedIndex, transaction);
+
+            var comparer = managedIndex.Comparer;
+
+            return
+                joinConstraint.Aggregate(
+                    Enumerable.Empty<Guid>(),
+                    (keys, guid) => keys.Union(
+                        IndexMatching
+                            .GetReverseMatching<TKey>(managedIndex, transaction, guid)
+                            .Where(key => comparer.Compare(key, Key) >= 0)
+                            .Select(_ => guid)));
         }
 
         public ILessThanQuery<TKey> GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new LessThanQuery<TKey>(Indexer, Key);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using In.BDB.BerkeleyQueries;
     using Support;
 
-    public class when_executing_between_inside_intersect : with_int_indexer
+    public class when_executing_outside_inside_intersect : with_int_indexer
     {
         private TrackedGraph insideTrackedGraph;
         private TrackedGraph lowerTrackedGraph;
@@ -67,7 +67,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                         _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new BetweenQuery<int>(registeredIndexer, 100, 103);
+            query = new OutsideQuery<int>(registeredIndexer, 100, 103);
 
             joinConstraint = new[]
                 {
@@ -94,7 +94,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         [Then]
         public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _ == insideTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }

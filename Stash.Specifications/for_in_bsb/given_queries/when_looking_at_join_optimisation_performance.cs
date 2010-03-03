@@ -89,33 +89,54 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         }
 
         [Then]
-        public void it_run_faster_with_more_joins()
+        public void it_run_faster_with_a_small_number_of_pre_joins()
         {
-            var nonOptTime = new Stopwatch();
-            nonOptTime.Start();
-            var smallJoinConstraint = new[] { insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId };
+            var smallJoinConstraint = new[]
+                {
+                    insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId
+                }
+                .Union(Enumerable.Range(1, 50).Select(_ => Guid.NewGuid()))
+                .ToList();
+            var largeJoinConstraint = new[]
+                {
+                    insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
+                }
+                .Union(Enumerable.Range(1, 1000).Select(_ => Guid.NewGuid()))
+                .ToList();
+
+            //Run once and ignore
+            actual = Subject.InTransactionDo(
+                _ =>
+                {
+                    var bsw = (BerkeleyStorageWork)_;
+                    return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, largeJoinConstraint).ToList();
+                });
+
+            //Run once and ignore
             actual = Subject.InTransactionDo(
                 _ =>
                 {
                     var bsw = (BerkeleyStorageWork)_;
                     return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, smallJoinConstraint).ToList();
                 });
-            nonOptTime.Stop();
 
-            var optTime = new Stopwatch();
-            optTime.Start();
-            var largeJoinConstraint = new[]
-                {
-                    insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
-                    Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
-                    Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
-                    Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid()
-                };
+            var nonOptTime = new Stopwatch();
+            nonOptTime.Start();
             actual = Subject.InTransactionDo(
                 _ =>
                 {
                     var bsw = (BerkeleyStorageWork)_;
                     return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, largeJoinConstraint).ToList();
+                });
+            nonOptTime.Stop();
+
+            var optTime = new Stopwatch();
+            optTime.Start();
+            actual = Subject.InTransactionDo(
+                _ =>
+                {
+                    var bsw = (BerkeleyStorageWork)_;
+                    return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, smallJoinConstraint).ToList();
                 });
             optTime.Stop();
 

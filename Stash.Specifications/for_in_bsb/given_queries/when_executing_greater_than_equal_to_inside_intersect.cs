@@ -9,11 +9,11 @@ namespace Stash.Specifications.for_in_bsb.given_queries
     using In.BDB.BerkeleyQueries;
     using Support;
 
-    public class when_executing_between_inside_intersect : with_int_indexer
+    public class when_executing_greater_than_equal_to_inside_intersect : with_int_indexer
     {
-        private TrackedGraph insideTrackedGraph;
-        private TrackedGraph lowerTrackedGraph;
-        private TrackedGraph upperTrackedGraph;
+        private TrackedGraph equalToTrackedGraph;
+        private TrackedGraph secondLessThanTrackedGraph;
+        private TrackedGraph secondGreaterThanTrackedGraph;
         private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
         private IBerkeleyQuery query;
@@ -22,27 +22,6 @@ namespace Stash.Specifications.for_in_bsb.given_queries
 
         protected override void Given()
         {
-            insideTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
-                registeredGraph
-                );
-
-            lowerTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
-                );
-
-            upperTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
-                registeredGraph
-                );
-
             lessThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
@@ -50,28 +29,49 @@ namespace Stash.Specifications.for_in_bsb.given_queries
                 registeredGraph
                 );
 
+            secondLessThanTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
+                registeredGraph
+                );
+            
+            equalToTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
+                registeredGraph
+                );
+
             greaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 104)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
+                registeredGraph
+                );
+            
+            secondGreaterThanTrackedGraph = new TrackedGraph(
+                Guid.NewGuid(),
+                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
                 registeredGraph
                 );
 
             Subject.InTransactionDo(
                 _ =>
                     {
-                        _.InsertGraph(insideTrackedGraph);
-                        _.InsertGraph(lowerTrackedGraph);
-                        _.InsertGraph(upperTrackedGraph);
+                        _.InsertGraph(equalToTrackedGraph);
+                        _.InsertGraph(secondLessThanTrackedGraph);
+                        _.InsertGraph(secondGreaterThanTrackedGraph);
                         _.InsertGraph(lessThanTrackedGraph);
                         _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new BetweenQuery<int>(registeredIndexer, 100, 103);
+            query = new GreaterThanEqualToQuery<int>(registeredIndexer, 100);
 
             joinConstraint = new[]
                 {
-                    insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId, 
+                    equalToTrackedGraph.InternalId, lessThanTrackedGraph.InternalId, 
                 };
         }
 
@@ -94,7 +94,7 @@ namespace Stash.Specifications.for_in_bsb.given_queries
         [Then]
         public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _ == insideTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == equalToTrackedGraph.InternalId).ShouldBeTrue();
         }
     }
 }

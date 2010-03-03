@@ -69,7 +69,7 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public INotEqualToQuery<TKey> GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new NotEqualToQuery<TKey>(Indexer, Key);
         }
     }
 }

@@ -21,9 +21,9 @@ namespace Stash.In.BDB.BerkeleyQueries
     public enum QueryCostScale
     {
         SingleGet = 1,
-        MultiGet = 2,
-        ClosedRangeScan = 5,
-        OpenRangeScan = 10,
-        FullScan = 20,
+        MultiGet = 10,
+        ClosedRangeScan = 100,
+        OpenRangeScan = 150,
+        FullScan = 200,
     }
 }

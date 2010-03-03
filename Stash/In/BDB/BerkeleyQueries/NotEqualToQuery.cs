@@ -77,13 +77,25 @@ namespace Stash.In.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            //TODO: Think of a better approach than simply throwing away the advantage of the other half of the intersect.
-            return Execute(managedIndex, transaction);
+            if (joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
+                return Execute(managedIndex, transaction);
+
+            var comparer = managedIndex.Comparer;
+
+            return
+                joinConstraint.Except(
+                    joinConstraint.Aggregate(
+                        Enumerable.Empty<Guid>(),
+                        (keys, guid) => keys.Union(
+                            IndexMatching
+                                .GetReverseMatching<TKey>(managedIndex, transaction, guid)
+                                .Where(key => comparer.Compare(Key, key) == 0)
+                                .Select(_ => guid))));
         }
 
         public IEqualToQuery<TKey> GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new EqualToQuery<TKey>(Indexer, Key);
         }
     }
 }
