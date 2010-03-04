@@ -19,6 +19,7 @@
 namespace Stash
 {
     using System.Collections.Generic;
+    using BackingStore;
 
     public interface Map<TGraph, TKey, TValue> : Map<TGraph>
     {

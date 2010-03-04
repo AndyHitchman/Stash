@@ -19,6 +19,7 @@
 namespace Stash.Engine
 {
     using System;
+    using BackingStore;
     using Configuration;
 
     public class ProjectedIndex<TKey> : IProjectedIndex<TKey>

@@ -21,6 +21,7 @@ namespace Stash.Configuration
     using System;
     using System.IO;
     using System.Runtime.Serialization;
+    using BackingStore;
     using Engine;
 
     /// <summary>

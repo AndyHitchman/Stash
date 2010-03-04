@@ -53,15 +53,15 @@
     <Compile Include="Configuration\GraphContext.cs" />
     <Compile Include="Configuration\RegisteredGraph%271.cs" />
     <Compile Include="Configuration\RegisteredGraph.cs" />
-    <Compile Include="Engine\AttemptToGetWithWrongRegisteredGraphException.cs" />
-    <Compile Include="Engine\GraphForKeyNotFoundException.cs" />
-    <Compile Include="Engine\IStorageWork.cs" />
+    <Compile Include="BackingStore\AttemptToGetWithWrongRegisteredGraphException.cs" />
+    <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
+    <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\DefaultSessionFactory.cs" />
     <Compile Include="Engine\DefaultInternalSession.cs" />
-    <Compile Include="Engine\IBackingStore.cs" />
+    <Compile Include="BackingStore\IBackingStore.cs" />
     <Compile Include="Engine\InternalSession.cs" />
-    <Compile Include="Engine\ITrackedGraph`1.cs" />
-    <Compile Include="IIndex.cs" />
+    <Compile Include="BackingStore\ITrackedGraph`1.cs" />
+    <Compile Include="IIndex`1.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyDbExtensions.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\BetweenQuery.cs" />
@@ -110,16 +110,16 @@
     <Compile Include="BackingStore\BDB\IBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="BackingStore\BDB\ManagedIndex.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
-    <Compile Include="IProjectedIndex.cs" />
+    <Compile Include="BackingStore\IProjectedIndex.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Map.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IProjectedIndex`1.cs" />
-    <Compile Include="Engine\IStoredGraph.cs" />
-    <Compile Include="Engine\ITrackedGraph.cs" />
+    <Compile Include="BackingStore\IProjectedIndex`1.cs" />
+    <Compile Include="BackingStore\IStoredGraph.cs" />
+    <Compile Include="BackingStore\ITrackedGraph.cs" />
     <Compile Include="Engine\PersistenceEvents\DefaultPersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\PersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\Update.cs" />
@@ -138,21 +138,9 @@
     <Compile Include="Engine\ProjectedIndex.cs" />
     <Compile Include="Engine\Serializers\BSONSerializer.cs" />
     <Compile Include="Engine\Serializers\Serializer.cs" />
-    <Compile Include="Engine\StoredGraph.cs" />
-    <Compile Include="Engine\TrackedGraph.cs" />
+    <Compile Include="BackingStore\StoredGraph.cs" />
+    <Compile Include="BackingStore\TrackedGraph.cs" />
     <Compile Include="Engine\UnenlistedRepository.cs" />
-    <Compile Include="Projection%272.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Projection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Projector%272.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Projector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Queries\IClosedRangeQuery.cs" />
     <Compile Include="Queries\INotOperator.cs" />
     <Compile Include="Queries\IIntersectOperator.cs" />
@@ -176,9 +164,6 @@
     <Compile Include="Queries\IQuery.cs" />
     <Compile Include="Queries\IQueryFactory.cs" />
     <Compile Include="Queries\IValueQuery.cs" />
-    <Compile Include="Reduction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Queries\Where.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Repository.cs" />

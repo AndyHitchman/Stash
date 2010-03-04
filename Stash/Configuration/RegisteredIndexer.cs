@@ -20,6 +20,7 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using BackingStore;
     using Engine;
 
     public abstract class RegisteredIndexer<TGraph> : IRegisteredIndexer

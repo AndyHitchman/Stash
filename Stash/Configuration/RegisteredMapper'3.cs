@@ -20,6 +20,7 @@ namespace Stash.Configuration
 {
     using System.Collections.Generic;
     using System.Linq;
+    using BackingStore;
     using Engine;
 
     /// <summary>

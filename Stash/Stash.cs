@@ -19,6 +19,7 @@
 namespace Stash
 {
     using System;
+    using BackingStore;
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;

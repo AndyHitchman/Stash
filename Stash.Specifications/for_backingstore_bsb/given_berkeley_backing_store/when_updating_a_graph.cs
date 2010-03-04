@@ -20,6 +20,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
     using System.Linq;
+    using BackingStore;
     using BackingStore.BDB;
     using Configuration;
     using Engine;

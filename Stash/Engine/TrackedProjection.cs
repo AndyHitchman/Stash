@@ -20,6 +20,7 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
+    using BackingStore;
 
     public class TrackedProjection
     {

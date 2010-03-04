@@ -18,6 +18,7 @@
 
 namespace Stash.Specifications.for_configuration.given_registered_stash
 {
+    using BackingStore;
     using Configuration;
     using Engine;
     using NUnit.Framework;

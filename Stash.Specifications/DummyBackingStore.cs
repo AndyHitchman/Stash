@@ -20,6 +20,7 @@ namespace Stash.Specifications
 {
     using System;
     using System.Collections.Generic;
+    using BackingStore;
     using Configuration;
     using Engine;
     using Queries;

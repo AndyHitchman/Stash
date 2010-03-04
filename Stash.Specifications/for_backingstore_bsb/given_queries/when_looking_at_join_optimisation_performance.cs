@@ -22,6 +22,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
+    using BackingStore;
     using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyQueries;
     using Engine;

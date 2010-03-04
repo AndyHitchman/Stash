@@ -19,6 +19,7 @@
 namespace Stash.Engine
 {
     using System.Collections.Generic;
+    using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
