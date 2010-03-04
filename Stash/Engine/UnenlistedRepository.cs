@@ -18,8 +18,6 @@
 
 namespace Stash.Engine
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Provides access to and management of persistent aggregrate object graphs and derived projections.
     /// </summary>
@@ -33,8 +31,8 @@ namespace Stash.Engine
         /// <param name="graph"></param>
         void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
 
-//        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession session, params IFrom<TFromThis, TProjection>[] @from)
-//            where TFromThis : IFrom<TFromThis, TProjection>;
+        //        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession session, params IFrom<TFromThis, TProjection>[] @from)
+        //            where TFromThis : IFrom<TFromThis, TProjection>;
 
         /// <summary>
         /// Get the <see cref="Tracker"/> for a persisted aggregate object graph.

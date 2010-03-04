@@ -20,6 +20,5 @@ namespace Stash.Queries
 {
     using System;
 
-    public interface ILessThanQuery<TKey> : IOpenRangeQuery<TKey>, IComplementaryQuery<IGreaterThanEqualQuery<TKey>> where TKey : IComparable<TKey>
-    { }
+    public interface ILessThanQuery<TKey> : IOpenRangeQuery<TKey>, IComplementaryQuery<IGreaterThanEqualQuery<TKey>> where TKey : IComparable<TKey> {}
 }

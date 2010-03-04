@@ -18,10 +18,8 @@
 
 namespace Stash.Specifications
 {
-    using Engine;
-
-//    public class DummyFrom : From<DummyFrom, object, DummyPersistentObject>
-//    {
-//        public DummyFrom(ProjectedIndex<object> projector) : base(projector) {}
-//    }
+    //    public class DummyFrom : From<DummyFrom, object, DummyPersistentObject>
+    //    {
+    //        public DummyFrom(ProjectedIndex<object> projector) : base(projector) {}
+    //    }
 }

@@ -18,8 +18,6 @@
 
 namespace Stash
 {
-    using System.Collections.Generic;
-
     public interface Repository
     {
         /// <summary>
@@ -45,8 +43,7 @@ namespace Stash
         /// <typeparam name="TFromThis"></typeparam>
         /// <param name="from"></param>
         /// <returns></returns>
-//        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params IFrom<TFromThis, TProjection>[] @from) where TFromThis : IFrom<TFromThis, TProjection>;
-
+        //        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params IFrom<TFromThis, TProjection>[] @from) where TFromThis : IFrom<TFromThis, TProjection>;
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
         /// </summary>

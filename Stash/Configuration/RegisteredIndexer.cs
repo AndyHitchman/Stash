@@ -24,6 +24,9 @@ namespace Stash.Configuration
 
     public abstract class RegisteredIndexer<TGraph> : IRegisteredIndexer
     {
+        public abstract Type IndexType { get; }
+        public abstract string IndexName { get; }
+        public abstract Type YieldType { get; }
         public abstract void EngageBackingStore(IBackingStore backingStore);
 
         /// <summary>
@@ -31,9 +34,5 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         public abstract IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph);
-
-        public abstract Type IndexType { get; }
-        public abstract string IndexName { get; }
-        public abstract Type YieldType { get; }
     }
 }

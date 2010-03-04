@@ -18,9 +18,5 @@
 
 namespace Stash.Queries
 {
-    using Configuration;
-
-    public interface IQuery
-    {
-    }
+    public interface IQuery {}
 }

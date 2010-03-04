@@ -18,8 +18,6 @@
 
 namespace Stash.Engine
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// The default implementation of <see cref="EnlistedRepository"/> delegates all requests to a
     /// provided <see cref="UnenlistedRepository"/> using the <see cref="EnlistedSession"/>.
@@ -48,10 +46,10 @@ namespace Stash.Engine
             underlyingUnenlistedRepository.Delete(enlistedSession, graph);
         }
 
-//        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params IFrom<TFromThis, TProjection>[] from) where TFromThis : IFrom<TFromThis, TProjection>
-//        {
-//            return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
-//        }
+        //        public IEnumerable<TProjection> Fetch<TFromThis, TProjection>(params IFrom<TFromThis, TProjection>[] from) where TFromThis : IFrom<TFromThis, TProjection>
+        //        {
+        //            return underlyingUnenlistedRepository.Fetch(enlistedSession, from);
+        //        }
 
         public Tracker GetTrackerFor<TGraph>(TGraph graph) where TGraph : class
         {

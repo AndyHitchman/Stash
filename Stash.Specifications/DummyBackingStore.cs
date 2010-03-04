@@ -26,27 +26,17 @@ namespace Stash.Specifications
 
     public class DummyBackingStore : IBackingStore
     {
-        public void EnsureIndex(IRegisteredIndexer registeredIndexer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
-        {
-            throw new NotImplementedException();
-        }
-
         public IQueryFactory QueryFactory
         {
             get { throw new NotImplementedException(); }
         }
 
-        public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
+        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
             throw new NotImplementedException();
         }
@@ -56,7 +46,17 @@ namespace Stash.Specifications
             throw new NotImplementedException();
         }
 
-        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InTransactionDo(Action<IStorageWork> storageWorkActions)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             throw new NotImplementedException();
         }

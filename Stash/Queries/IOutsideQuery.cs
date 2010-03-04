@@ -20,5 +20,5 @@ namespace Stash.Queries
 {
     using System;
 
-    public interface IOutsideQuery<TKey> : IClosedRangeQuery<TKey> where TKey : IComparable<TKey> { }
+    public interface IOutsideQuery<TKey> : IClosedRangeQuery<TKey> where TKey : IComparable<TKey> {}
 }

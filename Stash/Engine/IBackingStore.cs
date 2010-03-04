@@ -25,12 +25,12 @@ namespace Stash.Engine
 
     public interface IBackingStore
     {
-        void EnsureIndex(IRegisteredIndexer registeredIndexer);
-        IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
         IQueryFactory QueryFactory { get; }
-        void InTransactionDo(Action<IStorageWork> storageWorkActions);
-        TReturn InTransactionDo<TReturn>(Func<IStorageWork,TReturn> storageWorkFunction);
-        IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
         int Count(IRegisteredGraph registeredGraph, IQuery query);
+        void EnsureIndex(IRegisteredIndexer registeredIndexer);
+        IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
+        IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
+        void InTransactionDo(Action<IStorageWork> storageWorkActions);
+        TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction);
     }
 }

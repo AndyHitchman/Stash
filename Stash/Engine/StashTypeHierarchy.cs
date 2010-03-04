@@ -29,7 +29,8 @@ namespace Stash.Engine
             {
                 yield return t.FullName;
                 t = t.BaseType;
-            } while(t != null && t != typeof(object));
+            }
+            while(t != null && t != typeof(object));
         }
 
         public IEnumerable<string> Yield(Type t)

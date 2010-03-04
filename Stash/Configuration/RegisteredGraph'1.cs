@@ -18,10 +18,9 @@
 
 namespace Stash.Configuration
 {
-    using System;
     using System.Collections.Generic;
-    using Engine;
     using System.Linq;
+    using Engine;
 
     /// <summary>
     /// A configured object graph.
