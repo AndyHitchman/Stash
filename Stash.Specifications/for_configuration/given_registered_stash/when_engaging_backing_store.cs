@@ -23,6 +23,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
     using Engine;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
 
     [TestFixture]
     public class when_engaging_backing_store

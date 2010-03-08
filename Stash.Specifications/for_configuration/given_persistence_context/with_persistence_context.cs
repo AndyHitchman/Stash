@@ -20,6 +20,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
 {
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     public class with_persistence_context
     {

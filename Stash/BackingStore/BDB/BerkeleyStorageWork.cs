@@ -109,16 +109,22 @@ namespace Stash.BackingStore.BDB
                 managedIndex.ReverseIndex
                     .GetMultiple(graphKey, (int)managedIndex.ReverseIndex.Pagesize, Transaction);
 
-            Action<Cursor> actOnIndexEntry =
-                cursor =>
-                    {
-                        if(cursor.Current.Value.Data.SequenceEqual(graphKey.Data))
-                            cursor.Delete();
-                    };
-
             //In the forward index, get all keys for each reverse index value and delete the record if the value matches 
             //the internal id of the graph we are deleting.
-            onEachForwardIndexEntry(managedIndex, allKeysInIndex, actOnIndexEntry);
+            foreach(var cursor in
+                from indexKey in allKeysInIndex.Value
+                let c = managedIndex.Index.Cursor(new CursorConfig(), Transaction)
+                where c.Move(indexKey, true)
+                select c)
+            {
+                do
+                {
+                    if(cursor.Current.Value.Data.SequenceEqual(graphKey.Data)) cursor.Delete();
+                }
+                while (cursor.MoveNextDuplicate());
+
+                cursor.Close();
+            }
 
             managedIndex.ReverseIndex.Delete(graphKey, Transaction);
         }
@@ -217,23 +223,6 @@ namespace Stash.BackingStore.BDB
                         new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
                         new DatabaseEntry(type.AsByteArray()),
                         Transaction);
-            }
-        }
-
-        private void onEachForwardIndexEntry(
-            ManagedIndex managedIndex, KeyValuePair<DatabaseEntry, MultipleDatabaseEntry> reverseIndexKey, Action<Cursor> actOnIndexEntry)
-        {
-            foreach(var cursor in
-                from indexKey in reverseIndexKey.Value
-                let cursor = managedIndex.Index.Cursor(new CursorConfig(), Transaction)
-                where cursor.Move(indexKey, true)
-                select cursor)
-            {
-                do
-                    actOnIndexEntry(cursor);
-                while(cursor.MoveNextDuplicate());
-
-                cursor.Close();
             }
         }
 

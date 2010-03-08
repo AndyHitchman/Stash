@@ -21,6 +21,7 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
     using Configuration;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Support;
 
     [TestFixture]
     public class when_engaging_backing_store

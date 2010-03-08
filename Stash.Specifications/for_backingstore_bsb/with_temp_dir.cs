@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
+namespace Stash.Specifications.for_backingstore_bsb
 {
     using System;
     using System.IO;

@@ -16,16 +16,18 @@
 
 #endregion
 
-namespace Stash.Specifications
+namespace Stash
 {
     using System;
-    using System.Collections.Generic;
+    using System.IO;
 
-    public class StringIndex : IIndex<ClassWithTwoAncestors, string>
+    /// <summary>
+    /// An interface that conveniently groups serialization and deserialization functions.
+    /// Implement to provide customised behaviour or alternative serialization strategies.
+    /// </summary>
+    public interface ICustomSerializer<TGraph>
     {
-        public IEnumerable<string> Yield(ClassWithTwoAncestors graph)
-        {
-            throw new NotImplementedException();
-        }
+        Func<byte[], TGraph> Deserializer();
+        Func<TGraph, byte[]> Serializer();
     }
 }

@@ -25,11 +25,11 @@ namespace Stash.BackingStore.BDB.BerkeleyConfigs
         public ReverseIndexDatabaseConfig()
         {
             Creation = CreatePolicy.IF_NEEDED;
-            Duplicates = DuplicatesPolicy.SORTED;
+            Duplicates = DuplicatesPolicy.UNSORTED;
             FreeThreaded = true;
             ReadUncommitted = true;
             AutoCommit = true;
-            HashComparison = (dbt1, dbt2) => dbt1.Data.AsGuid().CompareTo(dbt2.Data.AsGuid());
+//            HashComparison = (dbt1, dbt2) => dbt1.Data.AsGuid().CompareTo(dbt2.Data.AsGuid());
         }
     }
 }

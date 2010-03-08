@@ -29,6 +29,7 @@ namespace Stash.BackingStore.BDB.BerkeleyConfigs
             FreeThreaded = true;
             ReadUncommitted = true;
             AutoCommit = true;
+//            HashComparison = (dbt1, dbt2) => dbt1.Data.AsGuid().CompareTo(dbt2.Data.AsGuid());
         }
     }
 }

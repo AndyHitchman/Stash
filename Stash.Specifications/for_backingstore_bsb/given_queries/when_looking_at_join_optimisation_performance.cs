@@ -79,6 +79,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             Subject.InTransactionDo(
                 _ =>
                     {
+                        var bbs = ((BerkeleyStorageWork)_).BackingStore;
                         _.InsertGraph(insideTrackedGraph);
                         _.InsertGraph(lowerTrackedGraph);
                         _.InsertGraph(upperTrackedGraph);
@@ -106,6 +107,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         [Then]
         public void it_run_faster_with_a_small_number_of_pre_joins()
         {
+            Console.WriteLine("Testing");
             var smallJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId

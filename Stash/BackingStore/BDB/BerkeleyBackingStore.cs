@@ -117,16 +117,20 @@ namespace Stash.BackingStore.BDB
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
             var storageWork = new BerkeleyStorageWork(this);
-            try
-            {
+//            try
+//            {
                 storageWorkActions(storageWork);
                 storageWork.Commit();
-            }
-            catch
-            {
-                storageWork.Abort();
-                throw;
-            }
+//            }
+//            catch
+//            {
+//                try
+//                {
+//                    storageWork.Abort();
+//                }
+//                catch{}
+//                throw;
+//            }
         }
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
