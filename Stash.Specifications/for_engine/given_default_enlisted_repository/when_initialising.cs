@@ -29,8 +29,8 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         [Test]
         public void it_should_operate_in_the_context_of_the_enlisting_session()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
+            var mockUnenlistedRepository = MockRepository.GenerateMock<IUnenlistedRepository>();
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
 
             sut.EnlistedSession.ShouldEqual(mockSession);

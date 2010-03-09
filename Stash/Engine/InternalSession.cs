@@ -19,50 +19,147 @@
 namespace Stash.Engine
 {
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
     using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
-    public interface InternalSession : Session
+    public class InternalSession : IInternalSession
     {
-        /// <summary>
-        /// The registered configuration.
-        /// </summary>
-        Registry Registry { get; }
+        protected readonly List<IPersistenceEvent> enrolledPersistenceEvents;
+        private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        /// <summary>
-        /// The engaged backing store.
-        /// </summary>
-        IBackingStore BackingStore { get; }
+        public InternalSession(Registry registry, IPersistenceEventFactory persistenceEventFactory)
+        {
+            Registry = registry;
+            PersistenceEventFactory = persistenceEventFactory;
+            InternalRepository = new DefaultUnenlistedRepository();
+            enrolledPersistenceEvents = new List<IPersistenceEvent>();
+        }
 
-        /// <summary>
-        /// An internal repository for use by the session.
-        /// </summary>
-        UnenlistedRepository InternalRepository { get; }
+        public IUnenlistedRepository InternalRepository { get; private set; }
 
-        /// <summary>
-        /// Persistence events enrolled in the session.
-        /// </summary>
-        IEnumerable<PersistenceEvent> EnrolledPersistenceEvents { get; }
+        public Registry Registry { get; private set; }
+        public IPersistenceEventFactory PersistenceEventFactory { get; set; }
 
-        /// <summary>
-        /// Graphs tracked by the session.
-        /// </summary>
-        IEnumerable<object> TrackedGraphs { get; }
+        public IBackingStore BackingStore
+        {
+            get { return Registry.BackingStore; }
+        }
 
-        PersistenceEventFactory PersistenceEventFactory { get; set; }
+        public virtual IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents
+        {
+            get
+            {
+                enrolledPersistenceEventsLocker.EnterReadLock();
+                try
+                {
+                    return enrolledPersistenceEvents.ToList();
+                }
+                finally
+                {
+                    enrolledPersistenceEventsLocker.ExitReadLock();
+                }
+            }
+        }
 
-        /// <summary>
-        /// Manage the persistence event.
-        /// </summary>
-        /// <param name="persistenceEvent"></param>
-        void Enroll(PersistenceEvent persistenceEvent);
+        public virtual IEnumerable<object> TrackedGraphs
+        {
+            get
+            {
+                enrolledPersistenceEventsLocker.EnterReadLock();
+                try
+                {
+                    return enrolledPersistenceEvents.Select(_ => _.UntypedGraph).ToList();
+                }
+                finally
+                {
+                    enrolledPersistenceEventsLocker.ExitReadLock();
+                }
+            }
+        }
 
-        /// <summary>
-        /// True if the graph is being tracked by this session.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        bool GraphIsTracked(object graph);
+        public void Abandon()
+        {
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                enrolledPersistenceEvents.Clear();
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
+        }
+
+        public virtual void Complete()
+        {
+            while(enrolledPersistenceEvents.Any())
+            {
+                phaseComplete();
+            }
+        }
+
+        public virtual void Dispose()
+        {
+            Complete();
+        }
+
+        public virtual EnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository)
+        {
+            return new DefaultEnlistedRepository(this, unenlistedRepository);
+        }
+
+        public void Enroll(IPersistenceEvent persistenceEvent)
+        {
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                foreach(
+                    var @event in
+                        enrolledPersistenceEvents.Where(_ => ReferenceEquals(persistenceEvent.UntypedGraph, _.UntypedGraph)))
+                {
+                    //TODO: Act on answer (determine whether answer is ever useful.)
+                    persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
+                }
+                enrolledPersistenceEvents.Add(persistenceEvent);
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
+        }
+
+        public bool GraphIsTracked(object graph)
+        {
+            return TrackedGraphs.Any(o => ReferenceEquals(o, graph));
+        }
+
+        public virtual IInternalSession Internalize()
+        {
+            return this;
+        }
+
+        private void phaseComplete()
+        {
+            List<IPersistenceEvent> drain;
+
+            enrolledPersistenceEventsLocker.EnterWriteLock();
+            try
+            {
+                drain = enrolledPersistenceEvents.ToList();
+                enrolledPersistenceEvents.Clear();
+            }
+            finally
+            {
+                enrolledPersistenceEventsLocker.ExitWriteLock();
+            }
+
+            foreach(var @event in drain)
+            {
+                @event.Complete();
+            }
+        }
     }
 }

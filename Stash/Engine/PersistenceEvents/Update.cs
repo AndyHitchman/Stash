@@ -39,7 +39,7 @@ namespace Stash.Engine.PersistenceEvents
             get { return trackEvent.Graph; }
         }
 
-        public InternalSession Session
+        public IInternalSession Session
         {
             get { return trackEvent.Session; }
         }
@@ -54,7 +54,7 @@ namespace Stash.Engine.PersistenceEvents
             Session.Enroll(this);
         }
 
-        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeRetained;
         }

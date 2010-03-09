@@ -16,19 +16,14 @@
 
 #endregion
 
-namespace Stash.Specifications.for_engine.given_default_internal_session
+namespace Stash
 {
-    using System.Collections.Generic;
-    using Engine;
-    using Engine.PersistenceEvents;
-
-    internal class StandInDefaultInternalSession : DefaultInternalSession
+    public interface ISessionFactory
     {
-        public StandInDefaultInternalSession() : base(null, null) {}
-
-        public List<PersistenceEvent> ExposedPersistenceEvents
-        {
-            get { return enrolledPersistenceEvents; }
-        }
+        /// <summary>
+        /// Get a session.
+        /// </summary>
+        /// <returns></returns>
+        ISession GetSession();
     }
 }

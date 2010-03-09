@@ -18,7 +18,7 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
-    public interface PersistenceEvent<TGraph> : PersistenceEvent
+    public interface PersistenceEvent<TGraph> : IPersistenceEvent
     {
         /// <summary>
         /// The typed graph.
@@ -28,6 +28,6 @@ namespace Stash.Engine.PersistenceEvents
         /// <summary>
         /// The internal session to which the persistence event belongs.
         /// </summary>
-        InternalSession Session { get; }
+        IInternalSession Session { get; }
     }
 }

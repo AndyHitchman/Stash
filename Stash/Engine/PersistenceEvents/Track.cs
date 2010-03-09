@@ -35,7 +35,7 @@ namespace Stash.Engine.PersistenceEvents
 
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
 
-        public Track(Guid internalId, TGraph graph, Stream serializedGraph, InternalSession session)
+        public Track(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session)
         {
             InternalId = internalId;
             Graph = graph;
@@ -64,7 +64,7 @@ namespace Stash.Engine.PersistenceEvents
         /// <summary>
         /// The internal session to which the persistence event belongs.
         /// </summary>
-        public InternalSession Session { get; private set; }
+        public IInternalSession Session { get; private set; }
 
         /// <summary>
         /// Get the untypes graph.
@@ -132,7 +132,7 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void PrepareEnrollment() {}
 
-        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeRetained;
         }

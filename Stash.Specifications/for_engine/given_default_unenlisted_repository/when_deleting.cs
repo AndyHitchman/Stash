@@ -32,7 +32,7 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
         [Test]
         public void it_should_ensure_that_the_registry_is_managing_the_graph_type()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
@@ -47,9 +47,9 @@ namespace Stash.Specifications.for_engine.given_default_unenlisted_repository
         [Test]
         public void it_should_make_the_event_via_the_persistence_event_factory()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
             var sut = new DefaultUnenlistedRepository();
             var graph = new DummyPersistentObject();
             var mockDestroy = MockRepository.GenerateStub<Destroy<DummyPersistentObject>>(Guid.Empty, null, null);

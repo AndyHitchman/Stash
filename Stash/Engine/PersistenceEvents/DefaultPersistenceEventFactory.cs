@@ -21,14 +21,14 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using System.IO;
 
-    public class DefaultPersistenceEventFactory : PersistenceEventFactory
+    public class DefaultPersistenceEventFactory : IPersistenceEventFactory
     {
-        public Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, InternalSession session)
+        public Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session)
         {
             return new Destroy<TGraph>(internalId, graph, session);
         }
 
-        public Endure<TGraph> MakeEndure<TGraph>(TGraph graph, InternalSession session)
+        public Endure<TGraph> MakeEndure<TGraph>(TGraph graph, IInternalSession session)
         {
             return new Endure<TGraph>(graph, session);
         }
@@ -38,7 +38,7 @@ namespace Stash.Engine.PersistenceEvents
             return new Insert<TGraph>(endure);
         }
 
-        public Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, InternalSession session)
+        public Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session)
         {
             return new Track<TGraph>(internalId, graph, serializedGraph, session);
         }

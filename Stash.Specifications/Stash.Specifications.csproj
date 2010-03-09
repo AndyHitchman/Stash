@@ -140,7 +140,7 @@
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track.cs" />
     <Compile Include="for_engine\given_default_enlisted_repository\when_initialising.cs" />
     <Compile Include="for_engine\given_default_enlisted_repository\when_doing_work.cs" />
-    <Compile Include="for_engine\given_default_internal_session\StandInDefaultInternalSession.cs" />
+    <Compile Include="for_engine\given_default_internal_session\StandInInternalSession.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_complete.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_enroll.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_abandon.cs" />

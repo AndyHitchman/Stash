@@ -22,11 +22,10 @@ namespace Stash
     using BackingStore;
     using Configuration;
     using Engine;
-    using Engine.PersistenceEvents;
 
-    public static class Stash
+    public static class Kernel
     {
-        public static SessionFactory SessionFactory { get; private set; }
+        public static ISessionFactory SessionFactory { get; private set; }
 
         public static Registry Registry { get; set; }
 
@@ -38,7 +37,7 @@ namespace Stash
             registrar.PerformRegistration(configurationAction);
             registrar.ApplyRegistration();
             Registry = registrar.Registry;
-            SessionFactory = new DefaultSessionFactory(registrar.Registry, new DefaultPersistenceEventFactory());
+            SessionFactory = new SessionFactory();
         }
     }
 }

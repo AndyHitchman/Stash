@@ -21,7 +21,7 @@ namespace Stash.Engine
     /// <summary>
     /// Provides access to and management of persistent aggregrate object graphs and derived projections.
     /// </summary>
-    public interface UnenlistedRepository : Repository
+    public interface IUnenlistedRepository : Repository
     {
         /// <summary>
         /// Instruct the repository to delete the graph from the persistent store.
@@ -29,7 +29,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="session"></param>
         /// <param name="graph"></param>
-        void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
+        void Delete<TGraph>(IInternalSession session, TGraph graph) where TGraph : class;
 
         //        IEnumerable<TProjection> Fetch<TFromThis, TProjection>(InternalSession session, params IFrom<TFromThis, TProjection>[] @from)
         //            where TFromThis : IFrom<TFromThis, TProjection>;
@@ -44,7 +44,7 @@ namespace Stash.Engine
         /// <param name="session"></param>
         /// <param name="graph"></param>
         /// <returns></returns>
-        Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
+        Tracker GetTrackerFor<TGraph>(IInternalSession session, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Instruct the repository to durably persist the <paramref name="graph"/>.
@@ -52,14 +52,14 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="session"></param>
         /// <param name="graph"></param>
-        void Persist<TGraph>(InternalSession session, TGraph graph) where TGraph : class;
+        void Persist<TGraph>(IInternalSession session, TGraph graph) where TGraph : class;
 
         /// <summary>
         /// Reconnect a <see cref="Tracker"/> to this session.
         /// </summary>
         /// <param name="session"></param>
         /// <param name="tracker"></param>
-        void ReconnectTracker(InternalSession session, Tracker tracker);
+        void ReconnectTracker(IInternalSession session, Tracker tracker);
 
         //        IEnumerable<Projection<TKey, TProjection>> Fetch<TFromThis, TKey, TProjection>(InternalSession session, From<TFromThis, TKey, TProjection> @from) where TFromThis : From<TFromThis, TKey, TProjection>;
     }

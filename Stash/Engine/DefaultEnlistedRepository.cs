@@ -20,14 +20,14 @@ namespace Stash.Engine
 {
     /// <summary>
     /// The default implementation of <see cref="EnlistedRepository"/> delegates all requests to a
-    /// provided <see cref="UnenlistedRepository"/> using the <see cref="EnlistedSession"/>.
+    /// provided <see cref="IUnenlistedRepository"/> using the <see cref="EnlistedSession"/>.
     /// </summary>
     public class DefaultEnlistedRepository : EnlistedRepository
     {
-        private readonly InternalSession enlistedSession;
-        private readonly UnenlistedRepository underlyingUnenlistedRepository;
+        private readonly IInternalSession enlistedSession;
+        private readonly IUnenlistedRepository underlyingUnenlistedRepository;
 
-        public DefaultEnlistedRepository(InternalSession enlistToSession, UnenlistedRepository unenlistedRepository)
+        public DefaultEnlistedRepository(IInternalSession enlistToSession, IUnenlistedRepository unenlistedRepository)
         {
             underlyingUnenlistedRepository = unenlistedRepository;
             enlistedSession = enlistToSession;
@@ -36,7 +36,7 @@ namespace Stash.Engine
         /// <summary>
         /// The session this repository is enlisted to.
         /// </summary>
-        public Session EnlistedSession
+        public ISession EnlistedSession
         {
             get { return enlistedSession; }
         }

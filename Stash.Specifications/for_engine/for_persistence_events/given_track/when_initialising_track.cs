@@ -33,7 +33,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_calculate_a_hash_code_based_on_the_original_stream()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var graph = new DummyPersistentObject();
             var serializedGraph = new MemoryStream("this is a pretend serialised object graph".Select(_ => Convert.ToByte(_)).ToArray());
             var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, serializedGraph, mockSession);
@@ -45,7 +45,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_calculate_a_hash_code_on_an_empty_stream()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var graph = new DummyPersistentObject();
             var serializedGraph = new MemoryStream();
             var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, serializedGraph, mockSession);

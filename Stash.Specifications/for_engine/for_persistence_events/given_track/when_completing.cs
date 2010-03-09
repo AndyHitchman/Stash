@@ -36,7 +36,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             public bool HasCalculatedIndexes;
             public bool HasCalculatedMaps;
 
-            public StandInTrack(Guid internalId, TGraph graph, Stream serializedgraph, InternalSession session)
+            public StandInTrack(Guid internalId, TGraph graph, Stream serializedgraph, IInternalSession session)
                 : base(internalId, graph, serializedgraph, session) {}
 
             protected override void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
@@ -53,7 +53,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_calculate_a_new_hash()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;
@@ -72,11 +72,11 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_calculate_indexes_when_the_graph_has_changed()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
             var graph = new DummyPersistentObject();
             var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
             var mockUpdate = new Update<DummyPersistentObject>(sut);
@@ -96,11 +96,11 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_calculate_maps_when_the_graph_has_changed()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
             var graph = new DummyPersistentObject();
             var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
             var mockUpdate = new Update<DummyPersistentObject>(sut);
@@ -120,11 +120,11 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_enroll_an_update_persistence_event_when_the_graph_has_changed()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<PersistenceEventFactory>();
+            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
             var graph = new DummyPersistentObject();
             var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
             var mockUpdate = new Update<DummyPersistentObject>(sut);
@@ -144,7 +144,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         [Test]
         public void it_should_not_enroll_an_update_persistence_event_when_the_graph_has_not_changed()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateMock<Registry>();
             var mockSerializer = MockRepository.GenerateMock<Serializer>();
             Func<Serializer> fSerializer = () => mockSerializer;

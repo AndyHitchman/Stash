@@ -20,7 +20,7 @@ namespace Stash.Engine
 {
     using System;
 
-    public class DefaultUnenlistedRepository : UnenlistedRepository
+    public class DefaultUnenlistedRepository : IUnenlistedRepository
     {
         /// <summary>
         /// Instruct the repository to delete the graph from the persistent store.
@@ -38,7 +38,7 @@ namespace Stash.Engine
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="session"></param>
         /// <param name="graph"></param>
-        public void Delete<TGraph>(InternalSession session, TGraph graph) where TGraph : class
+        public void Delete<TGraph>(IInternalSession session, TGraph graph) where TGraph : class
         {
             ensureGraphTypeIsRegistered<TGraph>(session);
 
@@ -81,7 +81,7 @@ namespace Stash.Engine
         //            return fetched;
         //        }
 
-        public Tracker GetTrackerFor<TGraph>(InternalSession session, TGraph graph) where TGraph : class
+        public Tracker GetTrackerFor<TGraph>(IInternalSession session, TGraph graph) where TGraph : class
         {
             throw new NotImplementedException();
         }
@@ -96,27 +96,27 @@ namespace Stash.Engine
             Persist(getSession(), graph);
         }
 
-        public void Persist<TGraph>(InternalSession session, TGraph graph) where TGraph : class
+        public void Persist<TGraph>(IInternalSession session, TGraph graph) where TGraph : class
         {
             ensureGraphTypeIsRegistered<TGraph>(session);
 
             session.PersistenceEventFactory.MakeEndure(graph, session).EnrollInSession();
         }
 
-        public void ReconnectTracker(InternalSession session, Tracker tracker)
+        public void ReconnectTracker(IInternalSession session, Tracker tracker)
         {
             throw new NotImplementedException();
         }
 
-        private static void ensureGraphTypeIsRegistered<TGraph>(InternalSession session)
+        private static void ensureGraphTypeIsRegistered<TGraph>(IInternalSession session)
         {
             if(!session.Registry.IsManagingGraphTypeOrAncestor(typeof(TGraph)))
                 throw new ArgumentOutOfRangeException("graph", "The graph type is not being managed by Stash");
         }
 
-        private static InternalSession getSession()
+        private static IInternalSession getSession()
         {
-            return Stash.SessionFactory.GetSession().Internalize();
+            return Kernel.SessionFactory.GetSession().Internalize();
         }
     }
 }

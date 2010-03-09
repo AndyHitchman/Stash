@@ -29,8 +29,8 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         [Test]
         public void it_should_delegate_delete_to_the_underlying_repository()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
+            var mockUnenlistedRepository = MockRepository.GenerateMock<IUnenlistedRepository>();
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
@@ -69,8 +69,8 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         [Test]
         public void it_should_delegate_get_tracker_for_to_the_underlying_repository()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
+            var mockUnenlistedRepository = MockRepository.GenerateMock<IUnenlistedRepository>();
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
@@ -82,8 +82,8 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         [Test]
         public void it_should_delegate_persist_to_the_underlying_repository()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
+            var mockUnenlistedRepository = MockRepository.GenerateMock<IUnenlistedRepository>();
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
             var graph = new DummyPersistentObject();
 
@@ -95,8 +95,8 @@ namespace Stash.Specifications.for_engine.given_default_enlisted_repository
         [Test]
         public void it_should_delegate_reconnect_tracker_to_the_underlying_repository()
         {
-            var mockSession = MockRepository.GenerateMock<InternalSession>();
-            var mockUnenlistedRepository = MockRepository.GenerateMock<UnenlistedRepository>();
+            var mockSession = MockRepository.GenerateMock<IInternalSession>();
+            var mockUnenlistedRepository = MockRepository.GenerateMock<IUnenlistedRepository>();
             var mockTracker = MockRepository.GenerateMock<Tracker>();
             var sut = new DefaultEnlistedRepository(mockSession, mockUnenlistedRepository);
 

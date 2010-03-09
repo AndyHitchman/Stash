@@ -28,7 +28,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         /// <param name="graph"></param>
         /// <param name="session"></param>
-        public Endure(TGraph graph, InternalSession session)
+        public Endure(TGraph graph, IInternalSession session)
             : base(Guid.NewGuid(), graph, new MemoryStream(), session) {}
 
 

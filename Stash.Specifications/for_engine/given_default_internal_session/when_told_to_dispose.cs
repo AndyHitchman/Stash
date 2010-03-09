@@ -25,10 +25,10 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     [TestFixture]
     public class when_told_to_dispose
     {
-        private class StandInDefaultInternalSession : DefaultInternalSession
+        private class StandInInternalSession : InternalSession
         {
             public bool EndWasCalled;
-            public StandInDefaultInternalSession() : base(null, null) {}
+            public StandInInternalSession() : base(null, null) {}
 
             public override void Complete()
             {
@@ -39,7 +39,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_tell_itself_to_end_the_session()
         {
-            var sut = new StandInDefaultInternalSession();
+            var sut = new StandInInternalSession();
 
             sut.Dispose();
 

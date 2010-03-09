@@ -21,12 +21,12 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using System.IO;
 
-    public interface PersistenceEventFactory
+    public interface IPersistenceEventFactory
     {
-        Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, InternalSession session);
-        Endure<TGraph> MakeEndure<TGraph>(TGraph graph, InternalSession session);
+        Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session);
+        Endure<TGraph> MakeEndure<TGraph>(TGraph graph, IInternalSession session);
         Insert<TGraph> MakeInsert<TGraph>(Endure<TGraph> endure);
-        Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, InternalSession session);
+        Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session);
         Update<TGraph> MakeUpdate<TGraph>(Track<TGraph> track);
     }
 }

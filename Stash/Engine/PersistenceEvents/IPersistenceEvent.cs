@@ -16,14 +16,28 @@
 
 #endregion
 
-namespace Stash
+namespace Stash.Engine.PersistenceEvents
 {
-    public interface SessionFactory
+    /// <summary>
+    /// An event that must be handled by the active <see cref="ISession"/>.
+    /// </summary>
+    public interface IPersistenceEvent
     {
         /// <summary>
-        /// Get a session.
+        /// Get the untypes graph.
         /// </summary>
-        /// <returns></returns>
-        Session GetSession();
+        object UntypedGraph { get; }
+
+        /// <summary>
+        /// Complete all work for the persistence event.
+        /// </summary>
+        void Complete();
+
+        /// <summary>
+        /// Enroll the persistence event in the session.
+        /// </summary>
+        void EnrollInSession();
+
+        PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event);
     }
 }

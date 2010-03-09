@@ -18,18 +18,15 @@
 
 namespace Stash.Engine
 {
-    using Configuration;
     using PersistenceEvents;
 
-    public class DefaultSessionFactory : SessionFactory
+    public class SessionFactory : ISessionFactory
     {
-        private readonly PersistenceEventFactory persistenceEventFactory;
-        private readonly Registry registry;
+        private readonly IPersistenceEventFactory persistenceEventFactory;
 
-        public DefaultSessionFactory(Registry registry, PersistenceEventFactory persistenceEventFactory)
+        public SessionFactory()
         {
-            this.registry = registry;
-            this.persistenceEventFactory = persistenceEventFactory;
+            persistenceEventFactory = new DefaultPersistenceEventFactory();
         }
 
 
@@ -37,9 +34,9 @@ namespace Stash.Engine
         /// Get a session.
         /// </summary>
         /// <returns></returns>
-        public Session GetSession()
+        public ISession GetSession()
         {
-            return new DefaultInternalSession(registry, persistenceEventFactory);
+            return new InternalSession(Kernel.Registry, persistenceEventFactory);
         }
     }
 }

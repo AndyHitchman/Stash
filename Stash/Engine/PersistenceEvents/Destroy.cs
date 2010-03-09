@@ -22,7 +22,7 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Destroy<TGraph> : PersistenceEvent<TGraph>
     {
-        public Destroy(Guid internalId, TGraph graph, InternalSession session)
+        public Destroy(Guid internalId, TGraph graph, IInternalSession session)
         {
             InternalId = internalId;
             Graph = graph;
@@ -39,7 +39,7 @@ namespace Stash.Engine.PersistenceEvents
         /// <summary>
         /// The internal session to which the persistence event belongs.
         /// </summary>
-        public InternalSession Session { get; private set; }
+        public IInternalSession Session { get; private set; }
 
         /// <summary>
         /// Get the untypes graph.
@@ -59,7 +59,7 @@ namespace Stash.Engine.PersistenceEvents
             Session.Enroll(this);
         }
 
-        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(PersistenceEvent @event)
+        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }

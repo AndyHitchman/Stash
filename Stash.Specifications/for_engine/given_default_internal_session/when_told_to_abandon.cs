@@ -29,8 +29,8 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_clear_all_peristed_events()
         {
-            var sut = new StandInDefaultInternalSession();
-            var mockPersistentEvent = MockRepository.GenerateStub<PersistenceEvent>();
+            var sut = new StandInInternalSession();
+            var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
             sut.ExposedPersistenceEvents.Add(mockPersistentEvent);
 
             sut.Abandon();

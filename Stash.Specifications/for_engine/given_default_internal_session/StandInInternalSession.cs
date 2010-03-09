@@ -16,25 +16,19 @@
 
 #endregion
 
-namespace Stash.Engine
+namespace Stash.Specifications.for_engine.given_default_internal_session
 {
-    using System;
-    using System.Runtime.Serialization;
+    using System.Collections.Generic;
+    using Engine;
+    using Engine.PersistenceEvents;
 
-    public class StashSerializationSurrogate : ISerializationSurrogate
+    internal class StandInInternalSession : InternalSession
     {
-        public virtual void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
-        {
-            throw new NotImplementedException();
-        }
+        public StandInInternalSession() : base(null, null) {}
 
-        public virtual object SetObjectData(
-            object obj,
-            SerializationInfo info,
-            StreamingContext context,
-            ISurrogateSelector selector)
+        public List<IPersistenceEvent> ExposedPersistenceEvents
         {
-            throw new NotImplementedException();
+            get { return enrolledPersistenceEvents; }
         }
     }
 }
