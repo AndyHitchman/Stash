@@ -30,10 +30,14 @@
 
 namespace Stash.BackingStore
 {
+    using System;
     using System.Collections.Generic;
+    using Configuration;
 
     public interface ITrackedGraph : IStoredGraph
     {
         IEnumerable<IProjectedIndex> ProjectedIndexes { get; }
+        IEnumerable<string> TypeHierarchy { get; }
+        IEnumerable<IRegisteredIndexer> Indexes { get; }
     }
 }

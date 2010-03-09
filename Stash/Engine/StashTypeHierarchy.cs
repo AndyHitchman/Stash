@@ -27,7 +27,7 @@ namespace Stash.Engine
         {
             do
             {
-                yield return t.FullName;
+                yield return t.AssemblyQualifiedName;
                 t = t.BaseType;
             }
             while(t != null && t != typeof(object));

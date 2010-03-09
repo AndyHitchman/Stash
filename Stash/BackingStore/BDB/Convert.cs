@@ -37,7 +37,7 @@ namespace Stash.BackingStore.BDB
 
         public static byte[] AsByteArray(this Type from)
         {
-            return from.FullName.AsByteArray();
+            return from.AssemblyQualifiedName.AsByteArray();
         }
 
         public static byte[] AsByteArray(this Guid from)

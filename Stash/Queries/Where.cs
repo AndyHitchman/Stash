@@ -27,89 +27,89 @@ namespace Stash.Queries
         public static IAllOfQuery<TKey> AllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.AllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Stash.Registry.BackingStore.Query.AllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
         }
 
         public static IIntersectOperator And(this IQuery lhs, IQuery rhs)
         {
-            return Stash.Registry.BackingStore.QueryFactory.And(lhs, rhs);
+            return Stash.Registry.BackingStore.Query.And(lhs, rhs);
         }
 
         public static IAnyOfQuery<TKey> AnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.AnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Stash.Registry.BackingStore.Query.AnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
         }
 
         public static IBetweenQuery<TKey> Between<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.Between<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Stash.Registry.BackingStore.Query.Between<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
         }
 
         public static IEqualToQuery<TKey> EqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.EqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.EqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static IGreaterThanQuery<TKey> GreaterThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.GreaterThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.GreaterThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static IGreaterThanEqualQuery<TKey> GreaterThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.GreaterThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.GreaterThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static IInsideQuery<TKey> Inside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.Inside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Stash.Registry.BackingStore.Query.Inside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
         }
 
         public static ILessThanQuery<TKey> LessThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.LessThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.LessThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static ILessThanEqualQuery<TKey> LessThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.LessThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.LessThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.NotAllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Stash.Registry.BackingStore.Query.NotAllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
         }
 
         public static INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.NotAnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Stash.Registry.BackingStore.Query.NotAnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
         }
 
         public static INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.NotEqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Stash.Registry.BackingStore.Query.NotEqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
         }
 
         public static IIntersectOperator Or(this IQuery lhs, IQuery rhs)
         {
-            return Stash.Registry.BackingStore.QueryFactory.Or(lhs, rhs);
+            return Stash.Registry.BackingStore.Query.Or(lhs, rhs);
         }
 
         public static IOutsideQuery<TKey> Outside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Stash.Registry.BackingStore.QueryFactory.Outside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Stash.Registry.BackingStore.Query.Outside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
         }
 
         private static IRegisteredIndexer getRegisteredIndexer<TGraph, TKey>() where TKey : IComparable<TKey>, IEquatable<TKey>

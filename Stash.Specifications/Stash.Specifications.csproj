@@ -105,7 +105,6 @@
     <Compile Include="Support\OtherDummyIndex.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_getting_registered_indexers.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph_that_isnt_stored.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph_with_the_wrong_registered_graph.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_updating_a_second_graph.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_updating_a_graph.cs" />
@@ -122,7 +121,6 @@
     <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
-    <Compile Include="for_configuration\given_graph_context\when_told_to_use_a_custom_serialization_surrogate.cs" />
     <Compile Include="for_configuration\given_graph_context\with_dummy_graph_context.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_not_to_persist.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_to_reduce.cs" />

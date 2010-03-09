@@ -37,12 +37,53 @@ namespace Stash.BackingStore
 
     public interface IBackingStore
     {
-        IQueryFactory QueryFactory { get; }
+        /// <summary>
+        /// A factory to build queries over indexes.
+        /// </summary>
+        IQueryFactory Query { get; }
+
+        /// <summary>
+        /// Count the number of stored <paramref name="registeredGraph"/> matching the given <paramref name="query"/>.
+        /// </summary>
+        /// <param name="registeredGraph"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         int Count(IRegisteredGraph registeredGraph, IQuery query);
+
+        /// <summary>
+        /// Ensures that the backing store is ready to persist the given <paramref name="registeredIndexer"/>.
+        /// </summary>
+        /// <param name="registeredIndexer"></param>
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
+
+        /// <summary>
+        /// Find and return instances of the <paramref name="registeredGraph"/> that match the given <paramref name="query"/>
+        /// </summary>
+        /// <param name="registeredGraph"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
+
+        /// <summary>
+        /// Get an instance of a <paramref name="registeredGraph"/> by its <paramref name="internalId"/>.
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <param name="registeredGraph"></param>
+        /// <returns></returns>
         IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
+
+        /// <summary>
+        /// Perform some <paramref name="storageWorkActions"/> inside a transaction.
+        /// </summary>
+        /// <param name="storageWorkActions"></param>
         void InTransactionDo(Action<IStorageWork> storageWorkActions);
+
+        /// <summary>
+        /// Call a <paramref name="storageWorkFunction"/> inside a transaction.
+        /// </summary>
+        /// <typeparam name="TReturn"></typeparam>
+        /// <param name="storageWorkFunction"></param>
+        /// <returns></returns>
         TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction);
     }
 }

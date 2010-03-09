@@ -81,7 +81,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
 
         protected override void When()
         {
-            actual = Subject.InTransactionDo(_ => _.Find(registeredGraph, query));
+            actual = Subject.InTransactionDo(_ => _.Find(query));
         }
 
         [Then]

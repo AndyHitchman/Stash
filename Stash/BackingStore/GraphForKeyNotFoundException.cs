@@ -48,12 +48,11 @@ namespace Stash.BackingStore
         public GraphForKeyNotFoundException(string message) : base(message) {}
         public GraphForKeyNotFoundException(string message, Exception inner) : base(message, inner) {}
 
-        public GraphForKeyNotFoundException(Guid internalId, IRegisteredGraph registeredGraph, Exception inner)
+        public GraphForKeyNotFoundException(Guid internalId, Exception inner)
             : base(
                 string.Format(
-                    "Graph stored for internalId {0} is not found. The supplied registered graph was {1}.",
-                    internalId,
-                    registeredGraph),
+                    "Graph stored for internalId {0} is not found.",
+                    internalId),
                 inner) {}
 
         protected GraphForKeyNotFoundException(

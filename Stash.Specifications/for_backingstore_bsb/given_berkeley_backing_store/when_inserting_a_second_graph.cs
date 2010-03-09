@@ -100,17 +100,17 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         {
             Subject.ConcreteTypeDatabase
                 .ValueForKey(firstTrackedGraph.InternalId)
-                .ShouldEqual(firstTrackedGraph.GraphType.FullName.Select(_ => (byte)_));
+                .ShouldEqual(firstTrackedGraph.GraphType.AssemblyQualifiedName.Select(_ => (byte)_));
             Subject.ConcreteTypeDatabase
                 .ValueForKey(secondTrackedGraph.InternalId)
-                .ShouldEqual(secondTrackedGraph.GraphType.FullName.Select(_ => (byte)_));
+                .ShouldEqual(secondTrackedGraph.GraphType.AssemblyQualifiedName.Select(_ => (byte)_));
         }
 
         [Then]
         public void it_should_persist_the_common_types_in_the_type_hierarchy_of_both_graphs()
         {
             var valuesForKey = Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(ClassWithNoAncestors)).Select(_ => _.AsGuid());
+                .ValuesForKey(typeof(ClassWithNoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }
@@ -119,7 +119,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_distinct_type_of_the_first_graph_in_the_type_hierarchy()
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(ClassWithTwoAncestors)).Select(_ => _.AsGuid())
+                .ValuesForKey(typeof(ClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid())
                 .ShouldContain(firstTrackedGraph.InternalId);
         }
 
@@ -127,7 +127,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_distinct_type_of_the_second_graph_in_the_type_hierarchy()
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(OtherClassWithTwoAncestors)).Select(_ => _.AsGuid())
+                .ValuesForKey(typeof(OtherClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid())
                 .ShouldContain(secondTrackedGraph.InternalId);
         }
 

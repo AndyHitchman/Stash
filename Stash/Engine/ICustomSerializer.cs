@@ -20,14 +20,15 @@ namespace Stash.Engine
 {
     using System;
     using System.IO;
+    using Configuration;
 
     /// <summary>
     /// An interface that conveniently groups serialization and deserialization functions.
     /// Implement to provide customised behaviour or alternative serialization strategies.
     /// </summary>
-    public interface CustomSerializer
+    public interface ICustomSerializer
     {
-        Func<Stream, TGraph> Deserialize<TGraph>();
-        Func<TGraph, Stream> Serialize<TGraph>();
+        TGraph Deserialize<TGraph>(byte[] bytes, Registry registry);
+        byte[] Serialize<TGraph>(TGraph graph, Registry registry);
     }
 }

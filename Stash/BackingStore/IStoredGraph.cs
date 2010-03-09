@@ -34,9 +34,10 @@ namespace Stash.BackingStore
     using System.Collections.Generic;
     using Configuration;
 
-    public interface IStoredGraph : IRegisteredGraph
+    public interface IStoredGraph
     {
         Guid InternalId { get; }
         IEnumerable<byte> SerialisedGraph { get; }
+        Type GraphType { get; }
     }
 }

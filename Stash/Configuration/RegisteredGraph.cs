@@ -54,9 +54,6 @@ namespace Stash.Configuration
 
         public abstract IEnumerable<IRegisteredIndexer> Indexes { get; }
 
-        public virtual ISerializationSurrogate RegisteredSerializationSurrogate { get; set; }
-
-
         public abstract void EngageBackingStore(IBackingStore backingStore);
     }
 }

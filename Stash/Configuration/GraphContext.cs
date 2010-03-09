@@ -71,7 +71,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <param name="serializer"></param>
         /// <param name="deserializer"></param>
-        public virtual void SerializeWith(Func<TGraph, Stream> serializer, Func<Stream, TGraph> deserializer)
+        public virtual void SerializeWith(Func<TGraph, Registry, byte[]> serializer, Func<byte[], Registry, TGraph> deserializer)
         {
             throw new NotImplementedException();
         }
@@ -80,16 +80,7 @@ namespace Stash.Configuration
         /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="customSerializer"/>.
         /// </summary>
         /// <param name="customSerializer"></param>
-        public virtual void SerializeWith(CustomSerializer customSerializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Tell the engine to use the provided serializaton surrogate rather than the default <see cref="StashSerializationSurrogate"/>.
-        /// </summary>
-        /// <param name="surrogate"></param>
-        public virtual void SerializeWith(ISerializationSurrogate surrogate)
+        public virtual void SerializeWith(ICustomSerializer customSerializer)
         {
             throw new NotImplementedException();
         }

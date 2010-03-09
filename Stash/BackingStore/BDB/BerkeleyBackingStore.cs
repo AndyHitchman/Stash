@@ -38,7 +38,7 @@ namespace Stash.BackingStore.BDB
         private const string graphFileName = "graphs" + DatabaseFileExt;
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
-        private readonly BerkeleyQueryFactory queryFactory;
+        private readonly BerkeleyQueryFactory query;
         private bool isDisposed;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Stash.BackingStore.BDB
         /// </summary>
         public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
-            queryFactory = new BerkeleyQueryFactory();
+            query = new BerkeleyQueryFactory();
             this.backingStoreEnvironment = backingStoreEnvironment;
             IndexDatabases = new Dictionary<string, ManagedIndex>();
 
@@ -65,9 +65,9 @@ namespace Stash.BackingStore.BDB
         public HashDatabase ConcreteTypeDatabase { get; private set; }
         public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
 
-        public IQueryFactory QueryFactory
+        public IQueryFactory Query
         {
-            get { return queryFactory; }
+            get { return query; }
         }
 
         public int Count(IRegisteredGraph registeredGraph, IQuery query)
@@ -106,31 +106,32 @@ namespace Stash.BackingStore.BDB
 
         public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
         {
-            return InTransactionDo(work => work.Find(registeredGraph, query));
+            return InTransactionDo(work => work.Find(query));
         }
 
         public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
         {
-            return InTransactionDo(work => work.Get(registeredGraph, internalId));
+            return InTransactionDo(work => work.Get(internalId));
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
             var storageWork = new BerkeleyStorageWork(this);
-//            try
-//            {
+            try
+            {
                 storageWorkActions(storageWork);
                 storageWork.Commit();
-//            }
-//            catch
-//            {
-//                try
-//                {
-//                    storageWork.Abort();
-//                }
-//                catch{}
-//                throw;
-//            }
+            }
+            catch
+            {
+                try
+                {
+                    storageWork.Abort();
+                }
+                catch{}
+
+                throw;
+            }
         }
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)

@@ -39,8 +39,8 @@ namespace Stash.BackingStore
     {
         int Count(IRegisteredGraph registeredGraph, IQuery query);
         void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
-        IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
-        IStoredGraph Get(IRegisteredGraph registeredGraph, Guid internalId);
+        IEnumerable<IStoredGraph> Find(IQuery query);
+        IStoredGraph Get(Guid internalId);
         void InsertGraph(ITrackedGraph trackedGraph);
         void UpdateGraph(ITrackedGraph trackedGraph);
     }

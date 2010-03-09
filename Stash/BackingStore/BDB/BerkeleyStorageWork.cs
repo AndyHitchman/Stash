@@ -63,28 +63,26 @@ namespace Stash.BackingStore.BDB
             deleteGraphData(graphKey);
         }
 
-        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        public IEnumerable<IStoredGraph> Find(IQuery query)
         {
             return executeQuery(query)
-                .Select(internalId => Get(registeredGraph, internalId))
+                .Select(internalId => Get(internalId))
                 .ToList();
         }
 
-        public IStoredGraph Get(IRegisteredGraph registeredGraph, Guid internalId)
+        public IStoredGraph Get(Guid internalId)
         {
             try
             {
                 var key = new DatabaseEntry(internalId.AsByteArray());
                 var storedConcreteType = BackingStore.ConcreteTypeDatabase.Get(key, Transaction).Value.Data.AsString();
-                if(storedConcreteType != registeredGraph.GraphType.FullName)
-                    throw new AttemptToGetWithWrongRegisteredGraphException(internalId, storedConcreteType, registeredGraph);
 
                 var entry = BackingStore.GraphDatabase.Get(key, Transaction);
-                return new StoredGraph(internalId, entry.Value.Data, registeredGraph);
+                return new StoredGraph(internalId, entry.Value.Data, storedConcreteType);
             }
             catch(NotFoundException knfe)
             {
-                throw new GraphForKeyNotFoundException(internalId, registeredGraph, knfe);
+                throw new GraphForKeyNotFoundException(internalId, knfe);
             }
         }
 
