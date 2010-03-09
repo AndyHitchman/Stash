@@ -37,11 +37,39 @@ namespace Stash.BackingStore
 
     public interface IStorageWork
     {
-        int Count(IRegisteredGraph registeredGraph, IQuery query);
+        /// <summary>
+        /// Count the number of stored graphs matching the given <paramref name="query"/>.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        int Count(IQuery query);
+
         void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
+
+        /// <summary>
+        /// Find and return instances of graphs that match the given <paramref name="query"/>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         IEnumerable<IStoredGraph> Find(IQuery query);
+
+        /// <summary>
+        /// Get an instance of a graph by its <paramref name="internalId"/>.
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <returns></returns>
         IStoredGraph Get(Guid internalId);
+        
+        /// <summary>
+        /// Insert a tracked graph.
+        /// </summary>
+        /// <param name="trackedGraph"></param>
         void InsertGraph(ITrackedGraph trackedGraph);
+
+        /// <summary>
+        /// Update a tracked graph.
+        /// </summary>
+        /// <param name="trackedGraph"></param>
         void UpdateGraph(ITrackedGraph trackedGraph);
     }
 }

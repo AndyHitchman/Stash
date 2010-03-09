@@ -55,7 +55,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_throw_wrong_registered_graph()
         {
             typeof(GraphForKeyNotFoundException).ShouldBeThrownBy(
-                () => Subject.Get(Guid.NewGuid(), gettingRegisteredGraph)
+                () => Subject.Get(Guid.NewGuid())
                 );
         }
     }

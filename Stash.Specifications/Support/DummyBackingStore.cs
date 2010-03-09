@@ -43,7 +43,7 @@ namespace Stash.Specifications.Support
             get { throw new NotImplementedException(); }
         }
 
-        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        public int Count(IQuery query)
         {
             throw new NotImplementedException();
         }
@@ -53,12 +53,12 @@ namespace Stash.Specifications.Support
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        public IEnumerable<IStoredGraph> Find(IQuery query)
         {
             throw new NotImplementedException();
         }
 
-        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
+        public IStoredGraph Get(Guid internalId)
         {
             throw new NotImplementedException();
         }

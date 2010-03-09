@@ -70,9 +70,9 @@ namespace Stash.BackingStore.BDB
             get { return query; }
         }
 
-        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        public int Count(IQuery query)
         {
-            return InTransactionDo(work => work.Count(registeredGraph, query));
+            return InTransactionDo(work => work.Count(query));
         }
 
         public void Dispose()
@@ -104,12 +104,12 @@ namespace Stash.BackingStore.BDB
                 new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
         }
 
-        public IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query)
+        public IEnumerable<IStoredGraph> Find(IQuery query)
         {
             return InTransactionDo(work => work.Find(query));
         }
 
-        public IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph)
+        public IStoredGraph Get(Guid internalId)
         {
             return InTransactionDo(work => work.Get(internalId));
         }

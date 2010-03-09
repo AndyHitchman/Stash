@@ -49,7 +49,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 
         protected override void When()
         {
-            result = Subject.Get(trackedGraph.InternalId, registeredGraph);
+            result = Subject.Get(trackedGraph.InternalId);
         }
 
         [Then]

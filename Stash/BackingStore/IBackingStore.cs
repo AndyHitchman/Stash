@@ -43,12 +43,11 @@ namespace Stash.BackingStore
         IQueryFactory Query { get; }
 
         /// <summary>
-        /// Count the number of stored <paramref name="registeredGraph"/> matching the given <paramref name="query"/>.
+        /// Count the number of stored graphs matching the given <paramref name="query"/>.
         /// </summary>
-        /// <param name="registeredGraph"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        int Count(IRegisteredGraph registeredGraph, IQuery query);
+        int Count(IQuery query);
 
         /// <summary>
         /// Ensures that the backing store is ready to persist the given <paramref name="registeredIndexer"/>.
@@ -57,20 +56,18 @@ namespace Stash.BackingStore
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
 
         /// <summary>
-        /// Find and return instances of the <paramref name="registeredGraph"/> that match the given <paramref name="query"/>
+        /// Find and return instances of graphs that match the given <paramref name="query"/>
         /// </summary>
-        /// <param name="registeredGraph"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        IEnumerable<IStoredGraph> Find(IRegisteredGraph registeredGraph, IQuery query);
+        IEnumerable<IStoredGraph> Find(IQuery query);
 
         /// <summary>
-        /// Get an instance of a <paramref name="registeredGraph"/> by its <paramref name="internalId"/>.
+        /// Get an instance of a graph by its <paramref name="internalId"/>.
         /// </summary>
         /// <param name="internalId"></param>
-        /// <param name="registeredGraph"></param>
         /// <returns></returns>
-        IStoredGraph Get(Guid internalId, IRegisteredGraph registeredGraph);
+        IStoredGraph Get(Guid internalId);
 
         /// <summary>
         /// Perform some <paramref name="storageWorkActions"/> inside a transaction.

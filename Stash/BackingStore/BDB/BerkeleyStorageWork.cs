@@ -48,7 +48,7 @@ namespace Stash.BackingStore.BDB
             Transaction.Commit();
         }
 
-        public int Count(IRegisteredGraph registeredGraph, IQuery query)
+        public int Count(IQuery query)
         {
             return executeQuery(query).Count();
         }
