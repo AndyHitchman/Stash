@@ -50,7 +50,7 @@ namespace Stash.BackingStore
 
         public IEnumerable<IRegisteredIndexer> Indexes
         {
-            get { return RegisteredGraph.Indexes; }
+            get { return RegisteredGraph.IndexersOnGraph; }
         }
 
         public IRegisteredGraph RegisteredGraph { get; private set; }

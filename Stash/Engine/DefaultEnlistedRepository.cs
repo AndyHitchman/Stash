@@ -19,10 +19,10 @@
 namespace Stash.Engine
 {
     /// <summary>
-    /// The default implementation of <see cref="EnlistedRepository"/> delegates all requests to a
+    /// The default implementation of <see cref="IEnlistedRepository"/> delegates all requests to a
     /// provided <see cref="IUnenlistedRepository"/> using the <see cref="EnlistedSession"/>.
     /// </summary>
-    public class DefaultEnlistedRepository : EnlistedRepository
+    public class DefaultEnlistedRepository : IEnlistedRepository
     {
         private readonly IInternalSession enlistedSession;
         private readonly IUnenlistedRepository underlyingUnenlistedRepository;

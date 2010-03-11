@@ -32,10 +32,12 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         private ITrackedGraph trackedGraph;
         private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         private IStoredGraph result;
+        private Registry registry;
 
         protected override void Given()
         {
-            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>();
+            registry = new Registry();
+            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
 
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),

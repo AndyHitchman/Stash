@@ -18,7 +18,7 @@
 
 namespace Stash.Engine
 {
-    public interface EnlistedRepository : Repository
+    public interface IEnlistedRepository : IRepository
     {
         /// <summary>
         /// Get the <see cref="Tracker"/> for a persisted aggregate object graph.

@@ -16,7 +16,7 @@
 
 #endregion
 
-namespace Stash
+namespace Stash.Queries
 {
-    public interface IIndex<TGraph> : IIndex {}
+    public interface IIsIndexedQuery : IQuery {}
 }

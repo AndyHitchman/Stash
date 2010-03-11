@@ -47,7 +47,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         [Test]
         public void it_should_get_the_graph_for_a_registered_graph_by_generic_wrapper()
         {
-            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>());
+            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
 
             Sut.GetRegistrationFor<DummyPersistentObject>().ShouldNotBeNull();
         }
@@ -55,7 +55,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         [Test]
         public void it_should_get_the_graph_for_a_registered_graph_by_type()
         {
-            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>());
+            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
 
             Sut.GetRegistrationFor(typeof(DummyPersistentObject)).ShouldNotBeNull();
         }

@@ -30,9 +30,11 @@ namespace Stash.Configuration
         public Registry()
         {
             RegisteredGraphs = new Dictionary<Type, RegisteredGraph>();
+            RegisteredIndexers = new List<IRegisteredIndexer>();
         }
 
         public Dictionary<Type, RegisteredGraph> RegisteredGraphs { get; private set; }
+        public List<IRegisteredIndexer> RegisteredIndexers { get; private set; }
 
         /// <summary>
         /// The aggregate object graphs currently configured.
@@ -55,7 +57,13 @@ namespace Stash.Configuration
             foreach(var registeredGraph in AllRegisteredGraphs)
             {
                 registeredGraph.EngageBackingStore(backingStore);
+            } 
+
+            foreach (var registeredIndexer in RegisteredIndexers)
+            {
+                registeredIndexer.EngageBackingStore(backingStore);
             }
+
         }
 
         /// <summary>
@@ -91,9 +99,17 @@ namespace Stash.Configuration
             if(RegisteredGraphs.ContainsKey(graph))
                 throw new ArgumentException(string.Format("Graph {0} is already registered", graph));
 
-            var registeredGraph = new RegisteredGraph<TGraph>();
+            var registeredGraph = new RegisteredGraph<TGraph>(this);
             RegisteredGraphs.Add(graph, registeredGraph);
             return registeredGraph;
+        }
+
+        public void RegisterIndexer<TGraph,TKey>(RegisteredIndexer<TGraph, TKey> registeredIndexer) where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            if(RegisteredIndexers.Contains(registeredIndexer))
+                throw new ArgumentException(string.Format("Indexer {0} is already registered", registeredIndexer));
+
+            RegisteredIndexers.Add(registeredIndexer);
         }
     }
 }

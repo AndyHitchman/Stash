@@ -27,8 +27,8 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Track<TGraph> : PersistenceEvent<TGraph>
     {
-        protected readonly Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection>> IndexProjections =
-            new Dictionary<RegisteredIndexer<TGraph>, List<TrackedProjection>>();
+        protected readonly Dictionary<IRegisteredIndexer, List<TrackedProjection>> IndexProjections =
+            new Dictionary<IRegisteredIndexer, List<TrackedProjection>>();
 
         protected readonly Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>> MapProjections =
             new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>>();
@@ -76,23 +76,11 @@ namespace Stash.Engine.PersistenceEvents
 
         protected virtual void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
         {
-            foreach(var registeredIndexer in registeredGraph.RegisteredIndexers)
+            foreach(var registeredIndexer in registeredGraph.IndexersOnGraph)
             {
                 IndexProjections.Add(
                     registeredIndexer,
                     registeredIndexer.GetKeyFreeProjections(Graph)
-                        .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
-                        .ToList());
-            }
-        }
-
-        protected virtual void CalculateMaps(RegisteredGraph<TGraph> registeredGraph)
-        {
-            foreach(var registeredMapper in registeredGraph.RegisteredMappers)
-            {
-                MapProjections.Add(
-                    registeredMapper,
-                    registeredMapper.GetKeyFreeProjections(Graph)
                         .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
                         .ToList());
             }
@@ -111,7 +99,6 @@ namespace Stash.Engine.PersistenceEvents
 
             //Calculate indexes, maps and reduces on tracked graphs.
             CalculateIndexes(registeredGraph);
-            CalculateMaps(registeredGraph);
 
             Session.PersistenceEventFactory.MakeUpdate(this).EnrollInSession();
         }

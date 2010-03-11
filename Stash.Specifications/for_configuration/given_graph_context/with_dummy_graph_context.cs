@@ -24,12 +24,14 @@ namespace Stash.Specifications.for_configuration.given_graph_context
 
     public class with_dummy_graph_context
     {
-        protected GraphContext<DummyBackingStore, DummyPersistentObject> Sut { get; private set; }
+        private Registry registry;
+        protected GraphContext<DummyPersistentObject> Sut { get; private set; }
 
         [SetUp]
         public void each_up()
         {
-            Sut = new GraphContext<DummyBackingStore, DummyPersistentObject>(new RegisteredGraph<DummyPersistentObject>());
+            registry = new Registry();
+            Sut = new GraphContext<DummyPersistentObject>(new RegisteredGraph<DummyPersistentObject>(registry));
         }
     }
 }

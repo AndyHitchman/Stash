@@ -60,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
+    <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />
@@ -119,7 +121,7 @@
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
     <Compile Include="for_configuration\given_persistence_context\with_persistence_context.cs" />
     <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
-    <Compile Include="for_configuration\given_graph_context\when_told_to_index.cs" />
+    <Compile Include="for_configuration\given_persistence_context\when_told_to_index.cs" />
     <Compile Include="for_configuration\given_graph_context\when_told_to_map.cs" />
     <Compile Include="for_configuration\given_graph_context\with_dummy_graph_context.cs" />
     <Compile Include="for_configuration\given_map_context\when_told_not_to_persist.cs" />
@@ -127,7 +129,7 @@
     <Compile Include="for_configuration\given_map_context\with_dummy_map_context.cs" />
     <Compile Include="Support\DummyIndex.cs" />
     <Compile Include="Support\DummyPersistentObject.cs" />
-    <Compile Include="for_configuration\given_registered_graph\when_engaging_backing_store.cs" />
+    <Compile Include="for_configuration\given_registry\when_engaging_backing_store.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_asked_for_a_graph.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_instantiating.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_told_to_register_a_graph.cs" />

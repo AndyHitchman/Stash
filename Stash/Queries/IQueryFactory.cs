@@ -39,5 +39,6 @@ namespace Stash.Queries
         INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IIntersectOperator Or(IQuery lhs, IQuery rhs);
         IOutsideQuery<TKey> Outside<TGraph, TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>;
+        IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer);
     }
 }

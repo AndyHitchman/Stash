@@ -33,7 +33,6 @@ namespace Stash.Configuration
         /// <summary>
         /// Calls the index function and returns a <see cref="IProjectedIndex"/>
         /// </summary>
-        /// <typeparam name="TGraph"></typeparam>
-        public abstract IEnumerable<IProjectedIndex> GetKeyFreeProjections(TGraph graph);
+        public abstract IEnumerable<IProjectedIndex> GetKeyFreeProjections(object graph);
     }
 }

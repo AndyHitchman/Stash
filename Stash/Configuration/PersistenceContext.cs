@@ -41,9 +41,22 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <param name="configurePersistentGraph"></param>
-        public virtual void Register<TGraph>(Action<GraphContext<TBackingStore, TGraph>> configurePersistentGraph) where TGraph : class
+        public virtual void Register<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph) where TGraph : class
         {
-            configurePersistentGraph(new GraphContext<TBackingStore, TGraph>(Registry.RegisterGraph<TGraph>()));
+            configurePersistentGraph(new GraphContext<TGraph>(Registry.RegisterGraph<TGraph>()));
+        }
+
+        /// <summary>
+        /// Index the object graph with the given <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TGraph"></typeparam>
+        public virtual void Index<TGraph,TKey>(IIndex<TGraph, TKey> index) where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            if (index == null) throw new ArgumentNullException("index");
+            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);
+            Registry.RegisterIndexer(registeredIndexer);
         }
 
         /// <summary>

@@ -29,29 +29,40 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     public class RegisteredGraph<TGraph> : RegisteredGraph
     {
-        public RegisteredGraph() : base(typeof(TGraph))
+        private readonly Registry registry;
+        private IEnumerable<IRegisteredIndexer> registeredIndexersAffectingGraph;
+
+        public RegisteredGraph(Registry registry) : base(typeof(TGraph))
         {
-            RegisteredIndexers = new List<RegisteredIndexer<TGraph>>();
-            RegisteredMappers = new List<RegisteredMapper<TGraph>>();
+            this.registry = registry;
         }
 
-        public virtual IList<RegisteredIndexer<TGraph>> RegisteredIndexers { get; private set; }
-        public virtual IList<RegisteredMapper<TGraph>> RegisteredMappers { get; private set; }
-
-        public override IEnumerable<IRegisteredIndexer> Indexes
+        public override IEnumerable<IRegisteredIndexer> IndexersOnGraph
         {
-            get { return RegisteredIndexers.Cast<IRegisteredIndexer>(); }
+            get {
+                return registeredIndexersAffectingGraph ??
+                       (registeredIndexersAffectingGraph =
+                        registry
+                            .RegisteredIndexers
+                            .Where(
+                                indexer =>
+                                indexer.IndexType
+                                    .GetInterfaces()
+                                    .Where(iface => typeof(IIndex).IsAssignableFrom(iface))
+                                    .Where(iface => iface.IsGenericType)
+                                    .Where(iface => iface.GetGenericTypeDefinition().Equals(typeof(IIndex<>)))
+                                    .Any(iface => iface.GetGenericArguments()[0].IsAssignableFrom(typeof(TGraph)))
+                            ));
+            }
         }
 
         public override void EngageBackingStore(IBackingStore backingStore)
         {
-            foreach(var registeredIndexer in RegisteredIndexers)
-                registeredIndexer.EngageBackingStore(backingStore);
         }
 
-        public IRegisteredIndexer GetRegisteredIndexerFor<TIndex>() where TIndex : IIndex<TGraph>
+        public IRegisteredIndexer GetRegisteredIndexerFor(IIndex<TGraph> index)
         {
-            return Indexes.Where(_ => _.IndexType == typeof(TIndex)).FirstOrDefault();
+            return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
         }
     }
 }

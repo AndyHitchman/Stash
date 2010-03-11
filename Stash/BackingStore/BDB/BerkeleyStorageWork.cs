@@ -150,7 +150,7 @@ namespace Stash.BackingStore.BDB
         /// <param name="registeredGraph"></param>
         private void deleteIndexes(DatabaseEntry graphKey, IRegisteredGraph registeredGraph)
         {
-            foreach(var managedIndex in registeredGraph.Indexes.Select(index => BackingStore.IndexDatabases[index.IndexName]))
+            foreach(var managedIndex in registeredGraph.IndexersOnGraph.Select(index => BackingStore.IndexDatabases[index.IndexName]))
             {
                 deleteAllIndexEntriesForGraphKey(managedIndex, graphKey);
             }

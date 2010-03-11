@@ -34,7 +34,6 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         private class StandInTrack<TGraph> : Track<TGraph>
         {
             public bool HasCalculatedIndexes;
-            public bool HasCalculatedMaps;
 
             public StandInTrack(Guid internalId, TGraph graph, Stream serializedgraph, IInternalSession session)
                 : base(internalId, graph, serializedgraph, session) {}
@@ -42,11 +41,6 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             protected override void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
             {
                 HasCalculatedIndexes = true;
-            }
-
-            protected override void CalculateMaps(RegisteredGraph<TGraph> registeredGraph)
-            {
-                HasCalculatedMaps = true;
             }
         }
 
@@ -91,30 +85,6 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
             sut.Complete();
 
             sut.HasCalculatedIndexes.ShouldBeTrue();
-        }
-
-        [Test]
-        public void it_should_calculate_maps_when_the_graph_has_changed()
-        {
-            var mockSession = MockRepository.GenerateMock<IInternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
-            var graph = new DummyPersistentObject();
-            var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-            var mockUpdate = new Update<DummyPersistentObject>(sut);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry).Repeat.Any();
-            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
-            mockPersistenceEventFactory.Expect(_ => _.MakeUpdate(sut)).Return(mockUpdate);
-            mockRegistry.Expect(_ => _.GetRegistrationFor<DummyPersistentObject>()).Return(null);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(new MemoryStream(new byte[] {1}));
-
-            sut.Complete();
-
-            sut.HasCalculatedMaps.ShouldBeTrue();
         }
 
         [Test]

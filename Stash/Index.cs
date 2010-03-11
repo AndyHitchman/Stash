@@ -16,18 +16,19 @@
 
 #endregion
 
-namespace Stash.Queries
+namespace Stash
 {
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Queries;
 
-    public static class Where
+    public static class Index
     {
         public static IAllOfQuery<TKey> AllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.AllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Kernel.Registry.BackingStore.Query.AllOf<TGraph, TKey>(getRegisteredIndexer(index), set);
         }
 
         public static IIntersectOperator And(this IQuery lhs, IQuery rhs)
@@ -38,67 +39,73 @@ namespace Stash.Queries
         public static IAnyOfQuery<TKey> AnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.AnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Kernel.Registry.BackingStore.Query.AnyOf<TGraph, TKey>(getRegisteredIndexer(index), set);
         }
 
         public static IBetweenQuery<TKey> Between<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Between<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.Query.Between<TGraph, TKey>(getRegisteredIndexer(index), lowerKey, upperKey);
         }
 
         public static IEqualToQuery<TKey> EqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.EqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.EqualTo<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static IGreaterThanQuery<TKey> GreaterThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.GreaterThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.GreaterThan<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static IGreaterThanEqualQuery<TKey> GreaterThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.GreaterThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.GreaterThanEqual<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static IInsideQuery<TKey> Inside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Inside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.Query.Inside<TGraph, TKey>(getRegisteredIndexer(index), lowerKey, upperKey);
+        }
+
+        public static IIsIndexedQuery IsIndexed<TGraph, TKey>(this IIndex<TGraph, TKey> index)
+            where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            return Kernel.Registry.BackingStore.Query.IsIndexed(getRegisteredIndexer(index));
         }
 
         public static ILessThanQuery<TKey> LessThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.LessThan<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.LessThan<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static ILessThanEqualQuery<TKey> LessThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.LessThanEqual<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.LessThanEqual<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotAllOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Kernel.Registry.BackingStore.Query.NotAllOf<TGraph, TKey>(getRegisteredIndexer(index), set);
         }
 
         public static INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotAnyOf<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), set);
+            return Kernel.Registry.BackingStore.Query.NotAnyOf<TGraph, TKey>(getRegisteredIndexer(index), set);
         }
 
         public static INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotEqualTo<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), key);
+            return Kernel.Registry.BackingStore.Query.NotEqualTo<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
         public static IIntersectOperator Or(this IQuery lhs, IQuery rhs)
@@ -109,12 +116,12 @@ namespace Stash.Queries
         public static IOutsideQuery<TKey> Outside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Outside<TGraph, TKey>(getRegisteredIndexer<TGraph, TKey>(), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.Query.Outside<TGraph, TKey>(getRegisteredIndexer(index), lowerKey, upperKey);
         }
 
-        private static IRegisteredIndexer getRegisteredIndexer<TGraph, TKey>() where TKey : IComparable<TKey>, IEquatable<TKey>
+        private static IRegisteredIndexer getRegisteredIndexer<TGraph>(IIndex<TGraph> index)
         {
-            return Kernel.Registry.GetRegistrationFor<TGraph>().GetRegisteredIndexerFor<IIndex<TGraph, TKey>>();
+            return Kernel.Registry.GetRegistrationFor<TGraph>().GetRegisteredIndexerFor(index);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Stash.Configuration
             }
         }
 
-        public abstract IEnumerable<IRegisteredIndexer> Indexes { get; }
+        public abstract IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
 
         public abstract void EngageBackingStore(IBackingStore backingStore);
     }

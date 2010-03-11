@@ -26,7 +26,7 @@ namespace Stash.Engine
 
         public SessionFactory()
         {
-            persistenceEventFactory = new DefaultPersistenceEventFactory();
+            persistenceEventFactory = new PersistenceEventFactory();
         }
 
 

@@ -37,7 +37,7 @@ namespace Stash
         /// Tell the session to track the work performed with the given repository.
         /// </summary>
         /// <param name="unenlistedRepository"></param>
-        EnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository);
+        IEnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository);
 
         /// <summary>
         /// Get the <see cref="IInternalSession"/> used by Stash. Not for external use.

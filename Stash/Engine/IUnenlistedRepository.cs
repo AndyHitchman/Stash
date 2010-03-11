@@ -21,7 +21,7 @@ namespace Stash.Engine
     /// <summary>
     /// Provides access to and management of persistent aggregrate object graphs and derived projections.
     /// </summary>
-    public interface IUnenlistedRepository : Repository
+    public interface IUnenlistedRepository : IRepository
     {
         /// <summary>
         /// Instruct the repository to delete the graph from the persistent store.

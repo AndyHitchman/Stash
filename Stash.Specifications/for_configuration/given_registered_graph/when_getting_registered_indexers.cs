@@ -28,23 +28,25 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
         [Test]
         public void it_should_find_a_registered_index_by_the_index_type()
         {
+            var registry = new Registry();
             var registeredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new DummyIndex());
-            var sut = new RegisteredGraph<DummyPersistentObject>();
-            sut.RegisteredIndexers.Add(registeredIndexer);
+            var sut = new RegisteredGraph<DummyPersistentObject>(registry);
+            registry.RegisteredIndexers.Add(registeredIndexer);
 
-            sut.GetRegisteredIndexerFor<DummyIndex>().ShouldEqual(registeredIndexer);
+            sut.GetRegisteredIndexerFor(new DummyIndex()).ShouldEqual(registeredIndexer);
         }
 
         [Test]
         public void it_should_find_the_correct_registered_index_by_the_index_type()
         {
+            var registry = new Registry();
             var registeredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new DummyIndex());
             var otherRegisteredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new OtherDummyIndex());
-            var sut = new RegisteredGraph<DummyPersistentObject>();
-            sut.RegisteredIndexers.Add(registeredIndexer);
-            sut.RegisteredIndexers.Add(otherRegisteredIndexer);
+            var sut = new RegisteredGraph<DummyPersistentObject>(registry);
+            registry.RegisteredIndexers.Add(registeredIndexer);
+            registry.RegisteredIndexers.Add(otherRegisteredIndexer);
 
-            sut.GetRegisteredIndexerFor<DummyIndex>().ShouldEqual(registeredIndexer);
+            sut.GetRegisteredIndexerFor(new OtherDummyIndex()).ShouldEqual(otherRegisteredIndexer);
         }
     }
 }

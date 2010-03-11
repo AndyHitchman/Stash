@@ -18,7 +18,7 @@
 
 namespace Stash
 {
-    public interface Repository
+    public interface IRepository
     {
         /// <summary>
         /// Instruct the repository to delete the graph from the persistent store.

@@ -19,11 +19,19 @@
 namespace Stash.Configuration
 {
     using System;
+    using System.Collections.Generic;
+    using BackingStore;
 
     public interface IRegisteredIndexer
     {
         Type IndexType { get; }
         string IndexName { get; }
         Type YieldType { get; }
+        void EngageBackingStore(IBackingStore backingStore);
+
+        /// <summary>
+        /// Calls the index function and returns a <see cref="IProjectedIndex"/>
+        /// </summary>
+        IEnumerable<IProjectedIndex> GetKeyFreeProjections(object graph);
     }
 }

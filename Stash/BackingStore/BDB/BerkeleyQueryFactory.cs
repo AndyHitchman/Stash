@@ -100,5 +100,10 @@ namespace Stash.BackingStore.BDB
         {
             throw new NotImplementedException();
         }
+
+        public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

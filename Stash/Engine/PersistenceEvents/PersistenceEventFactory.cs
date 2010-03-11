@@ -21,7 +21,7 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using System.IO;
 
-    public class DefaultPersistenceEventFactory : IPersistenceEventFactory
+    public class PersistenceEventFactory : IPersistenceEventFactory
     {
         public Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session)
         {

@@ -106,7 +106,7 @@ namespace Stash.Engine
             Complete();
         }
 
-        public virtual EnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository)
+        public virtual IEnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository)
         {
             return new DefaultEnlistedRepository(this, unenlistedRepository);
         }

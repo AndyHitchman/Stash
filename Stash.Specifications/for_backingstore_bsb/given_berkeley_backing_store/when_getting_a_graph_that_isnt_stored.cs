@@ -33,11 +33,13 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         private RegisteredGraph<ClassWithTwoAncestors> insertingRegisteredGraph;
         private RegisteredGraph<OtherClassWithTwoAncestors> gettingRegisteredGraph;
         private IStoredGraph result;
+        private Registry registry;
 
         protected override void Given()
         {
-            insertingRegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>();
-            gettingRegisteredGraph = new RegisteredGraph<OtherClassWithTwoAncestors>();
+            registry = new Registry();
+            insertingRegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
+            gettingRegisteredGraph = new RegisteredGraph<OtherClassWithTwoAncestors>(registry);
 
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
