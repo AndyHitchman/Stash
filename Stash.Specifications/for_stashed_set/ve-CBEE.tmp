@@ -1,7 +1,0 @@
-namespace BerkeleyDBFailingTest.for_stashed_set
-{
-    public class when_getting_a_stashed_set
-    {
-        
-    }
-}
