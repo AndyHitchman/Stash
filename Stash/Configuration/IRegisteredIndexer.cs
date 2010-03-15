@@ -32,6 +32,6 @@ namespace Stash.Configuration
         /// <summary>
         /// Calls the index function and returns a <see cref="IProjectedIndex"/>
         /// </summary>
-        IEnumerable<IProjectedIndex> GetKeyFreeProjections(object graph);
+        IEnumerable<IProjectedIndex> GetUntypedProjections(object graph);
     }
 }

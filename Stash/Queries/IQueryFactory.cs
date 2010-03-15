@@ -24,8 +24,8 @@ namespace Stash.Queries
 
     public interface IQueryFactory
     {
-        IAllOfQuery<TKey> AllOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
-        IIntersectOperator And(IQuery lhs, IQuery rhs);
+        IAllOfQuery<TKey> AllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
+        IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs);
         IAnyOfQuery<TKey> AnyOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IBetweenQuery<TKey> Between<TGraph, TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IEqualToQuery<TKey> EqualTo<TGraph, TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>;
@@ -37,7 +37,7 @@ namespace Stash.Queries
         INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
         INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>;
         INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>;
-        IIntersectOperator Or(IQuery lhs, IQuery rhs);
+        IIntersectOperator UnionOf(IQuery lhs, IQuery rhs);
         IOutsideQuery<TKey> Outside<TGraph, TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer);
     }

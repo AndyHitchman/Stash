@@ -26,12 +26,12 @@ namespace Stash.BackingStore.BDB
 
     public class BerkeleyQueryFactory : IQueryFactory
     {
-        public IAllOfQuery<TKey> AllOf<TGraph, TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
+        public IAllOfQuery<TKey> AllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new AllOfQuery<TKey>(indexer, set);
         }
 
-        public IIntersectOperator And(IQuery lhs, IQuery rhs)
+        public IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
         {
             throw new NotImplementedException();
         }
@@ -91,7 +91,7 @@ namespace Stash.BackingStore.BDB
             throw new NotImplementedException();
         }
 
-        public IIntersectOperator Or(IQuery lhs, IQuery rhs)
+        public IIntersectOperator UnionOf(IQuery lhs, IQuery rhs)
         {
             throw new NotImplementedException();
         }

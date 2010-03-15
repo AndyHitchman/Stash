@@ -104,6 +104,24 @@ namespace Stash.Configuration
             return registeredGraph;
         }
 
+        public IRegisteredIndexer GetIndexerFor(Type indexType)
+        {
+            return
+                RegisteredIndexers.Where(_ => _.IndexType.Equals(indexType)).First();
+        }
+
+        public IRegisteredIndexer GetIndexerFor(IIndex index)
+        {
+            return
+                GetIndexerFor(index.GetType());
+        }
+
+        public IRegisteredIndexer GetIndexerFor<TIndex>() where TIndex : IIndex
+        {
+            return
+                GetIndexerFor(typeof(TIndex));
+        }
+
         public void RegisterIndexer<TGraph,TKey>(RegisteredIndexer<TGraph, TKey> registeredIndexer) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             if(RegisteredIndexers.Contains(registeredIndexer))

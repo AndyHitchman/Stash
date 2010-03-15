@@ -18,20 +18,27 @@
 
 namespace Stash
 {
-    using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using Configuration;
+    using System.Linq;
+    using Queries;
 
-    /// <summary>
-    /// Implement an index for a tracked graph.
-    /// </summary>
-    /// <typeparam name="TGraph"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    public interface IIndex<TGraph, TKey> : IIndexByGraph<TGraph>, IIndexByKey<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class StashedSet<TGraph>
     {
-        /// <summary>
-        /// The index function that accepts the persisted object and yields a set of <typeparamref name="TKey"/>"/>
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        IEnumerable<TKey> Yield(TGraph graph);
+        public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession()) {}
+
+        public StashedSet(Registry registry, ISession session)
+        {
+            Registry = registry;
+            Session = session;
+        }
+
+        public Registry Registry { get; private set; }
+        public ISession Session { get; set; }
+
+        public void Where(IQuery query)
+        {
+        }
     }
 }

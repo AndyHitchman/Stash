@@ -18,5 +18,6 @@
 
 namespace Stash
 {
-    public interface IIndex<TGraph> : IIndex {}
+    public interface IIndexByGraph<TGraph> : IIndex {}
+    public interface IIndexByKey<TKey> : IIndex {}
 }

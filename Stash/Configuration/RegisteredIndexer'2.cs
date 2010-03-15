@@ -61,7 +61,7 @@ namespace Stash.Configuration
             backingStore.EnsureIndex(this);
         }
 
-        public override IEnumerable<IProjectedIndex> GetKeyFreeProjections(object graph)
+        public override IEnumerable<IProjectedIndex> GetUntypedProjections(object graph)
         {
             return Index.Yield((TGraph)graph).Cast<IProjectedIndex>();
         }

@@ -50,7 +50,7 @@ namespace Stash.Configuration
                                     .GetInterfaces()
                                     .Where(iface => typeof(IIndex).IsAssignableFrom(iface))
                                     .Where(iface => iface.IsGenericType)
-                                    .Where(iface => iface.GetGenericTypeDefinition().Equals(typeof(IIndex<>)))
+                                    .Where(iface => iface.GetGenericTypeDefinition().Equals(typeof(IIndexByGraph<>)))
                                     .Any(iface => iface.GetGenericArguments()[0].IsAssignableFrom(typeof(TGraph)))
                             ));
             }
@@ -60,7 +60,7 @@ namespace Stash.Configuration
         {
         }
 
-        public IRegisteredIndexer GetRegisteredIndexerFor(IIndex<TGraph> index)
+        public IRegisteredIndexer GetRegisteredIndexerFor(IIndex index)
         {
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
         }

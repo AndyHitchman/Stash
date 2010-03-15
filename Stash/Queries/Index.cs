@@ -1,39 +1,70 @@
 #region License
 
 // Copyright 2009 Andrew Hitchman
+
 // 
+
 // Licensed under the Apache License, Version 2.0 (the "License"); 
+
 // you may not use this file except in compliance with the License. 
+
 // You may obtain a copy of the License at 
+
 // 
+
 // 	http://www.apache.org/licenses/LICENSE-2.0 
+
 // 
+
 // Unless required by applicable law or agreed to in writing, software 
+
 // distributed under the License is distributed on an "AS IS" BASIS, 
+
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+
 // See the License for the specific language governing permissions and 
+
 // limitations under the License.
 
 #endregion
 
-namespace Stash
+namespace Stash.Queries
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
-    using Queries;
+    using Stash.Configuration;
+
+    public static class Index<TIndex> where TIndex : IIndex
+    {
+        public static IAllOfQuery<TKey> HasAllOf<TKey>(IEnumerable<TKey> set)
+            where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            return Kernel.Registry.BackingStore.Query.AllOf(Kernel.Registry.GetIndexerFor<TIndex>(), set);
+        }
+    }
 
     public static class Index
     {
-        public static IAllOfQuery<TKey> AllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
+        public static IAllOfQuery<TKey> HasAllOf<TKey>(this IIndexByKey<TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.AllOf<TGraph, TKey>(getRegisteredIndexer(index), set);
+            return Kernel.Registry.BackingStore.Query.AllOf(Kernel.Registry.GetIndexerFor(index), set);
         }
 
+        public static IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
+        {
+            return Kernel.Registry.BackingStore.Query.IntersectionOf(lhs, rhs);
+        }
+
+        /// <summary>
+        /// A synonym for <see cref="IntersectionOf"/>.
+        /// </summary>
+        /// <param name="lhs"></param>
+        /// <param name="rhs"></param>
+        /// <returns></returns>
         public static IIntersectOperator And(this IQuery lhs, IQuery rhs)
         {
-            return Kernel.Registry.BackingStore.Query.And(lhs, rhs);
+            return IntersectionOf(lhs, rhs);
         }
 
         public static IAnyOfQuery<TKey> AnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
@@ -108,9 +139,9 @@ namespace Stash
             return Kernel.Registry.BackingStore.Query.NotEqualTo<TGraph, TKey>(getRegisteredIndexer(index), key);
         }
 
-        public static IIntersectOperator Or(this IQuery lhs, IQuery rhs)
+        public static IIntersectOperator UnionOf(this IQuery lhs, IQuery rhs)
         {
-            return Kernel.Registry.BackingStore.Query.Or(lhs, rhs);
+            return Kernel.Registry.BackingStore.Query.UnionOf(lhs, rhs);
         }
 
         public static IOutsideQuery<TKey> Outside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
@@ -119,9 +150,9 @@ namespace Stash
             return Kernel.Registry.BackingStore.Query.Outside<TGraph, TKey>(getRegisteredIndexer(index), lowerKey, upperKey);
         }
 
-        private static IRegisteredIndexer getRegisteredIndexer<TGraph>(IIndex<TGraph> index)
+        private static IRegisteredIndexer getRegisteredIndexer(IIndex index)
         {
-            return Kernel.Registry.GetRegistrationFor<TGraph>().GetRegisteredIndexerFor(index);
+            return Kernel.Registry.GetIndexerFor(index);
         }
     }
 }

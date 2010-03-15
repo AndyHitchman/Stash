@@ -80,7 +80,7 @@ namespace Stash.Engine.PersistenceEvents
             {
                 IndexProjections.Add(
                     registeredIndexer,
-                    registeredIndexer.GetKeyFreeProjections(Graph)
+                    registeredIndexer.GetUntypedProjections(Graph)
                         .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
                         .ToList());
             }

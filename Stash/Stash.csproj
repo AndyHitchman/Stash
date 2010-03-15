@@ -112,6 +112,7 @@
     <Compile Include="BackingStore\BDB\ManagedIndex.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
+    <Compile Include="Queries\Index.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -181,10 +182,10 @@
     <Compile Include="Configuration\PersistenceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stash.cs" />
+    <Compile Include="StashedSet.cs" />
     <Compile Include="Tracker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Index.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
+    <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />
