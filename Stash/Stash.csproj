@@ -145,6 +145,7 @@
     <Compile Include="Engine\IUnenlistedRepository.cs" />
     <Compile Include="Queries\IIsIndexedQuery.cs" />
     <Compile Include="Queries\IClosedRangeQuery.cs" />
+    <Compile Include="Queries\Index`1.cs" />
     <Compile Include="Queries\INotOperator.cs" />
     <Compile Include="Queries\IIntersectOperator.cs" />
     <Compile Include="Queries\INotAllOfQuery.cs" />
@@ -181,8 +182,8 @@
     <Compile Include="Engine\TrackedProjection.cs" />
     <Compile Include="Configuration\PersistenceContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stash.cs" />
     <Compile Include="StashedSet.cs" />
+    <Compile Include="StashedSet`1.cs" />
     <Compile Include="Tracker.cs">
       <SubType>Code</SubType>
     </Compile>

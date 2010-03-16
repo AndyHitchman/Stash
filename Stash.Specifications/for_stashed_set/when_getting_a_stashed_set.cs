@@ -15,11 +15,11 @@ namespace Stash.Specifications.for_stashed_set
 
         protected override void When()
         {
-            sut.Where(Index<DummyIndex>.HasAllOf(new[] {1, 2, 3}));
-            sut.Where(new DummyIndex().HasAllOf(new[] {1, 2, 3}));
+            sut.Where(Index<DummyIndex>.AllOf(new[] {1, 2, 3}));
+            sut.Where(new DummyIndex().AllOf(new[] {1, 2, 3}));
 
-            sut.Where(Index.IntersectionOf(new DummyIndex().HasAllOf(new[] {1, 2, 3}), new DummyIndex().HasAllOf(new[] {2, 3})));
-            sut.Where(Index<DummyIndex>.HasAllOf(new[] {1, 2, 3}).And(Index<DummyIndex>.HasAllOf(new[] {2, 3})));
+            sut.Where(Index.IntersectionOf(new DummyIndex().AllOf(new[] {1, 2, 3}), new DummyIndex().AllOf(new[] {2, 3})));
+            sut.Where(Index<DummyIndex>.AllOf(new[] {1, 2, 3}).And(Index<DummyIndex>.AllOf(new[] {2, 3})));
         }
 
         [Then]

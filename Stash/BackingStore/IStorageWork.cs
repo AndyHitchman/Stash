@@ -51,7 +51,7 @@ namespace Stash.BackingStore
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        IEnumerable<IStoredGraph> Find(IQuery query);
+        IEnumerable<IStoredGraph> Get(IQuery query);
 
         /// <summary>
         /// Get an instance of a graph by its <paramref name="internalId"/>.

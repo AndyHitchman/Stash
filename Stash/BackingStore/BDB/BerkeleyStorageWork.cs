@@ -63,7 +63,7 @@ namespace Stash.BackingStore.BDB
             deleteGraphData(graphKey);
         }
 
-        public IEnumerable<IStoredGraph> Find(IQuery query)
+        public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             return executeQuery(query)
                 .Select(internalId => Get(internalId))

@@ -104,9 +104,9 @@ namespace Stash.BackingStore.BDB
                 new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
         }
 
-        public IEnumerable<IStoredGraph> Find(IQuery query)
+        public IEnumerable<IStoredGraph> Get(IQuery query)
         {
-            return InTransactionDo(work => work.Find(query));
+            return InTransactionDo(work => work.Get(query));
         }
 
         public IStoredGraph Get(Guid internalId)

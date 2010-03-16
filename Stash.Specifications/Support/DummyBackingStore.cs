@@ -53,7 +53,7 @@ namespace Stash.Specifications.Support
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IStoredGraph> Find(IQuery query)
+        public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             throw new NotImplementedException();
         }
