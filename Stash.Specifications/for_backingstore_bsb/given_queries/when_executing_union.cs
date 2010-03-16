@@ -46,7 +46,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
             rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
 
-            sut = new UnionOperator(lhs, rhs);
+            sut = new UnionOperator(new[] {lhs, rhs});
         }
 
         protected override void When()

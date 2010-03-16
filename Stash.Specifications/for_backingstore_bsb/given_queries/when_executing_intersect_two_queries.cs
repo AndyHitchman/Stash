@@ -51,7 +51,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
             rhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(rhsSet);
 
-            sut = new IntersectOperator(lhs, rhs);
+            sut = new IntersectOperator(new[] {lhs, rhs});
         }
 
         protected override void When()

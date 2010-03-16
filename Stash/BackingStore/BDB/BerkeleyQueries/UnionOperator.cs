@@ -26,14 +26,13 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class UnionOperator : IBerkeleyQuery, IUnionOperator
     {
-        private readonly IBerkeleyQuery lhs;
-        private readonly IBerkeleyQuery rhs;
-        private JoinExecutionOrder joinExecutionOrder;
+        private readonly IEnumerable<IBerkeleyQuery> queries;
 
-        public UnionOperator(IBerkeleyQuery lhs, IBerkeleyQuery rhs)
+        public UnionOperator(IEnumerable<IQuery> queries)
         {
-            this.lhs = lhs;
-            this.rhs = rhs;
+            this.queries = queries.OfType<IBerkeleyQuery>();
+            if(!this.queries.Any())
+                throw new ArgumentException("No executables queries passed", "queries");
         }
 
         public QueryCostScale QueryCostScale
@@ -43,22 +42,29 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            var lhsCost = lhs.EstimatedQueryCost(managedIndex, transaction);
-            var rhsCost = rhs.EstimatedQueryCost(managedIndex, transaction);
-            joinExecutionOrder = lhsCost < rhsCost ? JoinExecutionOrder.LeftFirst : JoinExecutionOrder.RightFirst;
-            return lhsCost + rhsCost;
+            return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(managedIndex, transaction));
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            return lhs.Execute(managedIndex, transaction).Union(rhs.Execute(managedIndex, transaction));
+            return
+                queries
+                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .Aggregate(
+                        Enumerable.Empty<Guid>(),
+                        (guids, query) => guids.Union(query.Execute(managedIndex, transaction))
+                    );
         }
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
             return
-                lhs.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint)
-                    .Union(rhs.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint));
+                queries
+                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .Aggregate(
+                        joinConstraint,
+                        (guids, query) => guids.Union(query.ExecuteInsideIntersect(managedIndex, transaction, guids))
+                    );
         }
     }
 }

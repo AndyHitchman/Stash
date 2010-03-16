@@ -26,14 +26,13 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class IntersectOperator : IBerkeleyQuery, IIntersectOperator
     {
-        private readonly IBerkeleyQuery lhs;
-        private readonly IBerkeleyQuery rhs;
-        private JoinExecutionOrder joinExecutionOrder;
+        private readonly IEnumerable<IBerkeleyQuery> queries;
 
-        public IntersectOperator(IQuery lhs, IQuery rhs)
+        public IntersectOperator(IEnumerable<IQuery> queries)
         {
-            this.lhs = (IBerkeleyQuery)lhs;
-            this.rhs = (IBerkeleyQuery)rhs;
+            this.queries = queries.OfType<IBerkeleyQuery>();
+            if(!this.queries.Any())
+                throw new ArgumentException("No executables queries passed", "queries");
         }
 
         public QueryCostScale QueryCostScale
@@ -43,35 +42,30 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
         {
-            var lhsCost = lhs.EstimatedQueryCost(managedIndex, transaction);
-            var rhsCost = rhs.EstimatedQueryCost(managedIndex, transaction);
-            joinExecutionOrder = lhsCost < rhsCost ? JoinExecutionOrder.LeftFirst : JoinExecutionOrder.RightFirst;
-            return lhsCost + rhsCost;
+            return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(managedIndex, transaction));
         }
 
         public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
         {
-            EstimatedQueryCost(managedIndex, transaction);
-
-            var cheapQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? lhs : rhs;
-            var expensiveQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? rhs : lhs;
-
-            var cheapResults = cheapQuery.Execute(managedIndex, transaction).ToList();
-            var expensiveResults = expensiveQuery.ExecuteInsideIntersect(managedIndex, transaction, cheapResults);
-            return cheapResults.Intersect(expensiveResults);
+            return
+                queries
+                    .Skip(1)
+                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .Aggregate(
+                        queries.First().Execute(managedIndex, transaction),
+                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(managedIndex, transaction, guids))
+                    );
         }
 
         public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            EstimatedQueryCost(managedIndex, transaction);
-
-            var cheapQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? lhs : rhs;
-            var expensiveQuery = joinExecutionOrder == JoinExecutionOrder.LeftFirst ? rhs : lhs;
-
-            //Materialise cheap results now, as we don't know how the other side will use this. We want to prevent multiple enumerations.
-            var cheapResults = cheapQuery.ExecuteInsideIntersect(managedIndex, transaction, joinConstraint).ToList();
-            var expensiveResults = expensiveQuery.ExecuteInsideIntersect(managedIndex, transaction, cheapResults);
-            return cheapResults.Intersect(expensiveResults);
+            return
+                queries
+                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .Aggregate(
+                        joinConstraint,
+                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(managedIndex, transaction, guids))
+                    );
         }
     }
 }
