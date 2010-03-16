@@ -1,29 +1,17 @@
 #region License
 
 // Copyright 2009 Andrew Hitchman
-
 // 
-
 // Licensed under the Apache License, Version 2.0 (the "License"); 
-
 // you may not use this file except in compliance with the License. 
-
 // You may obtain a copy of the License at 
-
 // 
-
 // 	http://www.apache.org/licenses/LICENSE-2.0 
-
 // 
-
 // Unless required by applicable law or agreed to in writing, software 
-
 // distributed under the License is distributed on an "AS IS" BASIS, 
-
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-
 // See the License for the specific language governing permissions and 
-
 // limitations under the License.
 
 #endregion
@@ -39,11 +27,6 @@ namespace Stash.Queries
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return Kernel.Registry.BackingStore.Query.AllOf(Kernel.Registry.GetIndexerFor(index), set);
-        }
-
-        public static IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
-        {
-            return Kernel.Registry.BackingStore.Query.IntersectionOf(lhs, rhs);
         }
 
         /// <summary>
@@ -93,6 +76,16 @@ namespace Stash.Queries
             return Kernel.Registry.BackingStore.Query.Inside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
         }
 
+        public static IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
+        {
+            return Kernel.Registry.BackingStore.Query.IntersectionOf(queries);
+        }
+
+        public static IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
+        {
+            return IntersectionOf(new[] {lhs, rhs});
+        }
+
         public static IIsIndexedQuery IsIndexed<TGraph, TKey>(this IIndex<TGraph, TKey> index)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
@@ -129,15 +122,25 @@ namespace Stash.Queries
             return Kernel.Registry.BackingStore.Query.NotEqualTo(Kernel.Registry.GetIndexerFor(index), key);
         }
 
-        public static IIntersectOperator UnionOf(this IQuery lhs, IQuery rhs)
+        public static IUnionOperator Or(this IQuery lhs, IQuery rhs)
         {
-            return Kernel.Registry.BackingStore.Query.UnionOf(lhs, rhs);
+            return UnionOf(lhs, rhs);
         }
 
         public static IOutsideQuery<TKey> Outside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return Kernel.Registry.BackingStore.Query.Outside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
+        }
+
+        public static IUnionOperator UnionOf(IQuery lhs, IQuery rhs)
+        {
+            return Kernel.Registry.BackingStore.Query.UnionOf(new[] {lhs, rhs});
+        }
+
+        public static IUnionOperator UnionOf(IEnumerable<IQuery> queries)
+        {
+            return Kernel.Registry.BackingStore.Query.UnionOf(queries);
         }
     }
 }

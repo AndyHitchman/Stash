@@ -37,5 +37,10 @@ namespace Stash.Engine
         {
             return GetTypeHierarchyFor(t);
         }
+
+        public static string GetConcreteTypeValue(Type t)
+        {
+            return t.AssemblyQualifiedName;
+        }
     }
 }

@@ -49,8 +49,8 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
         {
             return
                 queries
-                    .Skip(1)
                     .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .Skip(1)
                     .Aggregate(
                         queries.First().Execute(managedIndex, transaction),
                         (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(managedIndex, transaction, guids))

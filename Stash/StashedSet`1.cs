@@ -23,9 +23,12 @@ namespace Stash
     using System.Collections.Generic;
     using Configuration;
     using Queries;
+    using System.Linq;
 
     public class StashedSet<TGraph> : IEnumerable<TGraph>
     {
+        private readonly IEnumerable<IQuery> queryChain;
+
         public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession()) {}
 
         public StashedSet(Registry registry, ISession session)
@@ -34,15 +37,27 @@ namespace Stash
             Session = session;
         }
 
+        public StashedSet(Registry registry, ISession session, IEnumerable<IQuery> queryChain)
+        {
+            this.queryChain = queryChain;
+            Registry = registry;
+            Session = session;
+        }
+
         public Registry Registry { get; private set; }
         public ISession Session { get; set; }
 
-        public void Where(IQuery query)
+        public StashedSet<TGraph> Where(IQuery query)
         {
+            return new StashedSet<TGraph>(Registry, Session, queryChain.Concat(new[] {query}));
         }
 
         public IEnumerator<TGraph> GetEnumerator()
         {
+            if(!queryChain.Any())
+                throw new InvalidOperationException("No query specified in Where()");
+
+            //return Session.Internalize(). Registry.BackingStore.Get(Index.IntersectionOf(queryChain));
             throw new NotImplementedException();
         }
 

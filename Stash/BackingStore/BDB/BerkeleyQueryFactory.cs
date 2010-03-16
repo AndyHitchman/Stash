@@ -31,19 +31,19 @@ namespace Stash.BackingStore.BDB
             return new AllOfQuery<TKey>(indexer, set);
         }
 
-        public IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
+        public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
         {
-            throw new NotImplementedException();
+            return new IntersectOperator(queries);
         }
 
         public IAnyOfQuery<TKey> AnyOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new AnyOfQuery<TKey>(indexer, set);
         }
 
         public IBetweenQuery<TKey> Between<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new BetweenQuery<TKey>(indexer, lowerKey, upperKey);
         }
 
         public IEqualToQuery<TKey> EqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -53,57 +53,57 @@ namespace Stash.BackingStore.BDB
 
         public IGreaterThanQuery<TKey> GreaterThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new GreaterThanQuery<TKey>(indexer, key);
         }
 
         public IGreaterThanEqualQuery<TKey> GreaterThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new GreaterThanEqualToQuery<TKey>(indexer, key);
         }
 
         public IInsideQuery<TKey> Inside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new InsideQuery<TKey>(indexer, lowerKey, upperKey);
         }
 
         public ILessThanQuery<TKey> LessThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new LessThanQuery<TKey>(indexer, key);
         }
 
         public ILessThanEqualQuery<TKey> LessThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new LessThanEqualToQuery<TKey>(indexer, key);
         }
 
         public INotAnyOfQuery<TKey> NotAllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new NotAnyOfQuery<TKey>(indexer, set);
         }
 
         public INotAnyOfQuery<TKey> NotAnyOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new NotAnyOfQuery<TKey>(indexer, set);
         }
 
         public INotEqualToQuery<TKey> NotEqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new NotEqualToQuery<TKey>(indexer, key);
         }
 
-        public IIntersectOperator UnionOf(IQuery lhs, IQuery rhs)
+        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
         {
-            throw new NotImplementedException();
+            return new UnionOperator(queries);
         }
 
         public IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            throw new NotImplementedException();
+            return new OutsideQuery<TKey>(indexer, lowerKey, upperKey);
         }
 
         public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
         {
-            throw new NotImplementedException();
+            return new IsIndexedQuery(indexer);
         }
     }
 }
