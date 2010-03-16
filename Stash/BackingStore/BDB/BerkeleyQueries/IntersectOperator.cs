@@ -32,7 +32,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
         {
             this.queries = queries.OfType<IBerkeleyQuery>();
             if(!this.queries.Any())
-                throw new ArgumentException("No executables queries passed", "queries");
+                throw new ArgumentException("No executable queries passed", "queries");
         }
 
         public QueryCostScale QueryCostScale
