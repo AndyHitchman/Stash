@@ -24,10 +24,5 @@ namespace Stash.Engine.PersistenceEvents
         /// The typed graph.
         /// </summary>
         TGraph Graph { get; }
-
-        /// <summary>
-        /// The internal session to which the persistence event belongs.
-        /// </summary>
-        IInternalSession Session { get; }
     }
 }

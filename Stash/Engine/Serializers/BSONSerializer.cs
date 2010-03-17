@@ -19,21 +19,17 @@
 namespace Stash.Engine.Serializers
 {
     using System;
-    using System.IO;
+    using System.Collections.Generic;
+    using Configuration;
 
-    public class BSONSerializer : Serializer
+    public class BSONSerializer<TGraph> : ISerializer<TGraph>
     {
-        public object Deserialize(Stream serializedGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }
 
-        public TGraph Deserialize<TGraph>(Stream serializedGraph)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Stream Serialize(object graph)
+        public IEnumerable<byte> Serialize(TGraph graph, RegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }

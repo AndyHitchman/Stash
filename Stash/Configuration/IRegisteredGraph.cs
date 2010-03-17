@@ -37,5 +37,7 @@ namespace Stash.Configuration
         /// All registered indexes for the graph.
         /// </summary>
         IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
+
+        Registry Registry { get; }
     }
 }

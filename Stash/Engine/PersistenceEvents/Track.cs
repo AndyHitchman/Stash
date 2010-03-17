@@ -23,25 +23,21 @@ namespace Stash.Engine.PersistenceEvents
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
+    using BackingStore;
     using Configuration;
 
     public class Track<TGraph> : PersistenceEvent<TGraph>
     {
-        protected readonly Dictionary<IRegisteredIndexer, List<TrackedProjection>> IndexProjections =
-            new Dictionary<IRegisteredIndexer, List<TrackedProjection>>();
-
-        protected readonly Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>> MapProjections =
-            new Dictionary<RegisteredMapper<TGraph>, List<TrackedProjection>>();
-
+        private readonly IStoredGraph storedGraph;
+        private readonly IRegisteredGraph<TGraph> registeredGraph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
 
-        public Track(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session)
+        public Track(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph)
         {
-            InternalId = internalId;
-            Graph = graph;
-            Session = session;
+            this.storedGraph = storedGraph;
+            this.registeredGraph = registeredGraph;
             hashCodeGenerator = new SHA1CryptoServiceProvider();
-            OriginalHash = hashCodeGenerator.ComputeHash(serializedGraph);
+            OriginalHash = hashCodeGenerator.ComputeHash(storedGraph.SerialisedGraph.ToArray());
         }
 
         /// <summary>
@@ -62,11 +58,6 @@ namespace Stash.Engine.PersistenceEvents
         public TGraph Graph { get; private set; }
 
         /// <summary>
-        /// The internal session to which the persistence event belongs.
-        /// </summary>
-        public IInternalSession Session { get; private set; }
-
-        /// <summary>
         /// Get the untypes graph.
         /// </summary>
         public object UntypedGraph
@@ -74,47 +65,24 @@ namespace Stash.Engine.PersistenceEvents
             get { return Graph; }
         }
 
-        protected virtual void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
+        protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
         {
-            foreach(var registeredIndexer in registeredGraph.IndexersOnGraph)
-            {
-                IndexProjections.Add(
-                    registeredIndexer,
-                    registeredIndexer.GetUntypedProjections(Graph)
-                        .Select(projection => new TrackedProjection(new[] {InternalId}, projection))
-                        .ToList());
-            }
+            return 
+                registeredGraph.IndexersOnGraph
+                .Select(registeredIndexer => registeredIndexer.GetUntypedProjections(Graph))
+                .SelectMany(indices => indices);
         }
 
         public virtual void Complete()
         {
-            var serializedGraph = Session.Registry.Serializer().Serialize(Graph);
-            CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph);
+            var serializedGraph = registeredGraph.Serialize(Graph);
+            CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph.ToArray());
 
             if(CompletionHash.SequenceEqual(OriginalHash))
                 //No change to object. No work to do.
                 return;
 
-            var registeredGraph = Session.Registry.GetRegistrationFor<TGraph>();
-
-            //Calculate indexes, maps and reduces on tracked graphs.
-            CalculateIndexes(registeredGraph);
-
-            Session.PersistenceEventFactory.MakeUpdate(this).EnrollInSession();
-        }
-
-        public virtual void EnrollInSession()
-        {
-            //Keep a local cache of indexes, maps and reduces for graphs tracked in the session. Go here before hitting the
-            //backing store. Reduces may be out of date once retrieved.
-            //Exclude destroyed graphs from results.
-            //Reduces must be calculated by a background process to ensure consistency. Use a BDB Queue?
-
-            if(Session.GraphIsTracked(Graph))
-                return;
-
-            Session.Enroll(this);
-            PrepareEnrollment();
+            var trackedGraph = new TrackedGraph(storedGraph.InternalId, serializedGraph, CalculateIndexes(), registeredGraph);
         }
 
         public virtual void PrepareEnrollment() {}

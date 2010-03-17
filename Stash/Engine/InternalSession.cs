@@ -34,11 +34,8 @@ namespace Stash.Engine
         {
             Registry = registry;
             PersistenceEventFactory = persistenceEventFactory;
-            InternalRepository = new DefaultUnenlistedRepository();
             enrolledPersistenceEvents = new List<IPersistenceEvent>();
         }
-
-        public IUnenlistedRepository InternalRepository { get; private set; }
 
         public Registry Registry { get; private set; }
         public IPersistenceEventFactory PersistenceEventFactory { get; set; }
@@ -104,11 +101,6 @@ namespace Stash.Engine
         public virtual void Dispose()
         {
             Complete();
-        }
-
-        public virtual IEnlistedRepository EnlistRepository(IUnenlistedRepository unenlistedRepository)
-        {
-            return new DefaultEnlistedRepository(this, unenlistedRepository);
         }
 
         public void Enroll(IPersistenceEvent persistenceEvent)

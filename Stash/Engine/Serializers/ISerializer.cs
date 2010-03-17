@@ -18,12 +18,16 @@
 
 namespace Stash.Engine.Serializers
 {
-    using System.IO;
+    using System.Collections.Generic;
+    using Configuration;
 
-    public interface Serializer
+    /// <summary>
+    /// An interface that provides serialization and deserialization functions for a graph
+    /// Implement to provide customised behaviour or alternative serialization strategies.
+    /// </summary>
+    public interface ISerializer<TGraph>
     {
-        object Deserialize(Stream serializedGraph);
-        TGraph Deserialize<TGraph>(Stream serializedGraph);
-        Stream Serialize(object graph);
+        TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph);
+        IEnumerable<byte> Serialize(TGraph graph, RegisteredGraph<TGraph> registeredGraph);
     }
 }

@@ -19,7 +19,10 @@
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+    using BackingStore;
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
@@ -28,106 +31,24 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     using Rhino.Mocks;
     using Support;
 
-    [TestFixture]
-    public class when_completing
+    public class when_completing : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
     {
-        private class StandInTrack<TGraph> : Track<TGraph>
+        protected override void Given()
         {
-            public bool HasCalculatedIndexes;
-
-            public StandInTrack(Guid internalId, TGraph graph, Stream serializedgraph, IInternalSession session)
-                : base(internalId, graph, serializedgraph, session) {}
-
-            protected override void CalculateIndexes(RegisteredGraph<TGraph> registeredGraph)
-            {
-                HasCalculatedIndexes = true;
-            }
+            Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(Enumerable.Empty<byte>());
+            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Empty<byte>());
         }
 
-        [Test]
+        protected override void When()
+        {
+            Subject.Complete();
+        }
+
+
+        [Then]
         public void it_should_calculate_a_new_hash()
         {
-            var mockSession = MockRepository.GenerateMock<IInternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Stream.Null);
-
-            sut.Complete();
-
-            sut.CompletionHash.ShouldNotBeNull();
-        }
-
-        [Test]
-        public void it_should_calculate_indexes_when_the_graph_has_changed()
-        {
-            var mockSession = MockRepository.GenerateMock<IInternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
-            var graph = new DummyPersistentObject();
-            var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-            var mockUpdate = new Update<DummyPersistentObject>(sut);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry).Repeat.Any();
-            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
-            mockPersistenceEventFactory.Expect(_ => _.MakeUpdate(sut)).Return(mockUpdate);
-            mockRegistry.Expect(_ => _.GetRegistrationFor<DummyPersistentObject>()).Return(null);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(new MemoryStream(new byte[] {1}));
-
-            sut.Complete();
-
-            sut.HasCalculatedIndexes.ShouldBeTrue();
-        }
-
-        [Test]
-        public void it_should_enroll_an_update_persistence_event_when_the_graph_has_changed()
-        {
-            var mockSession = MockRepository.GenerateMock<IInternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var mockPersistenceEventFactory = MockRepository.GenerateMock<IPersistenceEventFactory>();
-            var graph = new DummyPersistentObject();
-            var sut = new StandInTrack<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-            var mockUpdate = new Update<DummyPersistentObject>(sut);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry).Repeat.Any();
-            mockSession.Expect(_ => _.PersistenceEventFactory).Return(mockPersistenceEventFactory);
-            mockPersistenceEventFactory.Expect(_ => _.MakeUpdate(sut)).Return(mockUpdate);
-            mockRegistry.Expect(_ => _.GetRegistrationFor<DummyPersistentObject>()).Return(null);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(new MemoryStream(new byte[] {1}));
-
-            sut.Complete();
-
-            mockSession.AssertWasCalled(s => s.Enroll(mockUpdate));
-        }
-
-        [Test]
-        public void it_should_not_enroll_an_update_persistence_event_when_the_graph_has_not_changed()
-        {
-            var mockSession = MockRepository.GenerateMock<IInternalSession>();
-            var mockRegistry = MockRepository.GenerateMock<Registry>();
-            var mockSerializer = MockRepository.GenerateMock<Serializer>();
-            Func<Serializer> fSerializer = () => mockSerializer;
-            var graph = new DummyPersistentObject();
-            var sut = new Track<DummyPersistentObject>(Guid.Empty, graph, Stream.Null, mockSession);
-
-            mockSession.Expect(_ => _.Registry).Return(mockRegistry);
-            mockRegistry.Expect(_ => _.Serializer).Return(fSerializer);
-            mockSerializer.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Stream.Null);
-
-            sut.Complete();
-
-            mockSession.AssertWasNotCalled(s => s.Enroll(null), o => o.IgnoreArguments());
+            Subject.CompletionHash.ShouldNotBeNull();
         }
     }
 }

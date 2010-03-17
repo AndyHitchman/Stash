@@ -20,21 +20,31 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
     using System.IO;
+    using System.Linq;
 
-    public class Endure<TGraph> : Track<TGraph>
+    public class Endure<TGraph> : IPersistenceEvent
     {
         /// <summary>
         /// We are persisting a new graph here, so create a new <see cref="Guid"/>.
         /// </summary>
         /// <param name="graph"></param>
         /// <param name="session"></param>
-        public Endure(TGraph graph, IInternalSession session)
-            : base(Guid.NewGuid(), graph, new MemoryStream(), session) {}
+        public Endure(TGraph graph, IInternalSession session) {}
 
 
-        public override void Complete()
+        public object UntypedGraph
         {
-            Session.PersistenceEventFactory.MakeInsert(this).EnrollInSession();
+            get { throw new NotImplementedException(); }
+        }
+
+        public void Complete()
+        {
+            //Session.PersistenceEventFactory.MakeInsert(this).EnrollInSession();
+        }
+
+        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
+        {
+            throw new NotImplementedException();
         }
     }
 }

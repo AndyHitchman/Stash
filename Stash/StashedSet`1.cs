@@ -22,6 +22,7 @@ namespace Stash
     using System.Collections;
     using System.Collections.Generic;
     using Configuration;
+    using Engine;
     using Queries;
     using System.Linq;
 
@@ -45,7 +46,8 @@ namespace Stash
         }
 
         public Registry Registry { get; private set; }
-        public ISession Session { get; set; }
+        public ISession Session { get; private set; }
+        private IInternalSession internalSession { get { return Session.Internalize(); }}
 
         public StashedSet<TGraph> Where(IQuery query)
         {
@@ -57,8 +59,13 @@ namespace Stash
             if(!queryChain.Any())
                 throw new InvalidOperationException("No query specified in Where()");
 
-            //return Session.Internalize(). Registry.BackingStore.Get(Index.IntersectionOf(queryChain));
-            throw new NotImplementedException();
+            var registeredGraph = Registry.GetRegistrationFor<TGraph>();
+            foreach(var storedGraph in Registry.BackingStore.Get(Index.IntersectionOf(queryChain)))
+            {
+                var track = internalSession.PersistenceEventFactory.MakeTrack(storedGraph, registeredGraph);
+                internalSession.Enroll(track);
+                yield return track.Graph;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()

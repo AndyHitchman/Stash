@@ -33,11 +33,6 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         void Complete();
 
-        /// <summary>
-        /// Enroll the persistence event in the session.
-        /// </summary>
-        void EnrollInSession();
-
         PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event);
     }
 }

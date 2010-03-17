@@ -19,14 +19,15 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using BackingStore;
+    using Configuration;
 
     public interface IPersistenceEventFactory
     {
         Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session);
         Endure<TGraph> MakeEndure<TGraph>(TGraph graph, IInternalSession session);
-        Insert<TGraph> MakeInsert<TGraph>(Endure<TGraph> endure);
-        Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session);
-        Update<TGraph> MakeUpdate<TGraph>(Track<TGraph> track);
+        Track<TGraph> MakeTrack<TGraph>(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph);
     }
 }

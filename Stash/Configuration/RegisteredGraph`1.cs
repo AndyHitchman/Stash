@@ -21,13 +21,13 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
-    using Engine;
+    using Engine.Serializers;
 
     /// <summary>
     /// A configured object graph.
     /// </summary>
     /// <typeparam name="TGraph"></typeparam>
-    public class RegisteredGraph<TGraph> : RegisteredGraph
+    public class RegisteredGraph<TGraph> : RegisteredGraph, IRegisteredGraph<TGraph>
     {
         private readonly Registry registry;
         private IEnumerable<IRegisteredIndexer> registeredIndexersAffectingGraph;
@@ -37,12 +37,15 @@ namespace Stash.Configuration
             this.registry = registry;
         }
 
+        public override Registry Registry { get { return registry; } }
+
         public override IEnumerable<IRegisteredIndexer> IndexersOnGraph
         {
-            get {
+            get
+            {
                 return registeredIndexersAffectingGraph ??
                        (registeredIndexersAffectingGraph =
-                        registry
+                        Registry
                             .RegisteredIndexers
                             .Where(
                                 indexer =>
@@ -56,13 +59,23 @@ namespace Stash.Configuration
             }
         }
 
-        public override void EngageBackingStore(IBackingStore backingStore)
+        public ISerializer<TGraph> Serializer { get; set; }
+
+        public TGraph Deserialize(IEnumerable<byte> serializedGraph)
         {
+            return Serializer.Deserialize(serializedGraph, this);
         }
+
+        public override void EngageBackingStore(IBackingStore backingStore) {}
 
         public IRegisteredIndexer GetRegisteredIndexerFor(IIndex index)
         {
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
+        }
+
+        public IEnumerable<byte> Serialize(TGraph graph)
+        {
+            return Serializer.Serialize(graph, this);
         }
     }
 }

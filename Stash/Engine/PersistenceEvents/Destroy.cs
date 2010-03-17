@@ -54,11 +54,6 @@ namespace Stash.Engine.PersistenceEvents
             throw new NotImplementedException();
         }
 
-        public virtual void EnrollInSession()
-        {
-            Session.Enroll(this);
-        }
-
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeEvicted;

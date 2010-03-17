@@ -19,33 +19,35 @@
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using BackingStore;
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
+    using Engine.Serializers;
     using NUnit.Framework;
     using Rhino.Mocks;
     using Support;
 
-    public class when_initialising_track : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
+    public class when_completing_with_a_changed_graph : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
     {
         protected override void Given()
         {
-            var serializedGraph = "this is a pretend serialised object graph".Select(_ => Convert.ToByte(_));
-            Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(serializedGraph);
+            Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(Enumerable.Repeat<byte>(0x02, 100));
+            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Repeat<byte>(0x01, 100));
         }
 
         protected override void When()
         {
-            var instantiate = Subject;
+            Subject.Complete();
         }
 
         [Then]
-        public void it_should_calculate_a_hash_code_based_on_the_original_serialized_graph()
+        public void it_should_calculate_indexes_when_the_graph_has_changed()
         {
-            Subject.OriginalHash.ShouldNotBeEmpty();
+            Subject.HasCalculatedIndexes.ShouldBeTrue();
         }
     }
 }

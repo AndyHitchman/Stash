@@ -53,6 +53,7 @@ namespace Stash.Configuration
         }
 
         public abstract IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
+        public abstract Registry Registry { get; }
 
         public abstract void EngageBackingStore(IBackingStore backingStore);
     }

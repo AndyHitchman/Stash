@@ -36,11 +36,6 @@ namespace Stash.Engine
         IBackingStore BackingStore { get; }
 
         /// <summary>
-        /// An internal repository for use by the session.
-        /// </summary>
-        IUnenlistedRepository InternalRepository { get; }
-
-        /// <summary>
         /// Persistence events enrolled in the session.
         /// </summary>
         IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents { get; }

@@ -46,8 +46,6 @@ namespace Stash.Configuration
 
         public virtual IBackingStore BackingStore { get; private set; }
 
-        public virtual Func<Serializer> Serializer { get; set; }
-
         /// <summary>
         /// Engage the backing store in managing the stash.
         /// </summary>

@@ -63,6 +63,10 @@
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_with_one_query.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_a_changed_graph.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
@@ -138,12 +142,9 @@
     <Compile Include="for_configuration\given_registered_stash\with_registered_stash.cs" />
     <Compile Include="for_configuration\given_registrar\when_configuring.cs" />
     <Compile Include="for_configuration\given_registered_stash\when_engaging_backing_store.cs" />
-    <Compile Include="for_engine\for_persistence_events\given_destroy\when_enrolling_in_session.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_enrolling_in_session.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track.cs" />
-    <Compile Include="for_engine\given_default_enlisted_repository\when_initialising.cs" />
-    <Compile Include="for_engine\given_default_enlisted_repository\when_doing_work.cs" />
     <Compile Include="for_engine\given_default_internal_session\StandInInternalSession.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_complete.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_enroll.cs" />
@@ -151,11 +152,7 @@
     <Compile Include="for_engine\given_default_internal_session\when_told_to_dispose.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_backing_store.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_registry.cs" />
-    <Compile Include="for_engine\given_default_internal_session\when_told_to_enlist_repository.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_internalise.cs" />
-    <Compile Include="for_engine\given_default_unenlisted_repository\when_fetching.cs" />
-    <Compile Include="for_engine\given_default_unenlisted_repository\when_deleting.cs" />
-    <Compile Include="for_engine\given_default_unenlisted_repository\when_persisting.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_second_graph.cs" />
@@ -179,6 +176,9 @@
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="for_engine\for_persistence_events\given_destroy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

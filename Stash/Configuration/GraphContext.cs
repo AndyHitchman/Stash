@@ -19,9 +19,9 @@
 namespace Stash.Configuration
 {
     using System;
-    using System.IO;
-    using System.Runtime.Serialization;
+    using System.Collections.Generic;
     using Engine;
+    using Engine.Serializers;
 
     /// <summary>
     /// The context for configuring a persistent object graph.
@@ -40,20 +40,10 @@ namespace Stash.Configuration
         public virtual RegisteredGraph<TGraph> RegisteredGraph { get; private set; }
 
         /// <summary>
-        /// Tell the engine to use the provided serializaton functions.
+        /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="serializer"/>.
         /// </summary>
         /// <param name="serializer"></param>
-        /// <param name="deserializer"></param>
-        public virtual void SerializeWith(Func<TGraph, Registry, byte[]> serializer, Func<byte[], Registry, TGraph> deserializer)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="customSerializer"/>.
-        /// </summary>
-        /// <param name="customSerializer"></param>
-        public virtual void SerializeWith(ICustomSerializer customSerializer)
+        public virtual void SerializeWith(ISerializer<TGraph> serializer)
         {
             throw new NotImplementedException();
         }

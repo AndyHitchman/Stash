@@ -67,10 +67,5 @@ namespace Stash.Configuration
         {
             Registry.RegisterGraph<TGraph>();
         }
-
-        public virtual void SerializeGraphsWith(Func<Serializer> serializer)
-        {
-            Registry.Serializer = serializer;
-        }
     }
 }

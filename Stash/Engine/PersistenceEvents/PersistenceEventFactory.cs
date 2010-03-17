@@ -19,7 +19,10 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
+    using BackingStore;
+    using Configuration;
 
     public class PersistenceEventFactory : IPersistenceEventFactory
     {
@@ -33,19 +36,9 @@ namespace Stash.Engine.PersistenceEvents
             return new Endure<TGraph>(graph, session);
         }
 
-        public Insert<TGraph> MakeInsert<TGraph>(Endure<TGraph> endure)
+        public Track<TGraph> MakeTrack<TGraph>(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph)
         {
-            return new Insert<TGraph>(endure);
-        }
-
-        public Track<TGraph> MakeTrack<TGraph>(Guid internalId, TGraph graph, Stream serializedGraph, IInternalSession session)
-        {
-            return new Track<TGraph>(internalId, graph, serializedGraph, session);
-        }
-
-        public Update<TGraph> MakeUpdate<TGraph>(Track<TGraph> track)
-        {
-            return new Update<TGraph>(track);
+            return new Track<TGraph>(storedGraph, registeredGraph);
         }
     }
 }
