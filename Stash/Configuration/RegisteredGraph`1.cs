@@ -29,15 +29,15 @@ namespace Stash.Configuration
     /// <typeparam name="TGraph"></typeparam>
     public class RegisteredGraph<TGraph> : RegisteredGraph, IRegisteredGraph<TGraph>
     {
-        private readonly Registry registry;
+        private readonly IRegistry registry;
         private IEnumerable<IRegisteredIndexer> registeredIndexersAffectingGraph;
 
-        public RegisteredGraph(Registry registry) : base(typeof(TGraph))
+        public RegisteredGraph(IRegistry registry) : base(typeof(TGraph))
         {
             this.registry = registry;
         }
 
-        public override Registry Registry { get { return registry; } }
+        public override IRegistry Registry { get { return registry; } }
 
         public override IEnumerable<IRegisteredIndexer> IndexersOnGraph
         {

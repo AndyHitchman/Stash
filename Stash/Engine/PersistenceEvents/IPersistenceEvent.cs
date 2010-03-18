@@ -18,6 +18,8 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
+    using BackingStore;
+
     /// <summary>
     /// An event that must be handled by the active <see cref="ISession"/>.
     /// </summary>
@@ -31,7 +33,8 @@ namespace Stash.Engine.PersistenceEvents
         /// <summary>
         /// Complete all work for the persistence event.
         /// </summary>
-        void Complete();
+        /// <param name="work"></param>
+        void Complete(IStorageWork work);
 
         PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event);
     }

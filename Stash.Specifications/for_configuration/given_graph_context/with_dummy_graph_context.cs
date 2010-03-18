@@ -24,7 +24,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
 
     public class with_dummy_graph_context
     {
-        private Registry registry;
+        private IRegistry registry;
         protected GraphContext<DummyPersistentObject> Sut { get; private set; }
 
         [SetUp]

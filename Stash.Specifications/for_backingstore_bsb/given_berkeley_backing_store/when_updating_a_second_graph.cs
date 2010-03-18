@@ -36,7 +36,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         private RegisteredIndexer<ClassWithTwoAncestors, int> firstRegisteredIndexer;
         private RegisteredIndexer<ClassWithTwoAncestors, string> secondRegisteredIndexer;
         private TrackedGraph updatedSecondTrackedGraph;
-        private Registry registry;
+        private IRegistry registry;
 
         protected override void Given()
         {

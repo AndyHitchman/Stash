@@ -35,7 +35,7 @@ namespace Stash.Configuration
             this.backingStore = backingStore;
         }
 
-        public virtual Registry Registry
+        public virtual IRegistry Registry
         {
             get { return persistenceContext.Registry; }
         }

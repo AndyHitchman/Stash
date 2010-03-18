@@ -19,6 +19,7 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using BackingStore;
 
     public class Destroy<TGraph> : PersistenceEvent<TGraph>
     {
@@ -49,7 +50,7 @@ namespace Stash.Engine.PersistenceEvents
             get { return Graph; }
         }
 
-        public virtual void Complete()
+        public virtual void Complete(IStorageWork work)
         {
             throw new NotImplementedException();
         }

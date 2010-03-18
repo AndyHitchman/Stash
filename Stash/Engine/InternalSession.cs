@@ -21,29 +21,23 @@ namespace Stash.Engine
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
-    using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
     public class InternalSession : IInternalSession
     {
-        protected readonly List<IPersistenceEvent> enrolledPersistenceEvents;
+        protected readonly List<IPersistenceEvent> PersistenceEvents;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        public InternalSession(Registry registry, IPersistenceEventFactory persistenceEventFactory)
+        public InternalSession(IRegistry registry, IPersistenceEventFactory persistenceEventFactory)
         {
             Registry = registry;
             PersistenceEventFactory = persistenceEventFactory;
-            enrolledPersistenceEvents = new List<IPersistenceEvent>();
+            PersistenceEvents = new List<IPersistenceEvent>();
         }
 
-        public Registry Registry { get; private set; }
+        public IRegistry Registry { get; private set; }
         public IPersistenceEventFactory PersistenceEventFactory { get; set; }
-
-        public IBackingStore BackingStore
-        {
-            get { return Registry.BackingStore; }
-        }
 
         public virtual IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents
         {
@@ -52,7 +46,8 @@ namespace Stash.Engine
                 enrolledPersistenceEventsLocker.EnterReadLock();
                 try
                 {
-                    return enrolledPersistenceEvents.ToList();
+                    //A stable clone.
+                    return PersistenceEvents.ToList();
                 }
                 finally
                 {
@@ -68,7 +63,7 @@ namespace Stash.Engine
                 enrolledPersistenceEventsLocker.EnterReadLock();
                 try
                 {
-                    return enrolledPersistenceEvents.Select(_ => _.UntypedGraph).ToList();
+                    return PersistenceEvents.Select(_ => _.UntypedGraph).ToList();
                 }
                 finally
                 {
@@ -82,7 +77,7 @@ namespace Stash.Engine
             enrolledPersistenceEventsLocker.EnterWriteLock();
             try
             {
-                enrolledPersistenceEvents.Clear();
+                PersistenceEvents.Clear();
             }
             finally
             {
@@ -92,9 +87,30 @@ namespace Stash.Engine
 
         public virtual void Complete()
         {
-            while(enrolledPersistenceEvents.Any())
+            while(PersistenceEvents.Any())
             {
-                phaseComplete();
+                List<IPersistenceEvent> drain;
+
+                enrolledPersistenceEventsLocker.EnterWriteLock();
+                try
+                {
+                    //A stable clone.
+                    drain = PersistenceEvents.ToList();
+                    PersistenceEvents.Clear();
+                }
+                finally
+                {
+                    enrolledPersistenceEventsLocker.ExitWriteLock();
+                }
+
+                Registry.BackingStore.InTransactionDo(
+                    work =>
+                        {
+                            foreach (var @event in drain)
+                            {
+                                @event.Complete(work);
+                            }
+                        });
             }
         }
 
@@ -110,12 +126,12 @@ namespace Stash.Engine
             {
                 foreach(
                     var @event in
-                        enrolledPersistenceEvents.Where(_ => ReferenceEquals(persistenceEvent.UntypedGraph, _.UntypedGraph)))
+                        PersistenceEvents.Where(_ => ReferenceEquals(persistenceEvent.UntypedGraph, _.UntypedGraph)))
                 {
                     //TODO: Act on answer (determine whether answer is ever useful.)
                     persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
                 }
-                enrolledPersistenceEvents.Add(persistenceEvent);
+                PersistenceEvents.Add(persistenceEvent);
             }
             finally
             {
@@ -131,27 +147,6 @@ namespace Stash.Engine
         public virtual IInternalSession Internalize()
         {
             return this;
-        }
-
-        private void phaseComplete()
-        {
-            List<IPersistenceEvent> drain;
-
-            enrolledPersistenceEventsLocker.EnterWriteLock();
-            try
-            {
-                drain = enrolledPersistenceEvents.ToList();
-                enrolledPersistenceEvents.Clear();
-            }
-            finally
-            {
-                enrolledPersistenceEventsLocker.ExitWriteLock();
-            }
-
-            foreach(var @event in drain)
-            {
-                @event.Complete();
-            }
         }
     }
 }

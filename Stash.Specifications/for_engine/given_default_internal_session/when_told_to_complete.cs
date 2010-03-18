@@ -18,36 +18,44 @@
 
 namespace Stash.Specifications.for_engine.given_default_internal_session
 {
+    using System;
+    using BackingStore;
+    using Configuration;
     using Engine.PersistenceEvents;
     using NUnit.Framework;
     using Rhino.Mocks;
     using Support;
 
     [TestFixture]
-    public class when_told_to_complete
+    public class when_told_to_complete : AutoMockedSpecification<StandInInternalSession>
     {
-        [Test]
-        public void it_should_clear_all_peristed_events()
+        private IPersistenceEvent mockPersistentEvent;
+        private IBackingStore mockBackingStore;
+
+        protected override void Given()
         {
-            var sut = new StandInInternalSession();
-            var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
-            sut.ExposedPersistenceEvents.Add(mockPersistentEvent);
+            mockBackingStore = MockRepository.GenerateMock<IBackingStore>();
+            Dependency<IRegistry>().Expect(_ => _.BackingStore).Return(mockBackingStore);
 
-            sut.Complete();
-
-            sut.EnrolledPersistenceEvents.ShouldBeEmpty();
+            mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
+            Subject.ExposedPersistenceEvents.Add(mockPersistentEvent);
         }
 
-        [Test]
+        protected override void When()
+        {
+            Subject.Complete();
+        }
+
+        [Then]
+        public void it_should_clear_all_peristed_events()
+        {
+            Subject.EnrolledPersistenceEvents.ShouldBeEmpty();
+        }
+
+        [Then]
         public void it_should_tell_persisted_events_to_complete()
         {
-            var sut = new StandInInternalSession();
-            var mockPersistentEvent = MockRepository.GenerateMock<IPersistenceEvent>();
-            sut.ExposedPersistenceEvents.Add(mockPersistentEvent);
-
-            sut.Complete();
-
-            mockPersistentEvent.AssertWasCalled(_ => _.Complete());
+            mockPersistentEvent.AssertWasCalled(_ => _.Complete(null), _ => _.IgnoreArguments());
         }
     }
 }

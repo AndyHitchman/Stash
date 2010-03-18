@@ -19,16 +19,17 @@
 namespace Stash.Specifications.for_engine.given_default_internal_session
 {
     using System.Collections.Generic;
+    using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
 
-    internal class StandInInternalSession : InternalSession
+    public class StandInInternalSession : InternalSession
     {
-        public StandInInternalSession() : base(null, null) {}
+        public StandInInternalSession(IRegistry registry, IPersistenceEventFactory persistenceEventFactory) : base(registry, persistenceEventFactory) {}
 
         public List<IPersistenceEvent> ExposedPersistenceEvents
         {
-            get { return enrolledPersistenceEvents; }
+            get { return PersistenceEvents; }
         }
     }
 }

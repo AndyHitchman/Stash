@@ -29,12 +29,12 @@ namespace Stash.Configuration
     /// <typeparam name="TBackingStore"></typeparam>
     public class PersistenceContext<TBackingStore> where TBackingStore : IBackingStore
     {
-        public PersistenceContext(Registry registry)
+        public PersistenceContext(IRegistry registry)
         {
             Registry = registry;
         }
 
-        public Registry Registry { get; private set; }
+        public IRegistry Registry { get; private set; }
 
         /// <summary>
         /// Configure Stash for the <typeparamref name="TGraph"/> and provide an action that performs additional configuration.

@@ -38,6 +38,6 @@ namespace Stash.Configuration
         /// </summary>
         IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
 
-        Registry Registry { get; }
+        IRegistry Registry { get; }
     }
 }

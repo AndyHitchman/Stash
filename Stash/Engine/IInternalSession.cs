@@ -19,7 +19,6 @@
 namespace Stash.Engine
 {
     using System.Collections.Generic;
-    using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
@@ -28,12 +27,7 @@ namespace Stash.Engine
         /// <summary>
         /// The registered configuration.
         /// </summary>
-        Registry Registry { get; }
-
-        /// <summary>
-        /// The engaged backing store.
-        /// </summary>
-        IBackingStore BackingStore { get; }
+        IRegistry Registry { get; }
 
         /// <summary>
         /// Persistence events enrolled in the session.

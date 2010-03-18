@@ -33,15 +33,18 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 
     public class when_completing : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
     {
+        private IStorageWork mockStorageWork;
+
         protected override void Given()
         {
             Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(Enumerable.Empty<byte>());
             Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Empty<byte>());
+            mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
         }
 
         protected override void When()
         {
-            Subject.Complete();
+            Subject.Complete(mockStorageWork);
         }
 
 

@@ -21,6 +21,7 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using System.IO;
     using System.Linq;
+    using BackingStore;
 
     public class Endure<TGraph> : IPersistenceEvent
     {
@@ -37,7 +38,7 @@ namespace Stash.Engine.PersistenceEvents
             get { throw new NotImplementedException(); }
         }
 
-        public void Complete()
+        public void Complete(IStorageWork work)
         {
             //Session.PersistenceEventFactory.MakeInsert(this).EnrollInSession();
         }

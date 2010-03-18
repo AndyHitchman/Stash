@@ -73,7 +73,7 @@ namespace Stash.Engine.PersistenceEvents
                 .SelectMany(indices => indices);
         }
 
-        public virtual void Complete()
+        public virtual void Complete(IStorageWork work)
         {
             var serializedGraph = registeredGraph.Serialize(Graph);
             CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph.ToArray());
@@ -83,9 +83,8 @@ namespace Stash.Engine.PersistenceEvents
                 return;
 
             var trackedGraph = new TrackedGraph(storedGraph.InternalId, serializedGraph, CalculateIndexes(), registeredGraph);
+            work.UpdateGraph(trackedGraph);
         }
-
-        public virtual void PrepareEnrollment() {}
 
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {

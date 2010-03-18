@@ -32,20 +32,20 @@ namespace Stash
 
         public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession()) {}
 
-        public StashedSet(Registry registry, ISession session)
+        public StashedSet(IRegistry registry, ISession session)
         {
             Registry = registry;
             Session = session;
         }
 
-        public StashedSet(Registry registry, ISession session, IEnumerable<IQuery> queryChain)
+        public StashedSet(IRegistry registry, ISession session, IEnumerable<IQuery> queryChain)
         {
             this.queryChain = queryChain;
             Registry = registry;
             Session = session;
         }
 
-        public Registry Registry { get; private set; }
+        public IRegistry Registry { get; private set; }
         public ISession Session { get; private set; }
         private IInternalSession internalSession { get { return Session.Internalize(); }}
 

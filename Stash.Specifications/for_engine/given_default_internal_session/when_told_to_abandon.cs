@@ -24,18 +24,25 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     using Support;
 
     [TestFixture]
-    public class when_told_to_abandon
+    public class when_told_to_abandon : AutoMockedSpecification<StandInInternalSession>
     {
-        [Test]
+        private IPersistenceEvent mockPersistentEvent;
+
+        protected override void Given()
+        {
+            mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
+            Subject.ExposedPersistenceEvents.Add(mockPersistentEvent);
+        }
+
+        protected override void When()
+        {
+            Subject.Abandon();
+        }
+
+        [Then]
         public void it_should_clear_all_peristed_events()
         {
-            var sut = new StandInInternalSession();
-            var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
-            sut.ExposedPersistenceEvents.Add(mockPersistentEvent);
-
-            sut.Abandon();
-
-            sut.EnrolledPersistenceEvents.ShouldBeEmpty();
+            Subject.EnrolledPersistenceEvents.ShouldBeEmpty();
         }
     }
 }

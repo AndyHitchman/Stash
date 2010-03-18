@@ -27,7 +27,7 @@ namespace Stash
     {
         public static ISessionFactory SessionFactory { get; private set; }
 
-        public static Registry Registry { get; set; }
+        public static IRegistry Registry { get; set; }
 
         public static void Kickstart<TBackingStore>(
             TBackingStore backingStore, Action<PersistenceContext<TBackingStore>> configurationAction)

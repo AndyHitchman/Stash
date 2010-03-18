@@ -33,21 +33,30 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 
     public class when_completing_with_an_unchanged_graph : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
     {
+        private IStorageWork mockStorageWork;
+
         protected override void Given()
         {
             Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(Enumerable.Repeat<byte>(0x01, 100));
             Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Repeat<byte>(0x01, 100));
+            mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
         }
 
         protected override void When()
         {
-            Subject.Complete();
+            Subject.Complete(mockStorageWork);
         }
 
         [Then]
-        public void it_should_calculate_indexes_when_the_graph_has_changed()
+        public void it_should_not_waste_time_calculate_indexes()
         {
             Subject.HasCalculatedIndexes.ShouldBeFalse();
+        }
+
+        [Then]
+        public void it_should_not_tell_storage_work_to_do_an_update()
+        {
+            mockStorageWork.AssertWasNotCalled(_ => _.UpdateGraph(null), _ => _.IgnoreArguments());
         }
     }
 }

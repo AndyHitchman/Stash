@@ -37,7 +37,7 @@ namespace Stash.Specifications.for_backingstore_bsb
     {
         protected RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         protected RegisteredIndexer<ClassWithTwoAncestors, int> registeredIndexer;
-        private Registry registry;
+        private IRegistry registry;
 
         protected override void WithContext()
         {
