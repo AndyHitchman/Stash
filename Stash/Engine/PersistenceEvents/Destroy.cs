@@ -21,7 +21,7 @@ namespace Stash.Engine.PersistenceEvents
     using System;
     using BackingStore;
 
-    public class Destroy<TGraph> : PersistenceEvent<TGraph>
+    public class Destroy<TGraph> : IPersistenceEvent<TGraph>
     {
         public Destroy(Guid internalId, TGraph graph, IInternalSession session)
         {

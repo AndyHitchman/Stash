@@ -18,7 +18,7 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
-    public interface PersistenceEvent<TGraph> : IPersistenceEvent
+    public interface IPersistenceEvent<TGraph> : IPersistenceEvent
     {
         /// <summary>
         /// The typed graph.

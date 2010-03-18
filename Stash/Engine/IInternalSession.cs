@@ -27,7 +27,7 @@ namespace Stash.Engine
         /// <summary>
         /// The registered configuration.
         /// </summary>
-        IRegistry Registry { get; }
+//        IRegistry Registry { get; }
 
         /// <summary>
         /// Persistence events enrolled in the session.

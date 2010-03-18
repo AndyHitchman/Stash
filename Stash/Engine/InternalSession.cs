@@ -21,22 +21,25 @@ namespace Stash.Engine
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
+    using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
     public class InternalSession : IInternalSession
     {
+        private readonly IBackingStore backingStore;
         protected readonly List<IPersistenceEvent> PersistenceEvents;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        public InternalSession(IRegistry registry, IPersistenceEventFactory persistenceEventFactory)
+        public InternalSession(IBackingStore backingStore, IPersistenceEventFactory persistenceEventFactory)
         {
-            Registry = registry;
+            this.backingStore = backingStore;
+            //            Registry = registry;
             PersistenceEventFactory = persistenceEventFactory;
             PersistenceEvents = new List<IPersistenceEvent>();
         }
 
-        public IRegistry Registry { get; private set; }
+//        public IRegistry Registry { get; private set; }
         public IPersistenceEventFactory PersistenceEventFactory { get; set; }
 
         public virtual IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents
@@ -103,7 +106,7 @@ namespace Stash.Engine
                     enrolledPersistenceEventsLocker.ExitWriteLock();
                 }
 
-                Registry.BackingStore.InTransactionDo(
+                backingStore.InTransactionDo(
                     work =>
                         {
                             foreach (var @event in drain)

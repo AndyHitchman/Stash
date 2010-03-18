@@ -6,7 +6,7 @@
     using Configuration;
     using Engine.PersistenceEvents;
 
-    public class StandInTrack<TGraph> : Track<TGraph>
+    public class StandInTrack<TGraph> : Track<TGraph> where TGraph : class
     {
         public bool HasCalculatedIndexes;
 

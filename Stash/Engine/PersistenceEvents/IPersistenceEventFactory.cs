@@ -28,6 +28,6 @@ namespace Stash.Engine.PersistenceEvents
     {
         Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session);
         Endure<TGraph> MakeEndure<TGraph>(TGraph graph, IInternalSession session);
-        Track<TGraph> MakeTrack<TGraph>(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph);
+        Track<TSuperGraph> MakeTrack<TSuperGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TSuperGraph : class;
     }
 }

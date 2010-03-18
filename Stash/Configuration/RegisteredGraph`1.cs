@@ -61,7 +61,7 @@ namespace Stash.Configuration
 
         public ISerializer<TGraph> Serializer { get; set; }
 
-        public TGraph Deserialize(IEnumerable<byte> serializedGraph)
+        public override object Deserialize(IEnumerable<byte> serializedGraph)
         {
             return Serializer.Deserialize(serializedGraph, this);
         }
@@ -73,9 +73,9 @@ namespace Stash.Configuration
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph)
+        public override IEnumerable<byte> Serialize(object graph)
         {
-            return Serializer.Serialize(graph, this);
+            return Serializer.Serialize((TGraph)graph, this);
         }
     }
 }

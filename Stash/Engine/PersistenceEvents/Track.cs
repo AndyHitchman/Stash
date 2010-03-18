@@ -26,13 +26,14 @@ namespace Stash.Engine.PersistenceEvents
     using BackingStore;
     using Configuration;
 
-    public class Track<TGraph> : PersistenceEvent<TGraph>
+    public class Track<TSuperGraph> : IPersistenceEvent<TSuperGraph> where TSuperGraph : class
     {
         private readonly IStoredGraph storedGraph;
-        private readonly IRegisteredGraph<TGraph> registeredGraph;
+        private readonly IRegisteredGraph registeredGraph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
+        private TSuperGraph graph;
 
-        public Track(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph)
+        public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
         {
             this.storedGraph = storedGraph;
             this.registeredGraph = registeredGraph;
@@ -53,12 +54,7 @@ namespace Stash.Engine.PersistenceEvents
         public Guid InternalId { get; set; }
 
         /// <summary>
-        /// The typed graph.
-        /// </summary>
-        public TGraph Graph { get; private set; }
-
-        /// <summary>
-        /// Get the untypes graph.
+        /// Get the untyped graph.
         /// </summary>
         public object UntypedGraph
         {
@@ -67,15 +63,15 @@ namespace Stash.Engine.PersistenceEvents
 
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
         {
-            return 
+            return
                 registeredGraph.IndexersOnGraph
-                .Select(registeredIndexer => registeredIndexer.GetUntypedProjections(Graph))
-                .SelectMany(indices => indices);
+                    .Select(registeredIndexer => registeredIndexer.GetUntypedProjections(UntypedGraph))
+                    .SelectMany(indices => indices);
         }
 
         public virtual void Complete(IStorageWork work)
         {
-            var serializedGraph = registeredGraph.Serialize(Graph);
+            var serializedGraph = registeredGraph.Serialize(UntypedGraph);
             CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph.ToArray());
 
             if(CompletionHash.SequenceEqual(OriginalHash))
@@ -89,6 +85,11 @@ namespace Stash.Engine.PersistenceEvents
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeRetained;
+        }
+
+        public TSuperGraph Graph
+        {
+            get { return graph ?? (graph = (TSuperGraph)registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
         }
     }
 }

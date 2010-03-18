@@ -21,49 +21,51 @@ namespace Stash
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using BackingStore;
     using Configuration;
     using Engine;
     using Queries;
     using System.Linq;
 
-    public class StashedSet<TGraph> : IEnumerable<TGraph>
+    public class StashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class
     {
+        private readonly IRegistry registry;
+        private readonly IInternalSession session;
+        private readonly IQueryFactory queryFactory;
         private readonly IEnumerable<IQuery> queryChain;
 
-        public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession()) {}
+        public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession().Internalize(), Kernel.Registry.BackingStore.Query) {}
 
-        public StashedSet(IRegistry registry, ISession session)
+        public StashedSet(IRegistry registry, IInternalSession session, IQueryFactory queryFactory)
         {
-            Registry = registry;
-            Session = session;
+            this.registry = registry;
+            this.session = session;
+            this.queryFactory = queryFactory;
+            queryChain = Enumerable.Empty<IQuery>();
         }
 
-        public StashedSet(IRegistry registry, ISession session, IEnumerable<IQuery> queryChain)
+        public StashedSet(IRegistry registry, IInternalSession session, IQueryFactory queryFactory, IEnumerable<IQuery> queryChain)
         {
+            this.registry = registry;
+            this.session = session;
+            this.queryFactory = queryFactory;
             this.queryChain = queryChain;
-            Registry = registry;
-            Session = session;
         }
-
-        public IRegistry Registry { get; private set; }
-        public ISession Session { get; private set; }
-        private IInternalSession internalSession { get { return Session.Internalize(); }}
 
         public StashedSet<TGraph> Where(IQuery query)
         {
-            return new StashedSet<TGraph>(Registry, Session, queryChain.Concat(new[] {query}));
+            return new StashedSet<TGraph>(registry, session, queryFactory, queryChain.Concat(new[] {query}));
         }
 
         public IEnumerator<TGraph> GetEnumerator()
         {
             if(!queryChain.Any())
-                throw new InvalidOperationException("No query specified in Where()");
+                throw new InvalidOperationException("No queries in query chain");
 
-            var registeredGraph = Registry.GetRegistrationFor<TGraph>();
-            foreach(var storedGraph in Registry.BackingStore.Get(Index.IntersectionOf(queryChain)))
+            foreach(var storedGraph in registry.BackingStore.Get(queryFactory.IntersectionOf(queryChain)))
             {
-                var track = internalSession.PersistenceEventFactory.MakeTrack(storedGraph, registeredGraph);
-                internalSession.Enroll(track);
+                var track = session.PersistenceEventFactory.MakeTrack<TGraph>(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType));
+                session.Enroll(track);
                 yield return track.Graph;
             }
         }

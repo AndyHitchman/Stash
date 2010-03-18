@@ -36,9 +36,9 @@ namespace Stash.Engine.PersistenceEvents
             return new Endure<TGraph>(graph, session);
         }
 
-        public Track<TGraph> MakeTrack<TGraph>(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph)
+        public Track<TSuperGraph> MakeTrack<TSuperGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TSuperGraph : class
         {
-            return new Track<TGraph>(storedGraph, registeredGraph);
+            return new Track<TSuperGraph>(storedGraph, registeredGraph);
         }
     }
 }

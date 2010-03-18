@@ -24,6 +24,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     using Engine.PersistenceEvents;
     using NUnit.Framework;
     using Rhino.Mocks;
+    using Rhino.Mocks.Constraints;
     using Support;
 
     [TestFixture]
@@ -34,11 +35,14 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
 
         protected override void Given()
         {
-            mockBackingStore = MockRepository.GenerateMock<IBackingStore>();
-            Dependency<IRegistry>().Expect(_ => _.BackingStore).Return(mockBackingStore);
-
             mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
             Subject.ExposedPersistenceEvents.Add(mockPersistentEvent);
+
+            //Call the supplied delegate.
+            var mockStorageWork = MockRepository.GenerateStub<IStorageWork>();
+            Dependency<IBackingStore>().Stub(_ => _.InTransactionDo(null))
+                .IgnoreArguments()
+                .WhenCalled(_ => ((Action<IStorageWork>)_.Arguments[0]).Invoke(mockStorageWork));
         }
 
         protected override void When()

@@ -67,6 +67,7 @@
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
+    <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="for_engine\given_default_internal_session\when_told_to_enroll.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_abandon.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_dispose.cs" />
-    <Compile Include="for_engine\given_default_internal_session\when_asked_for_the_registry.cs" />
     <Compile Include="for_engine\given_default_internal_session\when_told_to_internalise.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />

@@ -54,6 +54,8 @@ namespace Stash.Configuration
 
         public abstract IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
         public abstract IRegistry Registry { get; }
+        public abstract IEnumerable<byte> Serialize(object graph);
+        public abstract object Deserialize(IEnumerable<byte> serializedGraph);
 
         public abstract void EngageBackingStore(IBackingStore backingStore);
     }

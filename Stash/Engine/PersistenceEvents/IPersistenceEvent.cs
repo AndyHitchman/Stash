@@ -26,7 +26,7 @@ namespace Stash.Engine.PersistenceEvents
     public interface IPersistenceEvent
     {
         /// <summary>
-        /// Get the untypes graph.
+        /// Get the untyped graph.
         /// </summary>
         object UntypedGraph { get; }
 
