@@ -25,43 +25,6 @@ namespace Stash.Configuration
     using Engine;
     using Engine.Serializers;
 
-    public interface IRegistry {
-        Dictionary<Type, RegisteredGraph> RegisteredGraphs { get; }
-        List<IRegisteredIndexer> RegisteredIndexers { get; }
-
-        /// <summary>
-        /// The aggregate object graphs currently configured.
-        /// </summary>
-        IEnumerable<RegisteredGraph> AllRegisteredGraphs { get; }
-
-        IBackingStore BackingStore { get; }
-
-        /// <summary>
-        /// Engage the backing store in managing the stash.
-        /// </summary>
-        void EngageBackingStore(IBackingStore backingStore);
-
-        /// <summary>
-        /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <typeparamref name="TGraph"/>.
-        /// </summary>
-        /// <typeparam name="TGraph"></typeparam>
-        /// <returns></returns>
-        RegisteredGraph<TGraph> GetRegistrationFor<TGraph>();
-
-        /// <summary>
-        /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <paramref name="graphType"/>.
-        /// </summary>
-        /// <returns></returns>
-        RegisteredGraph GetRegistrationFor(Type graphType);
-
-        bool IsManagingGraphTypeOrAncestor(Type graphType);
-        RegisteredGraph<TGraph> RegisterGraph<TGraph>() where TGraph : class;
-        IRegisteredIndexer GetIndexerFor(Type indexType);
-        IRegisteredIndexer GetIndexerFor(IIndex index);
-        IRegisteredIndexer GetIndexerFor<TIndex>() where TIndex : IIndex;
-        void RegisterIndexer<TGraph,TKey>(RegisteredIndexer<TGraph, TKey> registeredIndexer) where TKey : IComparable<TKey>, IEquatable<TKey>;
-    }
-
     public class Registry : IRegistry
     {
         public Registry()
@@ -106,7 +69,7 @@ namespace Stash.Configuration
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        public virtual RegisteredGraph<TGraph> GetRegistrationFor<TGraph>()
+        public virtual IRegisteredGraph<TGraph> GetRegistrationFor<TGraph>()
         {
             return (RegisteredGraph<TGraph>)GetRegistrationFor(typeof(TGraph));
         }
@@ -115,7 +78,7 @@ namespace Stash.Configuration
         /// Get the <see cref="RegisteredGraph{TGraph}"/> for a given type <paramref name="graphType"/>.
         /// </summary>
         /// <returns></returns>
-        public virtual RegisteredGraph GetRegistrationFor(Type graphType)
+        public virtual IRegisteredGraph GetRegistrationFor(Type graphType)
         {
             if(graphType == null) throw new ArgumentNullException("graphType");
             if(!RegisteredGraphs.ContainsKey(graphType)) throw new ArgumentOutOfRangeException("graphType");

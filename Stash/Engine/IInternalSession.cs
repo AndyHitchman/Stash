@@ -19,16 +19,12 @@
 namespace Stash.Engine
 {
     using System.Collections.Generic;
+    using BackingStore;
     using Configuration;
     using PersistenceEvents;
 
     public interface IInternalSession : ISession
     {
-        /// <summary>
-        /// The registered configuration.
-        /// </summary>
-//        IRegistry Registry { get; }
-
         /// <summary>
         /// Persistence events enrolled in the session.
         /// </summary>
@@ -42,16 +38,19 @@ namespace Stash.Engine
         IPersistenceEventFactory PersistenceEventFactory { get; set; }
 
         /// <summary>
-        /// Manage the persistence event.
-        /// </summary>
-        /// <param name="persistenceEvent"></param>
-        void Enroll(IPersistenceEvent persistenceEvent);
-
-        /// <summary>
         /// True if the graph is being tracked by this session.
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
         bool GraphIsTracked(object graph);
+
+        /// <summary>
+        /// Track a stored graph such that changes made in the session are persisted to the backing store.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="storedGraph"></param>
+        /// <param name="registeredGraph"></param>
+        /// <returns></returns>
+        ITrack<TGraph> Track<TGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TGraph : class;
     }
 }

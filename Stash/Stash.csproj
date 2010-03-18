@@ -46,6 +46,7 @@
     <Compile Include="Configuration\IRegisteredGraph.cs" />
     <Compile Include="Configuration\IRegisteredGraph`1.cs" />
     <Compile Include="Configuration\IRegisteredIndexer.cs" />
+    <Compile Include="Configuration\IRegistry.cs" />
     <Compile Include="Configuration\RegisteredMapper`3.cs" />
     <Compile Include="Configuration\Registry.cs" />
     <Compile Include="Configuration\Registrar.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
     <Compile Include="BackingStore\IStorageWork.cs" />
+    <Compile Include="Engine\PersistenceEvents\ITrack.cs" />
     <Compile Include="Engine\Serializers\AdhocSerializer.cs" />
     <Compile Include="Engine\SessionFactory.cs" />
     <Compile Include="Engine\InternalSession.cs" />

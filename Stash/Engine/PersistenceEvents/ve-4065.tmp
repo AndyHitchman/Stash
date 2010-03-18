@@ -26,7 +26,7 @@ namespace Stash.Engine.PersistenceEvents
     using BackingStore;
     using Configuration;
 
-    public class Track<TSuperGraph> : ITrack<TSuperGraph> where TSuperGraph : class
+    public class Track<TSuperGraph> : IPersistenceEvent<TSuperGraph> where TSuperGraph : class
     {
         private readonly IStoredGraph storedGraph;
         private readonly IRegisteredGraph registeredGraph;

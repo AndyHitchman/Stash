@@ -24,6 +24,7 @@ namespace Stash
     using BackingStore;
     using Configuration;
     using Engine;
+    using Engine.PersistenceEvents;
     using Queries;
     using System.Linq;
 
@@ -62,12 +63,12 @@ namespace Stash
             if(!queryChain.Any())
                 throw new InvalidOperationException("No queries in query chain");
 
-            foreach(var storedGraph in registry.BackingStore.Get(queryFactory.IntersectionOf(queryChain)))
-            {
-                var track = session.PersistenceEventFactory.MakeTrack<TGraph>(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType));
-                session.Enroll(track);
-                yield return track.Graph;
-            }
+            return 
+                registry.BackingStore
+                    .Get(queryFactory.IntersectionOf(queryChain))
+                    .Select(storedGraph => session.Track<TGraph>(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
+                    .Select(track => track.Graph)
+                    .GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

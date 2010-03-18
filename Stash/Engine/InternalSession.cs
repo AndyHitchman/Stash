@@ -18,6 +18,7 @@
 
 namespace Stash.Engine
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -34,12 +35,10 @@ namespace Stash.Engine
         public InternalSession(IBackingStore backingStore, IPersistenceEventFactory persistenceEventFactory)
         {
             this.backingStore = backingStore;
-            //            Registry = registry;
             PersistenceEventFactory = persistenceEventFactory;
             PersistenceEvents = new List<IPersistenceEvent>();
         }
 
-//        public IRegistry Registry { get; private set; }
         public IPersistenceEventFactory PersistenceEventFactory { get; set; }
 
         public virtual IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents
@@ -122,7 +121,7 @@ namespace Stash.Engine
             Complete();
         }
 
-        public void Enroll(IPersistenceEvent persistenceEvent)
+        public virtual void Enroll(IPersistenceEvent persistenceEvent)
         {
             enrolledPersistenceEventsLocker.EnterWriteLock();
             try
@@ -145,6 +144,13 @@ namespace Stash.Engine
         public bool GraphIsTracked(object graph)
         {
             return TrackedGraphs.Any(o => ReferenceEquals(o, graph));
+        }
+
+        public ITrack<TGraph> Track<TGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TGraph : class
+        {
+            var track = new Track<TGraph>(storedGraph, registeredGraph);
+            Enroll(track);
+            return track;
         }
 
         public virtual IInternalSession Internalize()
