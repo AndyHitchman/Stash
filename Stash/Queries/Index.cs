@@ -26,7 +26,7 @@ namespace Stash.Queries
         public static IAllOfQuery<TKey> AllOf<TKey>(this IIndexByKey<TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.AllOf(Kernel.Registry.GetIndexerFor(index), set);
+            return Kernel.Registry.BackingStore.QueryFactory.AllOf(Kernel.Registry.GetIndexerFor(index), set);
         }
 
         /// <summary>
@@ -43,42 +43,42 @@ namespace Stash.Queries
         public static IAnyOfQuery<TKey> AnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.AnyOf(Kernel.Registry.GetIndexerFor(index), set);
+            return Kernel.Registry.BackingStore.QueryFactory.AnyOf(Kernel.Registry.GetIndexerFor(index), set);
         }
 
         public static IBetweenQuery<TKey> Between<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Between(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.QueryFactory.Between(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
         }
 
         public static IEqualToQuery<TKey> EqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.EqualTo(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.EqualTo(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static IGreaterThanQuery<TKey> GreaterThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.GreaterThan(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.GreaterThan(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static IGreaterThanEqualQuery<TKey> GreaterThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.GreaterThanEqual(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.GreaterThanEqual(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static IInsideQuery<TKey> Inside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Inside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.QueryFactory.Inside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
         }
 
         public static IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
         {
-            return Kernel.Registry.BackingStore.Query.IntersectionOf(queries);
+            return Kernel.Registry.BackingStore.QueryFactory.IntersectionOf(queries);
         }
 
         public static IIntersectOperator IntersectionOf(IQuery lhs, IQuery rhs)
@@ -89,37 +89,37 @@ namespace Stash.Queries
         public static IIsIndexedQuery IsIndexed<TGraph, TKey>(this IIndex<TGraph, TKey> index)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.IsIndexed(Kernel.Registry.GetIndexerFor(index));
+            return Kernel.Registry.BackingStore.QueryFactory.IsIndexed(Kernel.Registry.GetIndexerFor(index));
         }
 
         public static ILessThanQuery<TKey> LessThan<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.LessThan(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.LessThan(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static ILessThanEqualQuery<TKey> LessThanEqual<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.LessThanEqual(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.LessThanEqual(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static INotAnyOfQuery<TKey> NotAllOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotAllOf(Kernel.Registry.GetIndexerFor(index), set);
+            return Kernel.Registry.BackingStore.QueryFactory.NotAllOf(Kernel.Registry.GetIndexerFor(index), set);
         }
 
         public static INotAnyOfQuery<TKey> NotAnyOf<TGraph, TKey>(this IIndex<TGraph, TKey> index, IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotAnyOf(Kernel.Registry.GetIndexerFor(index), set);
+            return Kernel.Registry.BackingStore.QueryFactory.NotAnyOf(Kernel.Registry.GetIndexerFor(index), set);
         }
 
         public static INotEqualToQuery<TKey> NotEqualTo<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey key)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.NotEqualTo(Kernel.Registry.GetIndexerFor(index), key);
+            return Kernel.Registry.BackingStore.QueryFactory.NotEqualTo(Kernel.Registry.GetIndexerFor(index), key);
         }
 
         public static IUnionOperator Or(this IQuery lhs, IQuery rhs)
@@ -130,17 +130,17 @@ namespace Stash.Queries
         public static IOutsideQuery<TKey> Outside<TGraph, TKey>(this IIndex<TGraph, TKey> index, TKey lowerKey, TKey upperKey)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return Kernel.Registry.BackingStore.Query.Outside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
+            return Kernel.Registry.BackingStore.QueryFactory.Outside(Kernel.Registry.GetIndexerFor(index), lowerKey, upperKey);
         }
 
         public static IUnionOperator UnionOf(IQuery lhs, IQuery rhs)
         {
-            return Kernel.Registry.BackingStore.Query.UnionOf(new[] {lhs, rhs});
+            return Kernel.Registry.BackingStore.QueryFactory.UnionOf(new[] {lhs, rhs});
         }
 
         public static IUnionOperator UnionOf(IEnumerable<IQuery> queries)
         {
-            return Kernel.Registry.BackingStore.Query.UnionOf(queries);
+            return Kernel.Registry.BackingStore.QueryFactory.UnionOf(queries);
         }
     }
 }

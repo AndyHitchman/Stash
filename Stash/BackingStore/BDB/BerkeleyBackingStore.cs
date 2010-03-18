@@ -38,7 +38,7 @@ namespace Stash.BackingStore.BDB
         private const string graphFileName = "graphs" + DatabaseFileExt;
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
-        private readonly BerkeleyQueryFactory query;
+        private readonly BerkeleyQueryFactory queryFactory;
         private bool isDisposed;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Stash.BackingStore.BDB
         /// </summary>
         public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
-            query = new BerkeleyQueryFactory();
+            queryFactory = new BerkeleyQueryFactory();
             this.backingStoreEnvironment = backingStoreEnvironment;
             IndexDatabases = new Dictionary<string, ManagedIndex>();
 
@@ -65,9 +65,9 @@ namespace Stash.BackingStore.BDB
         public HashDatabase ConcreteTypeDatabase { get; private set; }
         public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
 
-        public IQueryFactory Query
+        public IQueryFactory QueryFactory
         {
-            get { return query; }
+            get { return queryFactory; }
         }
 
         public int Count(IQuery query)

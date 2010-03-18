@@ -31,23 +31,26 @@ namespace Stash
     public class StashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class
     {
         private readonly IRegistry registry;
+        private readonly IBackingStore backingStore;
         private readonly IInternalSession session;
         private readonly IQueryFactory queryFactory;
         private readonly IEnumerable<IQuery> queryChain;
 
-        public StashedSet() : this(Kernel.Registry, Kernel.SessionFactory.GetSession().Internalize(), Kernel.Registry.BackingStore.Query) {}
+        public StashedSet(ISession session) : this(session.Internalize(), Kernel.Registry, Kernel.Registry.BackingStore, Kernel.Registry.BackingStore.QueryFactory) {}
 
-        public StashedSet(IRegistry registry, IInternalSession session, IQueryFactory queryFactory)
+        public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory)
         {
             this.registry = registry;
+            this.backingStore = backingStore;
             this.session = session;
             this.queryFactory = queryFactory;
             queryChain = Enumerable.Empty<IQuery>();
         }
 
-        public StashedSet(IRegistry registry, IInternalSession session, IQueryFactory queryFactory, IEnumerable<IQuery> queryChain)
+        public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory, IEnumerable<IQuery> queryChain)
         {
             this.registry = registry;
+            this.backingStore = backingStore;
             this.session = session;
             this.queryFactory = queryFactory;
             this.queryChain = queryChain;
@@ -55,7 +58,7 @@ namespace Stash
 
         public StashedSet<TGraph> Where(IQuery query)
         {
-            return new StashedSet<TGraph>(registry, session, queryFactory, queryChain.Concat(new[] {query}));
+            return new StashedSet<TGraph>(session, registry, backingStore, queryFactory, queryChain.Concat(new[] {query}));
         }
 
         public IEnumerator<TGraph> GetEnumerator()
@@ -64,7 +67,7 @@ namespace Stash
                 throw new InvalidOperationException("No queries in query chain");
 
             return 
-                registry.BackingStore
+                backingStore
                     .Get(queryFactory.IntersectionOf(queryChain))
                     .Select(storedGraph => session.Track<TGraph>(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
                     .Select(track => track.Graph)

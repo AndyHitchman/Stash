@@ -40,7 +40,7 @@ namespace Stash.BackingStore
         /// <summary>
         /// A factory to build queries over indexes.
         /// </summary>
-        IQueryFactory Query { get; }
+        IQueryFactory QueryFactory { get; }
 
         /// <summary>
         /// Count the number of stored graphs matching the given <paramref name="query"/>.

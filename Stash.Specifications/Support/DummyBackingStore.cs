@@ -38,7 +38,7 @@ namespace Stash.Specifications.Support
 
     public class DummyBackingStore : IBackingStore
     {
-        public IQueryFactory Query
+        public IQueryFactory QueryFactory
         {
             get { throw new NotImplementedException(); }
         }

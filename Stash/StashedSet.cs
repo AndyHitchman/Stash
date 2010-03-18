@@ -23,23 +23,25 @@ namespace Stash
 
     public static class StashedSet
     {
-        public static StashedSet<TGraph> Get<TGraph>() where TGraph : class
+        public static StashedSet<TGraph> Get<TGraph>(ISession session) where TGraph : class
         {
             return
                 new StashedSet<TGraph>(
+                    session.Internalize(),
                     Kernel.Registry,
-                    Kernel.SessionFactory.GetSession().Internalize(),
-                    Kernel.Registry.BackingStore.Query,
+                    Kernel.Registry.BackingStore,
+                    Kernel.Registry.BackingStore.QueryFactory,
                     new[] {Index<StashTypeHierarchy>.EqualTo(StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))});
         }
 
-        public static StashedSet<object> Get()
+        public static StashedSet<object> Get(ISession session)
         {
             return
                 new StashedSet<object>(
-                    Kernel.Registry,
-                    Kernel.SessionFactory.GetSession().Internalize(),
-                    Kernel.Registry.BackingStore.Query);
+                    session.Internalize(), 
+                    Kernel.Registry, 
+                    Kernel.Registry.BackingStore, 
+                    Kernel.Registry.BackingStore.QueryFactory);
         }
     }
 }
