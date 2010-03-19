@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,15 +12,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Configuration
 {
     using System;
     using BackingStore;
-    using Engine;
-    using Engine.Serializers;
 
     /// <summary>
     /// The root context for configuring persistence.
@@ -37,6 +33,19 @@ namespace Stash.Configuration
         public IRegistry Registry { get; private set; }
 
         /// <summary>
+        /// Index the object graph with the given <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TGraph"></typeparam>
+        public virtual void Index<TGraph, TKey>(IIndex<TGraph, TKey> index) where TKey : IComparable<TKey>, IEquatable<TKey>
+        {
+            if(index == null) throw new ArgumentNullException("index");
+            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);
+            Registry.RegisterIndexer(registeredIndexer);
+        }
+
+        /// <summary>
         /// Configure Stash for the <typeparamref name="TGraph"/> and provide an action that performs additional configuration.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
@@ -44,19 +53,6 @@ namespace Stash.Configuration
         public virtual void Register<TGraph>(Action<GraphContext<TGraph>> configurePersistentGraph) where TGraph : class
         {
             configurePersistentGraph(new GraphContext<TGraph>(Registry.RegisterGraph<TGraph>()));
-        }
-
-        /// <summary>
-        /// Index the object graph with the given <paramref name="index"/>.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TGraph"></typeparam>
-        public virtual void Index<TGraph,TKey>(IIndex<TGraph, TKey> index) where TKey : IComparable<TKey>, IEquatable<TKey>
-        {
-            if (index == null) throw new ArgumentNullException("index");
-            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);
-            Registry.RegisterIndexer(registeredIndexer);
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,19 +12,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
-    using System.IO;
     using System.Linq;
     using BackingStore;
-    using Configuration;
-    using Engine;
-    using Engine.PersistenceEvents;
-    using NUnit.Framework;
     using Rhino.Mocks;
     using Support;
 

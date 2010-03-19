@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.BackingStore.BDB.BerkeleyQueries
@@ -27,8 +25,8 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class NotAllOfQuery<TKey> : IBerkeleyIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private readonly ManagedIndex managedIndex;
         private const int pageSizeBufferMultipler = 4;
+        private readonly ManagedIndex managedIndex;
 
         public NotAllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {

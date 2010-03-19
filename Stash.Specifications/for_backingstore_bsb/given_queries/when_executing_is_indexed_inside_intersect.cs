@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Specifications.for_backingstore_bsb.given_queries
@@ -25,7 +23,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyQueries;
     using Engine;
-    using Queries;
     using Support;
 
     public class when_executing_is_indexed_inside_intersect : with_int_indexer
@@ -93,7 +90,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         var bsw = (BerkeleyStorageWork)_;
                         return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).ToList();
                     });
-
         }
 
         [Then]

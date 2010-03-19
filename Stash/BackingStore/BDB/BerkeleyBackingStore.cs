@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.BackingStore.BDB
@@ -39,8 +37,8 @@ namespace Stash.BackingStore.BDB
 
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private readonly BerkeleyQueryFactory queryFactory;
-        private bool isDisposed;
         private bool isClosed;
+        private bool isDisposed;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
@@ -69,6 +67,18 @@ namespace Stash.BackingStore.BDB
         public IQueryFactory QueryFactory
         {
             get { return queryFactory; }
+        }
+
+        public void Close()
+        {
+            if(isClosed) return;
+            isClosed = true;
+
+            closeIndexDatabases();
+            closeConcreteTypeDatabase();
+            closeGraphDatabase();
+
+            closeEnvironment();
         }
 
         public int Count(IQuery query)
@@ -129,7 +139,7 @@ namespace Stash.BackingStore.BDB
                 {
                     storageWork.Abort();
                 }
-                catch{}
+                catch {}
 
                 throw;
             }
@@ -177,18 +187,6 @@ namespace Stash.BackingStore.BDB
             {
                 indexManager.Close();
             }
-        }
-
-        public void Close()
-        {
-            if(isClosed) return;
-            isClosed = true;
-
-            closeIndexDatabases();
-            closeConcreteTypeDatabase();
-            closeGraphDatabase();
-
-            closeEnvironment();
         }
 
         private void dbOpen()

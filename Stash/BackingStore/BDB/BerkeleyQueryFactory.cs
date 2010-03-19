@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.BackingStore.BDB
@@ -36,11 +34,6 @@ namespace Stash.BackingStore.BDB
         public IAllOfQuery<TKey> AllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return new AllOfQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, set);
-        }
-
-        public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
-        {
-            return new IntersectOperator(queries);
         }
 
         public IAnyOfQuery<TKey> AnyOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -73,6 +66,16 @@ namespace Stash.BackingStore.BDB
             return new InsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
+        public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
+        {
+            return new IntersectOperator(queries);
+        }
+
+        public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
+        {
+            return new IsIndexedQuery(backingStore.IndexDatabases[indexer.IndexName], indexer);
+        }
+
         public ILessThanQuery<TKey> LessThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return new LessThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
@@ -98,19 +101,14 @@ namespace Stash.BackingStore.BDB
             return new NotEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
-        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
-        {
-            return new UnionOperator(queries);
-        }
-
         public IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return new OutsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
-        public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
+        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
         {
-            return new IsIndexedQuery(backingStore.IndexDatabases[indexer.IndexName], indexer);
+            return new UnionOperator(queries);
         }
     }
 }

@@ -20,14 +20,13 @@ namespace Stash.Specifications.integration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
-    using Engine.Serializers;
     using Queries;
     using Support;
 
     public class when_querying_a_stashed_set : with_real_configuration
     {
-        private Post stashedPost;
         private Post actual;
+        private Post stashedPost;
 
         protected override void Given()
         {
@@ -43,11 +42,11 @@ namespace Stash.Specifications.integration
                                     Author = "Andy Hitchman",
                                     AuthorsEmail = "noone@nowhere.com",
                                     CommentedAt = new DateTime(2010, 03, 19, 13, 36, 01),
-                                    Text = "The blog is teh suck"
+                                    Text = "This blog is teh suck"
                                 }
                         }
                 };
-            
+
             var internalId = Guid.NewGuid();
             var registeredGraph = Kernel.Registry.GetRegistrationFor<Post>();
             var serializedGraph = registeredGraph.Serialize(stashedPost);
@@ -60,8 +59,7 @@ namespace Stash.Specifications.integration
         protected override void When()
         {
             actual =
-                StashedSet
-                    .Get<Post>(Kernel.SessionFactory.GetSession())
+                new StashedSet<Post>(Kernel.SessionFactory.GetSession())
                     .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
                     .FirstOrDefault();
         }
@@ -73,15 +71,15 @@ namespace Stash.Specifications.integration
         }
 
         [Then]
-        public void it_should_get_the_correct_title_for_my_post()
-        {
-            actual.Title.ShouldEqual(stashedPost.Title);
-        }
-
-        [Then]
         public void it_should_get_the_correct_comment_my_post()
         {
             actual.Comments.ShouldHaveCount(1);
+        }
+
+        [Then]
+        public void it_should_get_the_correct_title_for_my_post()
+        {
+            actual.Title.ShouldEqual(stashedPost.Title);
         }
     }
 }

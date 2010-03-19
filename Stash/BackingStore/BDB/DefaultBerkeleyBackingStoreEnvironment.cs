@@ -17,7 +17,6 @@
 namespace Stash.BackingStore.BDB
 {
     using BerkeleyConfigs;
-    using BerkeleyDB;
 
     public class DefaultBerkeleyBackingStoreEnvironment : BerkeleyBackingStoreEnvironment
     {

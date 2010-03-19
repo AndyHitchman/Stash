@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,14 +12,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
     using BackingStore;
@@ -28,9 +25,9 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Track<TSuperGraph> : ITrack<TSuperGraph> where TSuperGraph : class
     {
-        private readonly IStoredGraph storedGraph;
-        private readonly IRegisteredGraph registeredGraph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
+        private readonly IRegisteredGraph registeredGraph;
+        private readonly IStoredGraph storedGraph;
         private TSuperGraph graph;
 
         public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
@@ -61,6 +58,11 @@ namespace Stash.Engine.PersistenceEvents
             get { return Graph; }
         }
 
+        public virtual TSuperGraph Graph
+        {
+            get { return graph ?? (graph = (TSuperGraph)registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
+        }
+
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
         {
             return
@@ -85,11 +87,6 @@ namespace Stash.Engine.PersistenceEvents
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             return PreviouslyEnrolledEvent.ShouldBeRetained;
-        }
-
-        public virtual TSuperGraph Graph
-        {
-            get { return graph ?? (graph = (TSuperGraph)registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
         }
     }
 }

@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Specifications.for_backingstore_bsb.given_queries
@@ -25,7 +23,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyQueries;
     using Engine;
-    using given_berkeley_backing_store;
     using Support;
 
     public class when_executing_all_of_inside_intersect : with_int_indexer
@@ -78,7 +75,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         _.InsertGraph(nonMatchingTrackedGraph);
                     });
 
-            query = new AllOfQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, new[] { 101, 100 });
+            query = new AllOfQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, new[] {101, 100});
 
             joinConstraint = new[] {firstMatchingTrackedGraph.InternalId, secondMatchingTrackedGraph.InternalId};
         }

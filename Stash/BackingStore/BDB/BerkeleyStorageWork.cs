@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.BackingStore.BDB
@@ -24,7 +22,6 @@ namespace Stash.BackingStore.BDB
     using BerkeleyDB;
     using BerkeleyQueries;
     using Configuration;
-    using Engine;
     using Queries;
 
     public class BerkeleyStorageWork : IStorageWork
@@ -119,7 +116,7 @@ namespace Stash.BackingStore.BDB
                 {
                     if(cursor.Current.Value.Data.SequenceEqual(graphKey.Data)) cursor.Delete();
                 }
-                while (cursor.MoveNextDuplicate());
+                while(cursor.MoveNextDuplicate());
 
                 cursor.Close();
             }

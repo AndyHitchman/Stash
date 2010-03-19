@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Specifications.for_stashed_set
@@ -32,10 +30,10 @@ namespace Stash.Specifications.for_stashed_set
     {
         private IEnumerator<DummyPersistentObject> actual;
         private IInternalSession mockInternalSession;
+        private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
+        private IStoredGraph mockStoredGraph;
         private ITrack<DummyPersistentObject> mockTrack;
         private StashedSet<DummyPersistentObject> subject;
-        private IStoredGraph mockStoredGraph;
-        private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
 
         protected override void Given()
         {
@@ -71,15 +69,15 @@ namespace Stash.Specifications.for_stashed_set
         }
 
         [Then]
-        public void it_should_track_the_stored_graph()
-        {
-            mockInternalSession.VerifyAllExpectations();
-        }
-
-        [Then]
         public void it_should_return_an_object_matching_the_query()
         {
             actual.Current.ShouldBeOfType<DummyPersistentObject>();
+        }
+
+        [Then]
+        public void it_should_track_the_stored_graph()
+        {
+            mockInternalSession.VerifyAllExpectations();
         }
     }
 }

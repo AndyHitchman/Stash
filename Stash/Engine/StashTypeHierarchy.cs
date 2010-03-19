@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Engine
@@ -23,6 +21,11 @@ namespace Stash.Engine
 
     public class StashTypeHierarchy : IIndex<Type, string>
     {
+        public static string GetConcreteTypeValue(Type t)
+        {
+            return t.AssemblyQualifiedName;
+        }
+
         protected virtual IEnumerable<string> GetTypeHierarchyFor(Type t)
         {
             do
@@ -36,11 +39,6 @@ namespace Stash.Engine
         public IEnumerable<string> Yield(Type t)
         {
             return GetTypeHierarchyFor(t);
-        }
-
-        public static string GetConcreteTypeValue(Type t)
-        {
-            return t.AssemblyQualifiedName;
         }
     }
 }
