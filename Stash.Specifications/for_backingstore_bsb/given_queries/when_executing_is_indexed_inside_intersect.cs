@@ -32,7 +32,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         private TrackedGraph thirdTrackedGraph;
         private TrackedGraph fourthTrackedGraph;
         private IBerkeleyQuery query;
-        private List<Guid> actual;
+        private IEnumerable<Guid> actual;
         private Guid[] joinConstraint;
 
         protected override void Given()
@@ -88,7 +88,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).Materialize();
                     });
         }
 

@@ -22,6 +22,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using BerkeleyDB;
     using Configuration;
     using Queries;
+    using Engine;
 
     public class NotAllOfQuery<TKey> : IBerkeleyIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
@@ -56,7 +57,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 var bufferSize = (int)managedIndex.ReverseIndex.Pagesize * pageSizeBufferMultipler;
                 if(cursor.MoveFirstMultipleKey(bufferSize))
                 {
-                    var setKeysAsBytes = Set.Select(key => managedIndex.KeyAsByteArray(key)).ToList();
+                    var setKeysAsBytes = Set.Select(key => managedIndex.KeyAsByteArray(key)).Materialize();
                     do
                     {
                         foreach(var guid in cursor.CurrentMultipleKey

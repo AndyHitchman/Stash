@@ -22,6 +22,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using BerkeleyDB;
     using Configuration;
     using Queries;
+    using Engine;
 
     public class NotAnyOfQuery<TKey> : IBerkeleyIndexQuery, INotAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
@@ -50,7 +51,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(Transaction transaction)
         {
-            var matchingAny = new AnyOfQuery<TKey>(managedIndex, Indexer, Set).Execute(transaction).ToList();
+            var matchingAny = new AnyOfQuery<TKey>(managedIndex, Indexer, Set).Execute(transaction).Materialize();
 
             var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), transaction);
             try

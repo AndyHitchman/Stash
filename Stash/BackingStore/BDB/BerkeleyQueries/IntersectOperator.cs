@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Queries;
+    using Engine;
 
     public class IntersectOperator : IBerkeleyQuery, IIntersectOperator
     {
@@ -51,7 +52,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 queriesByCost
                     .Skip(1)
                     .Aggregate(
-                        queriesByCost.First().Execute(transaction).ToList().AsEnumerable(),
+                        queriesByCost.First().Execute(transaction).Materialize(),
                         (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }
@@ -62,7 +63,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 queries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
-                        joinConstraint.ToList().AsEnumerable(),
+                        joinConstraint.Materialize(),
                         (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }

@@ -110,20 +110,20 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId
                 }
                 .Union(Enumerable.Range(1, 50).Select(_ => Guid.NewGuid()))
-                .ToList();
+                .Materialize();
             var largeJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
                 }
                 .Union(Enumerable.Range(1, 1000).Select(_ => Guid.NewGuid()))
-                .ToList();
+                .Materialize();
 
             //Run once and ignore
             actual = Subject.InTransactionDo(
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.Transaction, largeJoinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, largeJoinConstraint).Materialize();
                     });
 
             //Run once and ignore
@@ -131,7 +131,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.Transaction, smallJoinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, smallJoinConstraint).Materialize();
                     });
 
             var nonOptTime = new Stopwatch();
@@ -140,7 +140,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.Transaction, largeJoinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, largeJoinConstraint).Materialize();
                     });
             nonOptTime.Stop();
 
@@ -150,7 +150,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.Transaction, smallJoinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, smallJoinConstraint).Materialize();
                     });
             optTime.Stop();
 

@@ -46,7 +46,7 @@ namespace Stash.Engine
                 try
                 {
                     //A stable clone.
-                    return PersistenceEvents.ToList();
+                    return PersistenceEvents.Materialize();
                 }
                 finally
                 {
@@ -62,7 +62,7 @@ namespace Stash.Engine
                 enrolledPersistenceEventsLocker.EnterReadLock();
                 try
                 {
-                    return PersistenceEvents.Select(_ => _.UntypedGraph).ToList();
+                    return PersistenceEvents.Select(_ => _.UntypedGraph).Materialize();
                 }
                 finally
                 {
@@ -88,13 +88,13 @@ namespace Stash.Engine
         {
             while(PersistenceEvents.Any())
             {
-                List<IPersistenceEvent> drain;
+                IEnumerable<IPersistenceEvent> drain;
 
                 enrolledPersistenceEventsLocker.EnterWriteLock();
                 try
                 {
                     //A stable clone.
-                    drain = PersistenceEvents.ToList();
+                    drain = PersistenceEvents.Materialize();
                     PersistenceEvents.Clear();
                 }
                 finally

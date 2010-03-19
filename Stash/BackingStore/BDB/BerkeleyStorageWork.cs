@@ -23,6 +23,7 @@ namespace Stash.BackingStore.BDB
     using BerkeleyQueries;
     using Configuration;
     using Queries;
+    using Engine;
 
     public class BerkeleyStorageWork : IStorageWork
     {
@@ -64,7 +65,7 @@ namespace Stash.BackingStore.BDB
         {
             return executeQuery(query)
                 .Select(internalId => Get(internalId))
-                .ToList();
+                .Materialize();
         }
 
         public IStoredGraph Get(Guid internalId)
