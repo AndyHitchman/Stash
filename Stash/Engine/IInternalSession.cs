@@ -48,6 +48,6 @@ namespace Stash.Engine
         /// <returns></returns>
         ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
 
-        IEndure Endure(object graph, IRegisteredGraph registeredGraph);
+        void Endure(object graph, IRegisteredGraph registeredGraph);
     }
 }

@@ -23,5 +23,10 @@ namespace Stash.Engine.PersistenceEvents
     public class Endure : Track, IEndure
     {
         public Endure(object graph, IRegisteredGraph registeredGraph) : base(Guid.NewGuid(), graph, registeredGraph) {}
+
+        public override void Complete(IStorageWork work)
+        {
+            CompleteInBackingStore(trackedGraph => work.InsertGraph(trackedGraph));
+        }
     }
 }

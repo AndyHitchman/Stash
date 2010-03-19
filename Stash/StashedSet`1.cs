@@ -25,7 +25,7 @@ namespace Stash
     using Engine;
     using Queries;
 
-    public class StashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class
+    public class StashedSet<TGraph> : IStashedSet<TGraph> where TGraph : class
     {
         private readonly IBackingStore backingStore;
         private readonly IEnumerable<IQuery> queryChain;
@@ -85,8 +85,7 @@ namespace Stash
 
         public void Add(TGraph item)
         {
-            var registeredGraph = registry.GetRegistrationFor(item.GetType());
-            session.Endure(item, registeredGraph);
+            session.Endure(item, registry.GetRegistrationFor(item.GetType()));
         }
 
         public bool Contains(TGraph item)

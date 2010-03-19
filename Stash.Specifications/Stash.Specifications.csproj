@@ -69,9 +69,11 @@
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
+    <Compile Include="for_stashed_set\when_adding_to_a_stashed_set.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
     <Compile Include="integration\Comment.cs" />
+    <Compile Include="integration\when_adding_a_transient_graph.cs" />
     <Compile Include="integration\when_querying_a_stashed_set_with_a_query_matching_nothing.cs" />
     <Compile Include="integration\when_updating_a_tracked_graph.cs" />
     <Compile Include="integration\when_querying_an_untyped_stashed_set.cs" />

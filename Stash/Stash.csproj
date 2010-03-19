@@ -120,6 +120,7 @@
     <Compile Include="BackingStore\BDB\ManagedIndex.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
+    <Compile Include="IStashedSet`1.cs" />
     <Compile Include="Queries\Index.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>

@@ -28,7 +28,6 @@ namespace Stash.Engine.PersistenceEvents
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
         private readonly IRegisteredGraph registeredGraph;
         private object graph;
-        private readonly IEnumerable<byte> storedSerializedGraph;
         private readonly Guid internalId;
 
         public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
@@ -40,7 +39,6 @@ namespace Stash.Engine.PersistenceEvents
             : this()
         {
             this.internalId = internalId;
-            this.storedSerializedGraph = storedSerializedGraph;
             this.registeredGraph = registeredGraph;
             OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
             graph = registeredGraph.Deserialize(storedSerializedGraph);
@@ -90,6 +88,11 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void Complete(IStorageWork work)
         {
+            CompleteInBackingStore(trackedGraph => work.UpdateGraph(trackedGraph));
+        }
+
+        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction) 
+        {
             var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph);
             CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
 
@@ -98,7 +101,7 @@ namespace Stash.Engine.PersistenceEvents
                 return;
 
             var trackedGraph = new TrackedGraph(internalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
-            work.UpdateGraph(trackedGraph);
+            completionAction(trackedGraph);
         }
 
         public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)

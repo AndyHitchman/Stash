@@ -153,11 +153,9 @@ namespace Stash.Engine
             return track;
         }
 
-        public IEndure Endure(object graph, IRegisteredGraph registeredGraph)
+        public void Endure(object graph, IRegisteredGraph registeredGraph)
         {
-            var endure = new Endure(graph, registeredGraph);
-            Enroll(endure);
-            return endure;
+            Enroll(new Endure(graph, registeredGraph));
         }
     }
 }
