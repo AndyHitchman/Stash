@@ -82,5 +82,7 @@ namespace Stash.BackingStore
         /// <param name="storageWorkFunction"></param>
         /// <returns></returns>
         TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction);
+
+        void Close();
     }
 }

@@ -39,5 +39,11 @@ namespace Stash
             Registry = registrar.Registry;
             SessionFactory = new SessionFactory();
         }
+
+        public static void Shutdown()
+        {
+            Registry.BackingStore.Close();
+            Registry = null;
+        }
     }
 }

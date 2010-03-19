@@ -40,13 +40,14 @@ namespace Stash.BackingStore.BDB
         private readonly IBerkeleyBackingStoreEnvironment backingStoreEnvironment;
         private readonly BerkeleyQueryFactory queryFactory;
         private bool isDisposed;
+        private bool isClosed;
 
         /// <summary>
         /// Create an instance of the backing store implementation using BerkeleyDB
         /// </summary>
         public BerkeleyBackingStore(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
         {
-            queryFactory = new BerkeleyQueryFactory();
+            queryFactory = new BerkeleyQueryFactory(this);
             this.backingStoreEnvironment = backingStoreEnvironment;
             IndexDatabases = new Dictionary<string, ManagedIndex>();
 
@@ -80,7 +81,7 @@ namespace Stash.BackingStore.BDB
             if(isDisposed) return;
             isDisposed = true;
 
-            dbClose();
+            Close();
         }
 
         public void EnsureIndex(IRegisteredIndexer registeredIndexer)
@@ -178,8 +179,11 @@ namespace Stash.BackingStore.BDB
             }
         }
 
-        private void dbClose()
+        public void Close()
         {
+            if(isClosed) return;
+            isClosed = true;
+
             closeIndexDatabases();
             closeConcreteTypeDatabase();
             closeGraphDatabase();
@@ -193,7 +197,7 @@ namespace Stash.BackingStore.BDB
             openConcreteTypeDatabase();
 
             RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, string>(new StashTypeHierarchy());
-            EnsureIndex(RegisteredTypeHierarchyIndex);
+            //Type hierarchy index is registered by the kernel, as it is used at the application level.
         }
 
         private static void ensureStashDirectory(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)

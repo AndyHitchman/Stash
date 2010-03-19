@@ -40,31 +40,31 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.MultiGet; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
-            return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(managedIndex, transaction));
+            return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(transaction));
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             return
                 queries
-                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Skip(1)
                     .Aggregate(
-                        queries.First().Execute(managedIndex, transaction),
-                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(managedIndex, transaction, guids))
+                        queries.First().Execute(transaction),
+                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
             return
                 queries
-                    .OrderBy(_ => _.EstimatedQueryCost(managedIndex, transaction))
+                    .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
                         joinConstraint,
-                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(managedIndex, transaction, guids))
+                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }
     }

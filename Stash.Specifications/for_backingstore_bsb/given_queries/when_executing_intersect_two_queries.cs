@@ -46,17 +46,17 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             //A bit weak. We're not sure which side will execute first: The second to execute 
             //will call ExecuteInsideIntersect. Cheat by ignoring this and having the pair of methods
             //return the same result.
-            lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
-            lhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(lhsSet);
-            rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
-            rhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(rhsSet);
+            lhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(lhsSet);
+            lhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(lhsSet);
+            rhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(rhsSet);
+            rhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(rhsSet);
 
             sut = new IntersectOperator(new[] {lhs, rhs});
         }
 
         protected override void When()
         {
-            actual = sut.Execute(null, null);
+            actual = sut.Execute(null);
         }
 
         [Then]

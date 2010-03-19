@@ -48,6 +48,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 insertingRegisteredGraph
                 );
 
+            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
         }
 

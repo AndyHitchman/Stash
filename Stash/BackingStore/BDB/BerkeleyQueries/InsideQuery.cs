@@ -27,10 +27,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class InsideQuery<TKey> : IBerkeleyIndexQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
+        private readonly ManagedIndex managedIndex;
         private const int pageSizeBufferMultipler = 4;
 
-        public InsideQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
+        public InsideQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             LowerKey = lowerKey;
             UpperKey = upperKey;
@@ -45,14 +47,14 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.ClosedRangeScan; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return (managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(UpperKey)), transaction).Less -
                     managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(LowerKey)), transaction).Less) *
                    managedIndex.Index.FastStats().nPages / pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
@@ -82,10 +84,10 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            if(joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
-                return Execute(managedIndex, transaction);
+            if(joinConstraint.Count() > EstimatedQueryCost(transaction))
+                return Execute(transaction);
 
             var comparer = managedIndex.Comparer;
 

@@ -18,6 +18,7 @@
 
 namespace Stash.Specifications.for_stashed_set
 {
+    using System;
     using System.Collections.Generic;
     using BackingStore;
     using Configuration;
@@ -33,10 +34,12 @@ namespace Stash.Specifications.for_stashed_set
         private IInternalSession mockInternalSession;
         private ITrack<DummyPersistentObject> mockTrack;
         private StashedSet<DummyPersistentObject> subject;
+        private IStoredGraph mockStoredGraph;
+        private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
 
         protected override void Given()
         {
-            mockInternalSession = MockRepository.GenerateStub<IInternalSession>();
+            mockInternalSession = MockRepository.GenerateMock<IInternalSession>();
             var mockRegistry = MockRepository.GenerateStub<IRegistry>();
             var mockBackingStore = MockRepository.GenerateStub<IBackingStore>();
             var mockQueryFactory = MockRepository.GenerateStub<IQueryFactory>();
@@ -44,10 +47,10 @@ namespace Stash.Specifications.for_stashed_set
 
             subject = new StashedSet<DummyPersistentObject>(mockInternalSession, mockRegistry, mockBackingStore, mockQueryFactory, new[] {mockQuery});
 
-            var mockRegisteredGraph = MockRepository.GenerateStub<IRegisteredGraph<DummyPersistentObject>>();
-            mockRegistry.Stub(_ => _.GetRegistrationFor(typeof(DummyPersistentObject))).Return(mockRegisteredGraph);
+            mockRegisteredGraph = MockRepository.GenerateStub<IRegisteredGraph<DummyPersistentObject>>();
+            mockRegistry.Stub(_ => _.GetRegistrationFor(Arg<Type>.Is.Anything)).Return(mockRegisteredGraph);
 
-            var mockStoredGraph = MockRepository.GenerateStub<IStoredGraph>();
+            mockStoredGraph = MockRepository.GenerateStub<IStoredGraph>();
             mockBackingStore.Stub(_ => _.Get(null)).IgnoreArguments().Return(new[] {mockStoredGraph});
 
             mockTrack = MockRepository.GenerateStub<ITrack<DummyPersistentObject>>();
@@ -56,7 +59,12 @@ namespace Stash.Specifications.for_stashed_set
 
         protected override void When()
         {
-            mockInternalSession.Expect(_ => _.Track<DummyPersistentObject>(null, null)).IgnoreArguments().Return(mockTrack);
+            mockInternalSession.Expect(
+                _ =>
+                _.Track<DummyPersistentObject>(
+                    Arg<IStoredGraph>.Is.Same(mockStoredGraph),
+                    Arg<IRegisteredGraph>.Is.Same(mockRegisteredGraph)))
+                .Return(mockTrack);
 
             actual = subject.GetEnumerator();
             actual.MoveNext();

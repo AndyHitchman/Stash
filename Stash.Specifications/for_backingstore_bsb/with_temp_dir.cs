@@ -1,5 +1,4 @@
-#region License
-
+﻿#region License
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,7 +12,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
 namespace Stash.Specifications.for_backingstore_bsb
@@ -31,7 +29,7 @@ namespace Stash.Specifications.for_backingstore_bsb
 
         protected override void WithContext()
         {
-            TempDir = Path.Combine(Path.GetTempPath(), "Stash" + Guid.NewGuid());
+            TempDir = Path.Combine(Path.GetTempPath(), "Stash-" + Guid.NewGuid());
             Console.WriteLine("TempDir: " + TempDir);
             if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
 

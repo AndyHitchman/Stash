@@ -164,9 +164,8 @@ namespace Stash.BackingStore.BDB
 
         private IEnumerable<Guid> executeQuery(IQuery query)
         {
-            var berkeleyQuery = (IBerkeleyIndexQuery)query;
-            var managedIndex = BackingStore.IndexDatabases[berkeleyQuery.Indexer.IndexName];
-            return berkeleyQuery.Execute(managedIndex, Transaction);
+            var berkeleyQuery = (IBerkeleyQuery)query;
+            return berkeleyQuery.Execute(Transaction);
         }
 
         private void insertConcreteType(ITrackedGraph trackedGraph)

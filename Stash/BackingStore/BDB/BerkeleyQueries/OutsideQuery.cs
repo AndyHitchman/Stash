@@ -27,10 +27,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class OutsideQuery<TKey> : IBerkeleyIndexQuery, IOutsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
+        private readonly ManagedIndex managedIndex;
         private const int pageSizeBufferMultipler = 4;
 
-        public OutsideQuery(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
+        public OutsideQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             LowerKey = lowerKey;
             UpperKey = upperKey;
@@ -45,12 +47,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.FullScan; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
@@ -102,10 +104,10 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            if(joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
-                return Execute(managedIndex, transaction);
+            if(joinConstraint.Count() > EstimatedQueryCost(transaction))
+                return Execute(transaction);
 
             var comparer = managedIndex.Comparer;
 

@@ -27,8 +27,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class AnyOfQuery<TKey> : IBerkeleyIndexQuery, IAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public AnyOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
+        private readonly ManagedIndex managedIndex;
+
+        public AnyOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             Set = set;
         }
@@ -41,24 +44,24 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.MultiGet; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return (double)QueryCostScale * Set.Count();
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             return Set.Aggregate(Enumerable.Empty<Guid>(), (current, key) => current.Union(IndexMatching.GetMatching(managedIndex, transaction, key)));
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            return Execute(managedIndex, transaction);
+            return Execute(transaction);
         }
 
         public INotAnyOfQuery<TKey> GetComplementaryQuery()
         {
-            return new NotAnyOfQuery<TKey>(Indexer, Set);
+            return new NotAnyOfQuery<TKey>(managedIndex, Indexer, Set);
         }
     }
 }

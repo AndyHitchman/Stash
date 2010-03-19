@@ -77,6 +77,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 registeredGraph
                 );
 
+            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
             Subject.EnsureIndex(registry.RegisteredIndexers[0]);
             Subject.EnsureIndex(registry.RegisteredIndexers[1]);
             Subject.InTransactionDo(

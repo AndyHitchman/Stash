@@ -45,7 +45,7 @@ namespace Stash.Configuration
         /// <param name="serializer"></param>
         public virtual void SerializeWith(ISerializer<TGraph> serializer)
         {
-            throw new NotImplementedException();
+            RegisteredGraph.Serializer = serializer;
         }
     }
 }

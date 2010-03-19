@@ -63,7 +63,7 @@ namespace Stash.Configuration
 
         public override IEnumerable<IProjectedIndex> GetUntypedProjections(object graph)
         {
-            return Index.Yield((TGraph)graph).Cast<IProjectedIndex>();
+            return Index.Yield((TGraph)graph).Select(key => new ProjectedIndex<TKey>(this, key)).Cast<IProjectedIndex>();
         }
     }
 }

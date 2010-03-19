@@ -43,29 +43,29 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             firstTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             secondTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             thirdTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                RegisteredGraph
                 );
 
             fourthTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
+                RegisteredGraph
                 );
 
             Subject.InTransactionDo(
@@ -77,7 +77,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         _.InsertGraph(fourthTrackedGraph);
                     });
 
-            query = new IsIndexedQuery(registeredIndexer);
+            query = new IsIndexedQuery(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer);
 
             joinConstraint = new[]
                 {
@@ -91,7 +91,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, joinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).ToList();
                     });
 
         }

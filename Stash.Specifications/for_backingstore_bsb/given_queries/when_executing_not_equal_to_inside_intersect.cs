@@ -43,29 +43,29 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             equaltrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             anotherEqualtrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             notEqualtrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 99)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
+                RegisteredGraph
                 );
 
             anotherNotEqualtrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                RegisteredGraph
                 );
 
             Subject.InTransactionDo(
@@ -77,7 +77,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         _.InsertGraph(anotherNotEqualtrackedGraph);
                     });
 
-            query = new NotEqualToQuery<int>(registeredIndexer, 100);
+            query = new NotEqualToQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, 100);
 
             joinConstraint = new[]
                 {
@@ -91,7 +91,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, joinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).ToList();
                     });
         }
 

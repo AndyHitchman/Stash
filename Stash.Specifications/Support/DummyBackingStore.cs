@@ -72,5 +72,10 @@ namespace Stash.Specifications.Support
         {
             throw new NotImplementedException();
         }
+
+        public void Close()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

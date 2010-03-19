@@ -27,10 +27,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class LessThanQuery<TKey> : IBerkeleyIndexQuery, ILessThanQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
+        private readonly ManagedIndex managedIndex;
         private const int pageSizeBufferMultipler = 4;
 
-        public LessThanQuery(IRegisteredIndexer indexer, TKey key)
+        public LessThanQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, TKey key)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             Key = key;
         }
@@ -43,13 +45,13 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.OpenRangeScan; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return managedIndex.Index.KeyRange(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), transaction).Less *
                    managedIndex.Index.FastStats().nPages / pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
@@ -78,10 +80,10 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            if(joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
-                return Execute(managedIndex, transaction);
+            if(joinConstraint.Count() > EstimatedQueryCost(transaction))
+                return Execute(transaction);
 
             var comparer = managedIndex.Comparer;
 
@@ -97,7 +99,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public IGreaterThanEqualQuery<TKey> GetComplementaryQuery()
         {
-            return new GreaterThanEqualToQuery<TKey>(Indexer, Key);
+            return new GreaterThanEqualToQuery<TKey>(managedIndex, Indexer, Key);
         }
     }
 }

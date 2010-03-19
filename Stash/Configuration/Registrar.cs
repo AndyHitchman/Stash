@@ -52,7 +52,13 @@ namespace Stash.Configuration
         public virtual void PerformRegistration(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
         {
             persistenceContext = new PersistenceContext<TBackingStore>(new Registry());
+            registerTypeHierarchyIndex();
             persistenceConfigurationActions(persistenceContext);
+        }
+
+        private void registerTypeHierarchyIndex()
+        {
+            persistenceContext.Index(new StashTypeHierarchy());
         }
     }
 }

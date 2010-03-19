@@ -39,13 +39,13 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             trackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
 
-            query = new EqualToQuery<int>(registeredIndexer, 100);
+            query = new EqualToQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, 100);
         }
 
         protected override void When()

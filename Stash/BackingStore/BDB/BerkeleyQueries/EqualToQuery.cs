@@ -27,8 +27,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class EqualToQuery<TKey> : IBerkeleyIndexQuery, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public EqualToQuery(IRegisteredIndexer indexer, TKey key)
+        private readonly ManagedIndex managedIndex;
+
+        public EqualToQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, TKey key)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             Key = key;
         }
@@ -41,12 +44,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.SingleGet; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             try
             {
@@ -61,15 +64,15 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
             //Can't do better than this.
-            return Execute(managedIndex, transaction);
+            return Execute(transaction);
         }
 
         public INotEqualToQuery<TKey> GetComplementaryQuery()
         {
-            return new NotEqualToQuery<TKey>(Indexer, Key);
+            return new NotEqualToQuery<TKey>(managedIndex, Indexer, Key);
         }
     }
 }

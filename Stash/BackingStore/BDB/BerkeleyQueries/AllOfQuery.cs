@@ -27,8 +27,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class AllOfQuery<TKey> : IBerkeleyIndexQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public AllOfQuery(IRegisteredIndexer indexer, IEnumerable<TKey> set)
+        private readonly ManagedIndex managedIndex;
+
+        public AllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
             Set = set;
         }
@@ -41,12 +44,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.MultiGet; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return (double)QueryCostScale * Set.Count();
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             //The seed of the aggregate is the matches for the first element of the set. The remaineder of the set
             //is passed as the comparison set.
@@ -54,7 +57,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return execute(managedIndex, transaction, matchingFirst, Set.Skip(1));
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
             //The seed of the aggregate is the join constraint. The full set is passed as the comparison set.
             return execute(managedIndex, transaction, joinConstraint, Set);
@@ -62,7 +65,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public INotAllOfQuery<TKey> GetComplementaryQuery()
         {
-            return new NotAllOfQuery<TKey>(Indexer, Set);
+            return new NotAllOfQuery<TKey>(managedIndex, Indexer, Set);
         }
 
         private IEnumerable<Guid> execute(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> seed, IEnumerable<TKey> comparisonSubset)

@@ -26,9 +26,16 @@ namespace Stash.BackingStore.BDB
 
     public class BerkeleyQueryFactory : IQueryFactory
     {
+        private readonly BerkeleyBackingStore backingStore;
+
+        public BerkeleyQueryFactory(BerkeleyBackingStore berkeleyBackingStore)
+        {
+            backingStore = berkeleyBackingStore;
+        }
+
         public IAllOfQuery<TKey> AllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new AllOfQuery<TKey>(indexer, set);
+            return new AllOfQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, set);
         }
 
         public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
@@ -38,57 +45,57 @@ namespace Stash.BackingStore.BDB
 
         public IAnyOfQuery<TKey> AnyOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new AnyOfQuery<TKey>(indexer, set);
+            return new AnyOfQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, set);
         }
 
         public IBetweenQuery<TKey> Between<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new BetweenQuery<TKey>(indexer, lowerKey, upperKey);
+            return new BetweenQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
         public IEqualToQuery<TKey> EqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new EqualToQuery<TKey>(indexer, key);
+            return new EqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public IGreaterThanQuery<TKey> GreaterThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new GreaterThanQuery<TKey>(indexer, key);
+            return new GreaterThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public IGreaterThanEqualQuery<TKey> GreaterThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new GreaterThanEqualToQuery<TKey>(indexer, key);
+            return new GreaterThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public IInsideQuery<TKey> Inside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new InsideQuery<TKey>(indexer, lowerKey, upperKey);
+            return new InsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
         public ILessThanQuery<TKey> LessThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new LessThanQuery<TKey>(indexer, key);
+            return new LessThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public ILessThanEqualQuery<TKey> LessThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new LessThanEqualToQuery<TKey>(indexer, key);
+            return new LessThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public INotAnyOfQuery<TKey> NotAllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new NotAnyOfQuery<TKey>(indexer, set);
+            return new NotAnyOfQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, set);
         }
 
         public INotAnyOfQuery<TKey> NotAnyOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new NotAnyOfQuery<TKey>(indexer, set);
+            return new NotAnyOfQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, set);
         }
 
         public INotEqualToQuery<TKey> NotEqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new NotEqualToQuery<TKey>(indexer, key);
+            return new NotEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
         }
 
         public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
@@ -98,12 +105,12 @@ namespace Stash.BackingStore.BDB
 
         public IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new OutsideQuery<TKey>(indexer, lowerKey, upperKey);
+            return new OutsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
         public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
         {
-            return new IsIndexedQuery(indexer);
+            return new IsIndexedQuery(backingStore.IndexDatabases[indexer.IndexName], indexer);
         }
     }
 }

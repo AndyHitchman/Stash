@@ -30,13 +30,15 @@
 
 namespace Stash.Specifications.for_backingstore_bsb
 {
+    using System;
     using Configuration;
+    using Engine;
     using Support;
 
     public abstract class with_int_indexer : with_temp_dir
     {
-        protected RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
-        protected RegisteredIndexer<ClassWithTwoAncestors, int> registeredIndexer;
+        protected RegisteredGraph<ClassWithTwoAncestors> RegisteredGraph;
+        protected RegisteredIndexer<ClassWithTwoAncestors, int> RegisteredIndexer;
         private IRegistry registry;
 
         protected override void WithContext()
@@ -44,11 +46,12 @@ namespace Stash.Specifications.for_backingstore_bsb
             base.WithContext();
 
             registry = new Registry();
-            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
-            registeredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
-            registry.RegisteredIndexers.Add(registeredIndexer);
+            RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
+            RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
+            registry.RegisteredIndexers.Add(RegisteredIndexer);
 
-            Subject.EnsureIndex(registeredIndexer);
+            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
+            Subject.EnsureIndex(RegisteredIndexer);
         }
     }
 }

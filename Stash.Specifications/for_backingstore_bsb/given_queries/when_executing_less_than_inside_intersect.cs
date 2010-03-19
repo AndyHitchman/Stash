@@ -44,36 +44,36 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             lessThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 99)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
+                RegisteredGraph
                 );
 
             secondLessThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             equalToTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 102)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
+                RegisteredGraph
                 );
 
             secondGreaterThanTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 103)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 103)},
+                RegisteredGraph
                 );
 
             Subject.InTransactionDo(
@@ -86,7 +86,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         _.InsertGraph(greaterThanTrackedGraph);
                     });
 
-            query = new LessThanQuery<int>(registeredIndexer, 100);
+            query = new LessThanQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, 100);
 
             joinConstraint = new[]
                 {
@@ -100,7 +100,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 _ =>
                     {
                         var bsw = (BerkeleyStorageWork)_;
-                        return query.ExecuteInsideIntersect(bsw.BackingStore.IndexDatabases[registeredIndexer.IndexName], bsw.Transaction, joinConstraint).ToList();
+                        return query.ExecuteInsideIntersect(bsw.Transaction, joinConstraint).ToList();
                     });
         }
 

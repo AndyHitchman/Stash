@@ -43,15 +43,15 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             lhsSet = new[] {commonGuid, Guid.NewGuid()};
             rhsSet = new[] {Guid.NewGuid(), commonGuid};
 
-            lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
-            rhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(rhsSet);
+            lhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(lhsSet);
+            rhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(rhsSet);
 
             sut = new UnionOperator(new[] {lhs, rhs});
         }
 
         protected override void When()
         {
-            actual = sut.Execute(null, null);
+            actual = sut.Execute(null);
         }
 
         [Then]

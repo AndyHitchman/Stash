@@ -27,10 +27,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
     public class IsIndexedQuery : IBerkeleyIndexQuery, IIsIndexedQuery
     {
+        private readonly ManagedIndex managedIndex;
         private const int pageSizeBufferMultipler = 4;
 
-        public IsIndexedQuery(IRegisteredIndexer indexer)
+        public IsIndexedQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer)
         {
+            this.managedIndex = managedIndex;
             Indexer = indexer;
         }
 
@@ -41,12 +43,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             get { return QueryCostScale.FullScan; }
         }
 
-        public double EstimatedQueryCost(ManagedIndex managedIndex, Transaction transaction)
+        public double EstimatedQueryCost(Transaction transaction)
         {
             return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(ManagedIndex managedIndex, Transaction transaction)
+        public IEnumerable<Guid> Execute(Transaction transaction)
         {
             var cursor = managedIndex.ReverseIndex.Cursor();
             while(cursor.MoveNextUnique())
@@ -55,10 +57,10 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
         {
-            if(joinConstraint.Count() > EstimatedQueryCost(managedIndex, transaction))
-                return Execute(managedIndex, transaction);
+            if(joinConstraint.Count() > EstimatedQueryCost(transaction))
+                return Execute(transaction);
 
             var cursor = managedIndex.ReverseIndex.Cursor();
 

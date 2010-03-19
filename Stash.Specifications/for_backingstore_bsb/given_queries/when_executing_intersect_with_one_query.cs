@@ -37,15 +37,15 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
 
             lhsSet = new[] {Guid.NewGuid(), Guid.NewGuid()};
 
-            lhs.Stub(_ => _.Execute(null, null)).IgnoreArguments().Return(lhsSet);
-            lhs.Stub(_ => _.ExecuteInsideIntersect(null, null, null)).IgnoreArguments().Return(lhsSet);
+            lhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(lhsSet);
+            lhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(lhsSet);
 
             sut = new IntersectOperator(new[] {lhs});
         }
 
         protected override void When()
         {
-            actual = sut.Execute(null, null);
+            actual = sut.Execute(null);
         }
 
         [Then]

@@ -63,12 +63,18 @@
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_with_one_query.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
+    <Compile Include="for_backingstore_bsb\with_temp_dir.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_a_changed_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
+    <Compile Include="integration\Comment.cs" />
+    <Compile Include="integration\Post.cs" />
+    <Compile Include="integration\when_querying_a_stashed_set.cs" />
+    <Compile Include="integration\with_real_configuration.cs" />
+    <Compile Include="with_temp_directory.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />
@@ -159,7 +165,6 @@
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_ensuring_an_index_that_does_not_exist.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_graph.cs" />
     <Compile Include="for_backingstore_bsb\BerkeleyDbExtensions.cs" />
-    <Compile Include="for_backingstore_bsb\with_temp_dir.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_instantiating.cs" />
     <Compile Include="Support\OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

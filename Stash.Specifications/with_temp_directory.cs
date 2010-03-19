@@ -1,5 +1,4 @@
 #region License
-
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -13,21 +12,30 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
 // See the License for the specific language governing permissions and 
 // limitations under the License.
-
 #endregion
 
-namespace Stash.BackingStore.BDB.BerkeleyQueries
+namespace Stash.Specifications
 {
     using System;
-    using System.Collections.Generic;
-    using BerkeleyDB;
-    using Queries;
+    using System.IO;
+    using Support;
 
-    public interface IBerkeleyQuery : IQuery
+    public abstract class with_temp_directory : Specification
     {
-        QueryCostScale QueryCostScale { get; }
-        double EstimatedQueryCost(Transaction transaction);
-        IEnumerable<Guid> Execute(Transaction transaction);
-        IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint);
+        protected string TempDir;
+
+        protected override void TidyUp()
+        {
+            base.TidyUp();
+            if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
+        }
+
+        protected override void WithContext()
+        {
+            base.WithContext();
+            TempDir = Path.Combine(Path.GetTempPath(), "Stash-" + Guid.NewGuid());
+            Console.WriteLine("TempDir: " + TempDir);
+            if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
+        }
     }
 }

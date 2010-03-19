@@ -43,8 +43,8 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
-                    {new ProjectedIndex<int>(registeredIndexer, 102), new ProjectedIndex<int>(registeredIndexer, 101), new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                    {new ProjectedIndex<int>(RegisteredIndexer, 102), new ProjectedIndex<int>(RegisteredIndexer, 101), new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             secondMatchingTrackedGraph = new TrackedGraph(
@@ -52,24 +52,24 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
-                        new ProjectedIndex<int>(registeredIndexer, 102), new ProjectedIndex<int>(registeredIndexer, 99), new ProjectedIndex<int>(registeredIndexer, 101),
-                        new ProjectedIndex<int>(registeredIndexer, 100)
+                        new ProjectedIndex<int>(RegisteredIndexer, 102), new ProjectedIndex<int>(RegisteredIndexer, 99), new ProjectedIndex<int>(RegisteredIndexer, 101),
+                        new ProjectedIndex<int>(RegisteredIndexer, 100)
                     },
-                registeredGraph
+                RegisteredGraph
                 );
 
             firstNonMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 100)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                RegisteredGraph
                 );
 
             secondtNonMatchingTrackedGraph = new TrackedGraph(
                 Guid.NewGuid(),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(registeredIndexer, 101)},
-                registeredGraph
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                RegisteredGraph
                 );
 
             Subject.InTransactionDo(
@@ -81,7 +81,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         _.InsertGraph(secondtNonMatchingTrackedGraph);
                     });
 
-            query = new AllOfQuery<int>(registeredIndexer, new[] {102, 100, 101});
+            query = new AllOfQuery<int>(Subject.IndexDatabases[RegisteredIndexer.IndexName], RegisteredIndexer, new[] { 102, 100, 101 });
         }
 
         protected override void When()
