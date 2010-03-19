@@ -94,9 +94,16 @@ namespace Stash.Configuration
         public virtual IRegisteredGraph GetRegistrationFor(Type graphType)
         {
             if(graphType == null) throw new ArgumentNullException("graphType");
-            if(!RegisteredGraphs.ContainsKey(graphType)) throw new ArgumentOutOfRangeException("graphType");
 
-            return RegisteredGraphs[graphType];
+            var t = graphType;
+            do
+            {
+                if(RegisteredGraphs.ContainsKey(t)) return RegisteredGraphs[t];
+                t = t.BaseType;
+            }
+            while (t != null && t != typeof(object));
+
+           throw new ArgumentOutOfRangeException("graphType");
         }
 
         public virtual bool IsManagingGraphTypeOrAncestor(Type graphType)

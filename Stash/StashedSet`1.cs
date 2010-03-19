@@ -82,5 +82,28 @@ namespace Stash
         {
             return GetEnumerator();
         }
+
+        public void Add(TGraph item)
+        {
+//            var registeredGraph = registry.GetRegistrationFor(item.GetType());
+//            var serializedGraph = registeredGraph.Serialize(stashedPost);
+//            var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));
+//            var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
+        }
+
+        public bool Contains(TGraph item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(TGraph item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
