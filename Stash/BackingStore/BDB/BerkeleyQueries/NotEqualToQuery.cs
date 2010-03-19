@@ -66,7 +66,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                             yield return guid;
                         }
                     }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                    while(cursor.MoveNextMultipleKey(bufferSize));
                 }
             }
             finally

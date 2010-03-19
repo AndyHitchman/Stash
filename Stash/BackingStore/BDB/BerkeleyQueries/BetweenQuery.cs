@@ -73,7 +73,8 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                             yield return guid;
                         }
                     }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                    while(cursor.MoveNextMultipleKey(bufferSize) &&
+                          comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), UpperKey) <= 0);
                 }
             }
             finally

@@ -45,12 +45,13 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
         public IEnumerable<Guid> Execute(Transaction transaction)
         {
+            var queriesByCost = queries.OrderBy(_ => _.EstimatedQueryCost(transaction));
+
             return
-                queries
-                    .OrderBy(_ => _.EstimatedQueryCost(transaction))
+                queriesByCost
                     .Skip(1)
                     .Aggregate(
-                        queries.First().Execute(transaction),
+                        queriesByCost.First().Execute(transaction).ToList().AsEnumerable(),
                         (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }
@@ -61,7 +62,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 queries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
-                        joinConstraint,
+                        joinConstraint.ToList().AsEnumerable(),
                         (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
                     );
         }

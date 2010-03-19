@@ -57,6 +57,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             {
                 var comparer = managedIndex.Comparer;
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
+
                 if(cursor.MoveFirstMultipleKey(bufferSize))
                 {
                     do
@@ -93,7 +94,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                                 yield return guid;
                             }
                     }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                    while(cursor.MoveNextMultipleKey(bufferSize));
                 }
             }
             finally

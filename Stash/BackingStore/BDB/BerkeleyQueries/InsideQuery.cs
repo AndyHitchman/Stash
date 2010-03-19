@@ -60,20 +60,25 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 var comparer = managedIndex.Comparer;
                 var keyAsBytes = managedIndex.KeyAsByteArray(LowerKey);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
+
+                //The exact value and then the next unique
                 if(cursor.Move(new DatabaseEntry(keyAsBytes), true) | cursor.MoveNextUniqueMultipleKey(bufferSize))
                 {
-                    do
-                    {
-                        foreach(var guid in
-                            cursor.CurrentMultipleKey
-                                .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
-                                .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) < 0)
-                                .Select(_ => _.value))
+                    //There could be an exact equal match and then no further unique matches.
+                    if (cursor.CurrentMultipleKey != null)
+                        do
                         {
-                            yield return guid;
+                            foreach(var guid in
+                                cursor.CurrentMultipleKey
+                                    .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
+                                    .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) < 0)
+                                    .Select(_ => _.value))
+                            {
+                                yield return guid;
+                            }
                         }
-                    }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                        while(cursor.MoveNextMultipleKey(bufferSize) &&
+                              comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), UpperKey) < 0);
                 }
             }
             finally

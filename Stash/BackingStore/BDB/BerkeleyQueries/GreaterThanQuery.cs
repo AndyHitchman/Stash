@@ -56,16 +56,20 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             {
                 var keyAsBytes = managedIndex.KeyAsByteArray(Key);
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
+
+                //The exact value and then the next unique
                 if(cursor.Move(new DatabaseEntry(keyAsBytes), true) | cursor.MoveNextUniqueMultipleKey(bufferSize))
                 {
-                    do
-                    {
-                        foreach(var guid in cursor.CurrentMultipleKey.Select(_ => _.Value.Data.AsGuid()))
+                    //There could be an exact equal match and then no further unique matches.
+                    if(cursor.CurrentMultipleKey != null)
+                        do
                         {
-                            yield return guid;
+                            foreach(var guid in cursor.CurrentMultipleKey.Select(_ => _.Value.Data.AsGuid()))
+                            {
+                                yield return guid;
+                            }
                         }
-                    }
-                    while(cursor.MoveNextDuplicateMultipleKey(bufferSize));
+                        while(cursor.MoveNextMultipleKey(bufferSize));
                 }
             }
             finally
