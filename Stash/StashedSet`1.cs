@@ -68,8 +68,8 @@ namespace Stash
             return
                 backingStore
                     .Get(queryFactory.IntersectionOf(queryChain))
-                    .Select(storedGraph => session.Track<TGraph>(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
-                    .Select(track => track.Graph)
+                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
+                    .Select(track => (TGraph)track.UntypedGraph)
                     .GetEnumerator();
         }
 
@@ -85,9 +85,10 @@ namespace Stash
 
         public void Add(TGraph item)
         {
-//            var registeredGraph = registry.GetRegistrationFor(item.GetType());
-//            var serializedGraph = registeredGraph.Serialize(stashedPost);
-//            var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));
+            var registeredGraph = registry.GetRegistrationFor(item.GetType());
+            var serializedGraph = registeredGraph.Serialize(item);
+            var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(item));
+//            session.Endure()
 //            var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
         }
 

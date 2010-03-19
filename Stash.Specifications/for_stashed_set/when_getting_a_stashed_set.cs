@@ -32,7 +32,7 @@ namespace Stash.Specifications.for_stashed_set
         private IInternalSession mockInternalSession;
         private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
         private IStoredGraph mockStoredGraph;
-        private ITrack<DummyPersistentObject> mockTrack;
+        private ITrack mockTrack;
         private StashedSet<DummyPersistentObject> subject;
 
         protected override void Given()
@@ -51,15 +51,15 @@ namespace Stash.Specifications.for_stashed_set
             mockStoredGraph = MockRepository.GenerateStub<IStoredGraph>();
             mockBackingStore.Stub(_ => _.Get(null)).IgnoreArguments().Return(new[] {mockStoredGraph});
 
-            mockTrack = MockRepository.GenerateStub<ITrack<DummyPersistentObject>>();
-            mockTrack.Stub(_ => _.Graph).Return(new DummyPersistentObject());
+            mockTrack = MockRepository.GenerateStub<ITrack>();
+            mockTrack.Stub(_ => _.UntypedGraph).Return(new DummyPersistentObject());
         }
 
         protected override void When()
         {
             mockInternalSession.Expect(
                 _ =>
-                _.Track<DummyPersistentObject>(
+                _.Track(
                     Arg<IStoredGraph>.Is.Same(mockStoredGraph),
                     Arg<IRegisteredGraph>.Is.Same(mockRegisteredGraph)))
                 .Return(mockTrack);

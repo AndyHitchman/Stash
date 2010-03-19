@@ -22,7 +22,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     using Configuration;
     using Engine.PersistenceEvents;
 
-    public class StandInTrack<TGraph> : Track<TGraph> where TGraph : class
+    public class StandInTrack<TGraph> : Track
     {
         public bool HasCalculatedIndexes;
 

@@ -148,11 +148,12 @@ namespace Stash.Engine
             return this;
         }
 
-        public ITrack<TGraph> Track<TGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TGraph : class
+        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
         {
-            var track = new Track<TGraph>(storedGraph, registeredGraph);
+            var track = new Track(storedGraph, registeredGraph);
             Enroll(track);
             return track;
         }
+
     }
 }

@@ -23,12 +23,12 @@ namespace Stash.Engine.PersistenceEvents
     using BackingStore;
     using Configuration;
 
-    public class Track<TSuperGraph> : ITrack<TSuperGraph> where TSuperGraph : class
+    public class Track : ITrack
     {
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
         private readonly IRegisteredGraph registeredGraph;
         private readonly IStoredGraph storedGraph;
-        private TSuperGraph graph;
+        private object graph;
 
         public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
         {
@@ -55,12 +55,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public object UntypedGraph
         {
-            get { return Graph; }
-        }
-
-        public virtual TSuperGraph Graph
-        {
-            get { return graph ?? (graph = (TSuperGraph)registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
+            get { return graph ?? (graph = registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
         }
 
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()

@@ -45,10 +45,9 @@ namespace Stash.Engine
         /// <summary>
         /// Track a stored graph such that changes made in the session are persisted to the backing store.
         /// </summary>
-        /// <typeparam name="TGraph"></typeparam>
         /// <param name="storedGraph"></param>
         /// <param name="registeredGraph"></param>
         /// <returns></returns>
-        ITrack<TGraph> Track<TGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TGraph : class;
+        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
     }
 }
