@@ -27,15 +27,37 @@ namespace Stash.Engine.PersistenceEvents
     {
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
         private readonly IRegisteredGraph registeredGraph;
-        private readonly IStoredGraph storedGraph;
         private object graph;
+        private readonly IEnumerable<byte> storedSerializedGraph;
+        private readonly Guid internalId;
 
         public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
+            : this(storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph)
         {
-            this.storedGraph = storedGraph;
+        }
+
+        public Track(Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
+            : this()
+        {
+            this.internalId = internalId;
+            this.storedSerializedGraph = storedSerializedGraph;
             this.registeredGraph = registeredGraph;
+            OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
+            graph = registeredGraph.Deserialize(storedSerializedGraph);
+        }
+
+        public Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
+            : this()
+        {
+            this.internalId = internalId;
+            this.graph = graph;
+            this.registeredGraph = registeredGraph;
+            OriginalHash = new byte[0];
+        }
+
+        private Track()
+        {
             hashCodeGenerator = new SHA1CryptoServiceProvider();
-            OriginalHash = hashCodeGenerator.ComputeHash(storedGraph.SerialisedGraph.ToArray());
         }
 
         /// <summary>
@@ -55,7 +77,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public object UntypedGraph
         {
-            get { return graph ?? (graph = registeredGraph.Deserialize(storedGraph.SerialisedGraph)); }
+            get { return graph; }
         }
 
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
@@ -68,14 +90,14 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void Complete(IStorageWork work)
         {
-            var serializedGraph = registeredGraph.Serialize(UntypedGraph);
-            CompletionHash = hashCodeGenerator.ComputeHash(serializedGraph.ToArray());
+            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph);
+            CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
 
             if(CompletionHash.SequenceEqual(OriginalHash))
                 //No change to object. No work to do.
                 return;
 
-            var trackedGraph = new TrackedGraph(storedGraph.InternalId, serializedGraph, CalculateIndexes(), registeredGraph);
+            var trackedGraph = new TrackedGraph(internalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
             work.UpdateGraph(trackedGraph);
         }
 

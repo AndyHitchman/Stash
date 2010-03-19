@@ -86,10 +86,7 @@ namespace Stash
         public void Add(TGraph item)
         {
             var registeredGraph = registry.GetRegistrationFor(item.GetType());
-            var serializedGraph = registeredGraph.Serialize(item);
-            var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(item));
-//            session.Endure()
-//            var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
+            session.Endure(item, registeredGraph);
         }
 
         public bool Contains(TGraph item)

@@ -61,6 +61,7 @@
     <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\LinqExtensions.cs" />
+    <Compile Include="Engine\PersistenceEvents\IEndure.cs" />
     <Compile Include="Engine\PersistenceEvents\ITrack.cs" />
     <Compile Include="Engine\Serializers\AdhocSerializer.cs" />
     <Compile Include="Engine\Serializers\BinarySerializer.cs" />

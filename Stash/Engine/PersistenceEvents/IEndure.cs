@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -16,14 +16,7 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
-    using System;
-    using BackingStore;
-    using Configuration;
-
-    public interface IPersistenceEventFactory
+    public interface IEndure : ITrack
     {
-        Destroy<TGraph> MakeDestroy<TGraph>(Guid internalId, TGraph graph, IInternalSession session);
-        Endure MakeEndure<TGraph>(TGraph graph, IRegisteredGraph registeredGraph);
-        Track MakeTrack<TSuperGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TSuperGraph : class;
     }
 }

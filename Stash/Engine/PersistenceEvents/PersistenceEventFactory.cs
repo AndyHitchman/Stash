@@ -27,9 +27,9 @@ namespace Stash.Engine.PersistenceEvents
             return new Destroy<TGraph>(internalId, graph, session);
         }
 
-        public Endure<TGraph> MakeEndure<TGraph>(TGraph graph, IInternalSession session)
+        public Endure MakeEndure<TGraph>(TGraph graph, IRegisteredGraph registeredGraph)
         {
-            return new Endure<TGraph>(graph, session);
+            return new Endure(graph, registeredGraph);
         }
 
         public Track MakeTrack<TSuperGraph>(IStoredGraph storedGraph, IRegisteredGraph registeredGraph) where TSuperGraph : class

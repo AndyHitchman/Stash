@@ -16,6 +16,7 @@
 
 namespace Stash.Engine
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -155,5 +156,11 @@ namespace Stash.Engine
             return track;
         }
 
+        public IEndure Endure(object graph, IRegisteredGraph registeredGraph)
+        {
+            var endure = new Endure(graph, registeredGraph);
+            Enroll(endure);
+            return endure;
+        }
     }
 }

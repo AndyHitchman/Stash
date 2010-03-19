@@ -49,5 +49,7 @@ namespace Stash.Engine
         /// <param name="registeredGraph"></param>
         /// <returns></returns>
         ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
+
+        IEndure Endure(object graph, IRegisteredGraph registeredGraph);
     }
 }
