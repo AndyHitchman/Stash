@@ -26,7 +26,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_return_itself()
         {
-            var sut = new InternalSession(null, null);
+            var sut = new InternalSession(null);
 
             sut.Internalize().ShouldEqual(sut);
         }

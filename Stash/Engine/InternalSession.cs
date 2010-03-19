@@ -30,14 +30,11 @@ namespace Stash.Engine
         private readonly IBackingStore backingStore;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        public InternalSession(IBackingStore backingStore, IPersistenceEventFactory persistenceEventFactory)
+        public InternalSession(IBackingStore backingStore)
         {
             this.backingStore = backingStore;
-            PersistenceEventFactory = persistenceEventFactory;
             PersistenceEvents = new List<IPersistenceEvent>();
         }
-
-        public IPersistenceEventFactory PersistenceEventFactory { get; set; }
 
         public virtual IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents
         {

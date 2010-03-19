@@ -20,11 +20,8 @@ namespace Stash.Engine
 
     public class SessionFactory : ISessionFactory
     {
-        private readonly IPersistenceEventFactory persistenceEventFactory;
-
         public SessionFactory()
         {
-            persistenceEventFactory = new PersistenceEventFactory();
         }
 
 
@@ -34,7 +31,7 @@ namespace Stash.Engine
         /// <returns></returns>
         public ISession GetSession()
         {
-            return new InternalSession(Kernel.Registry.BackingStore, persistenceEventFactory);
+            return new InternalSession(Kernel.Registry.BackingStore);
         }
     }
 }

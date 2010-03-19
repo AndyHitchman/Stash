@@ -130,8 +130,6 @@
     <Compile Include="BackingStore\IProjectedIndex`1.cs" />
     <Compile Include="BackingStore\IStoredGraph.cs" />
     <Compile Include="BackingStore\ITrackedGraph.cs" />
-    <Compile Include="Engine\PersistenceEvents\PersistenceEventFactory.cs" />
-    <Compile Include="Engine\PersistenceEvents\IPersistenceEventFactory.cs" />
     <Compile Include="Engine\PersistenceEvents\PreviouslyEnrolledEvent.cs" />
     <Compile Include="Engine\PersistenceEvents\Track.cs" />
     <Compile Include="Engine\PersistenceEvents\Destroy.cs" />

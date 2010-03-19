@@ -23,8 +23,8 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
 
     public class StandInInternalSession : InternalSession
     {
-        public StandInInternalSession(IBackingStore backingStore, IPersistenceEventFactory persistenceEventFactory)
-            : base(backingStore, persistenceEventFactory) {}
+        public StandInInternalSession(IBackingStore backingStore)
+            : base(backingStore) {}
 
         public List<IPersistenceEvent> ExposedPersistenceEvents
         {
