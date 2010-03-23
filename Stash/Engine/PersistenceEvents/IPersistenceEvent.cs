@@ -16,6 +16,7 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
+    using System;
     using BackingStore;
 
     /// <summary>
@@ -27,6 +28,11 @@ namespace Stash.Engine.PersistenceEvents
         /// Get the untyped graph.
         /// </summary>
         object UntypedGraph { get; }
+
+        /// <summary>
+        /// The internal id of the graph affected by the persistence event
+        /// </summary>
+        Guid InternalId { get; }
 
         /// <summary>
         /// Complete all work for the persistence event.

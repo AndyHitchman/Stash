@@ -6,9 +6,9 @@
     public interface IStashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class 
     {
         StashedSet<TGraph> Where(IQuery query);
-        void Add(TGraph item);
+        void Endure(TGraph item);
         bool Contains(TGraph item);
-        bool Remove(TGraph item);
+        void Destroy(TGraph item);
         int Count { get; }
     }
 }

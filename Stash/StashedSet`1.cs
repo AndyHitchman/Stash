@@ -83,7 +83,11 @@ namespace Stash
             return GetEnumerator();
         }
 
-        public void Add(TGraph item)
+        /// <summary>
+        /// Endure a graph. Make it persistent in the backing store.
+        /// </summary>
+        /// <param name="item"></param>
+        public void Endure(TGraph item)
         {
             session.Endure(item, registry.GetRegistrationFor(item.GetType()));
         }
@@ -93,9 +97,14 @@ namespace Stash
             throw new NotImplementedException();
         }
 
-        public bool Remove(TGraph item)
+        /// <summary>
+        /// Destroy the persistence 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public void Destroy(TGraph item)
         {
-            throw new NotImplementedException();
+            session.Destroy(item, registry.GetRegistrationFor(item.GetType()));
         }
 
         public int Count

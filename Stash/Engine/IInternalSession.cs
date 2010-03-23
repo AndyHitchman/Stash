@@ -41,13 +41,27 @@ namespace Stash.Engine
         bool GraphIsTracked(object graph);
 
         /// <summary>
-        /// Track a stored graph such that changes made in the session are persisted to the backing store.
+        /// Track a stored graph so that changes made in the session are persisted to the backing store.
         /// </summary>
         /// <param name="storedGraph"></param>
         /// <param name="registeredGraph"></param>
         /// <returns></returns>
         ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
 
+        /// <summary>
+        /// Endure a transient graph so that when the session completes the graph is persisted to the backing store.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="registeredGraph"></param>
         void Endure(object graph, IRegisteredGraph registeredGraph);
+        
+        /// <summary>
+        /// Destroy a persistent graph such that when the session completes the graph is removed from the backing store. can only operate on tracked
+        /// graphs within the same session.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <param name="registeredGraph"></param>
+        /// <returns>true is a tracked graph was marked for deletion</returns>
+        bool Destroy(object graph, IRegisteredGraph registeredGraph);
     }
 }

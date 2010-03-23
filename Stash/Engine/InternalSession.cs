@@ -157,5 +157,16 @@ namespace Stash.Engine
         {
             Enroll(new Endure(graph, registeredGraph));
         }
+
+        public bool Destroy(object graph, IRegisteredGraph registeredGraph)
+        {
+            var trackedEventForGraph = EnrolledPersistenceEvents.Where(_ => ReferenceEquals(graph, _.UntypedGraph));
+            if(!trackedEventForGraph.Any())
+                return false;
+
+            var internalId = trackedEventForGraph.Select(_ => _.InternalId).First();
+            Enroll(new Destroy(internalId, graph, registeredGraph));
+            return true;
+        }
     }
 }

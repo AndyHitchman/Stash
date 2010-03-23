@@ -25,20 +25,17 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Track : ITrack
     {
+        private readonly object graph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
         private readonly IRegisteredGraph registeredGraph;
-        private object graph;
-        private readonly Guid internalId;
 
         public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
-            : this(storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph)
-        {
-        }
+            : this(storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
 
         public Track(Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
             : this()
         {
-            this.internalId = internalId;
+            InternalId = internalId;
             this.registeredGraph = registeredGraph;
             OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
             graph = registeredGraph.Deserialize(storedSerializedGraph);
@@ -47,7 +44,7 @@ namespace Stash.Engine.PersistenceEvents
         public Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
             : this()
         {
-            this.internalId = internalId;
+            InternalId = internalId;
             this.graph = graph;
             this.registeredGraph = registeredGraph;
             OriginalHash = new byte[0];
@@ -68,7 +65,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public byte[] CompletionHash { get; private set; }
 
-        public Guid InternalId { get; set; }
+        public Guid InternalId { get; private set; }
 
         /// <summary>
         /// Get the untyped graph.
@@ -91,7 +88,7 @@ namespace Stash.Engine.PersistenceEvents
             CompleteInBackingStore(trackedGraph => work.UpdateGraph(trackedGraph));
         }
 
-        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction) 
+        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction)
         {
             var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph);
             CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
@@ -100,7 +97,7 @@ namespace Stash.Engine.PersistenceEvents
                 //No change to object. No work to do.
                 return;
 
-            var trackedGraph = new TrackedGraph(internalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
+            var trackedGraph = new TrackedGraph(InternalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
             completionAction(trackedGraph);
         }
 

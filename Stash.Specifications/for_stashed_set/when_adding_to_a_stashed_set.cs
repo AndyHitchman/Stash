@@ -51,7 +51,7 @@ namespace Stash.Specifications.for_stashed_set
 
         protected override void When()
         {
-            subject.Add(expected);
+            subject.Endure(expected);
         }
 
         [Then]

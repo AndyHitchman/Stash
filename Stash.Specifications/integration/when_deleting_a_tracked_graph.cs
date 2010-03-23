@@ -23,14 +23,13 @@ namespace Stash.Specifications.integration
     using Queries;
     using Support;
 
-    public class when_adding_a_transient_graph : with_real_configuration
+    public class when_deleting_a_tracked_graph : with_real_configuration
     {
-        private Post transientPost;
-        private Post persistedPost;
+        private string expectedTitle;
 
         protected override void Given()
         {
-            transientPost = new Post
+            var stashedPost = new Post
                 {
                     Title = "My Super Blog",
                     PostedAt = new DateTime(2010, 03, 19, 13, 33, 34),
@@ -46,27 +45,37 @@ namespace Stash.Specifications.integration
                                 }
                         }
                 };
+
+            var internalId = Guid.NewGuid();
+            var registeredGraph = Kernel.Registry.GetRegistrationFor<Post>();
+            var serializedGraph = registeredGraph.Serialize(stashedPost);
+            var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));
+            var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
+
+            Kernel.Registry.BackingStore.InTransactionDo(_ => _.InsertGraph(tracked));
         }
 
         protected override void When()
         {
-            var addingSession = Kernel.SessionFactory.GetSession();
-            new StashedSet<Post>(addingSession).Endure(transientPost);
-            addingSession.Complete();
+            var deletingSession = Kernel.SessionFactory.GetSession();
+            var stashedSet = new StashedSet<Post>(deletingSession)
+                .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1));
 
-            persistedPost = new StashedSet<Post>(Kernel.SessionFactory.GetSession()).FirstOrDefault();
+            var postToDelete = stashedSet.FirstOrDefault();
+            stashedSet.Destroy(postToDelete);
+            
+            deletingSession.Complete();
         }
 
         [Then]
-        public void it_should_persist_my_post()
+        public void it_should_have_removed_the_post()
         {
-            persistedPost.ShouldNotBeNull();
-        }
+            var deletedPost =
+                new StashedSet<Post>(Kernel.SessionFactory.GetSession())
+                    .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                    .FirstOrDefault();
 
-        [Then]
-        public void it_should_stash_the_correct_title()
-        {
-            persistedPost.Title.ShouldEqual(transientPost.Title);
+            deletedPost.ShouldBeNull();
         }
     }
 }

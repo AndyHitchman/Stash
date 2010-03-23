@@ -18,8 +18,5 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
 
-    public interface ITrack : IPersistenceEvent
-    {
-        Guid InternalId { get; set; }
-    }
+    public interface ITrack : IPersistenceEvent {}
 }

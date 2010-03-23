@@ -17,45 +17,40 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.Linq;
     using BackingStore;
+    using Configuration;
 
-    public class Destroy<TGraph> : IPersistenceEvent<TGraph>
+    public class Destroy : IDestroy
     {
-        public Destroy(Guid internalId, TGraph graph, IInternalSession session)
+        private readonly object graph;
+        private readonly IRegisteredGraph registeredGraph;
+
+        public Destroy(Guid internalId, object graph, IRegisteredGraph registeredGraph)
         {
             InternalId = internalId;
-            Graph = graph;
-            Session = session;
+            this.graph = graph;
+            this.registeredGraph = registeredGraph;
         }
 
-        public Guid InternalId { get; set; }
-
-        /// <summary>
-        /// The typed graph.
-        /// </summary>
-        public TGraph Graph { get; private set; }
-
-        /// <summary>
-        /// The internal session to which the persistence event belongs.
-        /// </summary>
-        public IInternalSession Session { get; private set; }
-
-        /// <summary>
-        /// Get the untypes graph.
-        /// </summary>
-        public virtual object UntypedGraph
+        public object UntypedGraph
         {
-            get { return Graph; }
+            get { return graph; }
         }
 
-        public virtual void Complete(IStorageWork work)
+        public Guid InternalId
+        {
+            get; private set;
+        }
+
+        public void Complete(IStorageWork work)
+        {
+            work.DeleteGraph(InternalId, registeredGraph);
+        }
+
+        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
             throw new NotImplementedException();
-        }
-
-        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
-        {
-            return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }
     }
 }
