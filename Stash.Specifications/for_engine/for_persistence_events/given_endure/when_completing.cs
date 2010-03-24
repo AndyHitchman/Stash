@@ -27,9 +27,8 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
     public class when_completing : Specification
     {
         private IStorageWork mockStorageWork;
-        private Endure subject;
         private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
-        private ITrackedGraph mockTrackedGraph;
+        private Endure subject;
 
         protected override void Given()
         {
