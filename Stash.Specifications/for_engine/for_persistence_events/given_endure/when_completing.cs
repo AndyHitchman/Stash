@@ -16,18 +16,17 @@
 
 namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
 {
-    using System;
     using System.Linq;
-    using Stash.BackingStore;
-    using Stash.Configuration;
-    using Stash.Engine.PersistenceEvents;
+    using BackingStore;
+    using Configuration;
+    using Engine.PersistenceEvents;
     using Rhino.Mocks;
-    using Stash.Specifications.Support;
+    using Support;
 
     public class when_completing : Specification
     {
-        private IStorageWork mockStorageWork;
         private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
+        private IStorageWork mockStorageWork;
         private Endure subject;
 
         protected override void Given()

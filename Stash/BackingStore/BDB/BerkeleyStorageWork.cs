@@ -61,11 +61,22 @@ namespace Stash.BackingStore.BDB
             deleteGraphData(graphKey);
         }
 
+        /// <summary>
+        /// Get executes the query in the given transaction and materialises the resulting internal ids immediately to
+        /// prevent holding open cursors for a significant duration. However, the stored graphs are lazily yielded in
+        /// distinct transactions.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
-            return executeQuery(query)
-                .Select(internalId => Get(internalId))
-                .Materialize();
+            //Materialize the query operators in order to minimize the duration of open cursors.
+            var matchingInternalIds = executeQuery(query).Materialize();
+
+            //This Get is lazy, so the transaction that originally did the match is likely closed. 
+            //We go back to the backing store to start a new transaction.
+            return matchingInternalIds 
+                .Select(internalId => BackingStore.Get(internalId));
         }
 
         public IStoredGraph Get(Guid internalId)
