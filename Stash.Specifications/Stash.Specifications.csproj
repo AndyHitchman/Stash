@@ -65,6 +65,8 @@
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
     <Compile Include="for_backingstore_bsb\with_temp_dir.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_destroy\when_completing.cs" />
+    <Compile Include="for_engine\for_persistence_events\given_endure\when_completing.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_a_changed_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
@@ -187,9 +189,6 @@
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="for_engine\for_persistence_events\given_destroy\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

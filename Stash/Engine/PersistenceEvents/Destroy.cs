@@ -50,7 +50,7 @@ namespace Stash.Engine.PersistenceEvents
 
         public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
         {
-            throw new NotImplementedException();
+            return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }
     }
 }
