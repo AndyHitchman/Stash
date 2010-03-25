@@ -60,7 +60,7 @@ namespace Stash.Specifications.integration
         {
             var session = Kernel.SessionFactory.GetSession();
             actual =
-                session.GetStashFor<Post>()
+                session.GetStashOf<Post>()
                     .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
                     .FirstOrDefault();
         }

@@ -58,7 +58,8 @@ namespace Stash.Specifications.integration
         protected override void When()
         {
             var deletingSession = Kernel.SessionFactory.GetSession();
-            var stashedSet = new StashedSet<Post>(deletingSession)
+            var stashedSet = deletingSession
+                .GetStashOf<Post>()
                 .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1));
 
             var postToDelete = stashedSet.FirstOrDefault();
@@ -70,8 +71,9 @@ namespace Stash.Specifications.integration
         [Then]
         public void it_should_have_removed_the_post()
         {
+            var querySession = Kernel.SessionFactory.GetSession();
             var deletedPost =
-                new StashedSet<Post>(Kernel.SessionFactory.GetSession())
+                querySession.GetStashOf<Post>()
                     .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
                     .FirstOrDefault();
 

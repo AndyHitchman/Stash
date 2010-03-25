@@ -26,6 +26,7 @@ namespace Stash.Specifications.integration
     public class when_updating_a_tracked_graph : with_real_configuration
     {
         private string expectedTitle;
+        private Post updatedPost;
 
         protected override void Given()
         {
@@ -59,7 +60,7 @@ namespace Stash.Specifications.integration
         {
             var updatingSession = Kernel.SessionFactory.GetSession();
             var postToUpdate =
-                new StashedSet<Post>(updatingSession)
+                updatingSession.GetStashOf<Post>()
                     .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
                     .FirstOrDefault();
 
@@ -67,16 +68,16 @@ namespace Stash.Specifications.integration
             postToUpdate.Title = expectedTitle;
 
             updatingSession.Complete();
+
+            var querySession = Kernel.SessionFactory.GetSession();
+            updatedPost = querySession.GetStashOf<Post>()
+                .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                .FirstOrDefault();
         }
 
         [Then]
         public void it_should_get_the_updated_title_for_my_post()
         {
-            var updatedPost =
-                new StashedSet<Post>(Kernel.SessionFactory.GetSession())
-                    .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
-                    .FirstOrDefault();
-
             updatedPost.Title.ShouldEqual(expectedTitle);
         }
     }

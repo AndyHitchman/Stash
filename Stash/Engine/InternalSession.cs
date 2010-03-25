@@ -16,14 +16,12 @@
 
 namespace Stash.Engine
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using BackingStore;
     using Configuration;
     using PersistenceEvents;
-    using Queries;
 
     public class InternalSession : IInternalSession
     {
@@ -174,7 +172,7 @@ namespace Stash.Engine
             return true;
         }
 
-        public StashedSet<TGraph> GetStashFor<TGraph>() where TGraph : class
+        public StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
         {
             return
                 new StashedSet<TGraph>(

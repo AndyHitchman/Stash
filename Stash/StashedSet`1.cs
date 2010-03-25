@@ -33,16 +33,6 @@ namespace Stash
         private readonly IRegistry registry;
         private readonly IInternalSession session;
 
-        public StashedSet(ISession session)
-            : this(
-                session.Internalize(),
-                Kernel.Registry,
-                Kernel.Registry.BackingStore,
-                Kernel.Registry.BackingStore.QueryFactory,
-                typeof(TGraph).Equals(typeof(object))
-                    ? Enumerable.Empty<IQuery>()
-                    : new[] {Index<StashTypeHierarchy>.EqualTo(StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))}) {}
-
         public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory)
             : this(
                 session,

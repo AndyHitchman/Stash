@@ -51,10 +51,11 @@ namespace Stash.Specifications.integration
         protected override void When()
         {
             var addingSession = Kernel.SessionFactory.GetSession();
-            new StashedSet<Post>(addingSession).Endure(transientPost);
+            addingSession.GetStashOf<Post>().Endure(transientPost);
             addingSession.Complete();
 
-            persistedPost = new StashedSet<Post>(Kernel.SessionFactory.GetSession()).FirstOrDefault();
+            var querySession = Kernel.SessionFactory.GetSession();
+            persistedPost = querySession.GetStashOf<Post>().FirstOrDefault();
         }
 
         [Then]

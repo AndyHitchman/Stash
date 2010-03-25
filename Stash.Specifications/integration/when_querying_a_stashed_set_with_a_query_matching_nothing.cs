@@ -58,8 +58,9 @@ namespace Stash.Specifications.integration
 
         protected override void When()
         {
+            var session = Kernel.SessionFactory.GetSession();
             actual =
-                new StashedSet<Post>(Kernel.SessionFactory.GetSession())
+                session.GetStashOf<Post>()
                     .Where(Index<NumberOfCommentsOnPost>.GreaterThan(1))
                     .Count();
         }
