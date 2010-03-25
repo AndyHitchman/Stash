@@ -1,0 +1,4 @@
+﻿<global type="string" Title="'Stash Example'"/>
+<content name="head">
+</content>
+Hello, world!

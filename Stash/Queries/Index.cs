@@ -28,7 +28,7 @@ namespace Stash.Queries
         }
 
         /// <summary>
-        /// A synonym for <see cref="IntersectionOf"/>.
+        /// A synonym for <see cref="IntersectionOf(Stash.Queries.IQuery,Stash.Queries.IQuery)"/>.
         /// </summary>
         /// <param name="lhs"></param>
         /// <param name="rhs"></param>

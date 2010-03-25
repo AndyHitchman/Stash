@@ -1,0 +1,484 @@
+﻿<global type="string" Title="'Team Build Reports'"/>
+<content name="head">
+    <script once="jquery.buttonstop" type="text/javascript" src="~/content/Scripts/jquery.buttonstop.js"></script>
+    <script once="jquery.cookie" type="text/javascript" src="~/content/Scripts/jquery.cookie.js"></script>
+    <script once="jquery.selects" type="text/javascript" src="~/content/Scripts/jquery.selects.js"></script>
+    <script once="jquery.hint" type="text/javascript" src="~/content/Scripts/jquery.hint.js"></script>
+    <script once="jquery.corner" type="text/javascript" src="~/content/Scripts/jquery.corner.js"></script>
+    <script once="jquery.sorter" type="text/javascript" src="~/content/Scripts/jquery.sorter.js"></script>
+	
+    <script type="text/javascript">
+    $(document).ready(function() {
+		$('#pageContent > div').corner();
+
+        $('#serverUrl')
+			.val($.cookie('serverUrl') == null ? '' : $.cookie('serverUrl'))
+			.change(function() {
+				if($(this).val() == null) {
+					$.cookie('serverUrl', null);
+				} else {
+					$.cookie('serverUrl', $(this).val(), { expires: 365, path: '/' });
+				}
+				$.cookie('teamProject', null);
+				$('#buildSet').fadeOut();
+				loadTeamProjects($(this).val());
+			});
+
+        $('#teamProject')
+			.change(function() {
+				if($(this).val() == '') {
+					$.cookie('teamProject', null);
+				} else {
+					$.cookie('teamProject', $(this).val(), { expires: 365, path: '/' });
+				}
+				$.cookie('buildDefinition', null);
+				$('#buildSet').fadeOut();
+				loadBuildDefinitions($('#serverUrl').val(), $(this).val());
+			});
+
+        $('#buildDefinition')
+			.change(function() {
+				if($(this).val() == '') {
+					$.cookie('buildDefinition', null);
+				} else {
+					$.cookie('buildDefinition', $(this).val(), { expires: 365, path: '/' });
+				}
+				$('#buildSet').fadeOut();
+				loadBuilds($('#serverUrl').val(), $('#teamProject').val(), $(this).val());
+			});
+		
+		$('#buildList').selectable({
+			stop: function() {
+				loadResults($('#serverUrl').val(), $(".ui-selected", this));
+			}
+		});
+
+        $(':input').hint();
+		$('#buildSet').hide();
+		$('#results').tabs();
+		$('.stopResults').hide();
+
+		loadTeamProjects($('#serverUrl').val());
+	})
+    
+    function getCurrentRequestId() {
+		return $('body').data('requestId');
+	}
+	
+	function getNextRequestId() {
+		var currReqId = $('body').data('requestId');
+		
+		if(currReqId == null)
+			currReqId = 0;
+		
+		var nextReqId = currReqId + 1
+		$('body').data('requestId', nextReqId);
+		return nextReqId;			
+	}
+    
+    function loadTeamProjects(serverUrl) {	
+		$('#teamProject')
+			.emptySelectOptions()
+			.attr('disabled', true);
+		$('#buildDefinition')
+			.emptySelectOptions()
+			.attr('disabled', true);
+
+		if(serverUrl == '') return;
+		
+		$.flash.subtle('Loading team projects...', 2500);
+		$.getJSON(
+			'!{Url.Action("GetTeamProjectsOnServer")}', 
+			{ serverUrl: serverUrl },
+			function(data, status) { onGotTeamProjects(serverUrl, data, status) }
+		);    
+	}
+
+	function onGotTeamProjects(serverUrl, data, status) {
+		if(status != 'success') {
+			$.flash.error('Could not get team projects on server ' + serverUrl +'. Status was ' + status);
+			return;
+		}
+		
+		if(data.failed == true) {
+			$.flash.error(data.message);
+			return;
+		}
+
+		$('#teamProject')
+			.attr('disabled', false)
+			.addDefaultOption('')
+			.addSelectOptions(
+				data.TeamProjects, 
+				function(project) { 
+					return { caption: project.Name, value: project.Name, selected: $.cookie('teamProject') == project.Name } 
+				})
+			.hint();
+
+		loadBuildDefinitions(serverUrl, $('#teamProject').val());
+	}
+    
+    function loadBuildDefinitions(serverUrl, teamProject) {
+		$('#buildDefinition')
+			.emptySelectOptions()
+			.attr('disabled', true);
+
+		if(serverUrl == '') return;
+		if(teamProject == '') return;
+			
+		$.flash.subtle('Loading build definitions...', 2500);
+		$.getJSON(
+			'!{Url.Action("GetBuildDefinitionsForTeamProject")}', 
+			{ serverUrl: serverUrl, teamProject: teamProject },
+			function(data, status) { onGotBuildDefinitions(serverUrl, teamProject, data, status) }
+		);    
+	}
+
+	function onGotBuildDefinitions(serverUrl, teamProject, data, status) {
+		if(status != 'success') {
+			$.flash.error('Could not get build definition for team project ' + teamProject +'. Status was ' + status);
+			return;
+		}
+		
+		if(data.failed == true) {
+			$.flash.error(data.message);
+			return;
+		}
+
+		$('#buildDefinition')
+			.attr('disabled', false)
+			.addDefaultOption('')
+			.addSelectOptions(
+				data.BuildDefinitions, 
+				function(buildDef) { 
+					return { caption: buildDef.Name, value: buildDef.Name, selected: $.cookie('buildDefinition') == buildDef.Name } 
+				})
+			.hint();
+			
+		loadBuilds(serverUrl, teamProject, $('#buildDefinition').val());
+	}
+	
+	function loadBuilds(serverUrl, teamProject, buildDefinition) {
+		$('#buildList').empty();
+
+		if(buildDefinition == '') {
+			$('#buildSet').fadeOut();
+			return;
+		}
+			
+		$.flash.subtle('Loading builds...', 2500);
+		$.getJSON(
+			'!{Url.Action("GetBuildsForDefinition")}', 
+			{ serverUrl: serverUrl, teamProject: teamProject, buildDefinition: buildDefinition },
+			function(data, status) { onGotBuilds(buildDefinition, data, status) }
+		);    
+	}
+
+	function onGotBuilds(buildDefinition, data, status) {
+		if(status != 'success') {
+			$.flash.error('Could not get builds for definition ' + buildDefinition +'. Status was ' + status);
+			return;
+		}
+		
+		if(data.failed == true) {
+			$.flash.error(data.message);
+			return;
+		}
+
+        $('#buildSet').fadeIn();
+
+        $.each(data.Builds, function(index, build) {
+			$('<li>' + build.BuildNumber + '</li>').data('buildUri', build.Uri).appendTo('#buildList');
+        });
+	}
+	
+	function loadResults(serverUrl, selectedBuilds) {
+		if(serverUrl == '') return;
+		if(selectedBuilds.size() < 1) return;
+			
+		$.flash.subtle('Loading changesets and work items...', 5000);
+		$('.stopResults').fadeIn().effect('pulsate', {times: 5});
+
+		var buildUris = $.makeArray(selectedBuilds.map(function() { return $(this).data('buildUri'); }));
+		
+		loadChangeSetsForBuild(serverUrl, buildUris, getNextRequestId());
+	}
+	
+	function loadChangeSetsForBuild(serverUrl, buildUris, activeRequestId) {
+		$('#changesets tbody').remove();
+		$('#workItems tr').not('.header').remove();
+
+		$.getJSON(
+			'!{Url.Action("GetChangesetsForBuilds")}', 
+			{ 
+				serverUrl: serverUrl, 
+				forBuilds: buildUris
+			},
+			function(data, status) { 
+				onGotChangesets(serverUrl, getResultsPlaceholder($('#changesets')), activeRequestId, 0, data, status) 
+			}
+		);
+	}
+
+	function loadChangesetsMergedIntoTarget(serverUrl, targetChangesetId, activeRequestId, placeholder, depth) {
+		$.getJSON(
+			'!{Url.Action("GetChangeSetsMergedIntoTarget")}', 
+			{ 
+				serverUrl: serverUrl, 
+				targetChangesetId: targetChangesetId
+			},
+			function(data, status) { onGotChangesets(serverUrl, placeholder, activeRequestId, depth, data, status) }
+		);
+	}
+
+	function getResultsPlaceholder(subTable, delay) {
+		var delayPostscript = "";
+		if(delay > 2000) {
+			delayPostscript = "(delayed by " + Math.round(delay / 1000, 1) + " seconds to avoid overloading server)";
+		}
+		return $('<tbody><tr class="working"><td colspan="5"><span>waiting for results...' + delayPostscript + '</span></td></tr></tbody>')
+					.appendTo(subTable);
+	}
+	
+	function buildChangesetRow(changeset) {
+		var changesetPath = changeset.TargetChangesetId == null ? 
+								changeset.ChangesetId : 
+								changeset.ChangesetId + '<' + changeset.TargetChangesetId;
+								
+		return $('<tr class="changeset"></tr>')
+					.data('id', changeset.ChangesetId)
+					.append('<td>' + changesetPath + '</td>' + 
+							'<td>' + changeset.Committer + '</td>' + 
+							'<td>' + changeset.CreationDate + '</td>' + 
+							'<td>' + changeset.Comment + '</td>' + 
+							'<td><span class="detailChangedFiles">Files</span>&nbsp;<span class="detailWorkItems">Work items</span></td>');
+	}
+
+	function noOutstandingRequests() {
+		return $('#changesets .working').size() == 0;
+	}
+
+	function finishWorking() {
+		$('#workItems').sort({ sortOn: '.workItemId', sortType: 'number'});
+		$('#workItems tr:even').addClass('even');
+		$('.stopResults').fadeOut().hide();
+	}
+
+	function onGotChangesets(serverUrl, placeholder, activeRequestId, depth, data, status) {
+		if(status != 'success') {
+			$.flash.error('Could not get changesets for selected builds. Status was ' + status);
+			return;
+		}
+		
+		if(data.failed == true) {
+			$.flash.error(data.message);
+			return;
+		}
+
+		placeholder.find('.working').remove();
+
+		if(data.Changesets.length == 0) {
+			placeholder.remove();
+			if(noOutstandingRequests()) {
+				finishWorking();
+			}
+			return;
+		}
+		
+		if(activeRequestId == getCurrentRequestId()) {
+			depth = depth + 1;
+			
+			if(depth > 4) {
+				$.flash.error("It looks like this query is going to get everything! I've stopped asking for more data!");
+				stopResults();
+			}
+			
+			if(data.Changesets.length > 10) {
+				$.flash.warning('A large number of changesets has been returned for this query. Slow-down started. Consider stopping results collection!', 5000);
+				$('.stopResults').effect('pulsate', {times: 10});
+			}
+		}
+		
+		var delay = 0;
+		var standoff = 500;
+
+		$.each(data.Changesets, function(index, cs) {
+			setTimeout(function() {
+				var csRow = buildChangesetRow(cs).appendTo(placeholder);
+					
+				$('#templates .associatedFiles').clone()
+					.appendTo(placeholder)
+					.hide();
+				
+				$('#templates .associatedWorkItems').clone()
+					.appendTo(placeholder)
+					.hide();
+				
+				$('.changeset:even', placeholder).addClass('even');
+
+				loadDetails(csRow, cs);
+				
+				if(activeRequestId != getCurrentRequestId()) {
+					if(noOutstandingRequests()) {
+						finishWorking();
+					}
+				} else {
+					delay = delay + standoff;
+					var childPlaceholder = getResultsPlaceholder($('#changesets'), delay);
+					setTimeout(function() { loadChangesetsMergedIntoTarget(serverUrl, cs.ChangesetId, activeRequestId, childPlaceholder, depth)}, delay);
+				}
+			}, 0);
+		});
+	}
+		
+	
+	function loadDetails(changesetRow, cs) {
+		$('.detailChangedFiles', changesetRow).click(function() { $(this).parent().parent().next().toggle() });
+		$('.detailWorkItems', changesetRow).click(function() { $(this).parent().parent().next().next().toggle() });
+
+		var changedFilesCell = changesetRow.next().find('td');
+		
+		var changeTable = $('<table class="changedFiles"></table>').appendTo(changedFilesCell);
+		$('#templates #associatedFileHeader').clone().appendTo(changeTable);
+
+		var wiTable = $('<table class="associatedWorkItems"></table>').appendTo(changesetRow.next().next().find('td'));
+		$('#templates #associatedWorkItemHeader').clone().appendTo(wiTable);
+
+		onGotChangesetDetails(
+				cs,
+				changeTable, 
+				wiTable, 
+				getResultsPlaceholder($('.changedFiles', changedFilesCell)));
+	}
+
+	function onGotChangesetDetails(cs, changeTable, wiTable, placeholder) {
+		placeholder.find('.working').remove();
+
+		$.each(cs.Changes, function(index, change) {
+			changeTable
+				.append('<tr><td class="filePath"><div>' + change.ServerItem.replace(/\//g, '/&#8203;') + '</div></td>' +
+						'<td>' + change.ChangeType + '</td></tr>');
+		});
+							
+		$.each(cs.WorkItems, function(index, wi) {
+			wiTable
+				.append('<tr><td>' + wi.Id + '</td>' +
+						'<td>' + wi.State + '</td>' +
+						'<td>' + wi.Title + '</td>' +
+						'<td>' + wi.Type + '</td>' +
+						'<td>' + wi.AssignedTo + '</td>' +
+						'</tr>');
+						
+			if($('#workItems #workItem' + wi.Id).size() == 0) {		
+				$('<tr id="workItem' + wi.Id + '" class="workItem"></tr>')
+					.append('<td class="workItemId">' + wi.Id + '</td>' +
+							'<td>' + wi.State + '</td>' +
+							'<td>' + wi.Type + '</td>' +
+							'<td>' + wi.Title + '</td>' +
+							'<td>' + wi.AssignedTo +'</td>')
+					.appendTo('#workItems');
+			}
+		});
+			
+		$('.associatedFiles tr:even, .associatedWorkItems tr:even', placeholder).addClass('even');		
+	}
+
+	function stopResults() {
+		getNextRequestId();
+		$('.stopResults').effect('highlight', {}, 1500, function() { $(this).fadeOut().hide() });
+	}
+	
+    </script>
+</content>
+<div class="sidebar">
+	<div>
+		<div id="server">
+			<h1>TFS Server URL</h1>
+			<label class="overlabel" for="serverUrl">Enter a TFS Server Url (Host:Port)</label> 
+			<input class="urlInput" id="serverUrl" name="serverUrl" type="text" value=""></input>
+		</div>
+		<div id="teamProjects">
+			<h1>Team Projects on Server</h1>
+			<label class="overlabel" for="teamProject">Select a Team Project</label> 
+			<select class="generalDropDown" id="teamProject" name="teamProject">
+			</select>
+		</div>
+		<div id="buildDefinitions">
+			<h1>Build Definitions in Team Project</h1>
+			<label class="overlabel" for="buildDefinition">Select a Build Definition</label> 
+			<select class="generalDropDown" id="buildDefinition" name="buildDefinition">
+			</select>
+		</div>
+	</div>
+	<div id="buildSet">
+		<h1>Builds for Definition</h1>
+		<label class="overlabel" for="buildList">Select one or more builds to examine changesets and related work items</label> 
+		<div class="scroller">
+			<ol id="buildList">
+			</ol>
+		</div>
+	</div>
+</div>
+<div class="main">
+	<div id="results">
+		<ul>
+			<li><a href="#resultstab-1">Changesets</a></li>
+			<li><a href="#resultstab-2">Work Items</a></li>
+		</ul>
+		<div id="resultstab-1">
+			The following change sets are incorporated into the selected builds:
+			<div class="stopResults"><a href="javascript:stopResults()">Stop getting results</a></div>
+			<table id="changesets" class="changesets">
+				<thead>
+					<tr class="header">
+						<th>Id</th>
+						<th>Committer</th>
+						<th>Date</th>
+						<th>Comment</th>
+						<th>More details</th>
+					</tr>
+				</thead>
+			</table>
+			<div class="stopResults"><a href="javascript:stopResults()">Stop getting results</a></div>
+		</div>
+		<div id="resultstab-2">
+			The following work items are associated with the selected builds:
+			<div class="stopResults"><a href="javascript:stopResults()">Stop getting results</a></div>
+			<table class="workItems">
+				<thead>
+					<tr class="header">
+						<th>Id</th>
+						<th>Status</th>
+						<th>Type</th>
+						<th>Title</th>
+						<th>Assigned To</th>
+					</tr>
+				</thead>
+				<tbody id="workItems">
+				</tbody>
+			</table>
+			<div class="stopResults"><a href="javascript:stopResults()">Stop getting results</a></div>
+		</div>
+	</div>
+</div>
+<div id="templates">
+	<table>
+		<tr class="associatedFiles">
+			<td class="content" colspan="5"></td>
+		</tr>
+		<tr class="associatedWorkItems">
+			<td class="content" colspan="5"></td>
+		</tr>
+		<tr class="header" id="associatedFileHeader">
+			<th>File</th>
+			<th>Change Type</th>
+		</tr>
+		<tr class="header" id="associatedWorkItemHeader">
+			<th>Id</th>
+			<th>Status</th>
+			<th>Type</th>
+			<th>Title</th>
+			<th>Assigned To</th>
+		</tr>
+	</table>
+</div>

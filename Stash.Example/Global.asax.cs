@@ -21,17 +21,15 @@ namespace Stash.Example
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using Spark;
+    using Spark.Web.Mvc;
+    using StructureMap;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
 
     public class MvcApplication : HttpApplication
     {
-        protected void Application_Start()
-        {
-            RegisterRoutes(RouteTable.Routes);
-        }
-
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -43,6 +41,41 @@ namespace Stash.Example
                 // URL with parameters
                 new {controller = "Home", action = "Index", id = ""} // Parameter defaults
                 );
+        }
+
+        public void ConfigureIoC(string configPath)
+        {
+            ObjectFactory.Configure(
+                c =>
+                {
+                    c.ForRequestedType<IViewEngine>()
+                        .TheDefaultIsConcreteType<SparkViewFactory>();
+
+                    c.ForRequestedType<IViewActivatorFactory>()
+                        .TheDefaultIsConcreteType<StructureMapViewActivator>();
+
+                    c.Scan(scanner => scanner.AddAllTypesOf<IController>().NameBy(type => type.Name.ToUpper()));
+                });
+
+            // Place this container as the dependency resolver and hook it into
+            // the controller factory mechanism
+            ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
+            ViewEngines.Engines.Add(ObjectFactory.GetInstance<IViewEngine>());
+
+        }
+
+        protected void Application_Start()
+        {
+            var settings = new SparkSettings()
+                .AddNamespace("System")
+                .AddNamespace("System.Collections.Generic")
+                .AddNamespace("System.Linq")
+                .AddNamespace("System.Web.Mvc")
+                .AddNamespace("System.Web.Mvc.Html");
+
+            ViewEngines.Engines.Add(new SparkViewFactory(settings));
+
+            RegisterRoutes(RouteTable.Routes);
         }
     }
 }
