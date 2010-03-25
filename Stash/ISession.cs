@@ -36,5 +36,8 @@ namespace Stash
         /// </summary>
         /// <returns></returns>
         IInternalSession Internalize();
+
+        StashedSet<TGraph> GetStashFor<TGraph>() where TGraph : class;
+        StashedSet<object> GetEntireStash();
     }
 }

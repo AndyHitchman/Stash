@@ -66,6 +66,7 @@
     <Compile Include="Engine\PersistenceEvents\ITrack.cs" />
     <Compile Include="Engine\Serializers\AdhocSerializer.cs" />
     <Compile Include="Engine\Serializers\BinarySerializer.cs" />
+    <Compile Include="Engine\Serializers\AggregateBinarySerializer.cs" />
     <Compile Include="Engine\SessionFactory.cs" />
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="BackingStore\IBackingStore.cs" />

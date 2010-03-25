@@ -16,6 +16,7 @@
 
 namespace Stash.Specifications.integration
 {
+    using System.Runtime.Serialization.Formatters.Binary;
     using BackingStore.BDB;
     using Engine.Serializers;
 
@@ -36,7 +37,7 @@ namespace Stash.Specifications.integration
                     {
                         _.Register<Post>(
                             r =>
-                            r.SerializeWith(new BinarySerializer<Post>()));
+                            r.SerializeWith(new BinarySerializer<Post>(new BinaryFormatter())));
                         _.Index(new NumberOfCommentsOnPost());
                     }
                 );

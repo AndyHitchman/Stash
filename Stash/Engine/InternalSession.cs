@@ -23,6 +23,7 @@ namespace Stash.Engine
     using BackingStore;
     using Configuration;
     using PersistenceEvents;
+    using Queries;
 
     public class InternalSession : IInternalSession
     {
@@ -168,5 +169,32 @@ namespace Stash.Engine
             Enroll(new Destroy(internalId, graph, registeredGraph));
             return true;
         }
+
+        public StashedSet<TGraph> GetStashFor<TGraph>() where TGraph : class
+        {
+            return
+                new StashedSet<TGraph>(
+                    this,
+                    Kernel.Registry,
+                    backingStore,
+                    backingStore.QueryFactory,
+                    new[]
+                        {
+                            backingStore.QueryFactory.EqualTo(
+                                Kernel.Registry.GetIndexerFor<StashTypeHierarchy>(),
+                                StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))
+                        });
+        }
+
+        public StashedSet<object> GetEntireStash()
+        {
+            return
+                new StashedSet<object>(
+                    this,
+                    Kernel.Registry,
+                    backingStore,
+                    backingStore.QueryFactory);
+        }
+
     }
 }

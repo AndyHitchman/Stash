@@ -26,9 +26,11 @@ namespace Stash.Engine.Serializers
     {
         private readonly BinaryFormatter formatter;
 
-        public BinarySerializer()
+        public BinarySerializer() : this(new BinaryFormatter()) {}
+
+        public BinarySerializer(BinaryFormatter binaryFormatter)
         {
-            formatter = new BinaryFormatter();
+            formatter = binaryFormatter;
         }
 
         public TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph)
