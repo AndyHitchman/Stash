@@ -25,9 +25,9 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     {
         private class StandInInternalSession : InternalSession
         {
-            public bool EndWasCalled;
-            public StandInInternalSession() : base(null) {}
+            public StandInInternalSession() : base(null, null) {}
 
+            public bool EndWasCalled;
             public override void Complete()
             {
                 EndWasCalled = true;

@@ -27,12 +27,16 @@ namespace Stash.Engine
 
     public class InternalSession : IInternalSession
     {
-        protected readonly List<IPersistenceEvent> PersistenceEvents;
+        private readonly IRegistry registry;
         private readonly IBackingStore backingStore;
+        protected readonly List<IPersistenceEvent> PersistenceEvents;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
 
-        public InternalSession(IBackingStore backingStore)
+        public InternalSession(IRegistry registry) : this(registry, registry.BackingStore) {}
+
+        public InternalSession(IRegistry registry, IBackingStore backingStore)
         {
+            this.registry = registry;
             this.backingStore = backingStore;
             PersistenceEvents = new List<IPersistenceEvent>();
         }
@@ -175,7 +179,7 @@ namespace Stash.Engine
             return
                 new StashedSet<TGraph>(
                     this,
-                    Kernel.Registry,
+                    registry,
                     backingStore,
                     backingStore.QueryFactory,
                     new[]
@@ -191,7 +195,7 @@ namespace Stash.Engine
             return
                 new StashedSet<object>(
                     this,
-                    Kernel.Registry,
+                    registry,
                     backingStore,
                     backingStore.QueryFactory);
         }
