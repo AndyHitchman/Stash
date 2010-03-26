@@ -152,7 +152,6 @@
     <Compile Include="Support\DummyReduction.cs" />
     <Compile Include="Support\DummyMap.cs" />
     <Compile Include="Support\DummyBackingStore.cs" />
-    <Compile Include="for_configuration\given_registered_indexer\when_engaging_backing_store.cs" />
     <Compile Include="for_configuration\given_persistence_context\when_told_to_register_a_graph.cs" />
     <Compile Include="for_configuration\given_persistence_context\with_persistence_context.cs" />
     <Compile Include="for_configuration\given_graph_context\DummerSerializationSurrogate.cs" />
@@ -202,6 +201,9 @@
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="for_configuration\given_registered_indexer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
