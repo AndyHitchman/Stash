@@ -61,7 +61,7 @@ namespace Stash.Specifications.integration
             var session = Kernel.SessionFactory.GetSession();
             actual =
                 session.GetStashOf<Post>()
-                    .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                    .Matching(_ => _.Where<NumberOfCommentsOnPost>().GreaterThanEqual(1))
                     .FirstOrDefault();
         }
 

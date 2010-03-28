@@ -122,7 +122,8 @@
     <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
     <Compile Include="IStashedSet`1.cs" />
-    <Compile Include="Queries\Index.cs" />
+    <Compile Include="Queries\MakeConstraint.cs" />
+    <Compile Include="Queries\SetConstraint.cs" />
     <Compile Include="Map`3.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -146,7 +147,6 @@
     <Compile Include="BackingStore\TrackedGraph.cs" />
     <Compile Include="Queries\IIsIndexedQuery.cs" />
     <Compile Include="Queries\IClosedRangeQuery.cs" />
-    <Compile Include="Queries\Index`1.cs" />
     <Compile Include="Queries\INotOperator.cs" />
     <Compile Include="Queries\IIntersectOperator.cs" />
     <Compile Include="Queries\INotAllOfQuery.cs" />

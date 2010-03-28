@@ -183,7 +183,7 @@ namespace Stash.Engine
                     new[]
                         {
                             backingStore.QueryFactory.EqualTo(
-                                Kernel.Registry.GetIndexerFor<StashTypeHierarchy>(),
+                                registry.GetIndexerFor<StashTypeHierarchy>(),
                                 StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))
                         });
         }

@@ -16,12 +16,16 @@
 
 namespace Stash.Engine
 {
+    using Configuration;
     using PersistenceEvents;
 
     public class SessionFactory : ISessionFactory
     {
-        public SessionFactory()
+        private readonly IRegistry registry;
+
+        public SessionFactory(IRegistry registry)
         {
+            this.registry = registry;
         }
 
 
@@ -31,7 +35,7 @@ namespace Stash.Engine
         /// <returns></returns>
         public ISession GetSession()
         {
-            return new InternalSession(Kernel.Registry);
+            return new InternalSession(registry);
         }
     }
 }

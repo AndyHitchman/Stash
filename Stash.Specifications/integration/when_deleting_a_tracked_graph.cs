@@ -60,7 +60,7 @@ namespace Stash.Specifications.integration
             var deletingSession = Kernel.SessionFactory.GetSession();
             var stashedSet = deletingSession
                 .GetStashOf<Post>()
-                .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1));
+                .Matching(_ => _.Where<NumberOfCommentsOnPost>().GreaterThanEqual(1));
 
             var postToDelete = stashedSet.FirstOrDefault();
             stashedSet.Destroy(postToDelete);
@@ -74,7 +74,7 @@ namespace Stash.Specifications.integration
             var querySession = Kernel.SessionFactory.GetSession();
             var deletedPost =
                 querySession.GetStashOf<Post>()
-                    .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                    .Matching(_ => _.Where<NumberOfCommentsOnPost>().GreaterThanEqual(1))
                     .FirstOrDefault();
 
             deletedPost.ShouldBeNull();

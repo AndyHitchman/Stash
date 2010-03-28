@@ -50,36 +50,9 @@ namespace Stash
             this.queryChain = queryChain;
         }
 
-        public IEnumerator<TGraph> GetEnumerator()
+        public int Count
         {
-            if(!queryChain.Any())
-                throw new InvalidOperationException("No queries in query chain");
-
-            return
-                backingStore
-                    .Get(queryFactory.IntersectionOf(queryChain))
-                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
-                    .Select(track => (TGraph)track.UntypedGraph)
-                    .GetEnumerator();
-        }
-
-        public StashedSet<TGraph> Where(IQuery query)
-        {
-            return new StashedSet<TGraph>(session, registry, backingStore, queryFactory, queryChain.Concat(new[] {query}));
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        /// <summary>
-        /// Endure a graph. Make it persistent in the backing store.
-        /// </summary>
-        /// <param name="item"></param>
-        public void Endure(TGraph item)
-        {
-            session.Endure(item, registry.GetRegistrationFor(item.GetType()));
+            get { throw new NotImplementedException(); }
         }
 
         public bool Contains(TGraph item)
@@ -97,9 +70,42 @@ namespace Stash
             session.Destroy(item, registry.GetRegistrationFor(item.GetType()));
         }
 
-        public int Count
+        /// <summary>
+        /// Endure a graph. Make it persistent in the backing store.
+        /// </summary>
+        /// <param name="item"></param>
+        public void Endure(TGraph item)
         {
-            get { throw new NotImplementedException(); }
+            session.Endure(item, registry.GetRegistrationFor(item.GetType()));
+        }
+
+        public IEnumerator<TGraph> GetEnumerator()
+        {
+            if(!queryChain.Any())
+                throw new InvalidOperationException("No queries in query chain");
+
+            return
+                backingStore
+                    .Get(queryFactory.IntersectionOf(queryChain))
+                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
+                    .Select(track => (TGraph)track.UntypedGraph)
+                    .GetEnumerator();
+        }
+
+        public StashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint)
+        {
+            var match = constraint(new MakeConstraint(registry, queryFactory));
+            return new StashedSet<TGraph>(
+                session, 
+                registry, 
+                backingStore, 
+                queryFactory, 
+                queryChain.Concat(new[] {match}));
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

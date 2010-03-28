@@ -61,7 +61,7 @@ namespace Stash.Specifications.integration
             var updatingSession = Kernel.SessionFactory.GetSession();
             var postToUpdate =
                 updatingSession.GetStashOf<Post>()
-                    .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                    .Matching(_ => _.Where<NumberOfCommentsOnPost>().GreaterThanEqual(1))
                     .FirstOrDefault();
 
             expectedTitle = "Updated post";
@@ -71,7 +71,7 @@ namespace Stash.Specifications.integration
 
             var querySession = Kernel.SessionFactory.GetSession();
             updatedPost = querySession.GetStashOf<Post>()
-                .Where(Index<NumberOfCommentsOnPost>.GreaterThanEqual(1))
+                .Matching(_ => _.Where<NumberOfCommentsOnPost>().GreaterThanEqual(1))
                 .FirstOrDefault();
         }
 

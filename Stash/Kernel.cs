@@ -30,32 +30,55 @@ namespace Stash
 
         public static IRegistry Registry { get; set; }
 
+        /// <summary>
+        /// Kickstart Stash by providing a <paramref name="backingStore"/> and registering graphs
+        /// and indexes inside the context of the <paramref name="persistenceConfigurationAction"/> delegate.
+        /// Finally take the final configuration in the <paramref name="delegatedConfigurationAction"/> as an 
+        /// opportunity to perform external configuration, such as setting up an inversion of control container.
+        /// </summary>
+        /// <typeparam name="TBackingStore"></typeparam>
+        /// <param name="backingStore"></param>
+        /// <param name="persistenceConfigurationAction"></param>
+        /// <param name="delegatedConfigurationAction"></param>
         public static void Kickstart<TBackingStore>(
             TBackingStore backingStore,
-            Action<PersistenceContext<TBackingStore>> configurationAction,
-            Action<IRegistry, IBackingStore, IQueryFactory> iocSingletonConfiguration)
+            Action<PersistenceContext<TBackingStore>> persistenceConfigurationAction,
+            Action<IRegistry, IBackingStore, IQueryFactory> delegatedConfigurationAction)
             where TBackingStore : IBackingStore
         {
             var registrar = new Registrar<TBackingStore>(backingStore);
-            registrar.PerformRegistration(configurationAction);
+            registrar.PerformRegistration(persistenceConfigurationAction);
             registrar.ApplyRegistration();
             Registry = registrar.Registry;
-            SessionFactory = new SessionFactory();
+            SessionFactory = new SessionFactory(Registry);
 
-            iocSingletonConfiguration(Registry, backingStore, backingStore.QueryFactory);
+            delegatedConfigurationAction(Registry, backingStore, backingStore.QueryFactory);
         }
 
+        /// <summary>
+        /// Kickstart Stash by providing a <paramref name="backingStore"/> and registering graphs
+        /// and indexes inside the context of the <paramref name="persistenceConfigurationAction"/> delegate.
+        /// </summary>
+        /// <param name="backingStore"></param>
+        /// <param name="configurationAction"></param>
         public static void Kickstart(BerkeleyBackingStore backingStore, Action<PersistenceContext<BerkeleyBackingStore>> configurationAction)
         {
-            Kickstart(backingStore, configurationAction, (registry, store, arg3) => { });
+            Kickstart(backingStore, configurationAction, (registry, store, queryFactory) => { });
         }
 
+        /// <summary>
+        /// Shutdown Stash. The backing store resource is released and no further work with Stash can be safely performed.
+        /// </summary>
         public static void Shutdown()
         {
             Registry.BackingStore.Close();
             Registry = null;
         }
 
+        /// <summary>
+        /// The HttpRequestManager provides methods that bind to <see cref="HttpApplication"/> events to provide
+        /// a simple central configuration for Stash-related configuration per Http Request.
+        /// </summary>
         public static class HttpRequestManager
         {
             /// <summary>
@@ -86,7 +109,7 @@ namespace Stash
             }
 
             /// <summary>
-            /// This configuration puts a new session into <see cref="HttpContext.Items"/>
+            /// This configuration puts a new session into <see cref="HttpContext.Items"/> on <see cref="HttpApplication.BeginRequest"/>
             /// and calls <see cref="ISession.Complete"/> on <see cref="HttpApplication.EndRequest"/>
             /// and <see cref="ISession.Abandon"/> on <see cref="HttpApplication.Error"/>
             /// </summary>
