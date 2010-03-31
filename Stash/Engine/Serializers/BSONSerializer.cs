@@ -22,12 +22,12 @@ namespace Stash.Engine.Serializers
 
     public class BSONSerializer<TGraph> : ISerializer<TGraph>
     {
-        public TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, RegisteredGraph<TGraph> registeredGraph)
+        public IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }

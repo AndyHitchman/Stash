@@ -84,6 +84,9 @@
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\Customer.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\Order.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\when_serializing_an_aggregate_referencing_another_aggregate.cs" />
     <Compile Include="for_stashed_set\when_adding_to_a_stashed_set.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />

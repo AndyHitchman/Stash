@@ -33,7 +33,7 @@ namespace Stash.Engine.Serializers
             formatter = binaryFormatter;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph)
         {
             var stream = new MemoryStream(bytes.ToArray());
             try
@@ -46,7 +46,7 @@ namespace Stash.Engine.Serializers
             }
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, RegisteredGraph<TGraph> registeredGraph)
+        public IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph)
         {
             var stream = new MemoryStream();
             try

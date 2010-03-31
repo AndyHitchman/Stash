@@ -10,6 +10,12 @@ namespace Stash.Engine.Serializers
     /// intended to represent an aggregate root), in which case a reference by internal id
     /// is serialised. 
     /// </summary>
+    /// <remarks>
+    /// Default serialisation behaviour is to eagerly load and track the aggregate graph. Lazy loading
+    /// can be specified in which case a proxy object inheriting from the real class is instantialed. 
+    /// This requires virtual methods if the registered graph is a concrete class.
+    /// No specific validation of this pre-condition condition is performed.
+    /// </remarks>
     /// <typeparam name="TGraph"></typeparam>
     public class AggregateBinarySerializer<TGraph> : ISerializer<TGraph>
     {
@@ -18,12 +24,12 @@ namespace Stash.Engine.Serializers
             
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, RegisteredGraph<TGraph> registeredGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, RegisteredGraph<TGraph> registeredGraph)
+        public IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }
