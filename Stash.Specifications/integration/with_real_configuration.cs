@@ -37,7 +37,7 @@ namespace Stash.Specifications.integration
                     {
                         _.Register<Post>(
                             r =>
-                            r.SerializeWith(new BinarySerializer<Post>(new BinaryFormatter())));
+                            r.SerializeWith(new BinarySerializer<Post>(r.RegisteredGraph, new BinaryFormatter())));
                         _.Index(new NumberOfCommentsOnPost());
                     }
                 );

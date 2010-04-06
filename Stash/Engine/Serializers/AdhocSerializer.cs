@@ -22,23 +22,23 @@ namespace Stash.Engine.Serializers
 
     public class AdhocSerializer<TGraph> : ISerializer<TGraph>
     {
-        private readonly Func<IEnumerable<byte>, IRegisteredGraph<TGraph>, TGraph> deserializer;
-        private readonly Func<TGraph, IRegisteredGraph<TGraph>, IEnumerable<byte>> serializer;
+        private readonly Func<IEnumerable<byte>, TGraph> deserializer;
+        private readonly Func<TGraph, IEnumerable<byte>> serializer;
 
-        public AdhocSerializer(Func<TGraph, IRegisteredGraph<TGraph>, IEnumerable<byte>> serializer, Func<IEnumerable<byte>, IRegisteredGraph<TGraph>, TGraph> deserializer)
+        public AdhocSerializer(Func<TGraph, IEnumerable<byte>> serializer, Func<IEnumerable<byte>, TGraph> deserializer)
         {
             this.serializer = serializer;
             this.deserializer = deserializer;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes)
         {
-            return deserializer(bytes, registeredGraph);
+            return deserializer(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph)
+        public IEnumerable<byte> Serialize(TGraph graph)
         {
-            return serializer(graph, registeredGraph);
+            return serializer(graph);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
 
         protected override void When()
         {
-            Subject.Serialize(actual, mockRegisteredGraph);
+            Subject.Serialize(actual);
         }
     }
 }

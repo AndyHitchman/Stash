@@ -2,7 +2,6 @@ namespace Stash.Engine.Serializers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
 
     /// <summary>
     /// The AggregateBinarySerializer performs standard binary formatting except
@@ -24,12 +23,12 @@ namespace Stash.Engine.Serializers
             
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph)
+        public TGraph Deserialize(IEnumerable<byte> bytes)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph)
+        public IEnumerable<byte> Serialize(TGraph graph)
         {
             throw new NotImplementedException();
         }

@@ -16,6 +16,7 @@
 
 namespace Stash.Configuration
 {
+    using System;
     using Engine.Serializers;
 
     /// <summary>
@@ -35,12 +36,32 @@ namespace Stash.Configuration
         public virtual RegisteredGraph<TGraph> RegisteredGraph { get; private set; }
 
         /// <summary>
-        /// Tell the engine to use the provided serializaton functions implemented by the <paramref name="serializer"/>.
+        /// Tell the engine to use the serializer implemented by <paramref name="serializer"/>.
         /// </summary>
         /// <param name="serializer"></param>
         public virtual void SerializeWith(ISerializer<TGraph> serializer)
         {
-            RegisteredGraph.Serializer = serializer;
+            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph,TGraph>(new NoTransformer<TGraph>(), serializer);
+        }
+
+        /// <summary>
+        /// Transformation allow an arbitrary mapping from the object you manage in code to an alternative
+        /// representation that is stored.
+        /// Tell the engine to transform and then serialize the tranformed graph.
+        /// </summary>
+        /// <remarks>
+        /// Tranforming allows a (generally) lightweight representation of a complex object to be stored.
+        /// For example, you may only need to persist a subset of properties on a complex object. Do this by
+        /// creating a simple POCO class to hold the transformed object. This is then serialised.
+        /// </remarks>
+        /// <typeparam name="TTransform"></typeparam>
+        /// <param name="transformer"></param>
+        /// <param name="serializer"></param>
+        public virtual void TransformAndSerializeWith<TTransform>(
+            ITransformer<TGraph, TTransform> transformer, 
+            ISerializer<TTransform> serializer)
+        {
+            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph,TTransform>(transformer, serializer);
         }
     }
 }

@@ -66,6 +66,9 @@
     <Compile Include="Engine\Serializers\AdhocSerializer.cs" />
     <Compile Include="Engine\Serializers\BinarySerializer.cs" />
     <Compile Include="Engine\Serializers\AggregateBinarySerializer.cs" />
+    <Compile Include="Engine\Serializers\ITransformer.cs" />
+    <Compile Include="Engine\Serializers\NoTransformer.cs" />
+    <Compile Include="Engine\Serializers\TransformAndSerialize.cs" />
     <Compile Include="Engine\SessionFactory.cs" />
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="BackingStore\IBackingStore.cs" />

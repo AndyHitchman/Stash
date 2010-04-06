@@ -25,7 +25,7 @@ namespace Stash.Engine.Serializers
     /// </summary>
     public interface ISerializer<TGraph>
     {
-        TGraph Deserialize(IEnumerable<byte> bytes, IRegisteredGraph<TGraph> registeredGraph);
-        IEnumerable<byte> Serialize(TGraph graph, IRegisteredGraph<TGraph> registeredGraph);
+        TGraph Deserialize(IEnumerable<byte> bytes);
+        IEnumerable<byte> Serialize(TGraph graph);
     }
 }

@@ -20,6 +20,6 @@ namespace Stash.Configuration
 
     public interface IRegisteredGraph<TGraph> : IRegisteredGraph
     {
-        ISerializer<TGraph> Serializer { get; set; }
+        ISerializer<TGraph> TransformSerializer { get; set; }
     }
 }

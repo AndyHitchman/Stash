@@ -60,11 +60,11 @@ namespace Stash.Configuration
             }
         }
 
-        public ISerializer<TGraph> Serializer { get; set; }
+        public ISerializer<TGraph> TransformSerializer { get; set; }
 
         public override object Deserialize(IEnumerable<byte> serializedGraph)
         {
-            return Serializer.Deserialize(serializedGraph, this);
+            return TransformSerializer.Deserialize(serializedGraph);
         }
 
         public override void EngageBackingStore(IBackingStore backingStore) {}
@@ -76,7 +76,7 @@ namespace Stash.Configuration
 
         public override IEnumerable<byte> Serialize(object graph)
         {
-            return Serializer.Serialize((TGraph)graph, this);
+            return TransformSerializer.Serialize((TGraph)graph);
         }
     }
 }
