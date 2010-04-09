@@ -38,5 +38,6 @@ namespace Stash.Queries
         INotEqualToQuery<TKey> NotEqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>;
         IUnionOperator UnionOf(IEnumerable<IQuery> queries);
+        IStartsWithQuery StartsWith(IRegisteredIndexer getIndexerFor, string key);
     }
 }

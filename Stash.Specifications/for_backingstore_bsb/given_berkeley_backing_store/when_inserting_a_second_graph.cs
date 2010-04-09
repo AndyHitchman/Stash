@@ -18,6 +18,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
     using System.Linq;
+    using System.Text;
     using BackingStore;
     using BackingStore.BDB;
     using Configuration;
@@ -101,10 +102,10 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         {
             Subject.ConcreteTypeDatabase
                 .ValueForKey(firstTrackedGraph.InternalId)
-                .ShouldEqual(firstTrackedGraph.GraphType.AssemblyQualifiedName.Select(_ => (byte)_));
+                .ShouldEqual(new UnicodeEncoding().GetBytes(firstTrackedGraph.GraphType.AssemblyQualifiedName));
             Subject.ConcreteTypeDatabase
                 .ValueForKey(secondTrackedGraph.InternalId)
-                .ShouldEqual(secondTrackedGraph.GraphType.AssemblyQualifiedName.Select(_ => (byte)_));
+                .ShouldEqual(new UnicodeEncoding().GetBytes(secondTrackedGraph.GraphType.AssemblyQualifiedName));
         }
 
         [Then]

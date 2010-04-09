@@ -110,5 +110,10 @@ namespace Stash.BackingStore.BDB
         {
             return new UnionOperator(queries);
         }
+
+        public IStartsWithQuery StartsWith(IRegisteredIndexer indexer, string key)
+        {
+            return new StartsWithQuery(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+        }
     }
 }

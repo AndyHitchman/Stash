@@ -18,6 +18,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
     using System.Linq;
+    using System.Text;
     using BackingStore;
     using BackingStore.BDB;
     using Configuration;
@@ -75,7 +76,8 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         [Then]
         public void it_should_persist_the_concrete_type_of_the_graph()
         {
-            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId).ShouldEqual(trackedGraph.GraphType.AssemblyQualifiedName.Select(_ => (byte)_));
+            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId)
+                .ShouldEqual(new UnicodeEncoding().GetBytes(trackedGraph.GraphType.AssemblyQualifiedName));
         }
 
         [Then]

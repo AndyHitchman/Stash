@@ -41,6 +41,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackingStore\BDB\BerkeleyQueries\StartsWithQuery.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\IsIndexedQuery.cs" />
     <Compile Include="BackingStore\BDB\DefaultBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="Configuration\IRegisteredGraph.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
     <Compile Include="IStashedSet`1.cs" />
+    <Compile Include="Queries\IStartsWithQuery.cs" />
     <Compile Include="Queries\MakeConstraint.cs" />
     <Compile Include="Queries\SetConstraint.cs" />
     <Compile Include="Map`3.cs">

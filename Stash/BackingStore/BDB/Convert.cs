@@ -18,6 +18,7 @@ namespace Stash.BackingStore.BDB
 {
     using System;
     using System.Linq;
+    using System.Text;
 
     public static class Convert
     {
@@ -30,11 +31,13 @@ namespace Stash.BackingStore.BDB
         {
             if(from == null) return new byte[] {};
 
-            return from.Select(_ => (byte)_).ToArray();
+            return new UnicodeEncoding().GetBytes(from);
         }
 
         public static byte[] AsByteArray(this Type from)
         {
+            if (from == null) return new byte[] { };
+
             return from.AssemblyQualifiedName.AsByteArray();
         }
 
@@ -165,7 +168,7 @@ namespace Stash.BackingStore.BDB
         {
             if(from == null) return null;
 
-            return new string(from.Select(_ => (char)_).ToArray());
+            return new UnicodeEncoding().GetString(from);
         }
 
         public static TimeSpan AsTimeSpan(this byte[] from)

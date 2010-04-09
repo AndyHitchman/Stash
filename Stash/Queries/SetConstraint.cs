@@ -114,5 +114,10 @@ namespace Stash.Queries
         {
             return queryFactory.Outside(registry.GetIndexerFor<TIndex>(), lowerKey, upperKey);
         }
+
+        public IStartsWithQuery StartsWith(string key)
+        {
+            return queryFactory.StartsWith(registry.GetIndexerFor<TIndex>(), key);
+        }
     }
 }

@@ -73,6 +73,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with_inside_intersect.cs" />
+    <Compile Include="for_backingstore_bsb\with_string_indexer.cs" />
+    <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_having_an_equal_match_but_no_greater_than_match.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_with_one_query.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
