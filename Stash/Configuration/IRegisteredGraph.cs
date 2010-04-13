@@ -18,6 +18,7 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using Engine;
 
     public interface IRegisteredGraph
     {
@@ -37,7 +38,8 @@ namespace Stash.Configuration
         IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
 
         IRegistry Registry { get; }
-        object Deserialize(IEnumerable<byte> serializedGraph);
-        IEnumerable<byte> Serialize(object graph);
+
+        object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session);
+        IEnumerable<byte> Serialize(object graph, IInternalSession session);
     }
 }

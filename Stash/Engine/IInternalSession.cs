@@ -16,6 +16,7 @@
 
 namespace Stash.Engine
 {
+    using System;
     using System.Collections.Generic;
     using BackingStore;
     using Configuration;
@@ -23,23 +24,6 @@ namespace Stash.Engine
 
     public interface IInternalSession : ISession
     {
-        /// <summary>
-        /// Persistence events enrolled in the session.
-        /// </summary>
-        IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents { get; }
-
-        /// <summary>
-        /// Graphs tracked by the session.
-        /// </summary>
-        IEnumerable<object> TrackedGraphs { get; }
-
-        /// <summary>
-        /// True if the graph is being tracked by this session.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        bool GraphIsTracked(object graph);
-
         /// <summary>
         /// Track a stored graph so that changes made in the session are persisted to the backing store.
         /// </summary>
@@ -63,5 +47,37 @@ namespace Stash.Engine
         /// <param name="registeredGraph"></param>
         /// <returns>true is a tracked graph was marked for deletion</returns>
         bool Destroy(object graph, IRegisteredGraph registeredGraph);
+
+        /// <summary>
+        /// Persistence events enrolled in the session.
+        /// </summary>
+        IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents { get; }
+
+        /// <summary>
+        /// Graphs tracked by the session.
+        /// </summary>
+        IEnumerable<object> TrackedGraphs { get; }
+
+        /// <summary>
+        /// True if the graph is being tracked by this session.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        bool GraphIsTracked(object graph);
+
+        /// <summary>
+        /// Get the internal id of a graph, if it is tracked.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        Guid? InternalIdOfTrackedGraph(object graph);
+
+        /// <summary>
+        /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 
+        /// backing store and tracked.
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <returns></returns>
+        object TrackedGraphForInternalId(Guid internalId);
     }
 }

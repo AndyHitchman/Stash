@@ -16,31 +16,28 @@
 
 namespace Stash.Engine.Serializers
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
-    using Configuration;
 
-    public class BinarySerializer<TGraph> : ISerializer<TGraph>
+    public class BinarySerializer
     {
-        private readonly IRegisteredGraph<TGraph> registeredGraph;
-        private readonly BinaryFormatter formatter;
+        private readonly BinaryFormatter binaryFormatter;
 
-        public BinarySerializer(IRegisteredGraph<TGraph> registeredGraph) : this(registeredGraph, new BinaryFormatter()) { }
-
-        public BinarySerializer(IRegisteredGraph<TGraph> registeredGraph, BinaryFormatter binaryFormatter)
+        public BinarySerializer(BinaryFormatter binaryFormatter)
         {
-            this.registeredGraph = registeredGraph;
-            formatter = binaryFormatter;
+            this.binaryFormatter = binaryFormatter;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes)
+        public object Deserialize(IEnumerable<byte> bytes)
         {
             var stream = new MemoryStream(bytes.ToArray());
             try
             {
-                return (TGraph)formatter.Deserialize(stream);
+                return binaryFormatter.Deserialize(stream);
             }
             finally
             {
@@ -48,12 +45,12 @@ namespace Stash.Engine.Serializers
             }
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph)
+        public IEnumerable<byte> Serialize(object graph)
         {
             var stream = new MemoryStream();
             try
             {
-                formatter.Serialize(stream, graph);
+                binaryFormatter.Serialize(stream, graph);
                 return stream.ToArray();
             }
             finally

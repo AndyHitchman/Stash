@@ -57,5 +57,17 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
 
             Sut.GetRegistrationFor(typeof(DummyPersistentObject)).ShouldNotBeNull();
         }
+
+        private class SubtypeOfDummyPersistentObject : DummyPersistentObject {}
+
+        [Test]
+        public void it_should_get_the_first_registered_supertype_of_the_instance()
+        {
+            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
+
+            var actual = Sut.GetRegistrationFor(typeof(SubtypeOfDummyPersistentObject));
+            actual.ShouldNotBeNull();
+            actual.GraphType.ShouldEqual(typeof(DummyPersistentObject));
+        }
     }
 }

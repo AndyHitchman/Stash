@@ -1,7 +1,25 @@
+#region License
+// Copyright 2009 Andrew Hitchman
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); 
+// you may not use this file except in compliance with the License. 
+// You may obtain a copy of the License at 
+// 
+// 	http://www.apache.org/licenses/LICENSE-2.0 
+// 
+// Unless required by applicable law or agreed to in writing, software 
+// distributed under the License is distributed on an "AS IS" BASIS, 
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+// See the License for the specific language governing permissions and 
+// limitations under the License.
+#endregion
+
 namespace Stash.Engine.Serializers
 {
-    using System;
     using System.Collections.Generic;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using Configuration;
 
     /// <summary>
     /// The AggregateBinarySerializer performs standard binary formatting except
@@ -18,19 +36,35 @@ namespace Stash.Engine.Serializers
     /// <typeparam name="TGraph"></typeparam>
     public class AggregateBinarySerializer<TGraph> : ISerializer<TGraph>
     {
-        public AggregateBinarySerializer()
+        private readonly IRegisteredGraph<TGraph> registeredGraph;
+
+        public AggregateBinarySerializer(IRegisteredGraph<TGraph> registeredGraph)
         {
-            
+            this.registeredGraph = registeredGraph;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession trackedSession)
         {
-            throw new NotImplementedException();
+            var binarySerializer = getBinarySerializerWithSurrogateSelector(trackedSession);
+            return (TGraph)binarySerializer.Deserialize(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph)
+        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession trackedSession)
         {
-            throw new NotImplementedException();
+            var binarySerializer = getBinarySerializerWithSurrogateSelector(trackedSession);
+            return binarySerializer.Serialize(graph);
+        }
+
+        /// <summary>
+        /// Need to use the same context when creating the surrogates as when serialising.
+        /// </summary>
+        /// <param name="trackedSession"></param>
+        /// <returns></returns>
+        private BinarySerializer getBinarySerializerWithSurrogateSelector(IInternalSession trackedSession)
+        {
+            var surrogateSelector = new AggregateSurrogateSelector(registeredGraph);
+            var streamingContext = new StreamingContext(StreamingContextStates.All, trackedSession);
+            return new BinarySerializer(new BinaryFormatter(surrogateSelector, streamingContext));
         }
     }
 }

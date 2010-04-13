@@ -16,6 +16,7 @@
 
 namespace Stash.Engine
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -139,9 +140,45 @@ namespace Stash.Engine
             }
         }
 
+        /// <summary>
+        /// True if the graph is being tracked by this session.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns></returns>
         public bool GraphIsTracked(object graph)
         {
-            return TrackedGraphs.Any(o => ReferenceEquals(o, graph));
+            return EnrolledPersistenceEvents.Any(_ => ReferenceEquals(_.UntypedGraph, graph));
+        }
+
+        /// <summary>
+        /// Get the internal id of a graph if it is tracked.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns></returns>
+        public Guid? InternalIdOfTrackedGraph(object graph)
+        {
+            var guid = EnrolledPersistenceEvents.Where(_ => ReferenceEquals(_.UntypedGraph, graph)).Select(_ => _.InternalId).FirstOrDefault();
+            return guid == Guid.Empty ? (Guid?)null : guid;
+        }
+
+        /// <summary>
+        /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 
+        /// backing store and tracked.
+        /// </summary>
+        /// <param name="internalId"></param>
+        /// <returns></returns>
+        /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
+        public object TrackedGraphForInternalId(Guid internalId)
+        {
+            var tracked = EnrolledPersistenceEvents.Where(_ => _.InternalId == internalId).Select(_ => _.UntypedGraph).FirstOrDefault();
+
+            if(tracked == null)
+            {
+                var storedGraph = backingStore.Get(internalId);
+                Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType));
+            }
+
+            return tracked;
         }
 
         public virtual IInternalSession Internalize()
@@ -151,7 +188,7 @@ namespace Stash.Engine
 
         public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
         {
-            var track = new Track(storedGraph, registeredGraph);
+            var track = new Track(this, storedGraph, registeredGraph);
             Enroll(track);
             return track;
         }

@@ -49,7 +49,7 @@ namespace Stash.Specifications.integration
 
             var internalId = Guid.NewGuid();
             var registeredGraph = Kernel.Registry.GetRegistrationFor<Post>();
-            var serializedGraph = registeredGraph.Serialize(stashedPost);
+            var serializedGraph = registeredGraph.Serialize(stashedPost, null);
             var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));
             var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
 

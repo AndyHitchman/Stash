@@ -27,21 +27,23 @@ namespace Stash.Engine.PersistenceEvents
     {
         private readonly object graph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
+        private readonly IInternalSession trackedSession;
         private readonly IRegisteredGraph registeredGraph;
 
-        public Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
-            : this(storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
+        public Track(IInternalSession trackedSession, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
+            : this(trackedSession, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
 
-        public Track(Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
+        private Track(IInternalSession trackedSession, Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
+            this.trackedSession = trackedSession;
             this.registeredGraph = registeredGraph;
             OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
-            graph = registeredGraph.Deserialize(storedSerializedGraph);
+            graph = registeredGraph.Deserialize(storedSerializedGraph, trackedSession);
         }
 
-        public Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
+        protected Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
@@ -90,7 +92,7 @@ namespace Stash.Engine.PersistenceEvents
 
         protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction)
         {
-            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph);
+            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph, trackedSession);
             CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
 
             if(CompletionHash.SequenceEqual(OriginalHash))

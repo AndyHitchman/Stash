@@ -16,6 +16,7 @@
 
 namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
 {
+    using System;
     using System.Linq;
     using BackingStore;
     using Configuration;
@@ -35,7 +36,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
             subject = new Endure(null, mockRegisteredGraph);
 
-            mockRegisteredGraph.Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Empty<byte>());
+            mockRegisteredGraph.Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(Enumerable.Empty<byte>());
             mockRegisteredGraph.Expect(_ => _.IndexersOnGraph).Return(Enumerable.Empty<IRegisteredIndexer>());
         }
 

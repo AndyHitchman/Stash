@@ -16,9 +16,11 @@
 
 namespace Stash.Configuration
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
+    using Engine;
     using Engine.Serializers;
 
     /// <summary>
@@ -62,11 +64,6 @@ namespace Stash.Configuration
 
         public ISerializer<TGraph> TransformSerializer { get; set; }
 
-        public override object Deserialize(IEnumerable<byte> serializedGraph)
-        {
-            return TransformSerializer.Deserialize(serializedGraph);
-        }
-
         public override void EngageBackingStore(IBackingStore backingStore) {}
 
         public IRegisteredIndexer GetRegisteredIndexerFor(IIndex index)
@@ -74,9 +71,14 @@ namespace Stash.Configuration
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
         }
 
-        public override IEnumerable<byte> Serialize(object graph)
+        public override object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session)
         {
-            return TransformSerializer.Serialize((TGraph)graph);
+            return TransformSerializer.Deserialize(serializedGraph, session);
+        }
+
+        public override IEnumerable<byte> Serialize(object graph, IInternalSession session)
+        {
+            return TransformSerializer.Serialize((TGraph)graph, session);
         }
     }
 }

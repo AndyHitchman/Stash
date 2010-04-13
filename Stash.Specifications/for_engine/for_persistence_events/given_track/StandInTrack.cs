@@ -27,7 +27,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         public bool HasCalculatedIndexes;
 
         public StandInTrack(IStoredGraph storedGraph, IRegisteredGraph<TGraph> registeredGraph)
-            : base(storedGraph, registeredGraph) {}
+            : base(null, storedGraph, registeredGraph) {}
 
         protected override IEnumerable<IProjectedIndex> CalculateIndexes()
         {

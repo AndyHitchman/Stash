@@ -16,6 +16,7 @@
 
 namespace Stash.Engine.Serializers
 {
+    using System;
     using System.Collections.Generic;
     using Configuration;
 
@@ -25,7 +26,7 @@ namespace Stash.Engine.Serializers
     /// </summary>
     public interface ISerializer<TGraph>
     {
-        TGraph Deserialize(IEnumerable<byte> bytes);
-        IEnumerable<byte> Serialize(TGraph graph);
+        TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession trackedSession);
+        IEnumerable<byte> Serialize(TGraph graph, IInternalSession trackedSession);
     }
 }

@@ -16,6 +16,7 @@
 
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
+    using System;
     using System.Linq;
     using BackingStore;
     using Configuration;
@@ -29,7 +30,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
         protected override void Given()
         {
             Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(Enumerable.Repeat<byte>(0x01, 100));
-            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null)).IgnoreArguments().Return(Enumerable.Repeat<byte>(0x01, 100));
+            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(Enumerable.Repeat<byte>(0x01, 100));
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
         }
 
