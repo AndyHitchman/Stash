@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -24,6 +24,8 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
     [TestFixture]
     public class when_asked_for_a_graph : with_registered_stash
     {
+        private class SubtypeOfDummyPersistentObject : DummyPersistentObject {}
+
         [Test]
         public void it_should_complain_if_the_type_is_not_a_registered_graph()
         {
@@ -43,6 +45,16 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         }
 
         [Test]
+        public void it_should_get_the_first_registered_supertype_of_the_instance()
+        {
+            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
+
+            var actual = Sut.GetRegistrationFor(typeof(SubtypeOfDummyPersistentObject));
+            actual.ShouldNotBeNull();
+            actual.GraphType.ShouldEqual(typeof(DummyPersistentObject));
+        }
+
+        [Test]
         public void it_should_get_the_graph_for_a_registered_graph_by_generic_wrapper()
         {
             Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
@@ -56,18 +68,6 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
             Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
 
             Sut.GetRegistrationFor(typeof(DummyPersistentObject)).ShouldNotBeNull();
-        }
-
-        private class SubtypeOfDummyPersistentObject : DummyPersistentObject {}
-
-        [Test]
-        public void it_should_get_the_first_registered_supertype_of_the_instance()
-        {
-            Sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), new RegisteredGraph<DummyPersistentObject>(null));
-
-            var actual = Sut.GetRegistrationFor(typeof(SubtypeOfDummyPersistentObject));
-            actual.ShouldNotBeNull();
-            actual.GraphType.ShouldEqual(typeof(DummyPersistentObject));
         }
     }
 }

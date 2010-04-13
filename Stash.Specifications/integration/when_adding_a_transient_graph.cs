@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -19,14 +19,12 @@ namespace Stash.Specifications.integration
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using BackingStore;
-    using Queries;
     using Support;
 
     public class when_adding_a_transient_graph : with_real_configuration
     {
-        private Post transientPost;
         private Post persistedPost;
+        private Post transientPost;
 
         protected override void Given()
         {

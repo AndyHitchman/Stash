@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -17,7 +17,6 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
-    using System.Linq;
     using BackingStore;
     using Configuration;
 
@@ -38,10 +37,7 @@ namespace Stash.Engine.PersistenceEvents
             get { return graph; }
         }
 
-        public Guid InternalId
-        {
-            get; private set;
-        }
+        public Guid InternalId { get; private set; }
 
         public void Complete(IStorageWork work)
         {

@@ -1,5 +1,5 @@
 ﻿#region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -20,7 +20,6 @@ namespace Stash.Specifications.integration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
-    using Queries;
     using Support;
 
     public class when_querying_an_untyped_stashed_set : with_real_configuration

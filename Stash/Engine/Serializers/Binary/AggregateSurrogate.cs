@@ -32,7 +32,7 @@ namespace Stash.Engine.Serializers.Binary
         public virtual void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
             var session = context.Context as IInternalSession;
-            if (session == null)
+            if(session == null)
                 throw new ArgumentException("context does not contain an instance of IInternalSession");
 
             var internalId = session.InternalIdOfTrackedGraph(obj);

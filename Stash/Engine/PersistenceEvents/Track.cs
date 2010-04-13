@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -27,8 +27,8 @@ namespace Stash.Engine.PersistenceEvents
     {
         private readonly object graph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
-        private readonly IInternalSession trackedSession;
         private readonly IRegisteredGraph registeredGraph;
+        private readonly IInternalSession trackedSession;
 
         public Track(IInternalSession trackedSession, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
             : this(trackedSession, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}

@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -16,7 +16,6 @@
 
 namespace Stash.Configuration
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
@@ -64,16 +63,16 @@ namespace Stash.Configuration
 
         public ISerializer<TGraph> TransformSerializer { get; set; }
 
+        public override object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session)
+        {
+            return TransformSerializer.Deserialize(serializedGraph, session);
+        }
+
         public override void EngageBackingStore(IBackingStore backingStore) {}
 
         public IRegisteredIndexer GetRegisteredIndexerFor(IIndex index)
         {
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
-        }
-
-        public override object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session)
-        {
-            return TransformSerializer.Deserialize(serializedGraph, session);
         }
 
         public override IEnumerable<byte> Serialize(object graph, IInternalSession session)

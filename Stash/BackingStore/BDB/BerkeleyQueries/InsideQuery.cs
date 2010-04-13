@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -65,7 +65,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 if(cursor.Move(new DatabaseEntry(keyAsBytes), true) | cursor.MoveNextUniqueMultipleKey(bufferSize))
                 {
                     //There could be an exact equal match and then no further unique matches.
-                    if (cursor.CurrentMultipleKey != null)
+                    if(cursor.CurrentMultipleKey != null)
                         do
                         {
                             foreach(var guid in

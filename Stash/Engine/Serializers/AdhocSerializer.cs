@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -18,7 +18,6 @@ namespace Stash.Engine.Serializers
 {
     using System;
     using System.Collections.Generic;
-    using Configuration;
 
     public class AdhocSerializer<TGraph> : ISerializer<TGraph>
     {

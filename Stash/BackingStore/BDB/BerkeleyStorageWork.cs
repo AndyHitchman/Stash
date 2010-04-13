@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -22,8 +22,8 @@ namespace Stash.BackingStore.BDB
     using BerkeleyDB;
     using BerkeleyQueries;
     using Configuration;
-    using Queries;
     using Engine;
+    using Queries;
 
     public class BerkeleyStorageWork : IStorageWork
     {
@@ -75,7 +75,7 @@ namespace Stash.BackingStore.BDB
 
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return matchingInternalIds 
+            return matchingInternalIds
                 .Select(internalId => BackingStore.Get(internalId));
         }
 

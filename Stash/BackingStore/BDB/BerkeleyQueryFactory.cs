@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -106,14 +106,14 @@ namespace Stash.BackingStore.BDB
             return new OutsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
         }
 
-        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
-        {
-            return new UnionOperator(queries);
-        }
-
         public IStartsWithQuery StartsWith(IRegisteredIndexer indexer, string key)
         {
             return new StartsWithQuery(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+        }
+
+        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
+        {
+            return new UnionOperator(queries);
         }
     }
 }

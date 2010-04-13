@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -36,7 +36,7 @@ namespace Stash.BackingStore.BDB
 
         public static byte[] AsByteArray(this Type from)
         {
-            if (from == null) return new byte[] { };
+            if(from == null) return new byte[] {};
 
             return from.AssemblyQualifiedName.AsByteArray();
         }

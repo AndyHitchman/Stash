@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -96,10 +96,10 @@ namespace Stash
         {
             var match = constraint(new MakeConstraint(registry, queryFactory));
             return new StashedSet<TGraph>(
-                session, 
-                registry, 
-                backingStore, 
-                queryFactory, 
+                session,
+                registry,
+                backingStore,
+                queryFactory,
                 queryChain.Concat(new[] {match}));
         }
 

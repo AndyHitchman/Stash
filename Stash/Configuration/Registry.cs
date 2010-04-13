@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -101,9 +101,9 @@ namespace Stash.Configuration
                 if(RegisteredGraphs.ContainsKey(t)) return RegisteredGraphs[t];
                 t = t.BaseType;
             }
-            while (t != null && t != typeof(object));
+            while(t != null && t != typeof(object));
 
-           throw new ArgumentOutOfRangeException("graphType");
+            throw new ArgumentOutOfRangeException("graphType");
         }
 
         public virtual bool IsManagingGraphTypeOrAncestor(Type graphType)

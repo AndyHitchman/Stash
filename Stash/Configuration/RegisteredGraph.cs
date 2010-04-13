@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -52,9 +52,8 @@ namespace Stash.Configuration
         public abstract IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
         public abstract IRegistry Registry { get; }
 
-        public abstract void EngageBackingStore(IBackingStore backingStore);
-        
         public abstract object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session);
+        public abstract void EngageBackingStore(IBackingStore backingStore);
         public abstract IEnumerable<byte> Serialize(object graph, IInternalSession session);
     }
 }

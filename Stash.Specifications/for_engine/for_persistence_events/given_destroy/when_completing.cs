@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -25,9 +25,9 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_destroy
 
     public class when_completing : Specification
     {
+        private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
         private IStorageWork mockStorageWork;
         private Destroy subject;
-        private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
 
         protected override void Given()
         {

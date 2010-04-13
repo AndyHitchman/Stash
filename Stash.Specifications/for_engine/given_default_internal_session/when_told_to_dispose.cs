@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -25,9 +25,9 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     {
         private class StandInInternalSession : InternalSession
         {
+            public bool EndWasCalled;
             public StandInInternalSession() : base(null, null) {}
 
-            public bool EndWasCalled;
             public override void Complete()
             {
                 EndWasCalled = true;

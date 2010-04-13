@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -16,7 +16,6 @@
 
 namespace Stash.Configuration
 {
-    using System;
     using Engine.Serializers;
 
     /// <summary>
@@ -41,7 +40,7 @@ namespace Stash.Configuration
         /// <param name="serializer"></param>
         public virtual void SerializeWith(ISerializer<TGraph> serializer)
         {
-            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph,TGraph>(new NoTransformer<TGraph>(), serializer);
+            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph, TGraph>(new NoTransformer<TGraph>(), serializer);
         }
 
         /// <summary>
@@ -58,10 +57,10 @@ namespace Stash.Configuration
         /// <param name="transformer"></param>
         /// <param name="serializer"></param>
         public virtual void TransformAndSerializeWith<TTransform>(
-            ITransformer<TGraph, TTransform> transformer, 
+            ITransformer<TGraph, TTransform> transformer,
             ISerializer<TTransform> serializer)
         {
-            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph,TTransform>(transformer, serializer);
+            RegisteredGraph.TransformSerializer = new TransformAndSerialize<TGraph, TTransform>(transformer, serializer);
         }
     }
 }

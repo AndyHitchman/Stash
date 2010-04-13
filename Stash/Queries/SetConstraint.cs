@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -22,8 +22,8 @@ namespace Stash.Queries
 
     public class SetConstraint<TIndex> where TIndex : IIndex
     {
-        private readonly IRegistry registry;
         private readonly IQueryFactory queryFactory;
+        private readonly IRegistry registry;
 
         public SetConstraint(IRegistry registry, IQueryFactory queryFactory)
         {

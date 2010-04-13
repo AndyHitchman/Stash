@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -57,7 +57,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 var comparer = managedIndex.Comparer;
                 var bufferSize = (int)managedIndex.Index.Pagesize * pageSizeBufferMultipler;
 
-                if (cursor.MoveFirstMultipleKey(bufferSize) && comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), Key) <= 0)
+                if(cursor.MoveFirstMultipleKey(bufferSize) && comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), Key) <= 0)
                 {
                     do
                     {
@@ -70,7 +70,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                             yield return guid;
                         }
                     }
-                    while (cursor.MoveNextMultipleKey(bufferSize) && comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), Key) <= 0);
+                    while(cursor.MoveNextMultipleKey(bufferSize) && comparer.Compare(managedIndex.ByteArrayAsKey(cursor.CurrentMultipleKey.First().Key.Data), Key) <= 0);
                 }
             }
             finally

@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -25,20 +25,15 @@ namespace Stash.Engine
     public interface IInternalSession : ISession
     {
         /// <summary>
-        /// Track a stored graph so that changes made in the session are persisted to the backing store.
+        /// Persistence events enrolled in the session.
         /// </summary>
-        /// <param name="storedGraph"></param>
-        /// <param name="registeredGraph"></param>
-        /// <returns></returns>
-        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
+        IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents { get; }
 
         /// <summary>
-        /// Endure a transient graph so that when the session completes the graph is persisted to the backing store.
+        /// Graphs tracked by the session.
         /// </summary>
-        /// <param name="graph"></param>
-        /// <param name="registeredGraph"></param>
-        void Endure(object graph, IRegisteredGraph registeredGraph);
-        
+        IEnumerable<object> TrackedGraphs { get; }
+
         /// <summary>
         /// Destroy a persistent graph such that when the session completes the graph is removed from the backing store. can only operate on tracked
         /// graphs within the same session.
@@ -49,14 +44,11 @@ namespace Stash.Engine
         bool Destroy(object graph, IRegisteredGraph registeredGraph);
 
         /// <summary>
-        /// Persistence events enrolled in the session.
+        /// Endure a transient graph so that when the session completes the graph is persisted to the backing store.
         /// </summary>
-        IEnumerable<IPersistenceEvent> EnrolledPersistenceEvents { get; }
-
-        /// <summary>
-        /// Graphs tracked by the session.
-        /// </summary>
-        IEnumerable<object> TrackedGraphs { get; }
+        /// <param name="graph"></param>
+        /// <param name="registeredGraph"></param>
+        void Endure(object graph, IRegisteredGraph registeredGraph);
 
         /// <summary>
         /// True if the graph is being tracked by this session.
@@ -71,6 +63,14 @@ namespace Stash.Engine
         /// <param name="graph"></param>
         /// <returns></returns>
         Guid? InternalIdOfTrackedGraph(object graph);
+
+        /// <summary>
+        /// Track a stored graph so that changes made in the session are persisted to the backing store.
+        /// </summary>
+        /// <param name="storedGraph"></param>
+        /// <param name="registeredGraph"></param>
+        /// <returns></returns>
+        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
 
         /// <summary>
         /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 

@@ -1,5 +1,5 @@
 #region License
-// Copyright 2009 Andrew Hitchman
+// Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
 // you may not use this file except in compliance with the License. 
@@ -26,10 +26,10 @@ namespace Stash.Engine
 
     public class InternalSession : IInternalSession
     {
-        private readonly IRegistry registry;
-        private readonly IBackingStore backingStore;
         protected readonly List<IPersistenceEvent> PersistenceEvents;
+        private readonly IBackingStore backingStore;
         private readonly ReaderWriterLockSlim enrolledPersistenceEventsLocker = new ReaderWriterLockSlim();
+        private readonly IRegistry registry;
 
         public InternalSession(IRegistry registry) : this(registry, registry.BackingStore) {}
 
@@ -115,9 +115,25 @@ namespace Stash.Engine
             }
         }
 
+        public bool Destroy(object graph, IRegisteredGraph registeredGraph)
+        {
+            var trackedEventForGraph = EnrolledPersistenceEvents.Where(_ => ReferenceEquals(graph, _.UntypedGraph));
+            if(!trackedEventForGraph.Any())
+                return false;
+
+            var internalId = trackedEventForGraph.Select(_ => _.InternalId).First();
+            Enroll(new Destroy(internalId, graph, registeredGraph));
+            return true;
+        }
+
         public virtual void Dispose()
         {
             Complete();
+        }
+
+        public void Endure(object graph, IRegisteredGraph registeredGraph)
+        {
+            Enroll(new Endure(graph, registeredGraph));
         }
 
         public virtual void Enroll(IPersistenceEvent persistenceEvent)
@@ -138,6 +154,32 @@ namespace Stash.Engine
             {
                 enrolledPersistenceEventsLocker.ExitWriteLock();
             }
+        }
+
+        public StashedSet<object> GetEntireStash()
+        {
+            return
+                new StashedSet<object>(
+                    this,
+                    registry,
+                    backingStore,
+                    backingStore.QueryFactory);
+        }
+
+        public StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
+        {
+            return
+                new StashedSet<TGraph>(
+                    this,
+                    registry,
+                    backingStore,
+                    backingStore.QueryFactory,
+                    new[]
+                        {
+                            backingStore.QueryFactory.EqualTo(
+                                registry.GetIndexerFor<StashTypeHierarchy>(),
+                                StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))
+                        });
         }
 
         /// <summary>
@@ -161,6 +203,18 @@ namespace Stash.Engine
             return guid == Guid.Empty ? (Guid?)null : guid;
         }
 
+        public virtual IInternalSession Internalize()
+        {
+            return this;
+        }
+
+        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
+        {
+            var track = new Track(this, storedGraph, registeredGraph);
+            Enroll(track);
+            return track;
+        }
+
         /// <summary>
         /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 
         /// backing store and tracked.
@@ -180,60 +234,5 @@ namespace Stash.Engine
 
             return tracked;
         }
-
-        public virtual IInternalSession Internalize()
-        {
-            return this;
-        }
-
-        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
-        {
-            var track = new Track(this, storedGraph, registeredGraph);
-            Enroll(track);
-            return track;
-        }
-
-        public void Endure(object graph, IRegisteredGraph registeredGraph)
-        {
-            Enroll(new Endure(graph, registeredGraph));
-        }
-
-        public bool Destroy(object graph, IRegisteredGraph registeredGraph)
-        {
-            var trackedEventForGraph = EnrolledPersistenceEvents.Where(_ => ReferenceEquals(graph, _.UntypedGraph));
-            if(!trackedEventForGraph.Any())
-                return false;
-
-            var internalId = trackedEventForGraph.Select(_ => _.InternalId).First();
-            Enroll(new Destroy(internalId, graph, registeredGraph));
-            return true;
-        }
-
-        public StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
-        {
-            return
-                new StashedSet<TGraph>(
-                    this,
-                    registry,
-                    backingStore,
-                    backingStore.QueryFactory,
-                    new[]
-                        {
-                            backingStore.QueryFactory.EqualTo(
-                                registry.GetIndexerFor<StashTypeHierarchy>(),
-                                StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))
-                        });
-        }
-
-        public StashedSet<object> GetEntireStash()
-        {
-            return
-                new StashedSet<object>(
-                    this,
-                    registry,
-                    backingStore,
-                    backingStore.QueryFactory);
-        }
-
     }
 }
