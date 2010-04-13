@@ -19,6 +19,7 @@ namespace Stash.Specifications.integration
     using System.Runtime.Serialization.Formatters.Binary;
     using BackingStore.BDB;
     using Engine.Serializers;
+    using Engine.Serializers.Binary;
 
     public abstract class with_real_configuration : with_temp_directory
     {

@@ -21,12 +21,12 @@ namespace Stash.Engine.Serializers
 
     public class BSONSerializer<TGraph> : ISerializer<TGraph>
     {
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession trackedSession)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession trackedSession)
+        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
         {
             throw new NotImplementedException();
         }

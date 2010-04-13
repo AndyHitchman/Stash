@@ -31,12 +31,12 @@ namespace Stash.Engine.Serializers
             this.deserializer = deserializer;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession trackedSession)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
         {
             return deserializer(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession trackedSession)
+        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
         {
             return serializer(graph);
         }

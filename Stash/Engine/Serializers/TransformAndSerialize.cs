@@ -14,14 +14,14 @@
             Serializer = serializer;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession trackedSession)
+        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
         {
-            return Transformer.TransformUp(Serializer.Deserialize(bytes, trackedSession));
+            return Transformer.TransformUp(Serializer.Deserialize(bytes, session));
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession trackedSession)
+        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
         {
-            return Serializer.Serialize(Transformer.TransformDown(graph), trackedSession);
+            return Serializer.Serialize(Transformer.TransformDown(graph), session);
         }
     }
 }
