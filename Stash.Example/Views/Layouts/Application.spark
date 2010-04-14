@@ -8,11 +8,11 @@
     <link href="~/Content/css/jquery-ui-1.7.2.css" rel="stylesheet" type="text/css" />
 
     <if condition="System.Diagnostics.Debugger.IsAttached">
-    	<script once="jquery" type="text/javascript" src="~/content/Scripts/jquery-1.3.2.js"></script>
+    	<script once="jquery" type="text/javascript" src="~/content/Scripts/jquery-1.4.1.js"></script>
 	    <script once="jquery.ui" type="text/javascript" src="~/content/Scripts/jquery-ui-1.7.2.js"></script>
 	</if>
 	<else>
-		<script once="jquery" type="text/javascript" src="~/content/Scripts/jquery-1.3.2.min.js"></script>
+		<script once="jquery" type="text/javascript" src="~/content/Scripts/jquery-1.4.1.min.js"></script>
 	    <script once="jquery.ui" type="text/javascript" src="~/content/Scripts/jquery-ui-1.7.2.min.js"></script>
 	</else>
 
