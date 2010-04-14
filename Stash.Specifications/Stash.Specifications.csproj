@@ -118,6 +118,7 @@
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
     <Compile Include="integration\Comment.cs" />
+    <Compile Include="integration\when_querying_a_stashed_set_with_the_not_constraint.cs" />
     <Compile Include="integration\when_deleting_a_tracked_graph.cs" />
     <Compile Include="integration\when_adding_a_transient_graph.cs" />
     <Compile Include="integration\when_querying_a_stashed_set_with_a_query_matching_nothing.cs" />
