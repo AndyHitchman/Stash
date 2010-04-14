@@ -62,10 +62,16 @@
   </Target>
   -->
   <ItemGroup>
-    <Content Include="BerkeleyDB\libdb48.dll" />
-    <Content Include="BerkeleyDB\libdb_csharp48.dll" />
     <Content Include="BerkeleyDB\libdb_dotnet48.dll" />
     <Content Include="BerkeleyDB\libdb_dotnet48.XML" />
+    <Content Include="BerkeleyDB\x64\libdb48.dll" />
+    <Content Include="BerkeleyDB\x64\libdb50.dll" />
+    <Content Include="BerkeleyDB\x64\libdb_csharp48.dll" />
+    <Content Include="BerkeleyDB\x64\libdb_csharp50.dll" />
+    <Content Include="BerkeleyDB\x86\libdb48.dll" />
+    <Content Include="BerkeleyDB\x86\libdb50.dll" />
+    <Content Include="BerkeleyDB\x86\libdb_csharp48.dll" />
+    <Content Include="BerkeleyDB\x86\libdb_csharp50.dll" />
     <Content Include="JSON.Net\Newtonsoft.Json.dll" />
     <Content Include="JSON.Net\Newtonsoft.Json.pdb" />
     <Content Include="JSON.Net\Newtonsoft.Json.xml" />

@@ -51,9 +51,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libdb_dotnet48, Version=4.8.26.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\BerkeleyDB\libdb_dotnet48.dll</HintPath>
+    <Reference Include="libdb_dotnet50">
+      <HintPath>..\lib\BerkeleyDB\libdb_dotnet50.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

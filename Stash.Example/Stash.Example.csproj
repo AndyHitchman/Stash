@@ -158,8 +158,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp48.dll" "$(TargetDir)"
-copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb48.dll" "$(TargetDir)"
+    <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp50.dll" "$(TargetDir)"
+copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb50.dll" "$(TargetDir)"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>
