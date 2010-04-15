@@ -12,53 +12,54 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using NUnit.Framework;
     using Support;
 
+
+    /// <summary>
+    /// We can create an index over our customer object. In this case we index
+    /// the customer number. This is analogous to the primary key.
+    /// </summary>
+    public class CustomersByNumber : IIndex<Customer, int>
+    {
+        /// <summary>
+        /// For each Customer we yield one value for the customer number.
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns></returns>
+        public IEnumerable<int> Yield(Customer customer)
+        {
+            yield return customer.Number;
+        }
+    }
+
+
+    /// <summary>
+    /// This index yields multiple keys, one per contact for the customer. The index
+    /// is always against the graph, rather than a member (i.e. customer, not the contact).
+    /// Indexes can be against supertypes or interfaces, which provides for some powerful
+    /// polymorphic behaviour in queries. TODO Demo this
+    /// </summary>
+    public class CustomersByContactFamilyName : IIndex<Customer, string>
+    {
+        public IEnumerable<string> Yield(Customer customer)
+        {
+            return customer.Contacts.Select(contact => contact.FamilyName.ToUpper());
+        }
+    }
+
+
+    /// <summary>
+    /// </summary>
+    public class CustomersByNumberOfContacts : IIndex<Customer, int>
+    {
+        public IEnumerable<int> Yield(Customer customer)
+        {
+            yield return customer.Contacts.Count();
+        }
+    }
+
+
     public class Ch3__Indexes_and_Queries : Chapter
     {
         //Note that these are NOT unit tests. The order of execution is significant
-
-
-        /// <summary>
-        /// We can create an index over our customer object. In this case we index
-        /// the customer number. This is analogous to the primary key.
-        /// </summary>
-        public class CustomersByNumber : IIndex<Customer,int>
-        {
-            /// <summary>
-            /// For each Customer we yield one value for the customer number.
-            /// </summary>
-            /// <param name="customer"></param>
-            /// <returns></returns>
-            public IEnumerable<int> Yield(Customer customer)
-            {
-                yield return customer.Number;
-            }
-        }
-
-
-        /// <summary>
-        /// This index yields multiple keys, one per contact for the customer. The index
-        /// is always against the graph, rather than a member (i.e. customer, not the contact).
-        /// Indexes can be against supertypes or interfaces, which provides for some powerful
-        /// polymorphic behaviour in queries. TODO Demo this
-        /// </summary>
-        public class CustomersByContactFamilyName : IIndex<Customer,string> 
-        {
-            public IEnumerable<string> Yield(Customer customer)
-            {
-                return customer.Contacts.Select(contact => contact.FamilyName);
-            }
-        }
-
-
-        /// <summary>
-        /// </summary>
-        public class CustomersByNumberOfContacts : IIndex<Customer,int> 
-        {
-            public IEnumerable<int> Yield(Customer customer)
-            {
-                yield return customer.Contacts.Count();
-            }
-        }
 
 
         private ISession session;
@@ -97,14 +98,14 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             customer1.Contacts.Add(new Contact { GivenName = "Jane", FamilyName = "Jones" });
 
             var customer2 = new Customer { Number = 20, Name = "Waldo Robotics" };
-            customer2.Contacts.Add(new Contact { GivenName = "Henry", FamilyName = "Bush" });
+            customer2.Contacts.Add(new Contact { GivenName = "Henry", FamilyName = "Dangerfield" });
             customer2.Contacts.Add(new Contact { GivenName = "Roberta", FamilyName = "Williams" });
             customer2.Contacts.Add(new Contact { GivenName = "Fred", FamilyName = "Smith" });
 
             //We have a Smith contact for both customers.
 
             var customer3 = new Customer { Number = 1, Name = "Spam4U" };
-            //Doesn't want us to get in touch
+            customer3.Contacts.Add(new Contact { GivenName = "Dick", FamilyName = "Dastardly" });
 
             customerStash.Endure(customer1);
             customerStash.Endure(customer2);
@@ -139,6 +140,53 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             var customersWithManyContacts = session.GetStashOf<Customer>().Matching(_ => _.Where<CustomersByNumberOfContacts>().GreaterThan(1));
 
             customersWithManyContacts.ShouldHaveCount(2);
+        }
+
+
+        [Fact]
+        public void c___We_can_get_customers_with_contacts_having_the_family_name_Smith()
+        {
+            var customersEmployingSmiths = session.GetStashOf<Customer>().Matching(_ => _.Where<CustomersByContactFamilyName>().EqualTo("SMITH"));
+
+            customersEmployingSmiths.ShouldHaveCount(2);
+        }
+
+
+        [Fact]
+        public void d___We_can_get_customers_with_contacts_having_the_family_name_starting_with_Da()
+        {
+            var customersWithEmployeesHavingNamesStartingDa = session.GetStashOf<Customer>().Matching(_ => _.Where<CustomersByContactFamilyName>().StartsWith("DA"));
+
+            customersWithEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
+        }
+
+
+        [Fact]
+        public void e___We_can_get_join_customers_having_between_1_and_2_contacts()
+        {
+            var customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa =
+                session.GetStashOf<Customer>()
+                    .Matching(_ => _.Where<CustomersByNumberOfContacts>().Between(1, 2));
+
+            customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
+        }
+
+
+        [Fact]
+        public void f___We_can_get_join_customers_with_contacts_having_the_family_name_starting_with_Da_and_between_1_and_2_contacts()
+        {
+            var customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa =
+                session.GetStashOf<Customer>()
+                    .Matching(
+                        _ =>
+                        _.IntersectionOf(
+                            _.Where<CustomersByContactFamilyName>().StartsWith("DA"),
+                            _.Where<CustomersByNumberOfContacts>().Between(1, 2)
+                            )
+                    );
+
+            customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(1);
+            customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.Single().Number.ShouldEqual(1);
         }
 
 

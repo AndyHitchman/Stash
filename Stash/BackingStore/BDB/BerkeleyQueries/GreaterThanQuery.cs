@@ -91,7 +91,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     (keys, guid) => keys.Union(
                         IndexMatching
                             .GetReverseMatching<TKey>(managedIndex, transaction, guid)
-                            .Where(key => comparer.Compare(key, Key) >= 0)
+                            .Where(key => comparer.Compare(key, Key) > 0)
                             .Select(_ => guid)));
         }
 
