@@ -50,16 +50,6 @@ namespace Stash
             this.queryChain = queryChain;
         }
 
-        public int Count
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool Contains(TGraph item)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Destroy the persistence 
         /// </summary>

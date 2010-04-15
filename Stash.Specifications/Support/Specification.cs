@@ -18,6 +18,7 @@ namespace Stash.Specifications.Support
 {
     using NUnit.Framework;
 
+    [TestFixture]
     public abstract class Specification
     {
         protected virtual void BaseContext() {}

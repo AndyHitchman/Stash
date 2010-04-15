@@ -20,6 +20,8 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
+    using Engine.Serializers;
+    using Engine.Serializers.Binary;
 
     public class Registry : IRegistry
     {
@@ -117,7 +119,11 @@ namespace Stash.Configuration
             if(RegisteredGraphs.ContainsKey(graph))
                 throw new ArgumentException(string.Format("Graph {0} is already registered", graph));
 
-            var registeredGraph = new RegisteredGraph<TGraph>(this);
+            var registeredGraph = new RegisteredGraph<TGraph>(this)
+                {
+                    //We default to the binary serialiser with no transform.
+                    TransformSerializer = new TransformAndSerialize<TGraph, TGraph>(new NoTransformer<TGraph>(), new BinarySerializer<TGraph>())
+                };
             RegisteredGraphs.Add(graph, registeredGraph);
             return registeredGraph;
         }

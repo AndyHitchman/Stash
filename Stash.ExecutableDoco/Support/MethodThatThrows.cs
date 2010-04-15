@@ -14,16 +14,10 @@
 // limitations under the License.
 #endregion
 
-namespace Stash
+namespace Stash.ExecutableDoco.Support
 {
-    using System;
-    using System.Collections.Generic;
-    using Queries;
-
-    public interface IStashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class
-    {
-        void Destroy(TGraph item);
-        void Endure(TGraph item);
-        StashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint);
-    }
+    /// <summary>
+    /// method that throws.
+    /// </summary>
+    public delegate void MethodThatThrows();
 }

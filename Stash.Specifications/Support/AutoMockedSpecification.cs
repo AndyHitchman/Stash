@@ -22,7 +22,6 @@ namespace Stash.Specifications.Support
     /// <summary>
     /// Thanks to GShutler and the OpenRasta.Wiki sample code for this BDD-style specification base class. No license specified.
     /// </summary>
-    [TestFixture]
     public abstract class AutoMockedSpecification<TSut> : Specification where TSut : class
     {
         protected override void BaseContext()
