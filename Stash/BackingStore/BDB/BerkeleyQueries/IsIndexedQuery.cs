@@ -64,7 +64,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
             return
                 joinConstraint
-                    .Where(guid => cursor.Move(new DatabaseEntry(guid.AsByteArray()), true));
+                    .Where(joinMatched => cursor.Move(new DatabaseEntry(joinMatched.AsByteArray()), true));
         }
     }
 }

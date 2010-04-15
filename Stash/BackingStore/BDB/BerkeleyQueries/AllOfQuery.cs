@@ -27,6 +27,10 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     {
         private readonly ManagedIndex managedIndex;
 
+        public AllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set, QueryCostScale queryCostScaleHint)
+            : this(managedIndex, indexer, set)
+        {}
+
         public AllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
             this.managedIndex = managedIndex;
@@ -66,19 +70,19 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return new NotAllOfQuery<TKey>(managedIndex, Indexer, Set);
         }
 
-        private IEnumerable<Guid> execute(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> seed, IEnumerable<TKey> comparisonSubset)
+        private IEnumerable<Guid> execute(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinMatching, IEnumerable<TKey> comparisonSubset)
         {
             //If the number of graphs in the constraint is less than the size of the set,
             //then it should be quicker to hit the reverse index for all graphs and eliminate,
             //rather than aggregrating the intersection.
-            return seed.Count() < Set.Count()
-                       ? seed.Where(
+            return joinMatching.Count() < Set.Count()
+                       ? joinMatching.Where(
                            internalId =>
                                {
                                    var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, transaction, internalId);
                                    return Set.All(key => reverseMatching.Contains(key));
                                })
-                       : comparisonSubset.Aggregate(seed, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, transaction, key)));
+                       : comparisonSubset.Aggregate(joinMatching, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, transaction, key)));
         }
     }
 }

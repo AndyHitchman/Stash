@@ -315,7 +315,7 @@ namespace Stash.ExecutableDoco.Support
         /// </typeparam>
         public static void ShouldContain<T>(this IEnumerable<T> actual, Func<T, bool> expected)
         {
-            ShouldNotEqual(actual.Single(expected), default(T));
+            Assert.IsTrue(actual.Any(expected));
         }
 
         /// <summary>

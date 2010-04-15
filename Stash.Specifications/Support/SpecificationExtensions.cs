@@ -249,13 +249,13 @@ namespace Stash.Specifications.Support
             {
                 method();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Assert.AreEqual(exceptionType, e.GetType());
                 exception = e;
             }
 
-            if(exception == null)
+            if (exception == null)
                 Assert.Fail(String.Format("Expected {0} to be thrown.", exceptionType.FullName));
 
             return exception;
@@ -315,7 +315,7 @@ namespace Stash.Specifications.Support
         /// </typeparam>
         public static void ShouldContain<T>(this IEnumerable<T> actual, Func<T, bool> expected)
         {
-            ShouldNotEqual(actual.Single(expected), default(T));
+            Assert.IsTrue(actual.Any(expected));
         }
 
         /// <summary>

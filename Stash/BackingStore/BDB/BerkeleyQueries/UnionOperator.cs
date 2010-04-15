@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Queries;
+    using Engine;
 
     public class UnionOperator : IBerkeleyQuery, IUnionOperator
     {
@@ -50,7 +51,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
                         Enumerable.Empty<Guid>(),
-                        (guids, query) => guids.Union(query.Execute(transaction))
+                        (guids, query) => guids.Union(query.Execute(transaction)).Materialize()
                     );
         }
 
@@ -60,8 +61,8 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 queries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
-                        joinConstraint,
-                        (guids, query) => guids.Union(query.ExecuteInsideIntersect(transaction, guids))
+                        Enumerable.Empty<Guid>(),
+                        (matching, query) => matching.Union(query.ExecuteInsideIntersect(transaction, joinConstraint)).Materialize()
                     );
         }
     }

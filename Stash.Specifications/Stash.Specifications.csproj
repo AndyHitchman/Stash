@@ -95,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="for_backingstore_bsb\given_queries\when_executing_union_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\with_string_indexer.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with.cs" />

@@ -92,11 +92,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return
                 joinConstraint.Aggregate(
                     Enumerable.Empty<Guid>(),
-                    (keys, guid) => keys.Union(
+                    (matching, joinMatched) => matching.Union(
                         IndexMatching
-                            .GetReverseMatching<string>(managedIndex, transaction, guid)
+                            .GetReverseMatching<string>(managedIndex, transaction, joinMatched)
                             .Where(key => key.StartsWith(Key))
-                            .Select(_ => guid)));
+                            .Select(_ => joinMatched)));
         }
     }
 }

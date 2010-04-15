@@ -88,11 +88,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return
                 joinConstraint.Aggregate(
                     Enumerable.Empty<Guid>(),
-                    (keys, guid) => keys.Union(
+                    (matching, joinMatched) => matching.Union(
                         IndexMatching
-                            .GetReverseMatching<TKey>(managedIndex, transaction, guid)
+                            .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)
                             .Where(key => comparer.Compare(key, Key) > 0)
-                            .Select(_ => guid)));
+                            .Select(_ => joinMatched)));
         }
 
         public ILessThanEqualQuery<TKey> GetComplementaryQuery()

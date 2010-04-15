@@ -79,11 +79,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                 joinConstraint.Except(
                     joinConstraint.Aggregate(
                         Enumerable.Empty<Guid>(),
-                        (keys, guid) => keys.Union(
+                        (matching, joinMatched) => matching.Union(
                             IndexMatching
-                                .GetReverseMatching<TKey>(managedIndex, transaction, guid)
+                                .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)
                                 .Where(key => Set.Contains(key))
-                                .Select(_ => guid))));
+                                .Select(_ => joinMatched))));
         }
 
         public INotAnyOfQuery<TKey> GetComplementaryQuery()

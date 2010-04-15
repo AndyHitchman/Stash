@@ -53,7 +53,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     .Skip(1)
                     .Aggregate(
                         queriesByCost.First().Execute(transaction).Materialize(),
-                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
+                        (matching, query) => matching.Intersect(query.ExecuteInsideIntersect(transaction, matching)).Materialize()
                     );
         }
 
@@ -64,7 +64,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
                         joinConstraint.Materialize(),
-                        (guids, query) => guids.Intersect(query.ExecuteInsideIntersect(transaction, guids))
+                        (matching, query) => matching.Intersect(query.ExecuteInsideIntersect(transaction, matching))
                     );
         }
     }
