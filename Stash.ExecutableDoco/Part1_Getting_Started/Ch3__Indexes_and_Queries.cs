@@ -24,6 +24,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using BackingStore.BDB;
     using NUnit.Framework;
     using Support;
+    using Engine;
 
 
     public class Ch3__Indexes_and_Queries : Chapter
@@ -213,7 +214,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
                     .ToList();
 
             //It is important to take notice of the ToList() method which materialises the query (i.e. executes
-            //the deferred queries). Without the ToList(), each test below would re-execute the query.
+            //the deferred queries). Without the ToList(), each assertion below would re-execute the query.
 
             customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(1);
             customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.Single().Number.ShouldEqual(1);
@@ -231,7 +232,9 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
                             _.Where<CustomersByContactFamilyName>().StartsWith("DA"),
                             _.Where<CustomersByNumberOfContacts>().GreaterThan(2))
                     )
-                    .ToList();
+                    .Materialize();
+
+            //Materialize() is a synonym for ToList(). Use Materialize rather than ToList as the intent is clearer.
 
             customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
             customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldContain(_ => _.Name == "Waldo Robotics");
@@ -250,9 +253,31 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
                             _.Where<CustomersByContactFamilyName>().StartsWith("DA"),
                             _.Where<CustomersByNumberOfContacts>().GreaterThan(2))
                     )
-                    .ToList();
+                    .Materialize();
 
             everythingWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
+        }
+
+
+        [Fact]
+        public void i___We_need_the_call_to_Materialize_as_we_can_extend_our_queries_by_adding_additional_matching_clauses()
+        {
+            var withTwoOrMoreContacts =
+                session.GetEntireStash()
+                    .Matching(_ => _.Where<CustomersByNumberOfContacts>().GreaterThanEqual(2));
+
+            var twoOrMoreAndEmployingSmith =
+                withTwoOrMoreContacts
+                    .Matching(_ => _.Where<CustomersByContactFamilyName>().EqualTo("SMITH"))
+                    .Materialize();
+
+            var twoOrMoreAndCustomerNumberGreaterThan10 =
+                withTwoOrMoreContacts
+                    .Matching(_ => _.Where<CustomersByNumber>().GreaterThan(10))
+                    .Materialize();
+
+            twoOrMoreAndEmployingSmith.ShouldHaveCount(2);
+            twoOrMoreAndCustomerNumberGreaterThan10.ShouldHaveCount(1);
         }
 
 
