@@ -57,7 +57,7 @@ namespace Stash.Engine
         /// <param name="registeredGraph"></param>
         /// <param name="serializationSession"></param>
         /// <returns></returns>
-        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, SerializationSession serializationSession);
+        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, ISerializationSession serializationSession);
 
         /// <summary>
         /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 
@@ -67,6 +67,6 @@ namespace Stash.Engine
         /// <param name="serializationSession"></param>
         /// <returns></returns>
         /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        object LoadTrackedGraphForInternalId(Guid internalId, SerializationSession serializationSession);
+        object LoadTrackedGraphForInternalId(Guid internalId, ISerializationSession serializationSession);
     }
 }

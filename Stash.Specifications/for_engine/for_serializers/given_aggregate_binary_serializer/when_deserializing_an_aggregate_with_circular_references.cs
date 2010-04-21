@@ -62,7 +62,6 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
         protected override void When()
         {
             mockSession.Expect(_ => _.TrackedGraphForInternalId(internalIdOfA)).Return(graphA);
-            mockSession.Expect(_ => _.TrackedGraphForInternalId(internalIdOfB)).Return(graphB);
 
             actualB = Subject.Deserialize(bytes, mockSession);
         }
