@@ -10,6 +10,7 @@ a suitable example application.
 
 Improvement in the pipeline are:
 
+  * Have queries work over the current session as well as the backing store.
   * Implement Azure Table Storage backing store (possibly build on Lokad.Cloud).
   * Look at other potential backing stores (e.g. Lucene.Net, ESENT, SQLServer).
   * Implement BSON and JSON serialisers.

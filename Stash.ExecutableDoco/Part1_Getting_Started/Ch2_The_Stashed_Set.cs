@@ -22,7 +22,6 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using BackingStore;
     using BackingStore.BDB;
     using Engine.Serializers.Binary;
     using NUnit.Framework;
@@ -73,9 +72,9 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             //Kickstart Stash by registering Customer as a persistent graph.
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ =>
+                register =>
                     {
-                        _.Register<Customer>();
+                        register.Graph<Customer>();
                     });
         }
 

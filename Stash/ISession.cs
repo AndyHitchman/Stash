@@ -31,7 +31,18 @@ namespace Stash
         /// </summary>
         void Complete();
 
+        /// <summary>
+        /// Returns a <see cref="StashedSet{TGraph}"/> where TGraph is object. 
+        /// This is everything in the backing store.
+        /// </summary>
+        /// <returns></returns>
         StashedSet<object> GetEntireStash();
+
+        /// <summary>
+        /// Returns a <see cref="StashedSet{TGraph}"/>.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <returns></returns>
         StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class;
 
         /// <summary>

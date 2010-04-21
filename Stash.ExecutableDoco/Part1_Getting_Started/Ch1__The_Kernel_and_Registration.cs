@@ -47,7 +47,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
         {
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ => { });
+                register => { });
         }
 
 
@@ -98,7 +98,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
         {
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ => { _.Register<Customer>(); });
+                register => { register.Graph<Customer>(); });
         }
 
 

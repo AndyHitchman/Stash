@@ -121,12 +121,12 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             //Kickstart Stash by registering Customer as a persistent graph.
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ =>
+                register =>
                     {
-                        _.Register<Customer>();
-                        _.Index(new CustomersByNumber());
-                        _.Index(new CustomersByContactFamilyName());
-                        _.Index(new CustomersByNumberOfContacts());
+                        register.Graph<Customer>();
+                        register.Index(new CustomersByNumber());
+                        register.Index(new CustomersByContactFamilyName());
+                        register.Index(new CustomersByNumberOfContacts());
                     });
 
 

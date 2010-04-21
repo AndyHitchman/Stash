@@ -32,12 +32,12 @@ namespace Stash.Specifications.integration
             base.WithContext();
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ =>
+                register =>
                     {
-                        _.Register<Post>(
-                            r =>
-                            r.SerializeWith(new BinarySerializer<Post>()));
-                        _.Index(new NumberOfCommentsOnPost());
+                        register.Graph<Post>(
+                            _ =>
+                            _.SerializeWith(new BinarySerializer<Post>()));
+                        register.Index(new NumberOfCommentsOnPost());
                     }
                 );
         }

@@ -111,13 +111,13 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             //Kickstart Stash by registering Customer and Order as a persistent graphs using the AggregateBinarySerializer.
             Kernel.Kickstart(
                 new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
-                _ =>
+                register =>
                     {
-                        _.Register<Customer>(c => c.SerializeWith(new AggregateBinarySerializer<Customer>(c.RegisteredGraph)));
-                        _.Register<Order>(c => c.SerializeWith(new AggregateBinarySerializer<Order>(c.RegisteredGraph)));
-                        _.Index(new CustomersByNumber());
-                        _.Index(new OrdersByNumber());
-                        _.Index(new OrdersByCustomerNumber());
+                        register.Graph<Customer>(_ => _.SerializeWith(new AggregateBinarySerializer<Customer>(_.RegisteredGraph)));
+                        register.Graph<Order>(_ => _.SerializeWith(new AggregateBinarySerializer<Order>(_.RegisteredGraph)));
+                        register.Index(new CustomersByNumber());
+                        register.Index(new OrdersByNumber());
+                        register.Index(new OrdersByCustomerNumber());
                     });
         }
 
