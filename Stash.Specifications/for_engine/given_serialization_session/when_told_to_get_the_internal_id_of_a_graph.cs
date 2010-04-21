@@ -14,11 +14,13 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Specifications.for_engine.given_default_internal_session
+namespace Stash.Specifications.for_engine.given_serialization_session
 {
     using System;
-    using Engine;
-    using Engine.PersistenceEvents;
+    using System.Linq;
+    using given_default_internal_session;
+    using Stash.Engine;
+    using Stash.Engine.PersistenceEvents;
     using NUnit.Framework;
     using Rhino.Mocks;
     using Support;
@@ -29,7 +31,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_return_null_if_the_graph_is_not_tracked()
         {
-            var sut = new InternalSession(null, null);
+            var sut = new SerializationSession(() => Enumerable.Empty<IPersistenceEvent>(), null);
 
             sut.InternalIdOfTrackedGraph(new object()).ShouldBeNull();
         }
@@ -37,15 +39,13 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Test]
         public void it_should_return_the_internal_id_if_the_graph_is_tracked()
         {
-            var sut = new StandInInternalSession(null, null);
             var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
+            var sut = new SerializationSession(() => new[] {mockPersistentEvent}, null);
 
             var expected = Guid.NewGuid();
             var graph = new object();
             mockPersistentEvent.Stub(_ => _.UntypedGraph).Return(graph);
             mockPersistentEvent.Stub(_ => _.InternalId).Return(expected);
-
-            sut.ExposedPersistenceEvents.Add(mockPersistentEvent);
 
             sut.InternalIdOfTrackedGraph(graph).ShouldEqual(expected);
         }

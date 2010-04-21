@@ -110,11 +110,12 @@
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_an_unchanged_graph.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\StandInTrack.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_initialising_track_with_empty_serialized_graph.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\when_deserializing_an_aggregate_with_circular_references.cs" />
     <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\when_deserializing_an_aggregate_referencing_another_aggregate.cs" />
-    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\Customer.cs" />
-    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\Order.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\GraphA.cs" />
+    <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\GraphB.cs" />
     <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\when_serializing_an_aggregate_referencing_another_aggregate.cs" />
-    <Compile Include="for_engine\given_default_internal_session\when_told_to_get_the_internal_id_of_a_graph.cs" />
+    <Compile Include="for_engine\given_serialization_session\when_told_to_get_the_internal_id_of_a_graph.cs" />
     <Compile Include="for_stashed_set\when_adding_to_a_stashed_set.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />

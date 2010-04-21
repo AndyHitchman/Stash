@@ -55,7 +55,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
         [Then]
         public void it_should_tell_persisted_events_to_complete()
         {
-            mockPersistentEvent.AssertWasCalled(_ => _.Complete(null), _ => _.IgnoreArguments());
+            mockPersistentEvent.AssertWasCalled(_ => _.Complete(null, null), _ => _.IgnoreArguments());
         }
     }
 }

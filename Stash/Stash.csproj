@@ -86,6 +86,9 @@
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
     <Compile Include="BackingStore\IStorageWork.cs" />
+    <Compile Include="Engine\ISerializationSession.cs" />
+    <Compile Include="Engine\SerializationSession.cs" />
+    <Compile Include="Engine\Serializers\Binary\AggregateRootSurrogate.cs" />
     <Compile Include="LinqExtensions.cs" />
     <Compile Include="Engine\PersistenceEvents\IDestroy.cs" />
     <Compile Include="Engine\PersistenceEvents\IEndure.cs" />
@@ -93,7 +96,7 @@
     <Compile Include="Engine\Serializers\AdhocSerializer.cs" />
     <Compile Include="Engine\Serializers\Binary\AggregateBinarySerializer.cs" />
     <Compile Include="Engine\Serializers\Binary\AggregateProxy.cs" />
-    <Compile Include="Engine\Serializers\Binary\AggregateSurrogate.cs" />
+    <Compile Include="Engine\Serializers\Binary\AggregateReferenceSurrogate.cs" />
     <Compile Include="Engine\Serializers\Binary\AggregateSurrogateSelector.cs" />
     <Compile Include="Engine\Serializers\Binary\BinarySerializer.cs" />
     <Compile Include="Engine\Serializers\Binary\BinarySerializer`1.cs" />

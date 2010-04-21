@@ -39,14 +39,9 @@ namespace Stash.Engine.PersistenceEvents
 
         public Guid InternalId { get; private set; }
 
-        public void Complete(IStorageWork work)
+        public void Complete(IStorageWork work, ISerializationSession session)
         {
             work.DeleteGraph(InternalId, registeredGraph);
-        }
-
-        public PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
-        {
-            return PreviouslyEnrolledEvent.ShouldBeEvicted;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Stash.Configuration
 
         public abstract void EngageBackingStore(IBackingStore backingStore);
 
-        public abstract object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session);
-        public abstract IEnumerable<byte> Serialize(object graph, IInternalSession session);
+        public abstract object Deserialize(IEnumerable<byte> serializedGraph, ISerializationSession session);
+        public abstract IEnumerable<byte> Serialize(object graph, ISerializationSession session);
     }
 }

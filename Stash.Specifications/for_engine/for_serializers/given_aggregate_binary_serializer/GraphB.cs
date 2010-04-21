@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -19,8 +19,9 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     using System;
 
     [Serializable]
-    public class Customer
+    public class GraphB
     {
-        public string Name { get; set; }
+        public string AString { get; set; }
+        public GraphA GraphA { get; set; }
     }
 }

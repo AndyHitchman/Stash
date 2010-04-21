@@ -19,17 +19,47 @@
 // ReSharper disable ConvertToLambdaExpression
 namespace Stash.ExecutableDoco.Part1_Getting_Started
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore.BDB;
     using NUnit.Framework;
     using Support;
-    using Engine;
 
 
     public class Ch3__Indexes_and_Queries : Chapter
     {
         //Note that these are NOT unit tests. The order of execution is significant
+
+
+        /// <summary>
+        /// Here is a simple object graph (a class with members of arbitrary depth) that we want to persist.
+        /// </summary>
+        [Serializable]
+        public partial class Customer
+        {
+            public Customer()
+            {
+                Contacts = new List<Contact>();
+            }
+
+            public int Number { get; set; }
+            public string Name { get; set; }
+            public IList<Contact> Contacts { get; private set; }
+        }
+
+        /// <summary>
+        /// <see cref="Customer">Customers</see> can have multiple contacts. We're just assuming these are people.
+        /// </summary>
+        [Serializable]
+        public class Contact
+        {
+            public string GivenName { get; set; }
+            public string Initial { get; set; }
+            public string FamilyName { get; set; }
+            public DateTime DateOfBirth { get; set; }
+        }
+
 
 
         /// <summary>
@@ -52,7 +82,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
 
         /// <summary>
         ///   This index yields multiple keys, one per contact for the customer. The index
-        ///   is always against the graph, rather than a member (i.e. customer, not the contact).
+        ///   is always against the graph root, rather than a member (i.e. customer, not the contact).
         ///   Indexes can be against supertypes or interfaces, which provides for some powerful
         ///   polymorphic behaviour in queries. TODO Demo this
         /// </summary>
@@ -82,7 +112,8 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
 
 
         /// <summary>
-        ///   We need to register indexes in addition to graphs.
+        ///   We need to register indexes in addition to graphs. We register instances on indexes. They are used
+        ///   at runtime by Stash. Indexes should be stateless and not hold on to resources.
         /// </summary>
         [TestFixtureSetUp]
         public void Lets_set_things_up()
@@ -137,6 +168,12 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
             session = Kernel.SessionFactory.GetSession();
         }
 
+        [TearDown]
+        public void Make_sure_we_complete_the_session()
+        {
+            session.Complete();
+        }
+
 
         [Fact]
         public void a___We_can_get_customers_by_their_number()
@@ -180,8 +217,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
         {
             var customersWithEmployeesHavingNamesStartingDa =
                 session.GetStashOf<Customer>()
-                    .Matching(_ => _.Where<CustomersByContactFamilyName>().StartsWith("DA"))
-                    .ToList();
+                    .Matching(_ => _.Where<CustomersByContactFamilyName>().StartsWith("DA"));
 
             customersWithEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
         }
@@ -192,8 +228,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
         {
             var customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa =
                 session.GetStashOf<Customer>()
-                    .Matching(_ => _.Where<CustomersByNumberOfContacts>().Between(1, 2))
-                    .ToList();
+                    .Matching(_ => _.Where<CustomersByNumberOfContacts>().Between(1, 2));
 
             customersWithMoreThanOneContactAndEmployeesHavingNamesStartingDa.ShouldHaveCount(2);
         }
@@ -263,7 +298,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
         public void i___We_need_the_call_to_Materialize_as_we_can_extend_our_queries_by_adding_additional_matching_clauses()
         {
             var withTwoOrMoreContacts =
-                session.GetEntireStash()
+                session.GetStashOf<Customer>()
                     .Matching(_ => _.Where<CustomersByNumberOfContacts>().GreaterThanEqual(2));
 
             var twoOrMoreAndEmployingSmith =
@@ -278,13 +313,6 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
 
             twoOrMoreAndEmployingSmith.ShouldHaveCount(2);
             twoOrMoreAndCustomerNumberGreaterThan10.ShouldHaveCount(1);
-        }
-
-
-        [TearDown]
-        public void Make_sure_we_complete_the_session()
-        {
-            session.Complete();
         }
 
 

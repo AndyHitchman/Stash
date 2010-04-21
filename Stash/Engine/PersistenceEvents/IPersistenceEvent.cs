@@ -38,8 +38,7 @@ namespace Stash.Engine.PersistenceEvents
         /// Complete all work for the persistence event.
         /// </summary>
         /// <param name="work"></param>
-        void Complete(IStorageWork work);
-
-        PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event);
+        /// <param name="session"></param>
+        void Complete(IStorageWork work, ISerializationSession session);
     }
 }

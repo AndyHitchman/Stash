@@ -77,7 +77,7 @@ namespace Stash
             return
                 backingStore
                     .Get(queryFactory.IntersectionOf(queryChain))
-                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType)))
+                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), new SerializationSession(() => session.EnrolledPersistenceEvents, session)))
                     .Select(track => (TGraph)track.UntypedGraph)
                     .GetEnumerator();
         }

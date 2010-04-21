@@ -61,7 +61,7 @@ namespace Stash.Specifications.for_stashed_set
                 _ =>
                 _.Track(
                     Arg<IStoredGraph>.Is.Same(mockStoredGraph),
-                    Arg<IRegisteredGraph>.Is.Same(mockRegisteredGraph)))
+                    Arg<IRegisteredGraph>.Is.Same(mockRegisteredGraph), new SerializationSession(() => _.EnrolledPersistenceEvents, _)))
                 .Return(mockTrack);
 
             actual = subject.GetEnumerator();

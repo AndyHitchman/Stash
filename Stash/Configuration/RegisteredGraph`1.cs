@@ -63,7 +63,7 @@ namespace Stash.Configuration
 
         public ISerializer<TGraph> TransformSerializer { get; set; }
 
-        public override object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session)
+        public override object Deserialize(IEnumerable<byte> serializedGraph, ISerializationSession session)
         {
             return TransformSerializer.Deserialize(serializedGraph, session);
         }
@@ -75,7 +75,7 @@ namespace Stash.Configuration
             return IndexersOnGraph.Where(_ => _.IndexType == index.GetType()).First();
         }
 
-        public override IEnumerable<byte> Serialize(object graph, IInternalSession session)
+        public override IEnumerable<byte> Serialize(object graph, ISerializationSession session)
         {
             return TransformSerializer.Serialize((TGraph)graph, session);
         }

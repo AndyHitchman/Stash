@@ -38,7 +38,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_destroy
 
         protected override void When()
         {
-            subject.Complete(mockStorageWork);
+            subject.Complete(mockStorageWork, null);
         }
 
 

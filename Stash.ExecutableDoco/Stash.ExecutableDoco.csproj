@@ -111,9 +111,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Part1_Getting_Started\Ch1_The_Kernel.cs" />
+    <Compile Include="Part1_Getting_Started\Ch1__The_Kernel_and_Registration.cs" />
     <Compile Include="Part1_Getting_Started\Ch2_The_Stashed_Set.cs" />
     <Compile Include="Part1_Getting_Started\Ch3__Indexes_and_Queries.cs" />
+    <Compile Include="Part1_Getting_Started\Ch4__Serializers_and_Aggregates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\Chapter.cs" />
     <Compile Include="Support\Fact.cs" />

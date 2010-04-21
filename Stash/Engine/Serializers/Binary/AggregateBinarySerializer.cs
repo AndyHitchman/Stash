@@ -30,20 +30,28 @@ namespace Stash.Engine.Serializers.Binary
     /// <typeparam name="TGraph"></typeparam>
     public class AggregateBinarySerializer<TGraph> : ISerializer<TGraph>
     {
+        private readonly ISurrogateSelector surrogateSelector;
         private readonly IRegisteredGraph<TGraph> registeredGraph;
+
+        public AggregateBinarySerializer(IRegisteredGraph<TGraph> registeredGraph, ISurrogateSelector surrogateSelector)
+            : this(registeredGraph)
+        {
+            this.surrogateSelector = surrogateSelector;
+        }
 
         public AggregateBinarySerializer(IRegisteredGraph<TGraph> registeredGraph)
         {
+            surrogateSelector = new SurrogateSelector();
             this.registeredGraph = registeredGraph;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
+        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
             var binarySerializer = getBinarySerializerWithSurrogateSelector(session);
             return (TGraph)binarySerializer.Deserialize(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
+        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
             var binarySerializer = getBinarySerializerWithSurrogateSelector(session);
             return binarySerializer.Serialize(graph);
@@ -54,11 +62,12 @@ namespace Stash.Engine.Serializers.Binary
         /// </summary>
         /// <param name="session"></param>
         /// <returns></returns>
-        private BinarySerializer getBinarySerializerWithSurrogateSelector(IInternalSession session)
+        private BinarySerializer getBinarySerializerWithSurrogateSelector(ISerializationSession session)
         {
-            var surrogateSelector = new AggregateSurrogateSelector(registeredGraph);
+            var selector = new AggregateSurrogateSelector(registeredGraph);
+            selector.ChainSelector(surrogateSelector);
             var streamingContext = new StreamingContext(StreamingContextStates.All, session);
-            return new BinarySerializer(new BinaryFormatter(surrogateSelector, streamingContext));
+            return new BinarySerializer(new BinaryFormatter(selector, streamingContext));
         }
     }
 }

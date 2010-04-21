@@ -51,33 +51,22 @@ namespace Stash.Engine
         void Endure(object graph, IRegisteredGraph registeredGraph);
 
         /// <summary>
-        /// True if the graph is being tracked by this session.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        bool GraphIsTracked(object graph);
-
-        /// <summary>
-        /// Get the internal id of a graph, if it is tracked.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        Guid? InternalIdOfTrackedGraph(object graph);
-
-        /// <summary>
         /// Track a stored graph so that changes made in the session are persisted to the backing store.
         /// </summary>
         /// <param name="storedGraph"></param>
         /// <param name="registeredGraph"></param>
+        /// <param name="serializationSession"></param>
         /// <returns></returns>
-        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph);
+        ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, SerializationSession serializationSession);
 
         /// <summary>
         /// Get the graph by internal id. If the graph is not tracked, it is fetched from the 
         /// backing store and tracked.
         /// </summary>
         /// <param name="internalId"></param>
+        /// <param name="serializationSession"></param>
         /// <returns></returns>
-        object TrackedGraphForInternalId(Guid internalId);
+        /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
+        object LoadTrackedGraphForInternalId(Guid internalId, SerializationSession serializationSession);
     }
 }

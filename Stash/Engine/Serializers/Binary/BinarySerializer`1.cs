@@ -25,12 +25,12 @@ namespace Stash.Engine.Serializers.Binary
 
         public BinarySerializer(BinaryFormatter binaryFormatter) : base(binaryFormatter) {}
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
+        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
             return (TGraph)base.Deserialize(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
+        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
             return base.Serialize(graph);
         }

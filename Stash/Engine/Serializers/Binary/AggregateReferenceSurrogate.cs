@@ -19,8 +19,10 @@ namespace Stash.Engine.Serializers.Binary
     using System;
     using System.Runtime.Serialization;
 
-    public class AggregateSurrogate : ISerializationSurrogate
+    public class AggregateReferenceSurrogate : ISerializationSurrogate
     {
+        public const string ReferenceInfoKey = "___StashInternalId";
+
         /// <summary>
         /// Populates the provided <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with the data needed to serialize the object.
         /// </summary>
@@ -31,7 +33,7 @@ namespace Stash.Engine.Serializers.Binary
         ///                 </exception>
         public virtual void GetObjectData(object obj, SerializationInfo info, StreamingContext context)
         {
-            var session = context.Context as IInternalSession;
+            var session = context.Context as ISerializationSession;
             if(session == null)
                 throw new ArgumentException("context does not contain an instance of IInternalSession");
 
@@ -42,8 +44,7 @@ namespace Stash.Engine.Serializers.Binary
                     string.Format("Graph of type {0} ({1}) is not tracked and therefore cannot be serialised as a reference", obj.GetType(), obj));
 
             info.SetType(typeof(AggregateProxy));
-            info.AddValue("InternalId", internalId);
-            info.AddValue("GraphType", obj.GetType());
+            info.AddValue(ReferenceInfoKey, internalId);
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace Stash.Engine.Serializers.Binary
         ///                 </exception>
         public object SetObjectData(object obj, SerializationInfo info, StreamingContext context, ISurrogateSelector selector)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

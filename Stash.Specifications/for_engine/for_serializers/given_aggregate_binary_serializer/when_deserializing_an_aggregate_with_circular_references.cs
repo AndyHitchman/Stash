@@ -24,56 +24,65 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     using Rhino.Mocks;
     using Support;
 
-    public class when_deserializing_an_aggregate_referencing_another_aggregate : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>
+    public class when_deserializing_an_aggregate_with_circular_references : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>
     {
-        private GraphB root;
-        private Guid internalIdOfCustomer;
+        private GraphB graphB;
+        private Guid internalIdOfA;
         private ISerializationSession mockSession;
-        private GraphB actual;
+        private GraphB actualB;
         private IRegistry mockRegistry;
         private GraphA graphA;
         private IEnumerable<byte> bytes;
-        private Guid internalIdOfOrder;
+        private Guid internalIdOfB;
 
         protected override void Given()
         {
             graphA = new GraphA {AString = "Bob"};
-            root = new GraphB {GraphA = graphA};
+            graphB = new GraphB {AString = "Jane", GraphA = graphA};
+            graphA.GraphB = graphB;
 
-            internalIdOfCustomer = Guid.NewGuid();
-            internalIdOfOrder = Guid.NewGuid();
+            internalIdOfA = new Guid("CFEBF6B6-FB86-49E0-A27D-9F63319AAA2D");
+            internalIdOfB = new Guid("7E3BF6C5-82FE-47A3-94D2-4373F7FCFDFA");
 
             mockRegistry = MockRepository.GenerateMock<IRegistry>();
             mockRegistry.Stub(_ => _.IsManagingGraphTypeOrAncestor(typeof(GraphA))).Return(true);
 
             mockSession = MockRepository.GenerateMock<ISerializationSession>();
-            mockSession.Stub(_ => _.InternalIdOfTrackedGraph(root)).Return(internalIdOfOrder);
-            mockSession.Stub(_ => _.InternalIdOfTrackedGraph(root.GraphA)).Return(internalIdOfCustomer);
+            mockSession.Stub(_ => _.InternalIdOfTrackedGraph(graphB)).Return(internalIdOfB);
+            mockSession.Stub(_ => _.InternalIdOfTrackedGraph(graphA)).Return(internalIdOfA);
 
+            Dependency<IRegisteredGraph<GraphA>>().Stub(_ => _.GraphType).Return(typeof(GraphA));
+            Dependency<IRegisteredGraph<GraphA>>().Stub(_ => _.Registry).Return(mockRegistry);
             Dependency<IRegisteredGraph<GraphB>>().Stub(_ => _.GraphType).Return(typeof(GraphB));
             Dependency<IRegisteredGraph<GraphB>>().Stub(_ => _.Registry).Return(mockRegistry);
 
-            bytes = Subject.Serialize(root, mockSession);
+            bytes = Subject.Serialize(graphB, mockSession);
         }
 
         protected override void When()
         {
-            mockSession.Expect(_ => _.TrackedGraphForInternalId(internalIdOfCustomer)).Return(graphA);
+            mockSession.Expect(_ => _.TrackedGraphForInternalId(internalIdOfA)).Return(graphA);
+            mockSession.Expect(_ => _.TrackedGraphForInternalId(internalIdOfB)).Return(graphB);
 
-            actual = Subject.Deserialize(bytes, mockSession);
+            actualB = Subject.Deserialize(bytes, mockSession);
         }
 
         [Then]
         public void it_should_deserialise_the_root_aggregate()
         {
-            actual.ShouldBeOfType<GraphB>();
+            actualB.ShouldBeOfType<GraphB>();
         }
 
         [Then]
-        public void it_should_use_the_tracked_customer()
+        public void it_should_use_the_tracked_root_aggregate()
         {
-//            mockSession.VerifyAllExpectations();
-            actual.GraphA.ShouldBeTheSameAs(graphA);
+            actualB.GraphA.ShouldBeTheSameAs(graphA);
+        }
+
+        [Then]
+        public void it_should_determine_whether_the_referenced_aggregate_is_already_tracked()
+        {
+            mockSession.VerifyAllExpectations();
         }
     }
 }

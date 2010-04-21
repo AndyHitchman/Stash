@@ -109,7 +109,7 @@ namespace Stash.Engine
                         {
                             foreach(var @event in drain)
                             {
-                                @event.Complete(work);
+                                @event.Complete(work, new SerializationSession(() => drain, this));
                             }
                         });
             }
@@ -133,7 +133,12 @@ namespace Stash.Engine
 
         public void Endure(object graph, IRegisteredGraph registeredGraph)
         {
-            Enroll(new Endure(graph, registeredGraph));
+            Enroll(new Endure(this, graph, registeredGraph));
+        }
+
+        public void Endure<TGraph>(TGraph graph)
+        {
+            Endure(graph, registry.GetRegistrationFor<TGraph>());
         }
 
         public virtual void Enroll(IPersistenceEvent persistenceEvent)
@@ -141,13 +146,6 @@ namespace Stash.Engine
             enrolledPersistenceEventsLocker.EnterWriteLock();
             try
             {
-                foreach(
-                    var @event in
-                        PersistenceEvents.Where(_ => ReferenceEquals(persistenceEvent.UntypedGraph, _.UntypedGraph)))
-                {
-                    //TODO: Act on answer (determine whether answer is ever useful.)
-                    persistenceEvent.SayWhatToDoWithPreviouslyEnrolledEvent(@event);
-                }
                 PersistenceEvents.Add(persistenceEvent);
             }
             finally
@@ -182,35 +180,15 @@ namespace Stash.Engine
                         });
         }
 
-        /// <summary>
-        /// True if the graph is being tracked by this session.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        public bool GraphIsTracked(object graph)
-        {
-            return EnrolledPersistenceEvents.Any(_ => ReferenceEquals(_.UntypedGraph, graph));
-        }
-
-        /// <summary>
-        /// Get the internal id of a graph if it is tracked.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns></returns>
-        public Guid? InternalIdOfTrackedGraph(object graph)
-        {
-            var guid = EnrolledPersistenceEvents.Where(_ => ReferenceEquals(_.UntypedGraph, graph)).Select(_ => _.InternalId).FirstOrDefault();
-            return guid == Guid.Empty ? (Guid?)null : guid;
-        }
 
         public virtual IInternalSession Internalize()
         {
             return this;
         }
 
-        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
+        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, SerializationSession serializationSession)
         {
-            var track = new Track(this, storedGraph, registeredGraph);
+            var track = new Track(serializationSession, storedGraph, registeredGraph);
             Enroll(track);
             return track;
         }
@@ -220,19 +198,15 @@ namespace Stash.Engine
         /// backing store and tracked.
         /// </summary>
         /// <param name="internalId"></param>
+        /// <param name="serializationSession"></param>
         /// <returns></returns>
         /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        public object TrackedGraphForInternalId(Guid internalId)
+        public object LoadTrackedGraphForInternalId(Guid internalId, SerializationSession serializationSession)
         {
-            var tracked = EnrolledPersistenceEvents.Where(_ => _.InternalId == internalId).Select(_ => _.UntypedGraph).FirstOrDefault();
+            var storedGraph = backingStore.Get(internalId);
+            var tracked = Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), serializationSession);
 
-            if(tracked == null)
-            {
-                var storedGraph = backingStore.Get(internalId);
-                Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType));
-            }
-
-            return tracked;
+            return tracked.UntypedGraph;
         }
     }
 }

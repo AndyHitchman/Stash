@@ -35,7 +35,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 
         protected override void When()
         {
-            Subject.Complete(mockStorageWork);
+            Subject.Complete(mockStorageWork, null);
         }
 
 

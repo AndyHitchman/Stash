@@ -17,6 +17,8 @@
 namespace Stash.Engine.Serializers.Binary
 {
     using System;
+    using System.Linq;
+    using System.Reflection;
     using System.Runtime.Serialization;
     using Configuration;
 
@@ -27,33 +29,39 @@ namespace Stash.Engine.Serializers.Binary
     public class AggregateSurrogateSelector : ISurrogateSelector
     {
         private readonly IRegisteredGraph registeredGraph;
-        private bool rootIsSerialised;
+        private ISurrogateSelector nextSelector;
+        private readonly AggregateReferenceSurrogate aggregateReferenceSurrogate;
+        private readonly AggregateRootSurrogate aggregateRootSurrogate;
 
         public AggregateSurrogateSelector(IRegisteredGraph registeredGraph)
         {
             this.registeredGraph = registeredGraph;
-            rootIsSerialised = false;
+            aggregateReferenceSurrogate = new AggregateReferenceSurrogate();
+            aggregateRootSurrogate = new AggregateRootSurrogate(aggregateReferenceSurrogate);
         }
 
-        public void ChainSelector(ISurrogateSelector selector) {}
+        public void ChainSelector(ISurrogateSelector selector)
+        {
+            if(nextSelector == null)
+                nextSelector = selector;
+            else
+                nextSelector.ChainSelector(selector);
+        }
 
         public ISurrogateSelector GetNextSelector()
         {
-            return null;
+            return nextSelector;
         }
 
         public ISerializationSurrogate GetSurrogate(Type type, StreamingContext context, out ISurrogateSelector selector)
         {
             selector = this;
 
-            if(!rootIsSerialised && type.Equals(registeredGraph.GraphType))
-            {
-                rootIsSerialised = true;
-                return null;
-            }
+            if(type.Equals(registeredGraph.GraphType))
+                return aggregateRootSurrogate;
 
             if(registeredGraph.Registry.IsManagingGraphTypeOrAncestor(type))
-                return new AggregateSurrogate();
+                return aggregateReferenceSurrogate;
 
             return null;
         }

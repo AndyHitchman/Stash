@@ -28,19 +28,23 @@ namespace Stash.Engine.PersistenceEvents
         private readonly object graph;
         private readonly SHA1CryptoServiceProvider hashCodeGenerator;
         private readonly IRegisteredGraph registeredGraph;
-        private readonly IInternalSession trackedSession;
 
-        public Track(IInternalSession trackedSession, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
-            : this(trackedSession, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
+        /// <summary>
+        /// <paramref name="session"/> is used transiently in the constructor.
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="storedGraph"></param>
+        /// <param name="registeredGraph"></param>
+        public Track(ISerializationSession session, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
+            : this(session, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
 
-        private Track(IInternalSession trackedSession, Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
+        public Track(ISerializationSession session, Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
-            this.trackedSession = trackedSession;
             this.registeredGraph = registeredGraph;
             OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
-            graph = registeredGraph.Deserialize(storedSerializedGraph, trackedSession);
+            graph = registeredGraph.Deserialize(storedSerializedGraph, session);
         }
 
         protected Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
@@ -85,14 +89,14 @@ namespace Stash.Engine.PersistenceEvents
                     .SelectMany(indices => indices);
         }
 
-        public virtual void Complete(IStorageWork work)
+        public virtual void Complete(IStorageWork work, ISerializationSession session)
         {
-            CompleteInBackingStore(trackedGraph => work.UpdateGraph(trackedGraph));
+            CompleteInBackingStore(trackedGraph => work.UpdateGraph(trackedGraph), session);
         }
 
-        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction)
+        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction, ISerializationSession session)
         {
-            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph, trackedSession);
+            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph, session);
             CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
 
             if(CompletionHash.SequenceEqual(OriginalHash))
@@ -101,11 +105,6 @@ namespace Stash.Engine.PersistenceEvents
 
             var trackedGraph = new TrackedGraph(InternalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
             completionAction(trackedGraph);
-        }
-
-        public virtual PreviouslyEnrolledEvent SayWhatToDoWithPreviouslyEnrolledEvent(IPersistenceEvent @event)
-        {
-            return PreviouslyEnrolledEvent.ShouldBeRetained;
         }
     }
 }

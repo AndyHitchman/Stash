@@ -26,7 +26,7 @@ namespace Stash.Engine.Serializers.Binary
 
         public AggregateProxy(SerializationInfo info, StreamingContext context)
         {
-            internalId = new Guid(info.GetString("InternalId"));
+            internalId = new Guid(info.GetString(AggregateReferenceSurrogate.ReferenceInfoKey));
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -36,9 +36,9 @@ namespace Stash.Engine.Serializers.Binary
 
         public object GetRealObject(StreamingContext context)
         {
-            var session = context.Context as IInternalSession;
+            var session = context.Context as ISerializationSession;
             if(session == null)
-                throw new ArgumentException("context does not contain an instance of IInternalSession");
+                throw new ArgumentException("context does not contain an instance of ISerializationSession");
 
             return session.TrackedGraphForInternalId(internalId);
         }

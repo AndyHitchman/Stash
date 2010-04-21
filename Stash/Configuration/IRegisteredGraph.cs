@@ -39,7 +39,7 @@ namespace Stash.Configuration
 
         IRegistry Registry { get; }
 
-        object Deserialize(IEnumerable<byte> serializedGraph, IInternalSession session);
-        IEnumerable<byte> Serialize(object graph, IInternalSession session);
+        object Deserialize(IEnumerable<byte> serializedGraph, ISerializationSession session);
+        IEnumerable<byte> Serialize(object graph, ISerializationSession session);
     }
 }

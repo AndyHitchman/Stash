@@ -39,5 +39,12 @@ namespace Stash
         /// </summary>
         /// <returns></returns>
         IInternalSession Internalize();
+
+        /// <summary>
+        /// Persist a graph of type <typeparamref name="TGraph"/>.
+        /// </summary>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph"></param>
+        void Endure<TGraph>(TGraph graph);
     }
 }

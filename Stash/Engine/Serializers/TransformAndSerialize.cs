@@ -29,12 +29,12 @@ namespace Stash.Engine.Serializers
         public ITransformer<TGraph, TTransform> Transformer { get; private set; }
         public ISerializer<TTransform> Serializer { get; private set; }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, IInternalSession session)
+        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
             return Transformer.TransformUp(Serializer.Deserialize(bytes, session));
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, IInternalSession session)
+        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
             return Serializer.Serialize(Transformer.TransformDown(graph), session);
         }

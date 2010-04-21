@@ -27,43 +27,41 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using Engine.Serializers.Binary;
     using NUnit.Framework;
     using Support;
-
-
-
-    /// <summary>
-    /// Here is a simple object graph (a class with members of arbitrary depth) that we want to persist.
-    /// </summary>
-    [Serializable]
-    public class Customer
-    {
-        public Customer()
-        {
-            Contacts = new List<Contact>();
-        }
-
-        public int Number { get; set; }
-        public string Name { get; set; }
-        public IList<Contact> Contacts { get; private set; }
-    }
-
-    /// <summary>
-    /// <see cref="Customer">Customers</see> can have multiple contacts. We're just assuming these are people.
-    /// </summary>
-    [Serializable]
-    public class Contact
-    {
-        public string GivenName { get; set; }
-        public string Initial { get; set; }
-        public string FamilyName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-    }
-
-
     
     
     public class Ch2__The_Stashed_Set : Chapter
     {
         //Note that these are NOT unit tests. The order of execution is significant
+
+
+        /// <summary>
+        /// Here is a simple object graph (a class with members of arbitrary depth) that we want to persist.
+        /// </summary>
+        [Serializable]
+        public class Customer
+        {
+            public Customer()
+            {
+                Contacts = new List<Contact>();
+            }
+
+            public int Number { get; set; }
+            public string Name { get; set; }
+            public IList<Contact> Contacts { get; private set; }
+        }
+
+        /// <summary>
+        /// <see cref="Customer">Customers</see> can have multiple contacts. We're just assuming these are people.
+        /// </summary>
+        [Serializable]
+        public class Contact
+        {
+            public string GivenName { get; set; }
+            public string Initial { get; set; }
+            public string FamilyName { get; set; }
+            public DateTime DateOfBirth { get; set; }
+        }
+
 
 
         private ISession session;
