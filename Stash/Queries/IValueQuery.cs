@@ -20,6 +20,5 @@ namespace Stash.Queries
 
     public interface IValueQuery<TKey> : IQuery where TKey : IEquatable<TKey>
     {
-        TKey Key { get; }
     }
 }

@@ -158,7 +158,7 @@ namespace Stash.Queries
         /// <typeparam name="TKey"></typeparam>
         /// <param name="set"></param>
         /// <returns></returns>
-        public INotAnyOfQuery<TKey> NotAllOf<TKey>(IEnumerable<TKey> set)
+        public INotAllOfQuery<TKey> NotAllOf<TKey>(IEnumerable<TKey> set)
             where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             return queryFactory.NotAllOf(registry.GetIndexerFor<TIndex>(), set);

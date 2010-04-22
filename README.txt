@@ -13,6 +13,8 @@ Improvement in the pipeline are:
   * Have queries work over the current session as well as the backing store.
   * Implement Azure Table Storage backing store (possibly build on Lokad.Cloud).
   * Look at other potential backing stores (e.g. Lucene.Net, ESENT, SQLServer).
+  * Create a Linq provider for StashedSet.
+  * Finish the implementation of Map/Reduce.
   * Implement BSON and JSON serialisers.
   * Implement web server to serve graphs/documents directly over HTTP using a RESTful API.
   * Build a meaningful example application.

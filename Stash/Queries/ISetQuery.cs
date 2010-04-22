@@ -21,6 +21,5 @@ namespace Stash.Queries
 
     public interface ISetQuery<TKey> : IQuery where TKey : IEquatable<TKey>
     {
-        IEnumerable<TKey> Set { get; }
     }
 }

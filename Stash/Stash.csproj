@@ -87,6 +87,13 @@
     <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
+    <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
+    <Compile Include="Engine\Partitioning\IPartitioningQueryFactory.cs" />
+    <Compile Include="Engine\Partitioning\PartitionedOperator.cs" />
+    <Compile Include="Engine\Partitioning\PartitionedQuery.cs" />
+    <Compile Include="Engine\Partitioning\IPartition.cs" />
+    <Compile Include="Engine\Partitioning\PartitionedQuery`1.cs" />
+    <Compile Include="Engine\Partitioning\PartitioningQueryFactory.cs" />
     <Compile Include="Engine\SerializationSession.cs" />
     <Compile Include="Engine\Serializers\Binary\AggregateRootSurrogate.cs" />
     <Compile Include="LinqExtensions.cs" />
@@ -242,6 +249,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Stash.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Engine\TrackedQueries\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

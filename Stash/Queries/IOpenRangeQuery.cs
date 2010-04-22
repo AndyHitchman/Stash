@@ -20,6 +20,5 @@ namespace Stash.Queries
 
     public interface IOpenRangeQuery<TKey> : IQuery where TKey : IComparable<TKey>
     {
-        TKey Key { get; }
     }
 }

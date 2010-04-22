@@ -21,6 +21,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
     using Configuration;
     using Engine;
     using Engine.PersistenceEvents;
+    using Queries;
 
     public class StandInInternalSession : InternalSession
     {

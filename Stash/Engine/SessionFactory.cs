@@ -34,7 +34,7 @@ namespace Stash.Engine
         /// <returns></returns>
         public ISession GetSession()
         {
-            return new InternalSession(registry);
+            return new InternalSession(registry, registry.BackingStore);
         }
     }
 }
