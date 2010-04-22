@@ -5,18 +5,13 @@ namespace Stash.Engine.Partitioning
     using Configuration;
     using Queries;
 
-    public class PartitioningQueryFactory : IPartitioningQueryFactory
+    public class PartitioningQueryFactory : IQueryFactory
     {
         private readonly IDictionary<IPartition, IQueryFactory> partitionedQueryFactories;
 
-        public PartitioningQueryFactory()
+        public PartitioningQueryFactory(IDictionary<IPartition, IQueryFactory> partitionedQueryFactories)
         {
-            partitionedQueryFactories = new Dictionary<IPartition, IQueryFactory>();
-        }
-
-        public void AddPartition(IPartition partition, IQueryFactory partitionsQueryFactory)
-        {
-            partitionedQueryFactories.Add(partition, partitionsQueryFactory);
+            this.partitionedQueryFactories = partitionedQueryFactories;
         }
 
         public IAllOfQuery<TKey> AllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>

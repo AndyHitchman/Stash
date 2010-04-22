@@ -70,6 +70,7 @@
     <Compile Include="BackingStore\BDB\BerkeleyQueries\StartsWithQuery.cs" />
     <Compile Include="BackingStore\BDB\BerkeleyQueries\IsIndexedQuery.cs" />
     <Compile Include="BackingStore\BDB\DefaultBerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="BackingStore\BDB\PartitionedBerkeleyBackingStore.cs" />
     <Compile Include="Configuration\IRegisteredGraph.cs" />
     <Compile Include="Configuration\IRegisteredGraph`1.cs" />
     <Compile Include="Configuration\IRegisteredIndexer.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
     <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
-    <Compile Include="Engine\Partitioning\IPartitioningQueryFactory.cs" />
+    <Compile Include="Engine\Partitioning\PartitioningBackingStore.cs" />
     <Compile Include="Engine\Partitioning\PartitionedOperator.cs" />
     <Compile Include="Engine\Partitioning\PartitionedQuery.cs" />
     <Compile Include="Engine\Partitioning\IPartition.cs" />

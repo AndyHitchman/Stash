@@ -24,52 +24,57 @@
 
         INotAllOfQuery<TKey> IComplementaryQuery<INotAllOfQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<INotAllOfQuery<TKey>>,INotAllOfQuery<TKey>>);
         }
 
         INotAnyOfQuery<TKey> IComplementaryQuery<INotAnyOfQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<INotAnyOfQuery<TKey>>, INotAnyOfQuery<TKey>>);
         }
 
         IOutsideQuery<TKey> IComplementaryQuery<IOutsideQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IOutsideQuery<TKey>>, IOutsideQuery<TKey>>);
         }
 
         INotEqualToQuery<TKey> IComplementaryQuery<INotEqualToQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<INotEqualToQuery<TKey>>, INotEqualToQuery<TKey>>);
         }
 
         ILessThanEqualQuery<TKey> IComplementaryQuery<ILessThanEqualQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<ILessThanEqualQuery<TKey>>, ILessThanEqualQuery<TKey>>);
         }
 
         ILessThanQuery<TKey> IComplementaryQuery<ILessThanQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<ILessThanQuery<TKey>>, ILessThanQuery<TKey>>);
         }
 
         IEqualToQuery<TKey> IComplementaryQuery<IEqualToQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IEqualToQuery<TKey>>, IEqualToQuery<TKey>>);
         }
 
         IAllOfQuery<TKey> IComplementaryQuery<IAllOfQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IAllOfQuery<TKey>>, IAllOfQuery<TKey>>);
         }
 
         IGreaterThanQuery<TKey> IComplementaryQuery<IGreaterThanQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IGreaterThanQuery<TKey>>, IGreaterThanQuery<TKey>>);
         }
 
         IGreaterThanEqualQuery<TKey> IComplementaryQuery<IGreaterThanEqualQuery<TKey>>.GetComplementaryQuery()
         {
-            throw new NotImplementedException();
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IGreaterThanEqualQuery<TKey>>, IGreaterThanEqualQuery<TKey>>);
+        }
+
+        private TQuery complementQuery<TComplement,TQuery>(IQueryFactory qf) where TComplement : IComplementaryQuery<TQuery> where TQuery : IQuery
+        {
+            return ((TComplement)GetPartitionedQuery(qf)).GetComplementaryQuery();
         }
     }
 }

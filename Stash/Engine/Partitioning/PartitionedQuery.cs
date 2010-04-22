@@ -22,18 +22,18 @@ namespace Stash.Engine.Partitioning
 
     public class PartitionedQuery : IPartitionedQuery, IIsIndexedQuery, IStartsWithQuery
     {
-        private readonly IDictionary<IPartition, IQueryFactory> partitionedQueryFactories;
-        private readonly Func<IQueryFactory, IQuery> getPartitionedQuery;
+        protected IDictionary<IPartition, IQueryFactory> PartitionedQueryFactories { get; private set; }
+        protected Func<IQueryFactory, IQuery> GetPartitionedQuery { get; private set; }
 
         public PartitionedQuery(IDictionary<IPartition, IQueryFactory> partitionedQueryFactories, Func<IQueryFactory, IQuery> getPartitionedQuery)
         {
-            this.partitionedQueryFactories = partitionedQueryFactories;
-            this.getPartitionedQuery = getPartitionedQuery;
+            PartitionedQueryFactories = partitionedQueryFactories;
+            GetPartitionedQuery = getPartitionedQuery;
         }
 
         public IQuery GetQueryForPartition(IPartition partition)
         {
-            return getPartitionedQuery(partitionedQueryFactories[partition]);
+            return GetPartitionedQuery(PartitionedQueryFactories[partition]);
         }
     }
 }
