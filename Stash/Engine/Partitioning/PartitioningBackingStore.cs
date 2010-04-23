@@ -25,7 +25,7 @@ namespace Stash.Engine.Partitioning
 
     /// <summary>
     ///   The partitioned backing store allows multiple backing stores to share resposibility for persisting data.
-    ///   Each operation on the backing store is blindly dispatched to each backing store. These backing stores
+    ///   Each operation on the backing store is blindly dispatched to each patitioned backing store. These backing stores
     ///   can either execute the requested operation or attempt to determine whether they are responsible for any data
     ///   affected by the operation.
     /// </summary>
@@ -76,11 +76,16 @@ namespace Stash.Engine.Partitioning
 
         public IStoredGraph Get(Guid internalId)
         {
-            return
+            var storedGraph = 
                 collectFromPartitions(
                     (partition, backingStore) => backingStore.Get(internalId),
                     null,
                     (accumulator, partial) => accumulator ?? partial);
+
+            if (storedGraph == null)
+                throw new GraphForKeyNotFoundException(internalId, null);
+
+            return storedGraph;
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)

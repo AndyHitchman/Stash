@@ -6,7 +6,7 @@
 
     public class PartitionedOperator : PartitionedQuery, IUnionOperator, IIntersectOperator, INotOperator
     {
-        public PartitionedOperator(IDictionary<IPartition, IQueryFactory> partitionedQueryFactories, Func<IQueryFactory, IQuery> getPartitionedQuery)
+        public PartitionedOperator(Dictionary<IPartition, IQueryFactory> partitionedQueryFactories, Func<IQueryFactory, IQuery> getPartitionedQuery)
             : base(partitionedQueryFactories, getPartitionedQuery) {}
     }
 }

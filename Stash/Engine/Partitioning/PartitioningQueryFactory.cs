@@ -7,9 +7,9 @@ namespace Stash.Engine.Partitioning
 
     public class PartitioningQueryFactory : IQueryFactory
     {
-        private readonly IDictionary<IPartition, IQueryFactory> partitionedQueryFactories;
+        private readonly Dictionary<IPartition, IQueryFactory> partitionedQueryFactories;
 
-        public PartitioningQueryFactory(IDictionary<IPartition, IQueryFactory> partitionedQueryFactories)
+        public PartitioningQueryFactory(Dictionary<IPartition, IQueryFactory> partitionedQueryFactories)
         {
             this.partitionedQueryFactories = partitionedQueryFactories;
         }

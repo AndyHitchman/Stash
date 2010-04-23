@@ -89,6 +89,8 @@
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
     <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
+    <Compile Include="Engine\Partitioning\PartitionedBackingStore.cs" />
+    <Compile Include="Engine\Partitioning\PartitionedStorageWork.cs" />
     <Compile Include="Engine\Partitioning\PartitioningBackingStore.cs" />
     <Compile Include="Engine\Partitioning\PartitionedOperator.cs" />
     <Compile Include="Engine\Partitioning\PartitionedQuery.cs" />
