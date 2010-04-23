@@ -18,7 +18,6 @@ namespace Stash.Engine.Partitioning
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using Queries;
 
     public class PartitionedQuery : IPartitionedQuery, IIsIndexedQuery, IStartsWithQuery

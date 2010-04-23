@@ -5,6 +5,9 @@ namespace Stash.Engine.Partitioning
     using Configuration;
     using Queries;
 
+    /// <summary>
+    /// The partitioning query factory build partitioned queries, which defer execution.
+    /// </summary>
     public class PartitioningQueryFactory : IQueryFactory
     {
         private readonly Dictionary<IPartition, IQueryFactory> partitionedQueryFactories;
