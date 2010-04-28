@@ -36,14 +36,14 @@ namespace Stash
         /// This is everything in the backing store.
         /// </summary>
         /// <returns></returns>
-        StashedSet<object> GetEntireStash();
+        IStashedSet<object> GetEntireStash();
 
         /// <summary>
         /// Returns a <see cref="StashedSet{TGraph}"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
-        StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class;
+        IStashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class;
 
         /// <summary>
         /// Get the <see cref="IInternalSession"/> used by Stash. Not for external use.

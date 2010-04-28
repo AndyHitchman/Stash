@@ -154,7 +154,7 @@ namespace Stash.Engine
             }
         }
 
-        public StashedSet<object> GetEntireStash()
+        public IStashedSet<object> GetEntireStash()
         {
             return
                 new StashedSet<object>(
@@ -164,7 +164,7 @@ namespace Stash.Engine
                     backingStore.QueryFactory);
         }
 
-        public StashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
+        public IStashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
         {
             return
                 new StashedSet<TGraph>(

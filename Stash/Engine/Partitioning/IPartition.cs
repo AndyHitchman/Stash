@@ -1,4 +1,12 @@
 ﻿namespace Stash.Engine.Partitioning
 {
-    public interface IPartition {}
+    using System;
+    using System.Collections.Generic;
+    using BackingStore;
+
+    public interface IPartition
+    {
+        IEnumerable<ISegment> SegmentsServed { get; }
+        bool IsResponsibleForGraph(Guid internalId);
+    }
 }

@@ -81,7 +81,7 @@ namespace Stash.Engine.Partitioning
             underlyingBackingStore.InTransactionDo(
                 work =>
                     {
-                        var partitionedWork = new PartitionedStorageWork(work);
+                        var partitionedWork = new PartitionedStorageWork(Partition, work);
                         storageWorkActions(partitionedWork);
                     });
         }

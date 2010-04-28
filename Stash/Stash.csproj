@@ -89,6 +89,7 @@
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
     <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
+    <Compile Include="Engine\Partitioning\ISegment.cs" />
     <Compile Include="Engine\Partitioning\PartitionedBackingStore.cs" />
     <Compile Include="Engine\Partitioning\PartitionedStorageWork.cs" />
     <Compile Include="Engine\Partitioning\PartitioningBackingStore.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Engine\Partitioning\IPartition.cs" />
     <Compile Include="Engine\Partitioning\PartitionedQuery`1.cs" />
     <Compile Include="Engine\Partitioning\PartitioningQueryFactory.cs" />
+    <Compile Include="Engine\Partitioning\PartitioningStrategy.cs" />
     <Compile Include="Engine\SerializationSession.cs" />
     <Compile Include="Engine\Serializers\Binary\AggregateRootSurrogate.cs" />
     <Compile Include="LinqExtensions.cs" />
