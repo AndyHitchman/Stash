@@ -38,35 +38,35 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         protected override void Given()
         {
             lessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer, "ml")},
                 RegisteredGraph
                 );
 
             lowerTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer, "mm")},
                 RegisteredGraph
                 );
 
             insideTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer, "mma")},
                 RegisteredGraph
                 );
 
             upperTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer, "mmz")},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer, "mn")},
                 RegisteredGraph

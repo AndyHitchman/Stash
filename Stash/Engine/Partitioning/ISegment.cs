@@ -11,6 +11,6 @@ namespace Stash.Engine.Partitioning
     {
         IPartition MappedPartition { get; }
         int SegmentNumber { get; }
-        bool IsResponsibleForGraph(Guid internalId);
+        bool IsResponsibleForGraph(InternalId internalId);
     }
 }

@@ -27,13 +27,13 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     public class when_deserializing_an_aggregate_with_circular_references : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>
     {
         private GraphB graphB;
-        private Guid internalIdOfA;
+        private InternalId internalIdOfA;
         private ISerializationSession mockSession;
         private GraphB actualB;
         private IRegistry mockRegistry;
         private GraphA graphA;
         private IEnumerable<byte> bytes;
-        private Guid internalIdOfB;
+        private InternalId internalIdOfB;
 
         protected override void Given()
         {
@@ -41,8 +41,8 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
             graphB = new GraphB {AString = "Jane", GraphA = graphA};
             graphA.GraphB = graphB;
 
-            internalIdOfA = new Guid("CFEBF6B6-FB86-49E0-A27D-9F63319AAA2D");
-            internalIdOfB = new Guid("7E3BF6C5-82FE-47A3-94D2-4373F7FCFDFA");
+            internalIdOfA = new InternalId(new Guid("CFEBF6B6-FB86-49E0-A27D-9F63319AAA2D"));
+            internalIdOfB = new InternalId(new Guid("7E3BF6C5-82FE-47A3-94D2-4373F7FCFDFA"));
 
             mockRegistry = MockRepository.GenerateMock<IRegistry>();
             mockRegistry.Stub(_ => _.IsManagingGraphTypeOrAncestor(typeof(GraphA))).Return(true);

@@ -32,7 +32,7 @@ namespace Stash.Engine.PersistenceEvents
         /// <summary>
         /// The internal id of the graph affected by the persistence event
         /// </summary>
-        Guid InternalId { get; }
+        InternalId InternalId { get; }
 
         /// <summary>
         /// Complete all work for the persistence event.

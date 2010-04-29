@@ -20,6 +20,7 @@ namespace Stash.Specifications.Support
     using System.Collections.Generic;
     using BackingStore;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class DummyBackingStore : IBackingStore
@@ -44,12 +45,17 @@ namespace Stash.Specifications.Support
             throw new NotImplementedException();
         }
 
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             throw new NotImplementedException();
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(InternalId internalId)
         {
             throw new NotImplementedException();
         }

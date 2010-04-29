@@ -21,26 +21,27 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using System.Linq;
     using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyQueries;
+    using Engine;
     using Rhino.Mocks;
     using Support;
 
     public class when_executing_union_inside_intersect : Specification
     {
-        private IEnumerable<Guid> actual;
+        private IEnumerable<InternalId> actual;
         private IBerkeleyQuery lhs;
         private IBerkeleyQuery rhs;
         private UnionOperator sut;
-        private Guid intersectingGuid1;
-        private Guid[] joinConstraint;
-        private Guid intersectingGuid2;
+        private InternalId intersectingGuid1;
+        private InternalId[] joinConstraint;
+        private InternalId intersectingGuid2;
 
         protected override void Given()
         {
             lhs = MockRepository.GenerateStub<IBerkeleyQuery>();
             rhs = MockRepository.GenerateStub<IBerkeleyQuery>();
 
-            intersectingGuid1 = Guid.NewGuid();
-            intersectingGuid2 = Guid.NewGuid();
+            intersectingGuid1 = new InternalId(Guid.NewGuid());
+            intersectingGuid2 = new InternalId(Guid.NewGuid());
 
             lhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(new[] {intersectingGuid1});
             rhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(new[] {intersectingGuid2});
@@ -49,7 +50,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
 
             joinConstraint = new[]
                 {
-                    intersectingGuid1, Guid.NewGuid(), intersectingGuid2
+                    intersectingGuid1, new InternalId(Guid.NewGuid()), intersectingGuid2
                 };
         }
 

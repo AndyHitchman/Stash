@@ -26,17 +26,17 @@ namespace Stash.Engine
     {
         public Func<IEnumerable<IPersistenceEvent>> GetCurrentPersistenceEvents { get; private set; }
         public IInternalSession InternalSession { get; private set; }
-        public Dictionary<Guid, object> ActivelyDeserialising { get; set; }
+        public Dictionary<InternalId, object> ActivelyDeserialising { get; set; }
 
         public SerializationSession(Func<IEnumerable<IPersistenceEvent>> getCurrentPersistenceEvents, IInternalSession internalSession)
         {
             GetCurrentPersistenceEvents = getCurrentPersistenceEvents;
             InternalSession = internalSession;
-            ActivelyDeserialising = new Dictionary<Guid, object>();
+            ActivelyDeserialising = new Dictionary<InternalId, object>();
         }
 
 
-        public bool GraphIsTracked(Guid internalId)
+        public bool GraphIsTracked(InternalId internalId)
         {
             return
                 GetCurrentPersistenceEvents()
@@ -45,7 +45,7 @@ namespace Stash.Engine
 
         }
 
-        public void RecordActiveDeserialization(Guid internalId, object graph)
+        public void RecordActiveDeserialization(InternalId internalId, object graph)
         {
             ActivelyDeserialising.Add(internalId, graph);
         }
@@ -57,7 +57,7 @@ namespace Stash.Engine
         /// <param name = "internalId"></param>
         /// <returns></returns>
         /// <exception cref = "GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        public object TrackedGraphForInternalId(Guid internalId)
+        public object TrackedGraphForInternalId(InternalId internalId)
         {
             if(ActivelyDeserialising.ContainsKey(internalId))
                 return ActivelyDeserialising[internalId];
@@ -80,10 +80,9 @@ namespace Stash.Engine
         /// </summary>
         /// <param name = "graph"></param>
         /// <returns></returns>
-        public Guid? InternalIdOfTrackedGraph(object graph)
+        public InternalId InternalIdOfTrackedGraph(object graph)
         {
-            var guid = GetCurrentPersistenceEvents().Where(_ => ReferenceEquals(_.UntypedGraph, graph)).Select(_ => _.InternalId).FirstOrDefault();
-            return guid == Guid.Empty ? (Guid?)null : guid;
+            return GetCurrentPersistenceEvents().Where(_ => ReferenceEquals(_.UntypedGraph, graph)).Select(_ => _.InternalId).FirstOrDefault();
         }
     }
 }

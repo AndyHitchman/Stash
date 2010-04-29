@@ -18,6 +18,7 @@ namespace Stash.Specifications.for_engine.for_partitioning.given_partitioned_sto
 {
     using System;
     using BackingStore;
+    using Engine;
     using Engine.Partitioning;
     using Rhino.Mocks;
     using Support;
@@ -33,7 +34,7 @@ namespace Stash.Specifications.for_engine.for_partitioning.given_partitioned_sto
 
         protected override void Given()
         {
-            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<Guid>.Is.Anything)).Return(true);
+            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<InternalId>.Is.Anything)).Return(true);
         }
 
         protected override void When()

@@ -28,24 +28,24 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     public class when_executing_all_of_inside_intersect : with_int_indexer
     {
         private IBerkeleyQuery query;
-        private IEnumerable<Guid> actual;
+        private IEnumerable<InternalId> actual;
         private TrackedGraph firstMatchingTrackedGraph;
         private TrackedGraph secondMatchingTrackedGraph;
         private TrackedGraph matchingButExcludedByIntersectTrackedGraph;
         private TrackedGraph nonMatchingTrackedGraph;
-        private Guid[] joinConstraint;
+        private InternalId[] joinConstraint;
 
         protected override void Given()
         {
             firstMatchingTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101), new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             secondMatchingTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {new ProjectedIndex<int>(RegisteredIndexer, 99), new ProjectedIndex<int>(RegisteredIndexer, 101), new ProjectedIndex<int>(RegisteredIndexer, 100)},
@@ -53,14 +53,14 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                 );
 
             matchingButExcludedByIntersectTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100), new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph
                 );
 
             nonMatchingTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph

@@ -19,11 +19,12 @@ namespace Stash.BackingStore
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Engine;
 
     public class TrackedGraph : ITrackedGraph
     {
         public TrackedGraph(
-            Guid internalId,
+            InternalId internalId,
             IEnumerable<byte> graph,
             IEnumerable<IProjectedIndex> projectedIndices,
             IRegisteredGraph registeredGraph)
@@ -53,7 +54,7 @@ namespace Stash.BackingStore
 
         public IRegisteredGraph RegisteredGraph { get; private set; }
 
-        public Guid InternalId { get; private set; }
+        public InternalId InternalId { get; private set; }
 
         public IEnumerable<byte> SerialisedGraph { get; private set; }
     }

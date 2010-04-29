@@ -19,13 +19,14 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System;
     using System.Collections.Generic;
     using BerkeleyDB;
+    using Engine;
     using Queries;
 
     public interface IBerkeleyQuery : IQuery
     {
         QueryCostScale QueryCostScale { get; }
         double EstimatedQueryCost(Transaction transaction);
-        IEnumerable<Guid> Execute(Transaction transaction);
-        IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint);
+        IEnumerable<InternalId> Execute(Transaction transaction);
+        IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint);
     }
 }

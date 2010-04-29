@@ -19,17 +19,18 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using System;
     using System.Collections.Generic;
     using BackingStore.BDB.BerkeleyQueries;
+    using Engine;
     using Rhino.Mocks;
     using Support;
 
     public class when_executing_intersect_two_queries : Specification
     {
-        private IEnumerable<Guid> actual;
-        private Guid commonGuid;
+        private IEnumerable<InternalId> actual;
+        private InternalId commonGuid;
         private IBerkeleyQuery lhs;
-        private IEnumerable<Guid> lhsSet;
+        private InternalId[] lhsSet;
         private IBerkeleyQuery rhs;
-        private IEnumerable<Guid> rhsSet;
+        private InternalId[] rhsSet;
         private IntersectOperator sut;
 
         protected override void Given()
@@ -37,9 +38,9 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             lhs = MockRepository.GenerateStub<IBerkeleyQuery>();
             rhs = MockRepository.GenerateStub<IBerkeleyQuery>();
 
-            commonGuid = Guid.NewGuid();
-            lhsSet = new[] {commonGuid, Guid.NewGuid()};
-            rhsSet = new[] {Guid.NewGuid(), commonGuid};
+            commonGuid = new InternalId(Guid.NewGuid());
+            lhsSet = new[] {commonGuid, new InternalId(Guid.NewGuid())};
+            rhsSet = new[] {new InternalId(Guid.NewGuid()), commonGuid};
 
             //A bit weak. We're not sure which side will execute first: The second to execute 
             //will call ExecuteInsideIntersect. Cheat by ignoring this and having the pair of methods

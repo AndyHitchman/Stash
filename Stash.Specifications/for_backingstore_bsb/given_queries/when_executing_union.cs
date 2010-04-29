@@ -20,16 +20,17 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore.BDB.BerkeleyQueries;
+    using Engine;
     using Rhino.Mocks;
     using Support;
 
     public class when_executing_union : Specification
     {
-        private IEnumerable<Guid> actual;
+        private IEnumerable<InternalId> actual;
         private IBerkeleyQuery lhs;
-        private IEnumerable<Guid> lhsSet;
+        private InternalId[] lhsSet;
         private IBerkeleyQuery rhs;
-        private IEnumerable<Guid> rhsSet;
+        private InternalId[] rhsSet;
         private UnionOperator sut;
 
         protected override void Given()
@@ -37,9 +38,9 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
             lhs = MockRepository.GenerateStub<IBerkeleyQuery>();
             rhs = MockRepository.GenerateStub<IBerkeleyQuery>();
 
-            var commonGuid = Guid.NewGuid();
-            lhsSet = new[] {commonGuid, Guid.NewGuid()};
-            rhsSet = new[] {Guid.NewGuid(), commonGuid};
+            var commonGuid = new InternalId(Guid.NewGuid());
+            lhsSet = new[] {commonGuid, new InternalId(Guid.NewGuid())};
+            rhsSet = new[] {new InternalId(Guid.NewGuid()), commonGuid};
 
             lhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(lhsSet);
             rhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(rhsSet);

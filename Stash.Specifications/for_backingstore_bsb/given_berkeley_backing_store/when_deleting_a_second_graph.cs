@@ -45,7 +45,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
             firstTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
@@ -55,7 +55,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 );
 
             secondTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {

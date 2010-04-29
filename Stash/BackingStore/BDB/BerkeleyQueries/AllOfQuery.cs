@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class AllOfQuery<TKey> : IBerkeleyIndexQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -51,18 +52,18 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return (double)QueryCostScale * Set.Count();
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             //The seed of the aggregate is the matches for the first element of the set. The remaineder of the set
             //is passed as the comparison set.
             var matchingFirst = IndexMatching.GetMatching(managedIndex, transaction, Set.First());
-            return execute(managedIndex, transaction, matchingFirst, Set.Skip(1));
+            return execute(transaction, matchingFirst, Set.Skip(1));
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             //The seed of the aggregate is the join constraint. The full set is passed as the comparison set.
-            return execute(managedIndex, transaction, joinConstraint, Set);
+            return execute(transaction, joinConstraint, Set);
         }
 
         public INotAllOfQuery<TKey> GetComplementaryQuery()
@@ -70,7 +71,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return new NotAllOfQuery<TKey>(managedIndex, Indexer, Set);
         }
 
-        private IEnumerable<Guid> execute(ManagedIndex managedIndex, Transaction transaction, IEnumerable<Guid> joinMatching, IEnumerable<TKey> comparisonSubset)
+        private IEnumerable<InternalId> execute(Transaction transaction, IEnumerable<InternalId> joinMatching, IEnumerable<TKey> comparisonSubset)
         {
             //If the number of graphs in the constraint is less than the size of the set,
             //then it should be quicker to hit the reverse index for all graphs and eliminate,

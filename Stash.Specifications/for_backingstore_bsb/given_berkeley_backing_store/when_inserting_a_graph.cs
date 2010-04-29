@@ -45,7 +45,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
             trackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(firstRegisteredIndexer, 1), new ProjectedIndex<string>(secondRegisteredIndexer, "wibble")},
                 registeredGraph
@@ -85,13 +85,13 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.First())
-                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.Skip(1).First())
-                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.Skip(2).First())
-                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
         }
 
         [Then]
@@ -101,7 +101,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 
             Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index
                 .ValueForKey(((int)projectedIndex.UntypedKey).AsByteArray())
-                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
         }
 
         [Then]
@@ -111,7 +111,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 
             Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index
                 .ValueForKey(((string)projectedIndex.UntypedKey).AsByteArray())
-                .ShouldEqual(trackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
         }
     }
 }

@@ -22,11 +22,17 @@ namespace Stash.Engine.Serializers.Binary
     [Serializable]
     public class AggregateProxy : ISerializable, IObjectReference
     {
-        private readonly Guid internalId;
+        private readonly InternalId internalId;
 
         public AggregateProxy(SerializationInfo info, StreamingContext context)
         {
-            internalId = new Guid(info.GetString(AggregateReferenceSurrogate.ReferenceInfoKey));
+            //Return a reference to a tracked object if available.
+            var rawInternalId = info.GetValue(AggregateReferenceSurrogate.ReferenceInfoKey, typeof(InternalId));
+
+            if (rawInternalId == null)
+                throw new InvalidOperationException("Expected SerializationInfo to contain an internal id for an aggregate");
+
+            internalId = (InternalId)rawInternalId;
         }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)

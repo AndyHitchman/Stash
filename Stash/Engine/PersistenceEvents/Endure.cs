@@ -22,7 +22,7 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Endure : Track, IEndure
     {
-        public Endure(IInternalSession trackedSession, object graph, IRegisteredGraph registeredGraph) : base(Guid.NewGuid(), graph, registeredGraph) {}
+        public Endure(IInternalSession trackedSession, object graph, IRegisteredGraph registeredGraph) : base(new InternalId(Guid.NewGuid()), graph, registeredGraph) {}
 
         public override void Complete(IStorageWork work, ISerializationSession session)
         {

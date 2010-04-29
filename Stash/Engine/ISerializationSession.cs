@@ -9,7 +9,7 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="graph"></param>
         /// <returns></returns>
-        Guid? InternalIdOfTrackedGraph(object graph);
+        InternalId InternalIdOfTrackedGraph(object graph);
 
 
         /// <summary>
@@ -18,9 +18,9 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="internalId"></param>
         /// <returns></returns>
-        object TrackedGraphForInternalId(Guid internalId);
+        object TrackedGraphForInternalId(InternalId internalId);
 
-        bool GraphIsTracked(Guid internalId);
-        void RecordActiveDeserialization(Guid internalId, object graph);
+        bool GraphIsTracked(InternalId internalId);
+        void RecordActiveDeserialization(InternalId internalId, object graph);
     }
 }

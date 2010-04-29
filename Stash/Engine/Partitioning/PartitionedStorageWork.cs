@@ -22,7 +22,7 @@ namespace Stash.Engine.Partitioning
             return underlyingStorageWork.Count(query);
         }
 
-        public void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph)
+        public void DeleteGraph(InternalId internalId, IRegisteredGraph registeredGraph)
         {
             if (!partition.IsResponsibleForGraph(internalId))
                 return;
@@ -35,7 +35,12 @@ namespace Stash.Engine.Partitioning
             return underlyingStorageWork.Get(query);
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            return underlyingStorageWork.Matching(query);
+        }
+
+        public IStoredGraph Get(InternalId internalId)
         {
             if (!partition.IsResponsibleForGraph(internalId))
                 return null;

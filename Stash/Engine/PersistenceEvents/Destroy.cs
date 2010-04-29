@@ -25,7 +25,7 @@ namespace Stash.Engine.PersistenceEvents
         private readonly object graph;
         private readonly IRegisteredGraph registeredGraph;
 
-        public Destroy(Guid internalId, object graph, IRegisteredGraph registeredGraph)
+        public Destroy(InternalId internalId, object graph, IRegisteredGraph registeredGraph)
         {
             InternalId = internalId;
             this.graph = graph;
@@ -37,7 +37,7 @@ namespace Stash.Engine.PersistenceEvents
             get { return graph; }
         }
 
-        public Guid InternalId { get; private set; }
+        public InternalId InternalId { get; private set; }
 
         public void Complete(IStorageWork work, ISerializationSession session)
         {

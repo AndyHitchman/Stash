@@ -49,7 +49,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             var matchingAny = new AnyOfQuery<TKey>(managedIndex, Indexer, Set).Execute(transaction).Materialize();
 
@@ -58,8 +58,8 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             {
                 while(cursor.MoveNextUnique())
                 {
-                    if(!matchingAny.Any(matchingKey => cursor.Current.Key.Data.AsGuid() == matchingKey))
-                        yield return cursor.Current.Key.Data.AsGuid();
+                    if(!matchingAny.Any(matchingKey => cursor.Current.Key.Data.AsInternalId() == matchingKey))
+                        yield return cursor.Current.Key.Data.AsInternalId();
                 }
             }
             finally
@@ -68,17 +68,15 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             if(joinConstraint.Count() > EstimatedQueryCost(transaction))
                 return Execute(transaction);
 
-            var comparer = managedIndex.Comparer;
-
             return
                 joinConstraint.Except(
                     joinConstraint.Aggregate(
-                        Enumerable.Empty<Guid>(),
+                        Enumerable.Empty<InternalId>(),
                         (matching, joinMatched) => matching.Union(
                             IndexMatching
                                 .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)

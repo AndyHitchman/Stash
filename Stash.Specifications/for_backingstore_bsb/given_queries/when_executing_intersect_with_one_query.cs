@@ -19,21 +19,22 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     using System;
     using System.Collections.Generic;
     using BackingStore.BDB.BerkeleyQueries;
+    using Engine;
     using Rhino.Mocks;
     using Support;
 
     public class when_executing_intersect_with_one_query : Specification
     {
-        private IEnumerable<Guid> actual;
+        private IEnumerable<InternalId> actual;
         private IBerkeleyQuery lhs;
-        private IEnumerable<Guid> lhsSet;
+        private InternalId[] lhsSet;
         private IntersectOperator sut;
 
         protected override void Given()
         {
             lhs = MockRepository.GenerateStub<IBerkeleyQuery>();
 
-            lhsSet = new[] {Guid.NewGuid(), Guid.NewGuid()};
+            lhsSet = new[] {new InternalId(Guid.NewGuid()), new InternalId(Guid.NewGuid())};
 
             lhs.Stub(_ => _.Execute(null)).IgnoreArguments().Return(lhsSet);
             lhs.Stub(_ => _.ExecuteInsideIntersect(null, null)).IgnoreArguments().Return(lhsSet);

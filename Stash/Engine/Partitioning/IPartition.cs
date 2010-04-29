@@ -7,6 +7,6 @@
     public interface IPartition
     {
         IEnumerable<ISegment> SegmentsServed { get; }
-        bool IsResponsibleForGraph(Guid internalId);
+        bool IsResponsibleForGraph(InternalId internalId);
     }
 }

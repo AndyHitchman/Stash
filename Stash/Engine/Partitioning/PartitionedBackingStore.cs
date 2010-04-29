@@ -47,6 +47,11 @@ namespace Stash.Engine.Partitioning
             underlyingBackingStore.EnsureIndex(registeredIndexer);
         }
 
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             var storedGraphs = Enumerable.Empty<IStoredGraph>();
@@ -60,7 +65,7 @@ namespace Stash.Engine.Partitioning
             return storedGraphs;
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(InternalId internalId)
         {
             IStoredGraph storedGraph = null;
 

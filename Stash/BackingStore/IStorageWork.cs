@@ -19,6 +19,7 @@ namespace Stash.BackingStore
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Engine;
     using Queries;
 
     public interface IStorageWork
@@ -30,7 +31,7 @@ namespace Stash.BackingStore
         /// <returns></returns>
         int Count(IQuery query);
 
-        void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph);
+        void DeleteGraph(InternalId internalId, IRegisteredGraph registeredGraph);
 
         /// <summary>
         /// Find and return instances of graphs that match the given <paramref name="query"/>
@@ -40,11 +41,18 @@ namespace Stash.BackingStore
         IEnumerable<IStoredGraph> Get(IQuery query);
 
         /// <summary>
+        /// Find and return the <see cref="InternalId"/> of graphs that match the given <paramref name="query"/>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        IEnumerable<InternalId> Matching(IQuery query);
+
+        /// <summary>
         /// Get an instance of a graph by its <paramref name="internalId"/>.
         /// </summary>
         /// <param name="internalId"></param>
         /// <returns></returns>
-        IStoredGraph Get(Guid internalId);
+        IStoredGraph Get(InternalId internalId);
 
         /// <summary>
         /// Insert a tracked graph.

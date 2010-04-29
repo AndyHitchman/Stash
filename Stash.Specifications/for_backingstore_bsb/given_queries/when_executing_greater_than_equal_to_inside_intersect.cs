@@ -33,41 +33,41 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
         private IBerkeleyQuery query;
-        private IEnumerable<Guid> actual;
-        private Guid[] joinConstraint;
+        private IEnumerable<InternalId> actual;
+        private InternalId[] joinConstraint;
 
         protected override void Given()
         {
             lessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
                 RegisteredGraph
                 );
 
             secondLessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             equalToTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
                 RegisteredGraph
                 );
 
             secondGreaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 103)},
                 RegisteredGraph

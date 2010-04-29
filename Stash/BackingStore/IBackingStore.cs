@@ -19,6 +19,7 @@ namespace Stash.BackingStore
     using System;
     using System.Collections.Generic;
     using Configuration;
+    using Engine;
     using Queries;
 
     public interface IBackingStore
@@ -44,6 +45,13 @@ namespace Stash.BackingStore
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
 
         /// <summary>
+        /// Find and return the <see cref="InternalId"/> of graphs that match the given <paramref name="query"/>
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        IEnumerable<InternalId> Matching(IQuery query);
+
+        /// <summary>
         /// Find and return instances of graphs that match the given <paramref name="query"/>
         /// </summary>
         /// <param name="query"></param>
@@ -55,7 +63,7 @@ namespace Stash.BackingStore
         /// </summary>
         /// <param name="internalId"></param>
         /// <returns></returns>
-        IStoredGraph Get(Guid internalId);
+        IStoredGraph Get(InternalId internalId);
 
         /// <summary>
         /// Perform some <paramref name="storageWorkActions"/> inside a transaction.

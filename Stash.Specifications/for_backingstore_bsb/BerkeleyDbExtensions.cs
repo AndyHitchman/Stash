@@ -21,12 +21,13 @@ namespace Stash.Specifications.for_backingstore_bsb
     using System.Linq;
     using BackingStore.BDB;
     using BerkeleyDB;
+    using Engine;
     using NUnit.Framework;
     using Support;
 
     public static class BerkeleyDbExtensions
     {
-        public static void ShouldHaveKey(this HashDatabase store, Guid key)
+        public static void ShouldHaveKey(this HashDatabase store, InternalId key)
         {
             store.Exists(new DatabaseEntry(key.AsByteArray())).ShouldBeTrue();
         }
@@ -36,7 +37,7 @@ namespace Stash.Specifications.for_backingstore_bsb
             store.Exists(new DatabaseEntry(key)).ShouldBeTrue();
         }
 
-        public static void ShouldNotHaveKey(this HashDatabase store, Guid key)
+        public static void ShouldNotHaveKey(this HashDatabase store, InternalId key)
         {
             store.Exists(new DatabaseEntry(key.AsByteArray())).ShouldBeFalse();
         }
@@ -46,7 +47,7 @@ namespace Stash.Specifications.for_backingstore_bsb
             store.Exists(new DatabaseEntry(key)).ShouldBeFalse();
         }
 
-        public static byte[] ValueForKey(this HashDatabase store, Guid key)
+        public static byte[] ValueForKey(this HashDatabase store, InternalId key)
         {
             try
             {

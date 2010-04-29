@@ -49,7 +49,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), transaction);
             try
@@ -60,11 +60,11 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     var setKeysAsBytes = Set.Select(key => managedIndex.KeyAsByteArray(key)).Materialize();
                     do
                     {
-                        foreach(var guid in cursor.CurrentMultipleKey
+                        foreach(var internalId in cursor.CurrentMultipleKey
                             .Where(pair => !setKeysAsBytes.Any(setKey => pair.Value.Data.SequenceEqual(setKey)))
-                            .Select(pair => pair.Key.Data.AsGuid()))
+                            .Select(pair => pair.Key.Data.AsInternalId()))
                         {
-                            yield return guid;
+                            yield return internalId;
                         }
                     }
                     while(cursor.MoveNextMultipleKey(bufferSize));
@@ -76,7 +76,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             if(joinConstraint.Count() > EstimatedQueryCost(transaction))
                 return Execute(transaction);
@@ -85,7 +85,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
             return
                 joinConstraint.Aggregate(
-                    Enumerable.Empty<Guid>(),
+                    Enumerable.Empty<InternalId>(),
                     (matching, joinMatched) => matching.Union(
                         IndexMatching
                             .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)

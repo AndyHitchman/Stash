@@ -20,6 +20,7 @@ namespace Stash.Specifications.integration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
+    using Engine;
     using Support;
 
     public class when_deleting_a_tracked_graph : with_real_configuration
@@ -45,7 +46,7 @@ namespace Stash.Specifications.integration
                         }
                 };
 
-            var internalId = Guid.NewGuid();
+            var internalId = new InternalId(Guid.NewGuid());
             var registeredGraph = Kernel.Registry.GetRegistrationFor<Post>();
             var serializedGraph = registeredGraph.Serialize(stashedPost, null);
             var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));

@@ -18,10 +18,11 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Collections.Generic;
+    using Engine;
 
     public interface IStoredGraph
     {
-        Guid InternalId { get; }
+        InternalId InternalId { get; }
         IEnumerable<byte> SerialisedGraph { get; }
         Type GraphType { get; }
     }

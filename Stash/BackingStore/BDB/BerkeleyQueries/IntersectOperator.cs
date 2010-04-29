@@ -44,7 +44,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(transaction));
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             var queriesByCost = queries.OrderBy(_ => _.EstimatedQueryCost(transaction));
 
@@ -57,7 +57,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     );
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             return
                 queries

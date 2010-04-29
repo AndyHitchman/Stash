@@ -18,13 +18,14 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Collections.Generic;
+    using Engine;
 
     public class StoredGraph : IStoredGraph
     {
-        public StoredGraph(Guid internalId, IEnumerable<byte> graph, string storedConcreteType)
+        public StoredGraph(InternalId internalId, IEnumerable<byte> graph, string storedConcreteType)
             : this(internalId, graph, Type.GetType(storedConcreteType)) {}
 
-        public StoredGraph(Guid internalId, IEnumerable<byte> graph, Type graphType)
+        public StoredGraph(InternalId internalId, IEnumerable<byte> graph, Type graphType)
         {
             InternalId = internalId;
             SerialisedGraph = graph;
@@ -33,7 +34,7 @@ namespace Stash.BackingStore
 
         public Type GraphType { get; private set; }
 
-        public Guid InternalId { get; private set; }
+        public InternalId InternalId { get; private set; }
         public IEnumerable<byte> SerialisedGraph { get; private set; }
     }
 }

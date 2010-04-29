@@ -48,7 +48,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             registry.RegisteredIndexers.Add(registeredIndexer);
 
             firstTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
@@ -59,7 +59,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 );
 
             secondTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "thesecondobjectsserialisedgraph".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
@@ -112,7 +112,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_common_types_in_the_type_hierarchy_of_both_graphs()
         {
             var valuesForKey = Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(ClassWithNoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid());
+                .ValuesForKey(typeof(ClassWithNoAncestors).AssemblyQualifiedName).Select(_ => _.AsInternalId());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }
@@ -121,7 +121,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_distinct_type_of_the_first_graph_in_the_type_hierarchy()
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(ClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid())
+                .ValuesForKey(typeof(ClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsInternalId())
                 .ShouldContain(firstTrackedGraph.InternalId);
         }
 
@@ -129,7 +129,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_distinct_type_of_the_second_graph_in_the_type_hierarchy()
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
-                .ValuesForKey(typeof(OtherClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsGuid())
+                .ValuesForKey(typeof(OtherClassWithTwoAncestors).AssemblyQualifiedName).Select(_ => _.AsInternalId())
                 .ShouldContain(secondTrackedGraph.InternalId);
         }
 
@@ -137,7 +137,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_persist_the_common_values_of_the_index_projection()
         {
             var valuesForKey = Subject.IndexDatabases[registeredIndexer.IndexName].Index
-                .ValuesForKey(commonIndexValues.AsByteArray()).Select(_ => _.AsGuid());
+                .ValuesForKey(commonIndexValues.AsByteArray()).Select(_ => _.AsInternalId());
             valuesForKey.ShouldContain(firstTrackedGraph.InternalId);
             valuesForKey.ShouldContain(secondTrackedGraph.InternalId);
         }
@@ -147,7 +147,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         {
             Subject.IndexDatabases[registeredIndexer.IndexName].Index
                 .ValueForKey(secondIndexDistinctIndexValue.AsByteArray())
-                .ShouldEqual(secondTrackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(secondTrackedGraph.InternalId.AsByteArray());
         }
 
         [Then]
@@ -155,7 +155,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         {
             Subject.IndexDatabases[registeredIndexer.IndexName].Index
                 .ValueForKey(firstIndexDistinctIndexValue.AsByteArray())
-                .ShouldEqual(firstTrackedGraph.InternalId.ToByteArray());
+                .ShouldEqual(firstTrackedGraph.InternalId.AsByteArray());
         }
     }
 }

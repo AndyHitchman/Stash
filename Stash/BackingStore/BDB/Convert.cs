@@ -19,6 +19,7 @@ namespace Stash.BackingStore.BDB
     using System;
     using System.Linq;
     using System.Text;
+    using Engine;
 
     public static class Convert
     {
@@ -142,6 +143,11 @@ namespace Stash.BackingStore.BDB
         public static float AsFloat(this byte[] from)
         {
             return BitConverter.ToSingle(from, 0);
+        }
+
+        public static InternalId AsInternalId(this byte[] from)
+        {
+            return new InternalId(new Guid(from));
         }
 
         public static Guid AsGuid(this byte[] from)

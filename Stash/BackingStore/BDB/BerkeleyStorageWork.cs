@@ -51,7 +51,7 @@ namespace Stash.BackingStore.BDB
             return executeQuery(query).Count();
         }
 
-        public void DeleteGraph(Guid internalId, IRegisteredGraph registeredGraph)
+        public void DeleteGraph(InternalId internalId, IRegisteredGraph registeredGraph)
         {
             var graphKey = new DatabaseEntry(internalId.AsByteArray());
 
@@ -79,7 +79,13 @@ namespace Stash.BackingStore.BDB
                 .Select(internalId => BackingStore.Get(internalId));
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            //Materialize the query operators in order to minimize the duration of open cursors.
+            return executeQuery(query).Materialize();
+        }
+
+        public IStoredGraph Get(InternalId internalId)
         {
             try
             {
@@ -171,7 +177,7 @@ namespace Stash.BackingStore.BDB
             deleteAllIndexEntriesForGraphKey(typeHierarchyDatabase, graphKey);
         }
 
-        private IEnumerable<Guid> executeQuery(IQuery query)
+        private IEnumerable<InternalId> executeQuery(IQuery query)
         {
             var berkeleyQuery = (IBerkeleyQuery)query;
             return berkeleyQuery.Execute(Transaction);

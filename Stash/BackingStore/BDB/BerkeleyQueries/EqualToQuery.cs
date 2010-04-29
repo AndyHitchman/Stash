@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class EqualToQuery<TKey> : IBerkeleyIndexQuery, IEqualToQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -47,22 +48,22 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             try
             {
                 return managedIndex.Index
                     .GetMultiple(new DatabaseEntry(managedIndex.KeyAsByteArray(Key)), (int)managedIndex.Index.Pagesize, transaction)
                     .Value
-                    .Select(graphKey => graphKey.Data.AsGuid());
+                    .Select(graphKey => graphKey.Data.AsInternalId());
             }
             catch(NotFoundException)
             {
-                return Enumerable.Empty<Guid>();
+                return Enumerable.Empty<InternalId>();
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             //Can't do better than this.
             return Execute(transaction);

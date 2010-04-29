@@ -42,7 +42,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             registry.RegisteredIndexers.Add(registeredIndexer);
 
             originalTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {

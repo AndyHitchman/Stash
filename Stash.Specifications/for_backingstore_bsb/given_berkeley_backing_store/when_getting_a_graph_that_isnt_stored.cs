@@ -40,7 +40,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             gettingRegisteredGraph = new RegisteredGraph<OtherClassWithTwoAncestors>(registry);
 
             trackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 Enumerable.Empty<IProjectedIndex>(),
                 insertingRegisteredGraph
@@ -56,7 +56,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         public void it_should_throw_wrong_registered_graph()
         {
             typeof(GraphForKeyNotFoundException).ShouldBeThrownBy(
-                () => Subject.Get(Guid.NewGuid())
+                () => Subject.Get(new InternalId(Guid.NewGuid()))
                 );
         }
     }

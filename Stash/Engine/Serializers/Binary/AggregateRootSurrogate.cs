@@ -38,7 +38,7 @@
                 //object when we deserialise.
                 var internalIdOfTrackedGraph = getSession(context).InternalIdOfTrackedGraph(obj);
                 if(internalIdOfTrackedGraph != null)
-                    info.AddValue(AggregateReferenceSurrogate.ReferenceInfoKey, internalIdOfTrackedGraph.Value);
+                    info.AddValue(AggregateReferenceSurrogate.ReferenceInfoKey, internalIdOfTrackedGraph);
             }
             else
             {
@@ -51,12 +51,12 @@
             var session = getSession(context);
 
             //Return a reference to a tracked object if available.
-            var rawInternalId = info.GetValue(AggregateReferenceSurrogate.ReferenceInfoKey, typeof(Guid));
+            var rawInternalId = info.GetValue(AggregateReferenceSurrogate.ReferenceInfoKey, typeof(InternalId));
 
             if (rawInternalId == null)
                 throw new InvalidOperationException("Expected SerializationInfo to contain an internal id for an aggregate");
 
-            var internalId = (Guid)rawInternalId;
+            var internalId = (InternalId)rawInternalId;
 
             if(session.GraphIsTracked(internalId)) 
                 return session.TrackedGraphForInternalId(internalId);

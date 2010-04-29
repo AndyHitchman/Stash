@@ -67,6 +67,6 @@ namespace Stash.Engine
         /// <param name="serializationSession"></param>
         /// <returns></returns>
         /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        object LoadTrackedGraphForInternalId(Guid internalId, ISerializationSession serializationSession);
+        object LoadTrackedGraphForInternalId(InternalId internalId, ISerializationSession serializationSession);
     }
 }

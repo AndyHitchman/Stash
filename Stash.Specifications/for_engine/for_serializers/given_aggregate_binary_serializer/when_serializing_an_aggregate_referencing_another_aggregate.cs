@@ -27,7 +27,7 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     public class when_serializing_an_aggregate_referencing_another_aggregate : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>
     {
         private GraphB root;
-        private Guid internalIdOfCustomer;
+        private InternalId internalIdOfCustomer;
         private ISerializationSession mockTrackedSession;
         private IEnumerable<byte> actual;
         private IRegistry mockRegistry;
@@ -40,7 +40,7 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
 
             root = new GraphB {GraphA = new GraphA {AString = "Bob"}};
 
-            internalIdOfCustomer = Guid.NewGuid();
+            internalIdOfCustomer = new InternalId(Guid.NewGuid());
 
             mockTrackedSession = MockRepository.GenerateMock<ISerializationSession>();
         }

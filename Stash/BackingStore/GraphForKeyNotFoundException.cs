@@ -18,6 +18,7 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Runtime.Serialization;
+    using Engine;
 
     [Serializable]
     public class GraphForKeyNotFoundException : Exception
@@ -33,7 +34,7 @@ namespace Stash.BackingStore
         public GraphForKeyNotFoundException(string message) : base(message) {}
         public GraphForKeyNotFoundException(string message, Exception inner) : base(message, inner) {}
 
-        public GraphForKeyNotFoundException(Guid internalId, Exception inner)
+        public GraphForKeyNotFoundException(InternalId internalId, Exception inner)
             : base(
                 string.Format(
                     "Graph stored for internalId {0} is not found.",

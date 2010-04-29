@@ -115,12 +115,17 @@ namespace Stash.BackingStore.BDB
                 new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
         }
 
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             return InTransactionDo(work => work.Get(query));
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(InternalId internalId)
         {
             return InTransactionDo(work => work.Get(internalId));
         }

@@ -49,7 +49,7 @@ namespace Stash.Specifications.for_stashed_set
             mockRegistry.Stub(_ => _.GetRegistrationFor(Arg<Type>.Is.Anything)).Return(mockRegisteredGraph);
 
             mockStoredGraph = MockRepository.GenerateStub<IStoredGraph>();
-            mockBackingStore.Stub(_ => _.Get(null)).IgnoreArguments().Return(new[] {mockStoredGraph});
+            mockBackingStore.Stub(_ => _.Get((IQuery)null)).IgnoreArguments().Return(new[] {mockStoredGraph});
 
             mockTrack = MockRepository.GenerateStub<ITrack>();
             mockTrack.Stub(_ => _.UntypedGraph).Return(new DummyPersistentObject());

@@ -38,7 +38,7 @@ namespace Stash.Engine.PersistenceEvents
         public Track(ISerializationSession session, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
             : this(session, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
 
-        public Track(ISerializationSession session, Guid internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
+        public Track(ISerializationSession session, InternalId internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
@@ -47,7 +47,7 @@ namespace Stash.Engine.PersistenceEvents
             graph = registeredGraph.Deserialize(storedSerializedGraph, session);
         }
 
-        protected Track(Guid internalId, object graph, IRegisteredGraph registeredGraph)
+        protected Track(InternalId internalId, object graph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
@@ -71,7 +71,7 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public byte[] CompletionHash { get; private set; }
 
-        public Guid InternalId { get; private set; }
+        public InternalId InternalId { get; private set; }
 
         /// <summary>
         /// Get the untyped graph.

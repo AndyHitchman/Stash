@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class IsIndexedQuery : IBerkeleyIndexQuery, IIsIndexedQuery
@@ -46,16 +47,16 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             var cursor = managedIndex.ReverseIndex.Cursor();
             while(cursor.MoveNextUnique())
             {
-                yield return cursor.Current.Key.Data.AsGuid();
+                yield return cursor.Current.Key.Data.AsInternalId();
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             if(joinConstraint.Count() > EstimatedQueryCost(transaction))
                 return Execute(transaction);

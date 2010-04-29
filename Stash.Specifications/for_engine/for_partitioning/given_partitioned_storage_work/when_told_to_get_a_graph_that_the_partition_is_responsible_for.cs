@@ -18,22 +18,23 @@ namespace Stash.Specifications.for_engine.for_partitioning.given_partitioned_sto
 {
     using System;
     using BackingStore;
+    using Engine;
     using Engine.Partitioning;
     using Rhino.Mocks;
     using Support;
 
     public class when_told_to_get_a_graph_that_the_partition_is_responsible_for : AutoMockedSpecification<PartitionedStorageWork>
     {
-        private Guid internalId;
+        private InternalId internalId;
 
         protected override void WithContext()
         {
-            internalId = Guid.NewGuid();
+            internalId = new InternalId(Guid.NewGuid());
         }
 
         protected override void Given()
         {
-            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<Guid>.Is.Anything)).Return(true);
+            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<InternalId>.Is.Anything)).Return(true);
         }
 
         protected override void When()

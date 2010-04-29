@@ -201,7 +201,7 @@ namespace Stash.Engine
         /// <param name="serializationSession"></param>
         /// <returns></returns>
         /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        public object LoadTrackedGraphForInternalId(Guid internalId, ISerializationSession serializationSession)
+        public object LoadTrackedGraphForInternalId(InternalId internalId, ISerializationSession serializationSession)
         {
             var storedGraph = backingStore.Get(internalId);
             var tracked = Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), serializationSession);

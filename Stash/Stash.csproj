@@ -87,6 +87,7 @@
     <Compile Include="Configuration\RegisteredGraph.cs" />
     <Compile Include="BackingStore\GraphForKeyNotFoundException.cs" />
     <Compile Include="BackingStore\IStorageWork.cs" />
+    <Compile Include="Engine\InternalId.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
     <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
     <Compile Include="Engine\Partitioning\ISegment.cs" />

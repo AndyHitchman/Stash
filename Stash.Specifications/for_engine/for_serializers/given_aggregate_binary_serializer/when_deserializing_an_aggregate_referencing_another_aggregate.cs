@@ -27,21 +27,21 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     public class when_deserializing_an_aggregate_referencing_another_aggregate : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>
     {
         private GraphB root;
-        private Guid internalIdOfCustomer;
+        private InternalId internalIdOfCustomer;
         private ISerializationSession mockSession;
         private GraphB actual;
         private IRegistry mockRegistry;
         private GraphA graphA;
         private IEnumerable<byte> bytes;
-        private Guid internalIdOfOrder;
+        private InternalId internalIdOfOrder;
 
         protected override void Given()
         {
             graphA = new GraphA {AString = "Bob"};
             root = new GraphB {GraphA = graphA};
 
-            internalIdOfCustomer = Guid.NewGuid();
-            internalIdOfOrder = Guid.NewGuid();
+            internalIdOfCustomer = new InternalId(Guid.NewGuid());
+            internalIdOfOrder = new InternalId(Guid.NewGuid());
 
             mockRegistry = MockRepository.GenerateMock<IRegistry>();
             mockRegistry.Stub(_ => _.IsManagingGraphTypeOrAncestor(typeof(GraphA))).Return(true);

@@ -34,21 +34,21 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         protected override void Given()
         {
             equaltrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             lessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph

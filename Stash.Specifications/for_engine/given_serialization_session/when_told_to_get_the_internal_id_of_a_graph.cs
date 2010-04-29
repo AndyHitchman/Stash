@@ -42,7 +42,7 @@ namespace Stash.Specifications.for_engine.given_serialization_session
             var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
             var sut = new SerializationSession(() => new[] {mockPersistentEvent}, null);
 
-            var expected = Guid.NewGuid();
+            var expected = new InternalId(Guid.NewGuid());
             var graph = new object();
             mockPersistentEvent.Stub(_ => _.UntypedGraph).Return(graph);
             mockPersistentEvent.Stub(_ => _.InternalId).Return(expected);

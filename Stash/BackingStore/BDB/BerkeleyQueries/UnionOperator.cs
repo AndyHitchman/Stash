@@ -44,24 +44,24 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return queries.Aggregate(0D, (cost, query) => cost + query.EstimatedQueryCost(transaction));
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             return
                 queries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
-                        Enumerable.Empty<Guid>(),
-                        (guids, query) => guids.Union(query.Execute(transaction)).Materialize()
+                        Enumerable.Empty<InternalId>(),
+                        (matching, query) => matching.Union(query.Execute(transaction)).Materialize()
                     );
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             return
                 queries
                     .OrderBy(_ => _.EstimatedQueryCost(transaction))
                     .Aggregate(
-                        Enumerable.Empty<Guid>(),
+                        Enumerable.Empty<InternalId>(),
                         (matching, query) => matching.Union(query.ExecuteInsideIntersect(transaction, joinConstraint)).Materialize()
                     );
         }

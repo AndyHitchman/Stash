@@ -34,40 +34,40 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         private TrackedGraph lessThanTrackedGraph;
         private TrackedGraph greaterThanTrackedGraph;
         private IBerkeleyQuery query;
-        private IEnumerable<Guid> actual;
+        private IEnumerable<InternalId> actual;
 
         protected override void Given()
         {
             insideTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph
                 );
 
             lowerTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             upperTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 103)},
                 RegisteredGraph
                 );
 
             lessThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 104)},
                 RegisteredGraph
@@ -88,7 +88,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
                         {
                             _.InsertGraph(
                                 new TrackedGraph(
-                                    Guid.NewGuid(),
+                                    new InternalId(Guid.NewGuid()),
                                     "letspretendthisisserialiseddata".Select(b => (byte)b),
                                     new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
                                     RegisteredGraph
@@ -105,17 +105,17 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         public void it_run_faster_with_a_small_number_of_pre_joins()
         {
             Console.WriteLine("Testing");
-            var smallJoinConstraint = new[]
+            IEnumerable<InternalId> smallJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId
                 }
-                .Union(Enumerable.Range(1, 50).Select(_ => Guid.NewGuid()))
+                .Union(Enumerable.Range(1, 50).Select(_ => new InternalId(Guid.NewGuid())))
                 .Materialize();
-            var largeJoinConstraint = new[]
+            IEnumerable<InternalId> largeJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
                 }
-                .Union(Enumerable.Range(1, 1000).Select(_ => Guid.NewGuid()))
+                .Union(Enumerable.Range(1, 1000).Select(_ => new InternalId(Guid.NewGuid())))
                 .Materialize();
 
             //Run once and ignore

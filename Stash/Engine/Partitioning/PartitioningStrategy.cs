@@ -8,7 +8,7 @@ namespace Stash.Engine.Partitioning
     public interface IPartitioningStrategy
     {
         PartitioningBackingStore GetPartitioningBackingStore();
-        bool IsResponsibleForGraph(ISegment segment, Guid internalId);
+        bool IsResponsibleForGraph(ISegment segment, InternalId internalId);
     }
 
     public class PartitioningStrategy : IPartitioningStrategy
@@ -46,7 +46,7 @@ namespace Stash.Engine.Partitioning
             throw new NotImplementedException();
         }
 
-        public bool IsResponsibleForGraph(ISegment segment, Guid internalId)
+        public bool IsResponsibleForGraph(ISegment segment, InternalId internalId)
         {
             return internalId.GetHashCode() % numberOfSegments == segment.SegmentNumber - 1;
         }
@@ -87,7 +87,7 @@ namespace Stash.Engine.Partitioning
             get { throw new NotImplementedException(); }
         }
 
-        public bool IsResponsibleForGraph(Guid internalId)
+        public bool IsResponsibleForGraph(InternalId internalId)
         {
             return partitioningStrategy.IsResponsibleForGraph(this, internalId);
         }
@@ -102,7 +102,7 @@ namespace Stash.Engine.Partitioning
 
         public IEnumerable<ISegment> SegmentsServed { get; private set; }
 
-        public bool IsResponsibleForGraph(Guid internalId)
+        public bool IsResponsibleForGraph(InternalId internalId)
         {
             return SegmentsServed.Any(_ => _.IsResponsibleForGraph(internalId));
         }

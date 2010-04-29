@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class InsideQuery<TKey> : IBerkeleyIndexQuery, IInsideQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -52,7 +53,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                    managedIndex.Index.FastStats().nPages / pageSizeBufferMultipler * (double)QueryCostScale;
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
             var cursor = managedIndex.Index.Cursor(new CursorConfig(), transaction);
             try
@@ -68,13 +69,13 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
                     if(cursor.CurrentMultipleKey != null)
                         do
                         {
-                            foreach(var guid in
+                            foreach(var internalId in
                                 cursor.CurrentMultipleKey
-                                    .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsGuid()})
+                                    .Select(_ => new {key = _.Key.Data, value = _.Value.Data.AsInternalId()})
                                     .TakeWhile(pair => comparer.Compare(managedIndex.ByteArrayAsKey(pair.key), UpperKey) < 0)
                                     .Select(_ => _.value))
                             {
-                                yield return guid;
+                                yield return internalId;
                             }
                         }
                         while(cursor.MoveNextMultipleKey(bufferSize) &&
@@ -87,7 +88,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             }
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             if(joinConstraint.Count() > EstimatedQueryCost(transaction))
                 return Execute(transaction);
@@ -96,7 +97,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
 
             return
                 joinConstraint.Aggregate(
-                    Enumerable.Empty<Guid>(),
+                    Enumerable.Empty<InternalId>(),
                     (matching, joinMatched) => matching.Union(
                         IndexMatching
                             .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)

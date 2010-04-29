@@ -28,8 +28,8 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
     public class when_executing_not_equal_to_inside_intersect : with_int_indexer
     {
         private IBerkeleyQuery query;
-        private IEnumerable<Guid> actual;
-        private Guid[] joinConstraint;
+        private IEnumerable<InternalId> actual;
+        private InternalId[] joinConstraint;
         private TrackedGraph equaltrackedGraph;
         private TrackedGraph notEqualtrackedGraph;
         private TrackedGraph anotherNotEqualtrackedGraph;
@@ -38,28 +38,28 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         protected override void Given()
         {
             equaltrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             anotherEqualtrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
                 RegisteredGraph
                 );
 
             notEqualtrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
                 RegisteredGraph
                 );
 
             anotherNotEqualtrackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
                 RegisteredGraph

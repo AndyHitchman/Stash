@@ -21,6 +21,7 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
     using System.Linq;
     using BerkeleyDB;
     using Configuration;
+    using Engine;
     using Queries;
 
     public class AnyOfQuery<TKey> : IBerkeleyIndexQuery, IAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -47,12 +48,12 @@ namespace Stash.BackingStore.BDB.BerkeleyQueries
             return (double)QueryCostScale * Set.Count();
         }
 
-        public IEnumerable<Guid> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(Transaction transaction)
         {
-            return Set.Aggregate(Enumerable.Empty<Guid>(), (current, key) => current.Union(IndexMatching.GetMatching(managedIndex, transaction, key)));
+            return Set.Aggregate(Enumerable.Empty<InternalId>(), (current, key) => current.Union(IndexMatching.GetMatching(managedIndex, transaction, key)));
         }
 
-        public IEnumerable<Guid> ExecuteInsideIntersect(Transaction transaction, IEnumerable<Guid> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
         {
             return Execute(transaction);
         }

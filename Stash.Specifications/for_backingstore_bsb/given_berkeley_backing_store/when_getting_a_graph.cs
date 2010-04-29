@@ -38,7 +38,7 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
             registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
 
             trackedGraph = new TrackedGraph(
-                Guid.NewGuid(),
+                new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 Enumerable.Empty<IProjectedIndex>(),
                 registeredGraph

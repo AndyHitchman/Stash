@@ -19,6 +19,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_destroy
     using System;
     using BackingStore;
     using Configuration;
+    using Engine;
     using Engine.PersistenceEvents;
     using Rhino.Mocks;
     using Support;
@@ -33,7 +34,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_destroy
         {
             mockRegisteredGraph = MockRepository.GenerateMock<IRegisteredGraph<DummyPersistentObject>>();
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
-            subject = new Destroy(Guid.NewGuid(), null, mockRegisteredGraph);
+            subject = new Destroy(new InternalId(Guid.NewGuid()), null, mockRegisteredGraph);
         }
 
         protected override void When()

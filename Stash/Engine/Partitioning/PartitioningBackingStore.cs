@@ -63,6 +63,11 @@ namespace Stash.Engine.Partitioning
             fireAtPartitions((partition, backingStore) => backingStore.EnsureIndex(registeredIndexer));
         }
 
+        public IEnumerable<InternalId> Matching(IQuery query)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
             var partitionedQuery = (IPartitionedQuery)query;
@@ -74,7 +79,7 @@ namespace Stash.Engine.Partitioning
                     (accumulator, partial) => accumulator.Union(partial));
         }
 
-        public IStoredGraph Get(Guid internalId)
+        public IStoredGraph Get(InternalId internalId)
         {
             var storedGraph = 
                 collectFromPartitions(

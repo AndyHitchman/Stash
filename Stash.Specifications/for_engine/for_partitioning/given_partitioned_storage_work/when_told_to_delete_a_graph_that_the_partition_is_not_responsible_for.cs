@@ -19,22 +19,23 @@ namespace Stash.Specifications.for_engine.for_partitioning.given_partitioned_sto
     using System;
     using BackingStore;
     using Configuration;
+    using Engine;
     using Engine.Partitioning;
     using Rhino.Mocks;
     using Support;
 
     public class when_told_to_delete_a_graph_that_the_partition_is_not_responsible_for : AutoMockedSpecification<PartitionedStorageWork>
     {
-        private Guid internalId;
+        private InternalId internalId;
 
         protected override void WithContext()
         {
-            internalId = Guid.NewGuid();
+            internalId = new InternalId(Guid.NewGuid());
         }
 
         protected override void Given()
         {
-            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<Guid>.Is.Anything)).Return(false);
+            Dependency<IPartition>().Expect(_ => _.IsResponsibleForGraph(Arg<InternalId>.Is.Anything)).Return(false);
         }
 
         protected override void When()
@@ -51,7 +52,7 @@ namespace Stash.Specifications.for_engine.for_partitioning.given_partitioned_sto
         [Then]
         public void it_should_not_delete_the_graph()
         {
-            Dependency<IStorageWork>().AssertWasNotCalled(_ => _.DeleteGraph(Arg<Guid>.Is.Anything, Arg<IRegisteredGraph>.Is.Anything));
+            Dependency<IStorageWork>().AssertWasNotCalled(_ => _.DeleteGraph(Arg<InternalId>.Is.Anything, Arg<IRegisteredGraph>.Is.Anything));
         }
     }
 }
