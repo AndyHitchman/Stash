@@ -81,13 +81,13 @@ namespace Stash.Engine.Partitioning
 
         public IStoredGraph Get(InternalId internalId)
         {
-            var storedGraph = 
+            var storedGraph =
                 collectFromPartitions(
                     (partition, backingStore) => backingStore.Get(internalId),
                     null,
                     (accumulator, partial) => accumulator ?? partial);
 
-            if (storedGraph == null)
+            if(storedGraph == null)
                 throw new GraphForKeyNotFoundException(internalId, null);
 
             return storedGraph;
