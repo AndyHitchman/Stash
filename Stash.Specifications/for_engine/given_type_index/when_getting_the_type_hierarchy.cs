@@ -35,7 +35,7 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpStashTypeHierarchy();
             var actual = sut.OpenedGetTypeHierarchyFor(typeof(ClassWithNoAncestors));
-            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors).AssemblyQualifiedName);
+            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors));
         }
 
         [Test]
@@ -43,7 +43,7 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpStashTypeHierarchy();
             var actual = sut.OpenedGetTypeHierarchyFor(typeof(ClassWithOneAncestors));
-            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors).AssemblyQualifiedName);
+            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors));
         }
 
         [Test]
@@ -51,9 +51,9 @@ namespace Stash.Specifications.for_engine.given_type_index
         {
             var sut = new OpenedUpStashTypeHierarchy();
             var actual = sut.OpenedGetTypeHierarchyFor(typeof(ClassWithTwoAncestors));
-            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors).AssemblyQualifiedName);
-            actual.ShouldContain(_ => _ == typeof(ClassWithTwoAncestors).AssemblyQualifiedName);
-            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors).AssemblyQualifiedName);
+            actual.ShouldContain(_ => _ == typeof(ClassWithOneAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithTwoAncestors));
+            actual.ShouldContain(_ => _ == typeof(ClassWithNoAncestors));
         }
 
         [Test]

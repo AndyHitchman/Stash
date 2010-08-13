@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
+namespace Stash.Specifications.for_backingstore_bsb.given_managed_index
 {
     using System.IO;
     using BackingStore.BDB;
@@ -24,38 +24,35 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
     using Support;
 
     [TestFixture]
-    public class when_ensuring_an_index_that_does_not_exist : with_temp_dir
+    public class when_registering_a_new_index : with_backing_store_on_temp_dir
     {
-        private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         private RegisteredIndexer<ClassWithTwoAncestors, int> registeredIndexer;
-        private IRegistry registry;
+
 
         protected override void Given()
         {
-            registry = new Registry();
-            registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
-            registeredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
-            registry.RegisteredIndexers.Add(registeredIndexer);
+            registeredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex(), registry);
         }
 
         protected override void When()
         {
-            Subject.EnsureIndex(registry.RegisteredIndexers[0]);
+            Subject.EnsureIndex(registeredIndexer);
         }
 
         [Then]
         public void it_should_create_the_index_database()
         {
-            File.Exists(TempDir + "\\data\\" + BerkeleyBackingStore.IndexFilenamePrefix + registeredIndexer.IndexName + BerkeleyBackingStore.DatabaseFileExt).ShouldBeTrue
+            File.Exists(TempDir + "\\data\\" + ManagedIndex.IndexFilenamePrefix + registeredIndexer.IndexName + BerkeleyBackingStore.DatabaseFileExt).ShouldBeTrue
                 ();
-            File.Exists(TempDir + "\\data\\" + BerkeleyBackingStore.ReverseIndexFilenamePrefix + registeredIndexer.IndexName + BerkeleyBackingStore.DatabaseFileExt).
+            File.Exists(TempDir + "\\data\\" + ManagedIndex.ReverseIndexFilenamePrefix + registeredIndexer.IndexName + BerkeleyBackingStore.DatabaseFileExt).
                 ShouldBeTrue();
         }
 
         [Then]
-        public void it_configure_the_database_with_the_correct_comparer()
+        public void it_should_configure_the_database_with_the_correct_comparer()
         {
             Subject.IndexDatabases[registeredIndexer.IndexName].Index.Compare.Method.DeclaringType.ShouldEqual(typeof(IntIndexDatabaseConfig));
         }
+
     }
 }

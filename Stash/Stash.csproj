@@ -71,6 +71,8 @@
     <Compile Include="BackingStore\BDB\BerkeleyQueries\IsIndexedQuery.cs" />
     <Compile Include="BackingStore\BDB\DefaultBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="BackingStore\BDB\PartitionedBerkeleyBackingStore.cs" />
+    <Compile Include="BackingStore\BDB\InternalProjectedIndex.cs" />
+    <Compile Include="BackingStore\IndexNotReadyException.cs" />
     <Compile Include="Configuration\IRegisteredGraph.cs" />
     <Compile Include="Configuration\IRegisteredGraph`1.cs" />
     <Compile Include="Configuration\IRegisteredIndexer.cs" />

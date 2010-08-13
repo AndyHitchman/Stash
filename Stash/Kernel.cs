@@ -61,7 +61,8 @@ namespace Stash
         /// </summary>
         /// <param name="backingStore"></param>
         /// <param name="configurationAction"></param>
-        public static void Kickstart(BerkeleyBackingStore backingStore, Action<PersistenceContext<BerkeleyBackingStore>> configurationAction)
+        public static void Kickstart(BerkeleyBackingStore backingStore,
+                                     Action<PersistenceContext<BerkeleyBackingStore>> configurationAction)
         {
             Kickstart(backingStore, configurationAction, (registry, store, queryFactory) => { });
         }

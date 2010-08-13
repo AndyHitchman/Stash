@@ -28,7 +28,7 @@ namespace Stash.BackingStore.BDB
         HashDatabaseConfig ValueDatabaseConfig { get; }
         HashDatabaseConfig ReverseIndexDatabaseConfig { get; }
         Dictionary<Type, IndexDatabaseConfig> IndexDatabaseConfigForTypes { get; }
-        DatabaseEnvironment Environment { get; }
+        DatabaseEnvironment DatabaseEnvironment { get; }
         void Close();
     }
 }

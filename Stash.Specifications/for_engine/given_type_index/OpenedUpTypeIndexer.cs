@@ -22,7 +22,7 @@ namespace Stash.Specifications.for_engine.given_type_index
 
     public class OpenedUpStashTypeHierarchy : StashTypeHierarchy
     {
-        public IEnumerable<string> OpenedGetTypeHierarchyFor(Type t)
+        public IEnumerable<Type> OpenedGetTypeHierarchyFor(Type t)
         {
             return base.GetTypeHierarchyFor(t);
         }

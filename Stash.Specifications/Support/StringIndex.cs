@@ -21,9 +21,11 @@ namespace Stash.Specifications.Support
 
     public class StringIndex : IIndex<ClassWithTwoAncestors, string>
     {
+        public const string ConstantValue = "stringIndex";
+
         public IEnumerable<string> Yield(ClassWithTwoAncestors graph)
         {
-            throw new NotImplementedException();
+            yield return ConstantValue;
         }
     }
 }

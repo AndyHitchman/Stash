@@ -95,15 +95,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\with_temp_dir.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\with_backing_store_on_temp_dir.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\NewIndex.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\ExistingIndex.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\GraphAffectedByNewIndex.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\when_registering_a_new_index_on_existing_graph_data.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\when_registering_a_new_index.cs" />
+    <Compile Include="for_backingstore_bsb\given_managed_index\with_temp_dir.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_union_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\with_string_indexer.cs" />
+    <Compile Include="for_backingstore_bsb\given_queries\with_string_indexer.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_having_an_equal_match_but_no_greater_than_match.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_with_one_query.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
-    <Compile Include="for_backingstore_bsb\with_temp_dir.cs" />
+    <Compile Include="for_backingstore_bsb\given_queries\with_temp_dir.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_not_responsible_for.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_responsible_for.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_delete_a_graph_that_the_partition_is_not_responsible_for.cs" />
@@ -179,7 +187,7 @@
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_equal_to.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_equal_to_is_false.cs" />
     <Compile Include="for_backingstore_bsb\given_queries\when_executing_equal_to.cs" />
-    <Compile Include="for_backingstore_bsb\with_int_indexer.cs" />
+    <Compile Include="for_backingstore_bsb\given_queries\with_int_indexer.cs" />
     <Compile Include="Support\OtherDummyIndex.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_getting_registered_indexers.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph_that_isnt_stored.cs" />
@@ -224,7 +232,6 @@
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_second_graph.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_deleting_a_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_ensuring_an_index_that_does_not_exist.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_graph.cs" />
     <Compile Include="for_backingstore_bsb\BerkeleyDbExtensions.cs" />
     <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_instantiating.cs" />

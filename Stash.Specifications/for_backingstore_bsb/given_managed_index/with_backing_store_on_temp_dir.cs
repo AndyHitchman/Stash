@@ -14,24 +14,28 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Specifications.for_backingstore_bsb
+namespace Stash.Specifications.for_backingstore_bsb.given_managed_index
 {
     using System;
     using System.IO;
+    using System.Threading;
     using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyConfigs;
     using BerkeleyDB;
+    using Configuration;
+    using Engine;
     using Support;
 
-    public abstract class with_temp_dir : AutoMockedSpecification<BerkeleyBackingStore>
+    public abstract class with_backing_store_on_temp_dir : AutoMockedSpecification<BerkeleyBackingStore>
     {
         protected string TempDir;
+        protected IRegistry registry;
 
         protected override void WithContext()
         {
             TempDir = Path.Combine(Path.GetTempPath(), "Stash-" + Guid.NewGuid());
             Console.WriteLine("TempDir: " + TempDir);
-            if(!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
+            if (!Directory.Exists(TempDir)) Directory.CreateDirectory(TempDir);
 
             AutoMocker.Container.Configure(
                 _ =>
@@ -45,12 +49,18 @@ namespace Stash.Specifications.for_backingstore_bsb
                     .Ctor<TypeIndexDatabaseConfig>().Is(new TypeIndexDatabaseConfig())
                     .Ctor<ObjectIndexDatabaseConfig>().Is(new ObjectIndexDatabaseConfig())
                 );
+
+            registry = new Registry();
+            var typeHierarchyIndexer = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), registry);
+            registry.RegisteredIndexers.Add(typeHierarchyIndexer);
+            Subject.EnsureIndex(typeHierarchyIndexer);
+
         }
 
         protected override void TidyUp()
         {
             Subject.Dispose();
-            if(Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
+            if (Directory.Exists(TempDir)) Directory.Delete(TempDir, true);
         }
     }
 }

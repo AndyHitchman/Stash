@@ -16,6 +16,7 @@
 
 namespace Stash.Engine.Partitioning
 {
+    using System;
     using System.Collections.Generic;
     using BackingStore;
     using Configuration;

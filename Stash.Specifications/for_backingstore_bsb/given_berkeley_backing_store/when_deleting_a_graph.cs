@@ -32,15 +32,13 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         private RegisteredIndexer<ClassWithTwoAncestors, int> firstRegisteredIndexer;
         private RegisteredIndexer<ClassWithTwoAncestors, string> secondRegisteredIndexer;
-        private IRegistry registry;
 
         protected override void Given()
         {
-            registry = new Registry();
             registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
-            firstRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
+            firstRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex(), registry);
             registry.RegisteredIndexers.Add(firstRegisteredIndexer);
-            secondRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex());
+            secondRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex(), registry);
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
             trackedGraph = new TrackedGraph(
@@ -50,7 +48,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 registeredGraph
                 );
 
-            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
             Subject.EnsureIndex(firstRegisteredIndexer);
             Subject.EnsureIndex(secondRegisteredIndexer);
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));

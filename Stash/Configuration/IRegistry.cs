@@ -28,7 +28,7 @@ namespace Stash.Configuration
         /// <summary>
         /// The aggregate object graphs currently configured.
         /// </summary>
-        IEnumerable<RegisteredGraph> AllRegisteredGraphs { get; }
+        IEnumerable<IRegisteredGraph> AllRegisteredGraphs { get; }
 
         IBackingStore BackingStore { get; }
 

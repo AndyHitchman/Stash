@@ -20,6 +20,7 @@ namespace Stash.Configuration
     using System.Collections.Generic;
     using System.Linq;
     using BackingStore;
+    using Engine;
     using Engine.Serializers;
     using Engine.Serializers.Binary;
 
@@ -37,9 +38,9 @@ namespace Stash.Configuration
         /// <summary>
         /// The aggregate object graphs currently configured.
         /// </summary>
-        public virtual IEnumerable<RegisteredGraph> AllRegisteredGraphs
+        public virtual IEnumerable<IRegisteredGraph> AllRegisteredGraphs
         {
-            get { return RegisteredGraphs.Values; }
+            get { return RegisteredGraphs.Values.Cast<IRegisteredGraph>(); }
         }
 
         public virtual IBackingStore BackingStore { get; private set; }
@@ -50,7 +51,7 @@ namespace Stash.Configuration
         public virtual void EngageBackingStore(IBackingStore backingStore)
         {
             BackingStore = backingStore;
-            foreach(var registeredGraph in AllRegisteredGraphs)
+            foreach(var registeredGraph in RegisteredGraphs.Values)
             {
                 registeredGraph.EngageBackingStore(backingStore);
             }
@@ -97,13 +98,12 @@ namespace Stash.Configuration
         {
             if(graphType == null) throw new ArgumentNullException("graphType");
 
-            var t = graphType;
-            do
+            var sth = new StashTypeHierarchy();
+
+            foreach(var superType in sth.YieldTypes(graphType))
             {
-                if(RegisteredGraphs.ContainsKey(t)) return RegisteredGraphs[t];
-                t = t.BaseType;
+                if (RegisteredGraphs.ContainsKey(superType)) return RegisteredGraphs[superType];
             }
-            while(t != null && t != typeof(object));
 
             throw new ArgumentOutOfRangeException("graphType");
         }

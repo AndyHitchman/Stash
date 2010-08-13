@@ -22,9 +22,13 @@ namespace Stash.Configuration
 
     public abstract class RegisteredIndexer<TGraph> : IRegisteredIndexer
     {
+        public Type GraphType { get { return typeof(TGraph); } }
+
         public abstract Type IndexType { get; }
         public abstract string IndexName { get; }
         public abstract Type YieldType { get; }
+        public abstract IEnumerable<IRegisteredGraph> GraphsIndexed { get; }
+        public abstract IRegistry Registry { get; }
         public abstract void EngageBackingStore(IBackingStore backingStore);
 
         /// <summary>

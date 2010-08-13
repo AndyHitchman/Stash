@@ -30,8 +30,6 @@ namespace Stash.BackingStore.BDB
     public class BerkeleyBackingStore : IBackingStore, IDisposable
     {
         public const string DatabaseFileExt = ".db";
-        public const string IndexFilenamePrefix = "index-";
-        public const string ReverseIndexFilenamePrefix = "ridx-";
         private const string concreteTypeFileName = "concreteTypes" + DatabaseFileExt;
         private const string graphFileName = "graphs" + DatabaseFileExt;
 
@@ -49,15 +47,14 @@ namespace Stash.BackingStore.BDB
             this.backingStoreEnvironment = backingStoreEnvironment;
             IndexDatabases = new Dictionary<string, ManagedIndex>();
 
-            ensureStashDirectory(backingStoreEnvironment);
             dbOpen();
         }
 
         public RegisteredIndexer<Type, string> RegisteredTypeHierarchyIndex { get; private set; }
 
-        public DatabaseEnvironment Environment
+        public IBerkeleyBackingStoreEnvironment Environment
         {
-            get { return backingStoreEnvironment.Environment; }
+            get { return backingStoreEnvironment; }
         }
 
         public HashDatabase GraphDatabase { get; private set; }
@@ -96,23 +93,13 @@ namespace Stash.BackingStore.BDB
 
         public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
-            var configForType = backingStoreEnvironment.IndexDatabaseConfigForTypes.ContainsKey(registeredIndexer.YieldType)
-                                    ? backingStoreEnvironment.IndexDatabaseConfigForTypes[registeredIndexer.YieldType]
-                                    : backingStoreEnvironment.IndexDatabaseConfigForTypes[typeof(object)];
-
-            var indexDatabase =
-                BTreeDatabase.Open(
-                    IndexFilenamePrefix + registeredIndexer.IndexName + DatabaseFileExt,
-                    configForType);
-
-            var rIndexDatabase =
-                HashDatabase.Open(
-                    ReverseIndexFilenamePrefix + registeredIndexer.IndexName + DatabaseFileExt,
-                    backingStoreEnvironment.ReverseIndexDatabaseConfig);
+            var managedIndex = new ManagedIndex(this, Environment, registeredIndexer);
 
             IndexDatabases.Add(
                 registeredIndexer.IndexName,
-                new ManagedIndex(registeredIndexer.IndexName, registeredIndexer.YieldType, indexDatabase, rIndexDatabase, configForType));
+                managedIndex);
+
+            managedIndex.EnsureIndex();
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)
@@ -199,13 +186,8 @@ namespace Stash.BackingStore.BDB
             openGraphDatabase();
             openConcreteTypeDatabase();
 
-            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, string>(new StashTypeHierarchy());
+            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), null);
             //Type hierarchy index is registered by the kernel, as it is used at the application level.
-        }
-
-        private static void ensureStashDirectory(IBerkeleyBackingStoreEnvironment backingStoreEnvironment)
-        {
-            Directory.CreateDirectory(Path.Combine(backingStoreEnvironment.DatabaseDirectory, backingStoreEnvironment.DatabaseEnvironmentConfig.CreationDir));
         }
 
         private void openConcreteTypeDatabase()

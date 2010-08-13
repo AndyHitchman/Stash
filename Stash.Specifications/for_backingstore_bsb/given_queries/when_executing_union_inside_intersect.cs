@@ -18,8 +18,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using BackingStore.BDB;
     using BackingStore.BDB.BerkeleyQueries;
     using Engine;
     using Rhino.Mocks;

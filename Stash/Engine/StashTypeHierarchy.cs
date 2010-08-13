@@ -18,6 +18,7 @@ namespace Stash.Engine
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class StashTypeHierarchy : IIndex<Type, string>
     {
@@ -26,19 +27,24 @@ namespace Stash.Engine
             return t.AssemblyQualifiedName;
         }
 
-        protected virtual IEnumerable<string> GetTypeHierarchyFor(Type t)
+        protected virtual IEnumerable<Type> GetTypeHierarchyFor(Type t)
         {
             do
             {
-                yield return t.AssemblyQualifiedName;
+                yield return t;
                 t = t.BaseType;
             }
             while(t != null && t != typeof(object));
         }
 
-        public IEnumerable<string> Yield(Type t)
+        public IEnumerable<Type> YieldTypes(Type t)
         {
             return GetTypeHierarchyFor(t);
+        }
+
+        public IEnumerable<string> Yield(Type t)
+        {
+            return GetTypeHierarchyFor(t).Select(_ => _.AssemblyQualifiedName);
         }
     }
 }

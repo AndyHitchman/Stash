@@ -105,17 +105,17 @@ namespace Stash.Specifications.for_backingstore_bsb.given_queries
         public void it_run_faster_with_a_small_number_of_pre_joins()
         {
             Console.WriteLine("Testing");
-            IEnumerable<InternalId> smallJoinConstraint = new[]
+            var smallJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId
                 }
                 .Union(Enumerable.Range(1, 50).Select(_ => new InternalId(Guid.NewGuid())))
                 .Materialize();
-            IEnumerable<InternalId> largeJoinConstraint = new[]
+            var largeJoinConstraint = new[]
                 {
                     insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
                 }
-                .Union(Enumerable.Range(1, 1000).Select(_ => new InternalId(Guid.NewGuid())))
+                .Union(Enumerable.Range(1, 5000).Select(_ => new InternalId(Guid.NewGuid())))
                 .Materialize();
 
             //Run once and ignore

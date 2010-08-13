@@ -29,7 +29,7 @@ namespace Stash.Specifications.for_configuration.given_registry
         {
             var sut = new Registry();
             var mockRegisteredIndexer =
-                MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, int>>((IIndex<DummyPersistentObject, int>)null);
+                MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, int>>((IIndex<DummyPersistentObject, int>)null, (IRegistry)null);
             sut.RegisteredIndexers.Add(mockRegisteredIndexer);
 
             sut.EngageBackingStore(null);

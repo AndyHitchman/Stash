@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Specifications.for_backingstore_bsb
+namespace Stash.Specifications.for_backingstore_bsb.given_queries
 {
     using System;
     using Configuration;
@@ -25,18 +25,14 @@ namespace Stash.Specifications.for_backingstore_bsb
     {
         protected RegisteredGraph<ClassWithTwoAncestors> RegisteredGraph;
         protected RegisteredIndexer<ClassWithTwoAncestors, int> RegisteredIndexer;
-        private IRegistry registry;
 
         protected override void WithContext()
         {
             base.WithContext();
 
-            registry = new Registry();
-            RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
-            RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex());
-            registry.RegisteredIndexers.Add(RegisteredIndexer);
-
-            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
+            RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(Registry);
+            RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex(), Registry);
+            Registry.RegisteredIndexers.Add(RegisteredIndexer);
             Subject.EnsureIndex(RegisteredIndexer);
         }
     }

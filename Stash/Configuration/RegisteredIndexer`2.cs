@@ -29,8 +29,12 @@ namespace Stash.Configuration
     /// <typeparam name="TKey"></typeparam>
     public class RegisteredIndexer<TGraph, TKey> : RegisteredIndexer<TGraph> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        public RegisteredIndexer(IIndex<TGraph, TKey> index)
+        private readonly IRegistry registry;
+        private IEnumerable<IRegisteredGraph> registeredGraphsIndexed;
+
+        public RegisteredIndexer(IIndex<TGraph, TKey> index, IRegistry registry)
         {
+            this.registry = registry;
             Index = index;
         }
 
@@ -62,6 +66,26 @@ namespace Stash.Configuration
         public override IEnumerable<IProjectedIndex> GetUntypedProjections(object graph)
         {
             return Index.Yield((TGraph)graph).Select(key => new ProjectedIndex<TKey>(this, key)).Cast<IProjectedIndex>();
+        }
+
+        public override IEnumerable<IRegisteredGraph> GraphsIndexed
+        {
+            get
+            {
+                return registeredGraphsIndexed ??
+                       (registeredGraphsIndexed =
+                        Registry
+                            .AllRegisteredGraphs
+                            .Where(
+                                registeredGraph =>
+                                registeredGraph.GraphType.Equals(GraphType) || registeredGraph.GraphType.IsSubclassOf(GraphType) 
+                            ));
+            }
+        }
+
+        public override IRegistry Registry
+        {
+            get { return registry; }
         }
     }
 }

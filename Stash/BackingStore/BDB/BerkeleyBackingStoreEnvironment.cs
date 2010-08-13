@@ -18,6 +18,7 @@ namespace Stash.BackingStore.BDB
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using BerkeleyConfigs;
     using BerkeleyDB;
 
@@ -75,24 +76,27 @@ namespace Stash.BackingStore.BDB
         public HashDatabaseConfig ValueDatabaseConfig { get; private set; }
         public HashDatabaseConfig ReverseIndexDatabaseConfig { get; private set; }
         public Dictionary<Type, IndexDatabaseConfig> IndexDatabaseConfigForTypes { get; private set; }
-        public DatabaseEnvironment Environment { get; private set; }
+        public DatabaseEnvironment DatabaseEnvironment { get; private set; }
 
         public void Close()
         {
-            if(Environment != null) Environment.Close();
+            if(DatabaseEnvironment != null) DatabaseEnvironment.Close();
             DatabaseEnvironment.Remove(DatabaseDirectory);
         }
 
 
         private void openEnvironment()
         {
-            Environment = DatabaseEnvironment.Open(DatabaseDirectory, DatabaseEnvironmentConfig);
-            ValueDatabaseConfig.Env = Environment;
-            ReverseIndexDatabaseConfig.Env = Environment;
+            Directory.CreateDirectory(DatabaseDirectory);
+            Directory.CreateDirectory(Path.Combine(DatabaseDirectory, DatabaseEnvironmentConfig.CreationDir));
+
+            DatabaseEnvironment = DatabaseEnvironment.Open(DatabaseDirectory, DatabaseEnvironmentConfig);
+            ValueDatabaseConfig.Env = DatabaseEnvironment;
+            ReverseIndexDatabaseConfig.Env = DatabaseEnvironment;
 
             foreach(var databaseConfigForType in IndexDatabaseConfigForTypes)
             {
-                databaseConfigForType.Value.Env = Environment;
+                databaseConfigForType.Value.Env = DatabaseEnvironment;
             }
         }
     }

@@ -30,11 +30,9 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
         private ITrackedGraph trackedGraph;
         private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
         private IStoredGraph result;
-        private IRegistry registry;
 
         protected override void Given()
         {
-            registry = new Registry();
             registeredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
 
             trackedGraph = new TrackedGraph(
@@ -44,7 +42,6 @@ namespace Stash.Specifications.for_backingstore_bsb.given_berkeley_backing_store
                 registeredGraph
                 );
 
-            Subject.EnsureIndex(new RegisteredIndexer<Type, string>(new StashTypeHierarchy()));
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
         }
 

@@ -41,7 +41,7 @@ namespace Stash.Configuration
         public virtual void Index<TGraph, TKey>(IIndex<TGraph, TKey> index) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
             if(index == null) throw new ArgumentNullException("index");
-            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index);
+            var registeredIndexer = new RegisteredIndexer<TGraph, TKey>(index, Registry);
             Registry.RegisterIndexer(registeredIndexer);
         }
 

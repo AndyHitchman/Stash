@@ -30,7 +30,7 @@ namespace Stash.BackingStore.BDB
         public BerkeleyStorageWork(BerkeleyBackingStore backingStore)
         {
             BackingStore = backingStore;
-            Transaction = backingStore.Environment.BeginTransaction();
+            Transaction = backingStore.Environment.DatabaseEnvironment.BeginTransaction();
         }
 
         public BerkeleyBackingStore BackingStore { get; set; }
@@ -70,13 +70,9 @@ namespace Stash.BackingStore.BDB
         /// <returns></returns>
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
-            //Materialize the query operators in order to minimize the duration of open cursors.
-            var matchingInternalIds = executeQuery(query).Materialize();
-
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return matchingInternalIds
-                .Select(internalId => BackingStore.Get(internalId));
+            return Matching(query).Select(internalId => BackingStore.Get(internalId));
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)
@@ -117,29 +113,7 @@ namespace Stash.BackingStore.BDB
 
         private void deleteAllIndexEntriesForGraphKey(ManagedIndex managedIndex, DatabaseEntry graphKey)
         {
-            //Get all reverse index values for the internal id.
-            var allKeysInIndex =
-                managedIndex.ReverseIndex
-                    .GetMultiple(graphKey, (int)managedIndex.ReverseIndex.Pagesize, Transaction);
-
-            //In the forward index, get all keys for each reverse index value and delete the record if the value matches 
-            //the internal id of the graph we are deleting.
-            foreach(var cursor in
-                from indexKey in allKeysInIndex.Value
-                let c = managedIndex.Index.Cursor(new CursorConfig(), Transaction)
-                where c.Move(indexKey, true)
-                select c)
-            {
-                do
-                {
-                    if(cursor.Current.Value.Data.SequenceEqual(graphKey.Data)) cursor.Delete();
-                }
-                while(cursor.MoveNextDuplicate());
-
-                cursor.Close();
-            }
-
-            managedIndex.ReverseIndex.Delete(graphKey, Transaction);
+            managedIndex.Delete(graphKey, Transaction);
         }
 
         private void deleteConcreteType(DatabaseEntry graphKey)
@@ -173,8 +147,8 @@ namespace Stash.BackingStore.BDB
 
         private void deleteTypeHierarchy(DatabaseEntry graphKey)
         {
-            var typeHierarchyDatabase = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
-            deleteAllIndexEntriesForGraphKey(typeHierarchyDatabase, graphKey);
+            var typeHierarchyIndex = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
+            deleteAllIndexEntriesForGraphKey(typeHierarchyIndex, graphKey);
         }
 
         private IEnumerable<InternalId> executeQuery(IQuery query)
@@ -201,40 +175,23 @@ namespace Stash.BackingStore.BDB
 
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
-            foreach(var each in 
-                from projection in trackedGraph.ProjectedIndexes
-                let managedIndex = BackingStore.IndexDatabases[projection.IndexName]
-                select new {projection, managedIndex})
-            {
-                each.managedIndex.Index
-                    .Put(
-                        new DatabaseEntry(each.managedIndex.KeyAsByteArray(each.projection.UntypedKey)),
-                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        Transaction);
-                each.managedIndex.ReverseIndex
-                    .Put(
-                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        new DatabaseEntry(each.managedIndex.KeyAsByteArray(each.projection.UntypedKey)),
-                        Transaction);
-            }
+            foreach(var projection in trackedGraph.ProjectedIndexes)
+                insertIndex(projection, trackedGraph.InternalId);
+        }
+
+        private void insertIndex(IProjectedIndex projection, InternalId internalId)
+        {
+            var managedIndex = BackingStore.IndexDatabases[projection.IndexName];
+            managedIndex.Insert(projection.UntypedKey, internalId, Transaction);
         }
 
         private void insertTypeHierarchy(ITrackedGraph trackedGraph)
         {
-            var typeHierarchyDatabase = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
+            var typeHierarchyIndex = BackingStore.IndexDatabases[BackingStore.RegisteredTypeHierarchyIndex.IndexName];
 
             foreach(var type in trackedGraph.TypeHierarchy)
             {
-                typeHierarchyDatabase.Index
-                    .Put(
-                        new DatabaseEntry(type.AsByteArray()),
-                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        Transaction);
-                typeHierarchyDatabase.ReverseIndex
-                    .Put(
-                        new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                        new DatabaseEntry(type.AsByteArray()),
-                        Transaction);
+                typeHierarchyIndex.Insert(type, trackedGraph.InternalId, Transaction);
             }
         }
 

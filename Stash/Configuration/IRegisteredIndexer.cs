@@ -22,9 +22,12 @@ namespace Stash.Configuration
 
     public interface IRegisteredIndexer
     {
+        Type GraphType { get; }
         Type IndexType { get; }
         string IndexName { get; }
         Type YieldType { get; }
+        IEnumerable<IRegisteredGraph> GraphsIndexed { get; }
+        IRegistry Registry { get; }
         void EngageBackingStore(IBackingStore backingStore);
 
         /// <summary>

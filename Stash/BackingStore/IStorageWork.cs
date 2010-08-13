@@ -18,6 +18,7 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Collections.Generic;
+    using BerkeleyDB;
     using Configuration;
     using Engine;
     using Queries;
