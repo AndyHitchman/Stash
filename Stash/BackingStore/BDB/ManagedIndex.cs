@@ -33,7 +33,7 @@ namespace Stash.BackingStore.BDB
         private readonly IRegisteredIndexer registeredIndexer;
         public const string IndexFilenamePrefix = "index-";
         public const string ReverseIndexFilenamePrefix = "ridx-";
-        private const int recompileTimeoutMs = 1000 * 10;
+        private const int recompileTimeoutMs = 1000 * 60;
 
         private IndexDatabaseConfig config;
         private EventWaitHandle indexCompiled;
@@ -102,9 +102,9 @@ namespace Stash.BackingStore.BDB
         public void BuildIndexFromGraphs()
         {
             //Let the background thread claim the wait handle.
-//            ThreadPool.QueueUserWorkItem(
-//                state =>
-//                    {
+            ThreadPool.QueueUserWorkItem(
+                state =>
+                    {
                         var registeredGraphs = registeredIndexer.GraphsIndexed;
                         var session = new InternalSession(registeredIndexer.Registry, backingStore);
 
@@ -136,7 +136,7 @@ namespace Stash.BackingStore.BDB
                         session.Abandon();
 
                         indexCompiled.Set();
-//                    });
+                    });
         }
 
         public void Insert(object untypedKey, InternalId internalId, Transaction transaction)
