@@ -1,5 +1,0 @@
-R# version: 5.1.3000.12
-assembly libdb_dotnet50, Version=5.0.21.0, Culture=neutral
-  file C:\Projects\Stash\lib\BerkeleyDB\libdb_dotnet50.dll mtime 18/06/2011 6:12:27 AM
-referenced assembly mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-  file C:\Windows\Microsoft.NET\Framework\v2.0.50727\mscorlib.dll mtime 7/02/2011 11:35:26 PM

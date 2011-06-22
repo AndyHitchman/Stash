@@ -1,5 +1,0 @@
-<Modules>
-  <Module PersistentId="FE8D9F27-2F35-4936-8CC6-D2473E110F44" ModuleId="Stash.ExecutableDoco" />
-  <Module PersistentId="095683A6-57F6-4E5C-A039-4638F08AE7BC" ModuleId="Stash" />
-  <Module PersistentId="libdb_dotnet50, Version=5.0.21.0, Culture=neutral" ModuleId="libdb_dotnet50" />
-</Modules>
