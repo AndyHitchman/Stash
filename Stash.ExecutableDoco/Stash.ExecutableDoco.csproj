@@ -97,8 +97,8 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libdb_dotnet50">
-      <HintPath>..\lib\BerkeleyDB\libdb_dotnet50.dll</HintPath>
+    <Reference Include="libdb_dotnet52">
+      <HintPath>..\lib\BerkeleyDB\libdb_dotnet52.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\lib\NUnit\nunit.framework.dll</HintPath>
@@ -129,8 +129,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp50.dll" "$(TargetDir)"
-copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb50.dll" "$(TargetDir)"
+    <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp52.dll" "$(TargetDir)"
+copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb52.dll" "$(TargetDir)"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

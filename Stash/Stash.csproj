@@ -57,8 +57,8 @@
     <AssemblyOriginatorKeyFile>Properties\Stash.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libdb_dotnet50">
-      <HintPath>..\lib\BerkeleyDB\libdb_dotnet50.dll</HintPath>
+    <Reference Include="libdb_dotnet52">
+      <HintPath>..\lib\BerkeleyDB\libdb_dotnet52.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
