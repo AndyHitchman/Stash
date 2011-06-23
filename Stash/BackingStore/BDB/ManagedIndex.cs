@@ -129,7 +129,15 @@ namespace Stash.BackingStore.BDB
                                 {
                                     foreach(var projection in graphProjections)
                                     {
-                                        Insert(projection.Projection.UntypedKey, projection.InternalId, ((BerkeleyStorageWork)work).Transaction);
+                                        try
+                                        {
+                                            Insert(projection.Projection.UntypedKey, projection.InternalId, ((BerkeleyStorageWork)work).Transaction);
+                                        }
+                                        catch(KeyExistException)
+                                        {
+                                            //This is acceptable, as it is possible for another session to insert the key
+                                            //before we match it. We carry on.
+                                        }
                                     }
                                 });
 
@@ -211,8 +219,6 @@ namespace Stash.BackingStore.BDB
 
         private HashDatabase reverseIndex;
 
-
-        public Type YieldsType { get; private set; }
 
         public IComparer Comparer
         {
