@@ -82,7 +82,7 @@ namespace Stash
                     .GetEnumerator();
         }
 
-        public StashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint)
+        public IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint)
         {
             var match = constraint(new MakeConstraint(registry, queryFactory));
             return new StashedSet<TGraph>(

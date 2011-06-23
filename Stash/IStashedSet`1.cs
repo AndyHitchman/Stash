@@ -24,6 +24,6 @@ namespace Stash
     {
         void Destroy(TGraph item);
         void Endure(TGraph item);
-        StashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint);
+        IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint);
     }
 }
