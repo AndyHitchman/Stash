@@ -46,12 +46,6 @@ namespace Stash
         IStashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class;
 
         /// <summary>
-        /// Get the <see cref="IInternalSession"/> used by Stash. Not for external use.
-        /// </summary>
-        /// <returns></returns>
-        IInternalSession Internalize();
-
-        /// <summary>
         /// Persist a graph of type <typeparamref name="TGraph"/>.
         /// </summary>
         /// <typeparam name="TGraph"></typeparam>
