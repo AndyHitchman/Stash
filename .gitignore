@@ -1,9 +1,13 @@
 **/obj
 **/bin
+**/Bin
 *.user
 **/*.user
 *.suo
 *.cache
 ~$*
 **/~$*
-_Resharper.*
+_ReSharper.*
+xmldoc/XmlDoc
+**/App_Data/Log.txt
+**/*.orig
