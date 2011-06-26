@@ -31,7 +31,7 @@ namespace Stash.Specifications.for_engine.given_serialization_session
         [Test]
         public void it_should_return_null_if_the_graph_is_not_tracked()
         {
-            var sut = new SerializationSession(() => Enumerable.Empty<IPersistenceEvent>(), null);
+            var sut = new SerializationSession(() => Enumerable.Empty<IPersistenceEvent>(), null, false);
 
             sut.InternalIdOfTrackedGraph(new object()).ShouldBeNull();
         }
@@ -40,7 +40,7 @@ namespace Stash.Specifications.for_engine.given_serialization_session
         public void it_should_return_the_internal_id_if_the_graph_is_tracked()
         {
             var mockPersistentEvent = MockRepository.GenerateStub<IPersistenceEvent>();
-            var sut = new SerializationSession(() => new[] {mockPersistentEvent}, null);
+            var sut = new SerializationSession(() => new[] {mockPersistentEvent}, null, false);
 
             var expected = new InternalId(Guid.NewGuid());
             var graph = new object();

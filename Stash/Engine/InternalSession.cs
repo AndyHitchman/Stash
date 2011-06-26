@@ -109,7 +109,7 @@ namespace Stash.Engine
                         {
                             foreach(var @event in drain)
                             {
-                                @event.Complete(work, new SerializationSession(() => drain, this));
+                                @event.Complete(work, new SerializationSession(() => drain, this, false));
                             }
                         });
             }
@@ -156,28 +156,23 @@ namespace Stash.Engine
 
         public IStashedSet<object> GetEntireStash()
         {
-            return
-                new StashedSet<object>(
-                    this,
-                    registry,
-                    backingStore,
-                    backingStore.QueryFactory);
+            return makeStashedSet<object>();
         }
 
         public IStashedSet<TGraph> GetStashOf<TGraph>() where TGraph : class
         {
             return
-                new StashedSet<TGraph>(
-                    this,
-                    registry,
-                    backingStore,
-                    backingStore.QueryFactory,
-                    new[]
-                        {
-                            backingStore.QueryFactory.EqualTo(
-                                registry.GetIndexerFor<StashTypeHierarchy>(),
-                                StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph)))
-                        });
+                makeStashedSet<TGraph>()
+                    .RestrictToTypeHierarchy();
+        }
+
+        private StashedSet<TGraph> makeStashedSet<TGraph>() where TGraph : class
+        {
+            return new StashedSet<TGraph>(
+                this,
+                registry,
+                backingStore,
+                backingStore.QueryFactory);
         }
 
 
@@ -186,10 +181,10 @@ namespace Stash.Engine
             return this;
         }
 
-        public ITrack Track(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, ISerializationSession serializationSession)
+        public ITrack Load(IStoredGraph storedGraph, IRegisteredGraph registeredGraph, ISerializationSession serializationSession, bool untracked)
         {
             var track = new Track(serializationSession, storedGraph, registeredGraph);
-            Enroll(track);
+            if(!untracked) Enroll(track);
             return track;
         }
 
@@ -199,12 +194,13 @@ namespace Stash.Engine
         /// </summary>
         /// <param name="internalId"></param>
         /// <param name="serializationSession"></param>
+        /// <param name="untracked"></param>
         /// <returns></returns>
         /// <exception cref="GraphForKeyNotFoundException">If the graph is not persisted in the backing store.</exception>
-        public object LoadTrackedGraphForInternalId(InternalId internalId, ISerializationSession serializationSession)
+        public object LoadTrackedGraphForInternalId(InternalId internalId, ISerializationSession serializationSession, bool untracked)
         {
             var storedGraph = backingStore.Get(internalId);
-            var tracked = Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), serializationSession);
+            var tracked = Load(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), serializationSession, untracked);
 
             return tracked.UntypedGraph;
         }

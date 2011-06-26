@@ -21,7 +21,10 @@ namespace Stash.Specifications.for_stashed_set
 
     public class when_getting_a_stashed_set_without_any_constraints : AutoMockedSpecification<StashedSet<DummyPersistentObject>>
     {
-        protected override void Given() {}
+        protected override void Given()
+        {
+            AutoMocker.Inject(false);
+        }
 
         protected override void When() {}
 

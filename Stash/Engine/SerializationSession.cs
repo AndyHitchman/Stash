@@ -24,15 +24,17 @@ namespace Stash.Engine
 
     public class SerializationSession : ISerializationSession
     {
+        private bool untracked;
         public Func<IEnumerable<IPersistenceEvent>> GetCurrentPersistenceEvents { get; private set; }
         public IInternalSession InternalSession { get; private set; }
         public Dictionary<InternalId, object> ActivelyDeserialising { get; set; }
 
-        public SerializationSession(Func<IEnumerable<IPersistenceEvent>> getCurrentPersistenceEvents, IInternalSession internalSession)
+        public SerializationSession(Func<IEnumerable<IPersistenceEvent>> getCurrentPersistenceEvents, IInternalSession internalSession, bool untracked)
         {
             GetCurrentPersistenceEvents = getCurrentPersistenceEvents;
             InternalSession = internalSession;
             ActivelyDeserialising = new Dictionary<InternalId, object>();
+            this.untracked = untracked;
         }
 
 
@@ -70,7 +72,7 @@ namespace Stash.Engine
             if(tracked != null)
                 return tracked;
 
-            var loading = InternalSession.LoadTrackedGraphForInternalId(internalId, this);
+            var loading = InternalSession.LoadTrackedGraphForInternalId(internalId, this, untracked);
 
             return loading;
         }

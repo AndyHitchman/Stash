@@ -132,6 +132,7 @@
     <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\GraphA.cs" />
     <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\GraphB.cs" />
     <Compile Include="for_engine\for_serializers\given_aggregate_binary_serializer\when_serializing_an_aggregate_referencing_another_aggregate.cs" />
+    <Compile Include="for_engine\given_default_internal_session\when_told_to_load_without_tracking.cs" />
     <Compile Include="for_engine\given_serialization_session\when_told_to_get_the_internal_id_of_a_graph.cs" />
     <Compile Include="for_stashed_set\when_adding_to_a_stashed_set.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />

@@ -41,9 +41,13 @@ namespace Stash.Specifications.for_stashed_set
             var mockRegistry = MockRepository.GenerateStub<IRegistry>();
             var mockBackingStore = MockRepository.GenerateStub<IBackingStore>();
             var mockQueryFactory = MockRepository.GenerateStub<IQueryFactory>();
-            var mockQuery = MockRepository.GenerateStub<IQuery>();
 
-            subject = new StashedSet<DummyPersistentObject>(mockInternalSession, mockRegistry, mockBackingStore, mockQueryFactory, new[] {mockQuery});
+            subject = new StashedSet<DummyPersistentObject>(
+                mockInternalSession,
+                mockRegistry,
+                mockBackingStore,
+                mockQueryFactory,
+                new[] {new StashedSet<DummyPersistentObject>(mockInternalSession, mockRegistry, mockBackingStore, mockQueryFactory)});
 
             mockRegisteredGraph = MockRepository.GenerateStub<IRegisteredGraph<DummyPersistentObject>>();
             mockRegistry.Stub(_ => _.GetRegistrationFor(Arg<Type>.Is.Anything)).Return(mockRegisteredGraph);
@@ -59,10 +63,11 @@ namespace Stash.Specifications.for_stashed_set
         {
             mockInternalSession.Expect(
                 _ =>
-                _.Track(
+                _.Load(
                     Arg<IStoredGraph>.Is.Same(mockStoredGraph),
                     Arg<IRegisteredGraph>.Is.Same(mockRegisteredGraph),
-                    Arg<ISerializationSession>.Is.Anything))
+                    Arg<ISerializationSession>.Is.Anything,
+                    Arg<bool>.Is.Anything))
                 .Return(mockTrack);
 
             actual = subject.GetEnumerator();

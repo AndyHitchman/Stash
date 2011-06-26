@@ -37,9 +37,8 @@ namespace Stash.Specifications.for_stashed_set
             var mockRegistry = MockRepository.GenerateStub<IRegistry>();
             var mockBackingStore = MockRepository.GenerateStub<IBackingStore>();
             var mockQueryFactory = MockRepository.GenerateStub<IQueryFactory>();
-            var mockQuery = MockRepository.GenerateStub<IQuery>();
 
-            subject = new StashedSet<DummyPersistentObject>(mockInternalSession, mockRegistry, mockBackingStore, mockQueryFactory, new[] {mockQuery});
+            subject = new StashedSet<DummyPersistentObject>(mockInternalSession, mockRegistry, mockBackingStore, mockQueryFactory, new StashedSet<DummyPersistentObject>[0]);
 
             mockRegisteredGraph = MockRepository.GenerateStub<IRegisteredGraph<DummyPersistentObject>>();
             mockRegistry.Stub(_ => _.GetRegistrationFor(Arg<Type>.Is.Anything)).Return(mockRegisteredGraph);

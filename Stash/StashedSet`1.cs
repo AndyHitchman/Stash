@@ -28,10 +28,12 @@ namespace Stash
     public class StashedSet<TGraph> : IStashedSet<TGraph> where TGraph : class
     {
         private readonly IBackingStore backingStore;
-        private readonly IEnumerable<IQuery> queryChain;
+        private readonly IEnumerable<StashedSet<TGraph>> queryChain;
         private readonly IQueryFactory queryFactory;
         private readonly IRegistry registry;
         private readonly IInternalSession session;
+        private bool untracked;
+        private IQuery match;
 
         public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory)
             : this(
@@ -39,9 +41,9 @@ namespace Stash
                 registry,
                 backingStore,
                 queryFactory,
-                Enumerable.Empty<IQuery>()) {}
+                Enumerable.Empty<StashedSet<TGraph>>()) {}
 
-        public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory, IEnumerable<IQuery> queryChain)
+        public StashedSet(IInternalSession session, IRegistry registry, IBackingStore backingStore, IQueryFactory queryFactory, IEnumerable<StashedSet<TGraph>> queryChain)
         {
             this.registry = registry;
             this.backingStore = backingStore;
@@ -76,26 +78,42 @@ namespace Stash
 
             return
                 backingStore
-                    .Get(queryFactory.IntersectionOf(queryChain))
-                    .Select(storedGraph => session.Track(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), new SerializationSession(() => session.EnrolledPersistenceEvents, session)))
+                    .Get(queryFactory.IntersectionOf(queryChain.Select(_ => _.match)))
+                    .Select(storedGraph => session.Load(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), new SerializationSession(() => session.EnrolledPersistenceEvents, session, untracked), untracked))
                     .Select(track => (TGraph)track.UntypedGraph)
                     .GetEnumerator();
         }
 
         public IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint)
         {
-            var match = constraint(new MakeConstraint(registry, queryFactory));
+            match = constraint(new MakeConstraint(registry, queryFactory));
             return new StashedSet<TGraph>(
                 session,
                 registry,
                 backingStore,
                 queryFactory,
-                queryChain.Concat(new[] {match}));
+                queryChain.Concat(new[] {this}));
+        }
+
+        public IStashedSet<TGraph> Untracked()
+        {
+            untracked = true;
+            return this;
+        }
+
+        public bool IsUntracked()
+        {
+            return queryChain.Any(_ => _.untracked);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public IStashedSet<TGraph> RestrictToTypeHierarchy()
+        {
+            return Matching(_ => _.Where<StashTypeHierarchy>().EqualTo(StashTypeHierarchy.GetConcreteTypeValue(typeof(TGraph))));
         }
     }
 }
