@@ -80,31 +80,10 @@
     <Content Include="BerkeleyDB\x86\libdb_csharp48.dll" />
     <Content Include="BerkeleyDB\x86\libdb_csharp50.dll" />
     <Content Include="BerkeleyDB\x86\libdb_csharp52.dll" />
-    <Content Include="JSON.Net\Newtonsoft.Json.dll" />
-    <Content Include="JSON.Net\Newtonsoft.Json.pdb" />
-    <Content Include="JSON.Net\Newtonsoft.Json.xml" />
-    <Content Include="JSON.Net\readme.txt" />
-    <Content Include="NUnit\nunit.framework.dll" />
-    <Content Include="NUnit\nunit.framework.xml" />
-    <Content Include="Spark\license.txt" />
-    <Content Include="Spark\Spark.dll" />
-    <Content Include="Spark\Spark.pdb" />
-    <Content Include="Spark\Spark.Web.Mvc.dll" />
-    <Content Include="Spark\Spark.Web.Mvc.pdb" />
-    <Content Include="StructureMap\LICENSE.TXT" />
-    <Content Include="StructureMap\Rhino.Mocks.dll" />
-    <Content Include="StructureMap\Rhino.Mocks.xml" />
-    <Content Include="StructureMap\StructureMap.AutoMocking.dll" />
-    <Content Include="StructureMap\StructureMap.AutoMocking.xml" />
-    <Content Include="StructureMap\StructureMap.dll" />
-    <Content Include="StructureMap\StructureMap.xml" />
-    <Content Include="StructureMap\StructureMapDoctor.exe" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BerkeleyDB\LICENSE" />
     <None Include="BerkeleyDB\README" />
-    <None Include="JSON.Net\Documentation.chm" />
-    <None Include="StructureMap\StructureMap.chm" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

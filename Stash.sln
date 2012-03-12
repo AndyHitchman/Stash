@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash", "Stash\Stash.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Specifications", "Stash.Specifications\Stash.Specifications.csproj", "{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Example", "Stash.Example\Stash.Example.csproj", "{CF629842-B363-4FCB-B60E-BE2476D7D4C6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib", "lib\lib.csproj", "{25D856D0-9295-42AB-B55B-A8156187F269}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.ExecutableDoco", "Stash.ExecutableDoco\Stash.ExecutableDoco.csproj", "{FE8D9F27-2F35-4936-8CC6-D2473E110F44}"
@@ -57,20 +55,6 @@ Global
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x64.Build.0 = Release|x64
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x86.ActiveCfg = Release|x86
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x86.Build.0 = Release|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|x64.ActiveCfg = Debug|x64
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|x64.Build.0 = Debug|x64
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|x86.ActiveCfg = Debug|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Debug|x86.Build.0 = Debug|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|Any CPU.ActiveCfg = Release|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|Mixed Platforms.Build.0 = Release|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|x64.ActiveCfg = Release|x64
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|x64.Build.0 = Release|x64
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|x86.ActiveCfg = Release|x86
-		{CF629842-B363-4FCB-B60E-BE2476D7D4C6}.Release|x86.Build.0 = Release|x86
 		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
