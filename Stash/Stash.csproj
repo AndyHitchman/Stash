@@ -57,9 +57,6 @@
     <AssemblyOriginatorKeyFile>Properties\Stash.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libdb_dotnet52">
-      <HintPath>..\lib\BerkeleyDB\libdb_dotnet52.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -73,11 +70,6 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\StartsWithQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\IsIndexedQuery.cs" />
-    <Compile Include="BackingStore\BDB\DefaultBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="BackingStore\BDB\PartitionedBerkeleyBackingStore.cs" />
-    <Compile Include="BackingStore\BDB\InternalProjectedIndex.cs" />
     <Compile Include="BackingStore\IndexNotReadyException.cs" />
     <Compile Include="Configuration\IRegisteredGraph.cs" />
     <Compile Include="Configuration\IRegisteredGraph`1.cs" />
@@ -131,53 +123,6 @@
     <Compile Include="BackingStore\ITrackedGraph`1.cs" />
     <Compile Include="IIndex.cs" />
     <Compile Include="IIndex`1.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyDbExtensions.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\BetweenQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\AnyOfQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\AllOfQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\IndexMatching.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\UnionOperator.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\IntersectOperator.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\IBerkeleyQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\NotAnyOfQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\NotAllOfQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\OutsideQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\InsideQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\LessThanQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\GreaterThanQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\LessThanEqualToQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\GreaterThanEqualToQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\NotEqualToQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\IBerkeleyIndexQuery.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\QueryCostScale.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueryFactory.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyStorageWork.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\BooleanIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\CharIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\ReverseIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\ObjectIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\TimeSpanIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\DoubleIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\DateTimeIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\DefaultDatabaseEnvironmentConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\DecimalIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\FloatIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\GuidIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\IndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\IntIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\LongIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\ShortIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\StringIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\TypeIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\UIntIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\ULongIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\UShortIndexDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyConfigs\ValueDatabaseConfig.cs" />
-    <Compile Include="BackingStore\BDB\Convert.cs" />
-    <Compile Include="BackingStore\BDB\IBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="BackingStore\BDB\ManagedIndex.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyQueries\EqualToQuery.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
     <Compile Include="IStashedSet`1.cs" />
     <Compile Include="Queries\IStartsWithQuery.cs" />
@@ -232,7 +177,6 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="Engine\StashTypeHierarchy.cs" />
     <Compile Include="IIndex`2.cs" />
-    <Compile Include="BackingStore\BDB\BerkeleyBackingStore.cs" />
     <Compile Include="Engine\PersistentGraph.cs" />
     <Compile Include="ISessionFactory.cs" />
     <Compile Include="Kernel.cs" />

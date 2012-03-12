@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Stash.ExecutableDoco</RootNamespace>
     <AssemblyName>Stash.ExecutableDoco</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -123,6 +123,10 @@
     <Compile Include="Support\SpecificationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stash.BerkeleyDB\Stash.BerkeleyDB.csproj">
+      <Project>{072B337D-4E89-458D-AD82-02E2D3F096C2}</Project>
+      <Name>Stash.BerkeleyDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stash\Stash.csproj">
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>

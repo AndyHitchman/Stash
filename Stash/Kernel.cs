@@ -19,7 +19,6 @@ namespace Stash
     using System;
     using System.Web;
     using BackingStore;
-    using BackingStore.BDB;
     using Configuration;
     using Engine;
     using Queries;
@@ -61,8 +60,10 @@ namespace Stash
         /// </summary>
         /// <param name="backingStore"></param>
         /// <param name="configurationAction"></param>
-        public static void Kickstart(BerkeleyBackingStore backingStore,
-                                     Action<PersistenceContext<BerkeleyBackingStore>> configurationAction)
+        public static void Kickstart<TBackingStore>(
+            TBackingStore backingStore,
+            Action<PersistenceContext<TBackingStore>> configurationAction)
+            where TBackingStore : IBackingStore
         {
             Kickstart(backingStore, configurationAction, (registry, store, queryFactory) => { });
         }

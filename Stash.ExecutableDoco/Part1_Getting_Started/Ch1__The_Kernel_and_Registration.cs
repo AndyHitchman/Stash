@@ -22,7 +22,7 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using System;
     using System.Collections.Generic;
     using BackingStore;
-    using BackingStore.BDB;
+    using BerkeleyDB;
     using NUnit.Framework;
     using Support;
 

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Stash.Specifications</RootNamespace>
     <AssemblyName>Stash.Specifications</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,10 +69,40 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x64\Debug\Stash.Specifications.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\x64\Release\Stash.Specifications.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="libdb_dotnet52">
-      <HintPath>..\lib\BerkeleyDB\libdb_dotnet52.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
@@ -94,23 +125,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\with_temp_dir.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\with_backing_store_on_temp_dir.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\NewIndex.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\ExistingIndex.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\GraphAffectedByNewIndex.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\when_registering_a_new_index_on_existing_graph_data.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\when_registering_a_new_index.cs" />
-    <Compile Include="for_backingstore_bsb\given_managed_index\with_temp_dir.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_union_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\with_string_indexer.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_starts_with.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_having_an_equal_match_but_no_greater_than_match.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_with_one_query.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_is_indexed.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\with_temp_dir.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_not_responsible_for.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_responsible_for.cs" />
     <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_delete_a_graph_that_the_partition_is_not_responsible_for.cs" />
@@ -136,65 +150,12 @@
     <Compile Include="for_stashed_set\when_adding_to_a_stashed_set.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set_without_any_constraints.cs" />
     <Compile Include="for_stashed_set\when_getting_a_stashed_set.cs" />
-    <Compile Include="integration\Comment.cs" />
-    <Compile Include="integration\when_querying_a_stashed_set_with_the_not_constraint.cs" />
-    <Compile Include="integration\when_deleting_a_tracked_graph.cs" />
-    <Compile Include="integration\when_adding_a_transient_graph.cs" />
-    <Compile Include="integration\when_querying_a_stashed_set_with_a_query_matching_nothing.cs" />
-    <Compile Include="integration\when_updating_a_tracked_graph.cs" />
-    <Compile Include="integration\when_querying_an_untyped_stashed_set.cs" />
-    <Compile Include="integration\Post.cs" />
-    <Compile Include="integration\when_querying_a_stashed_set.cs" />
-    <Compile Include="integration\with_real_configuration.cs" />
     <Compile Include="with_temp_directory.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_outside_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_equal_to_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_any_of_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_all_of_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_less_than_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_equal_to_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_inside_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_looking_at_join_optimisation_performance.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_between_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_all_of_inside_intersect_having_a_smaller_number_of_graphs_than_keys_in_set.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_all_of_inside_intersect.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_intersect_two_queries.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_union.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_any_of.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_all_of.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_all_of_having_a_smaller_number_of_graphs_than_keys_in_set.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_all_of.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_any_of_having_query_key_that_doesnt_exist.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_any_of.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_outside_having_nothing_inside.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_outside_nothing_matching.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_outside.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_inside.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_with_only_greater.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_estimating_query_cost.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_between.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_less_than.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_less_than_equal_to_matches_none.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_less_than_equal_to.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_equal_to_with_only_greater_than.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_equal_to_matches_none.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_greater_than_equal_to.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_not_equal_to.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_equal_to_is_false.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\when_executing_equal_to.cs" />
-    <Compile Include="for_backingstore_bsb\given_queries\with_int_indexer.cs" />
     <Compile Include="Support\OtherDummyIndex.cs" />
     <Compile Include="for_configuration\given_registered_graph\when_getting_registered_indexers.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph_that_isnt_stored.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_getting_a_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_updating_a_second_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_updating_a_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_deleting_a_second_graph.cs" />
     <Compile Include="Support\IntIndex.cs" />
     <Compile Include="Support\OtherClassWithTwoAncestors.cs" />
     <Compile Include="Support\DummyFrom.cs" />
@@ -230,11 +191,6 @@
     <Compile Include="for_engine\given_default_internal_session\when_told_to_internalise.cs" />
     <Compile Include="for_engine\given_type_index\OpenedUpTypeIndexer.cs" />
     <Compile Include="for_engine\given_type_index\when_getting_the_type_hierarchy.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_second_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_deleting_a_graph.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_inserting_a_graph.cs" />
-    <Compile Include="for_backingstore_bsb\BerkeleyDbExtensions.cs" />
-    <Compile Include="for_backingstore_bsb\given_berkeley_backing_store\when_instantiating.cs" />
     <Compile Include="Support\OtherDummyPersistentObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\StringIndex.cs" />
@@ -245,6 +201,10 @@
     <Compile Include="Support\ThenAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stash.BerkeleyDB\Stash.BerkeleyDB.csproj">
+      <Project>{072B337D-4E89-458D-AD82-02E2D3F096C2}</Project>
+      <Name>Stash.BerkeleyDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stash\Stash.csproj">
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>
@@ -271,7 +231,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -282,8 +244,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp52.dll" "$(TargetDir)"
-copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb52.dll" "$(TargetDir)"
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

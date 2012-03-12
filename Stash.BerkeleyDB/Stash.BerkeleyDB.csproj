@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{072B337D-4E89-458D-AD82-02E2D3F096C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stash.BerkeleyDB</RootNamespace>
+    <AssemblyName>Stash.BerkeleyDB</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="libdb_dotnet52">
+      <HintPath>..\lib\BerkeleyDB\libdb_dotnet52.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BerkeleyBackingStore.cs" />
+    <Compile Include="BerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="BerkeleyConfigs\BooleanIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\CharIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\DateTimeIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\DecimalIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\DefaultDatabaseEnvironmentConfig.cs" />
+    <Compile Include="BerkeleyConfigs\DoubleIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\FloatIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\GuidIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\IndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\IntIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\LongIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\ObjectIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\ReverseIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\ShortIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\StringIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\TimeSpanIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\TypeIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\UIntIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\ULongIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\UShortIndexDatabaseConfig.cs" />
+    <Compile Include="BerkeleyConfigs\ValueDatabaseConfig.cs" />
+    <Compile Include="BerkeleyDbExtensions.cs" />
+    <Compile Include="BerkeleyQueries\AllOfQuery.cs" />
+    <Compile Include="BerkeleyQueries\AnyOfQuery.cs" />
+    <Compile Include="BerkeleyQueries\BetweenQuery.cs" />
+    <Compile Include="BerkeleyQueries\EqualToQuery.cs" />
+    <Compile Include="BerkeleyQueries\GreaterThanEqualToQuery.cs" />
+    <Compile Include="BerkeleyQueries\GreaterThanQuery.cs" />
+    <Compile Include="BerkeleyQueries\IBerkeleyIndexQuery.cs" />
+    <Compile Include="BerkeleyQueries\IBerkeleyQuery.cs" />
+    <Compile Include="BerkeleyQueries\IndexMatching.cs" />
+    <Compile Include="BerkeleyQueries\InsideQuery.cs" />
+    <Compile Include="BerkeleyQueries\IntersectOperator.cs" />
+    <Compile Include="BerkeleyQueries\IsIndexedQuery.cs" />
+    <Compile Include="BerkeleyQueries\LessThanEqualToQuery.cs" />
+    <Compile Include="BerkeleyQueries\LessThanQuery.cs" />
+    <Compile Include="BerkeleyQueries\NotAllOfQuery.cs" />
+    <Compile Include="BerkeleyQueries\NotAnyOfQuery.cs" />
+    <Compile Include="BerkeleyQueries\NotEqualToQuery.cs" />
+    <Compile Include="BerkeleyQueries\OutsideQuery.cs" />
+    <Compile Include="BerkeleyQueries\QueryCostScale.cs" />
+    <Compile Include="BerkeleyQueries\StartsWithQuery.cs" />
+    <Compile Include="BerkeleyQueries\UnionOperator.cs" />
+    <Compile Include="BerkeleyQueryFactory.cs" />
+    <Compile Include="BerkeleyStorageWork.cs" />
+    <Compile Include="Convert.cs" />
+    <Compile Include="DefaultBerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="IBerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="InternalProjectedIndex.cs" />
+    <Compile Include="ManagedIndex.cs" />
+    <Compile Include="PartitionedBerkeleyBackingStore.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stash\Stash.csproj">
+      <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
+      <Name>Stash</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
