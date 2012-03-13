@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.BerkeleyDB", "Stash.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.BerkeleyDB.Specifications", "Stash.BerkeleyDB.Specifications\Stash.BerkeleyDB.Specifications.csproj", "{33C4748E-156A-4F87-9633-ECDB67EFDA45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Azure", "Stash.Azure\Stash.Azure.csproj", "{F4C894AF-18AA-4827-97B2-FF8087F7B815}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,18 @@ Global
 		{33C4748E-156A-4F87-9633-ECDB67EFDA45}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{33C4748E-156A-4F87-9633-ECDB67EFDA45}.Release|x64.ActiveCfg = Release|Any CPU
 		{33C4748E-156A-4F87-9633-ECDB67EFDA45}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|x64.ActiveCfg = Release|Any CPU
+		{F4C894AF-18AA-4827-97B2-FF8087F7B815}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
