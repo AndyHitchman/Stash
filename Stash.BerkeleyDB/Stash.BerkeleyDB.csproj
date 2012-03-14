@@ -93,9 +93,10 @@
     <Compile Include="Convert.cs" />
     <Compile Include="DefaultBerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="IBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="InternalProjectedIndex.cs" />
     <Compile Include="ManagedIndex.cs" />
     <Compile Include="PartitionedBerkeleyBackingStore.cs" />
+    <Compile Include="ProjectedIndex.cs" />
+    <Compile Include="ProjectedIndex`1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

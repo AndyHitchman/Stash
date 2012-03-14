@@ -45,6 +45,15 @@ namespace Stash.BackingStore
         void EnsureIndex(IRegisteredIndexer registeredIndexer);
 
         /// <summary>
+        /// Provide a projection for a specific index key in a platform dependant implementation.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <param name="indexName"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key);
+
+        /// <summary>
         /// Find and return the <see cref="InternalId"/> of graphs that match the given <paramref name="query"/>
         /// </summary>
         /// <param name="query"></param>

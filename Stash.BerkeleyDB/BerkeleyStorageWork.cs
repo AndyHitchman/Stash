@@ -176,10 +176,10 @@ namespace Stash.BerkeleyDB
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
             foreach(var projection in trackedGraph.ProjectedIndexes)
-                insertIndex(projection, trackedGraph.InternalId);
+                insertIndex((ProjectedIndex)projection, trackedGraph.InternalId);
         }
 
-        private void insertIndex(IProjectedIndex projection, InternalId internalId)
+        private void insertIndex(ProjectedIndex projection, InternalId internalId)
         {
             var managedIndex = BackingStore.IndexDatabases[projection.IndexName];
             managedIndex.Insert(projection.UntypedKey, internalId, Transaction);
@@ -211,7 +211,7 @@ namespace Stash.BerkeleyDB
                 .Select(
                     index => new
                         {
-                            keys = trackedGraph.ProjectedIndexes.Where(_ => _.IndexName == index.IndexName).Select(_ => _.UntypedKey),
+                            keys = trackedGraph.ProjectedIndexes.Where(_ => _.IndexName == index.IndexName).Cast<ProjectedIndex>().Select(_ => _.UntypedKey),
                             managedIndex = BackingStore.IndexDatabases[index.IndexName]
                         }))
             {

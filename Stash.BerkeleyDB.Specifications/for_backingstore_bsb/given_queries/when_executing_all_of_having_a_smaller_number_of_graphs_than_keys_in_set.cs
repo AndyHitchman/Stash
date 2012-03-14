@@ -40,7 +40,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
-                    {new ProjectedIndex<int>(RegisteredIndexer, 102), new ProjectedIndex<int>(RegisteredIndexer, 101), new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                    {
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102),
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101),
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)
+                    },
                 RegisteredGraph
                 );
 
@@ -49,8 +53,10 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
-                        new ProjectedIndex<int>(RegisteredIndexer, 102), new ProjectedIndex<int>(RegisteredIndexer, 99), new ProjectedIndex<int>(RegisteredIndexer, 101),
-                        new ProjectedIndex<int>(RegisteredIndexer, 100)
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102), 
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99),
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101),
+                        new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)
                     },
                 RegisteredGraph
                 );
@@ -58,14 +64,14 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
             firstNonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100) },
                 RegisteredGraph
                 );
 
             secondtNonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101) },
                 RegisteredGraph
                 );
 

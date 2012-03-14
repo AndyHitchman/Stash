@@ -122,7 +122,7 @@ namespace Stash.BerkeleyDB
                                 .EnrolledPersistenceEvents
                                 .SelectMany(
                                     trackedGraph => registeredIndexer.GetUntypedProjections(trackedGraph.UntypedGraph),
-                                    (graph, projection) => new {Projection = projection, graph.InternalId});
+                                    (graph, projection) => new {Projection = (ProjectedIndex)projection, graph.InternalId});
 
                         backingStore.InTransactionDo(
                             work =>

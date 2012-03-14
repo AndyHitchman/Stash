@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Stash</RootNamespace>
     <AssemblyName>Stash</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -145,7 +146,6 @@
     <Compile Include="Engine\Serializers\ISerializer.cs" />
     <Compile Include="Engine\PersistenceEvents\PersistenceEvent`1.cs" />
     <Compile Include="Engine\PersistenceEvents\IPersistenceEvent.cs" />
-    <Compile Include="Engine\ProjectedIndex.cs" />
     <Compile Include="Engine\Serializers\BSONSerializer.cs" />
     <Compile Include="BackingStore\StoredGraph.cs" />
     <Compile Include="BackingStore\TrackedGraph.cs" />

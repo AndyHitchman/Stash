@@ -102,6 +102,11 @@ namespace Stash.BerkeleyDB
             managedIndex.EnsureIndex();
         }
 
+        public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)
+        {
+            return new ProjectedIndex<TKey>(indexName, key);
+        }
+
         public IEnumerable<InternalId> Matching(IQuery query)
         {
             throw new NotImplementedException();

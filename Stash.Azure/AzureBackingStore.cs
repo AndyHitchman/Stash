@@ -42,10 +42,15 @@ namespace Stash.Azure
 
         public int Count(IQuery query)
         {
-            throw new NotImplementedException();
+            return InTransactionDo(work => work.Count(query));
         }
 
         public void EnsureIndex(IRegisteredIndexer registeredIndexer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)
         {
             throw new NotImplementedException();
         }
@@ -61,6 +66,11 @@ namespace Stash.Azure
         }
 
         public IStoredGraph Get(InternalId internalId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TReturn InTransactionDo<TReturn>(Func<IStorageWork,TReturn> storageWorkActions)
         {
             throw new NotImplementedException();
         }

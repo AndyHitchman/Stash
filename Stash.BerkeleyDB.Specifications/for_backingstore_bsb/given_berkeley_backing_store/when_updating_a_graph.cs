@@ -43,8 +43,8 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
                 "thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
-                        new ProjectedIndex<int>(registeredIndexer, 1),
-                        new ProjectedIndex<int>(registeredIndexer, 2)
+                        new ProjectedIndex<int>(registeredIndexer.IndexName, 1),
+                        new ProjectedIndex<int>(registeredIndexer.IndexName, 2)
                     },
                 registeredGraph
                 );
@@ -54,8 +54,8 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
                 "thesecondobjectsserialisedgraph".Select(_ => (byte)_),
                 new IProjectedIndex[]
                     {
-                        new ProjectedIndex<int>(registeredIndexer, 2),
-                        new ProjectedIndex<int>(registeredIndexer, 3)
+                        new ProjectedIndex<int>(registeredIndexer.IndexName, 2),
+                        new ProjectedIndex<int>(registeredIndexer.IndexName, 3)
                     },
                 registeredGraph
                 );

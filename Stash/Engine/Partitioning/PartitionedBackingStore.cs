@@ -60,6 +60,11 @@ namespace Stash.Engine.Partitioning
             underlyingBackingStore.EnsureIndex(registeredIndexer);
         }
 
+        public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<InternalId> Matching(IQuery query)
         {
             throw new NotImplementedException();

@@ -40,28 +40,28 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
             firstTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             secondTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             thirdTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
                 RegisteredGraph
                 );
 
             fourthTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
                 RegisteredGraph
                 );
 

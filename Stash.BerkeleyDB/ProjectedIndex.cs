@@ -14,13 +14,15 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BackingStore
+namespace Stash.BerkeleyDB
 {
     using System;
+    using BackingStore;
 
-    public interface IProjectedIndex
+    public abstract class ProjectedIndex : IProjectedIndex 
     {
-        string IndexName { get; }
-        Type TypeOfKey { get; }
+        public abstract string IndexName { get; set; }
+        public abstract Type TypeOfKey { get; }
+        public abstract object UntypedKey { get; }
     }
 }

@@ -38,21 +38,21 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
             insideTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 101)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
                 RegisteredGraph
                 );
 
             lowerTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 100)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             upperTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 102)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
                 RegisteredGraph
                 );
 

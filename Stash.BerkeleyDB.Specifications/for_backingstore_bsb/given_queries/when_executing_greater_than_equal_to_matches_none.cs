@@ -36,7 +36,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
             lessThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer, 99)},
+                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)},
                 RegisteredGraph
                 );
 

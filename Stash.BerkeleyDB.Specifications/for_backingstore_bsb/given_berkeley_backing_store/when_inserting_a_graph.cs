@@ -44,7 +44,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             trackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
                 "letspretendthisisserialiseddata".Select(_ => (byte)_),
-                new IProjectedIndex[] {new ProjectedIndex<int>(firstRegisteredIndexer, 1), new ProjectedIndex<string>(secondRegisteredIndexer, "wibble")},
+                new IProjectedIndex[]
+                    {
+                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1),
+                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
+                    },
                 registeredGraph
                 );
 
@@ -96,7 +100,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             var projectedIndex = trackedGraph.ProjectedIndexes.First();
 
             Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index
-                .ValueForKey(((int)projectedIndex.UntypedKey).AsByteArray())
+                .ValueForKey(((int)((ProjectedIndex)projectedIndex).UntypedKey).AsByteArray())
                 .ShouldEqual(trackedGraph.InternalId.AsByteArray());
         }
 
@@ -106,7 +110,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             var projectedIndex = trackedGraph.ProjectedIndexes.Skip(1).First();
 
             Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index
-                .ValueForKey(((string)projectedIndex.UntypedKey).AsByteArray())
+                .ValueForKey(((string)((ProjectedIndex)projectedIndex).UntypedKey).AsByteArray())
                 .ShouldEqual(trackedGraph.InternalId.AsByteArray());
         }
     }
