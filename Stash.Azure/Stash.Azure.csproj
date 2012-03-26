@@ -45,6 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureBackingStore.cs" />
+    <Compile Include="AzureQueries\IAzureQuery.cs" />
+    <Compile Include="AzureStorageWork.cs" />
+    <Compile Include="ConcreteTypeEntity.cs" />
+    <Compile Include="ProjectedIndex`1.cs" />
+    <Compile Include="TypeHierarchyEntity.cs" />
+    <Compile Include="ProjectedIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

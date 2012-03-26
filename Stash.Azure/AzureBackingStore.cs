@@ -15,20 +15,64 @@ namespace Stash.Azure
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using BackingStore;
     using Configuration;
     using Engine;
     using Microsoft.WindowsAzure;
     using Queries;
+    using Microsoft.WindowsAzure.StorageClient;
 
     public class AzureBackingStore : IBackingStore, IDisposable
     {
-        private readonly CloudStorageAccount cloudStorageAccount;
         private bool isDisposed;
+        private CloudTableClient cloudTableClient;
+        private const string graphContainerName = "stash";
+        public readonly string TypeHierarchyTableName = "stashtypehierarchies";
+        public readonly string ConcreteTypeTableName = "stashconretetypes";
 
         public AzureBackingStore(CloudStorageAccount cloudStorageAccount)
         {
-            this.cloudStorageAccount = cloudStorageAccount;
+            GraphContainer =
+                cloudStorageAccount
+                    .CreateCloudBlobClient()
+                    .GetContainerReference(graphContainerName);
+            ensureGraphContainer();
+
+            cloudTableClient = cloudStorageAccount.CreateCloudTableClient();
+            cloudTableClient.RetryPolicy = RetryPolicies.Retry(3, new TimeSpan(0, 0, 0, 0, 100));
+            ensureTypeHierarchies();
+            ensureConcreteTypes();
+        }
+
+        private void ensureGraphContainer() 
+        {
+            GraphContainer.CreateIfNotExist();
+            var permissions = GraphContainer.GetPermissions();
+            permissions.PublicAccess = BlobContainerPublicAccessType.Off;
+            GraphContainer.SetPermissions(permissions, new BlobRequestOptions {AccessCondition = AccessCondition.IfMatch(GraphContainer.Properties.ETag)});
+        }
+
+        private void ensureTypeHierarchies()
+        {
+            cloudTableClient.CreateTableIfNotExist(TypeHierarchyTableName);
+        }
+
+        private void ensureConcreteTypes()
+        {
+            cloudTableClient.CreateTableIfNotExist(ConcreteTypeTableName);
+        }
+
+        public CloudBlobContainer GraphContainer { get; private set; }
+
+        public IQueryable<TableServiceEntity> TypeHierarchyQuery
+        {
+            get { return cloudTableClient.GetDataServiceContext().CreateQuery<TypeHierarchyEntity>(TypeHierarchyTableName); }
+        }
+
+        public IQueryable<TableServiceEntity> ConcreteTypeQuery
+        {
+            get { return cloudTableClient.GetDataServiceContext().CreateQuery<TypeHierarchyEntity>(ConcreteTypeTableName); }
         }
 
         public IQueryFactory QueryFactory
@@ -47,12 +91,12 @@ namespace Stash.Azure
 
         public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
-            throw new NotImplementedException();
+            cloudTableClient.CreateTableIfNotExist()
         }
 
         public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)
         {
-            throw new NotImplementedException();
+            return new ProjectedIndex<TKey>(indexName, key);
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)
@@ -62,22 +106,24 @@ namespace Stash.Azure
 
         public IEnumerable<IStoredGraph> Get(IQuery query)
         {
-            throw new NotImplementedException();
+            return InTransactionDo(work => work.Get(query));
         }
 
         public IStoredGraph Get(InternalId internalId)
         {
-            throw new NotImplementedException();
+            return InTransactionDo(work => work.Get(internalId));
         }
 
-        public TReturn InTransactionDo<TReturn>(Func<IStorageWork,TReturn> storageWorkActions)
+        public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkActions)
         {
-            throw new NotImplementedException();
+            var storageWork = new AzureStorageWork(this, cloudTableClient);
+            return storageWorkActions(storageWork);
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
-            throw new NotImplementedException();
+            var storageWork = new AzureStorageWork(this, cloudTableClient);
+            storageWorkActions(storageWork);
         }
 
         public void Dispose()

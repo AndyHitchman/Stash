@@ -16,8 +16,12 @@
 
 namespace Stash.BackingStore
 {
+    using System;
+
     public interface IProjectedIndex<TKey> : IProjectedIndex
     {
+        string IndexName { get; }
+        Type TypeOfKey { get; }
         TKey Key { get; }
     }
 }
