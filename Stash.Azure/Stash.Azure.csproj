@@ -45,12 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureBackingStore.cs" />
+    <Compile Include="AzureQueries\AllOfQuery.cs" />
+    <Compile Include="AzureQueries\IAzureIndexQuery.cs" />
     <Compile Include="AzureQueries\IAzureQuery.cs" />
+    <Compile Include="AzureQueries\IndexMatching.cs" />
     <Compile Include="AzureStorageWork.cs" />
+    <Compile Include="AzureQueryFactory.cs" />
     <Compile Include="ConcreteTypeEntity.cs" />
+    <Compile Include="Convert.cs" />
     <Compile Include="IndexEntity.cs" />
     <Compile Include="ManagedIndex.cs" />
     <Compile Include="ProjectedIndex`1.cs" />
+    <Compile Include="AzureQueries\QueryCostScale.cs" />
     <Compile Include="TypeHierarchyEntity.cs" />
     <Compile Include="ProjectedIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

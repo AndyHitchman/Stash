@@ -7,6 +7,6 @@ namespace Stash.Azure
     {
         public abstract string IndexName { get; protected set; }
         public abstract Type TypeOfKey { get; }
-        public abstract string KeyAsString { get; }
+        public abstract object UntypedKey { get; }
     }
 }

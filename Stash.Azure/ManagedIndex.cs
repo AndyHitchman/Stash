@@ -151,7 +151,7 @@ namespace Stash.Azure
                     });
         }
 
-        public void Insert(string key, InternalId internalId, TableServiceContext serviceContext)
+        public void Insert(object key, InternalId internalId, TableServiceContext serviceContext)
         {
             serviceContext.AddObject(forwardIndexName, new IndexEntity {PartitionKey = key, RowKey = internalId.ToString()});
             serviceContext.AddObject(reverseIndexName, new IndexEntity {PartitionKey = internalId.ToString(), RowKey = key});
@@ -195,6 +195,16 @@ namespace Stash.Azure
                 return serviceContext.CreateQuery<IndexEntity>(reverseIndexName);
 
             throw new IndexNotReadyException(Name);
+        }
+
+        public InternalId ConvertToInternalId(string stringRepresentation)
+        {
+            return new InternalId(Guid.Parse(stringRepresentation));
+        }
+
+        public IComparable<object> ConvertToKey(string stringRepresentation)
+        {
+            throw new NotImplementedException();
         }
     }
 }

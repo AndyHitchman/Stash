@@ -211,7 +211,6 @@ namespace Stash.BerkeleyDB
                 .Select(
                     index => new
                         {
-                            keys = trackedGraph.ProjectedIndexes.Where(_ => _.IndexName == index.IndexName).Cast<ProjectedIndex>().Select(_ => _.UntypedKey),
                             managedIndex = BackingStore.IndexDatabases[index.IndexName]
                         }))
             {

@@ -134,7 +134,6 @@ namespace Stash.Azure
                 .Select(
                     index => new
                         {
-                            keys = trackedGraph.ProjectedIndexes.Where(_ => _.IndexName == index.IndexName).Cast<ProjectedIndex>().Select(_ => _.KeyAsString),
                             managedIndex = backingStore.IndexDatabases[index.IndexName]
                         }))
             {
@@ -152,7 +151,7 @@ namespace Stash.Azure
 
         private void insertIndex(ProjectedIndex projection, InternalId internalId)
         {
-            backingStore.IndexDatabases[projection.IndexName].Insert(projection.KeyAsString, internalId, ServiceContext);
+            backingStore.IndexDatabases[projection.IndexName].Insert(projection.UntypedKey, internalId, ServiceContext);
         }
 
         private void deleteAllIndexEntriesForInternalId(ManagedIndex managedIndex, InternalId internalId)

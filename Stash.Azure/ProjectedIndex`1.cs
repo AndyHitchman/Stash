@@ -17,6 +17,6 @@
 
         public TKey Key { get; private set; }
 
-        public override string KeyAsString { get { return Key.ToString(); } }
+        public override object UntypedKey { get { return Key; } }
     }
 }
