@@ -16,6 +16,7 @@ namespace Stash.Azure
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
     using BackingStore;
     using Configuration;
     using Engine;
@@ -26,13 +27,15 @@ namespace Stash.Azure
     public class AzureBackingStore : IBackingStore, IDisposable
     {
         private bool isDisposed;
-        private CloudTableClient cloudTableClient;
+        private readonly CloudTableClient cloudTableClient;
         private const string graphContainerName = "stash";
-        public readonly string TypeHierarchyTableName = "stashtypehierarchies";
-        public readonly string ConcreteTypeTableName = "stashconretetypes";
+        public const string TypeHierarchyTableName = "stashtypehierarchies";
+        public const string ConcreteTypeTableName = "stashconretetypes";
 
         public AzureBackingStore(CloudStorageAccount cloudStorageAccount)
         {
+            configureServiceEndpoint(cloudStorageAccount);
+
             GraphContainer =
                 cloudStorageAccount
                     .CreateCloudBlobClient()
@@ -41,8 +44,17 @@ namespace Stash.Azure
 
             cloudTableClient = cloudStorageAccount.CreateCloudTableClient();
             cloudTableClient.RetryPolicy = RetryPolicies.Retry(3, new TimeSpan(0, 0, 0, 0, 100));
+
             ensureTypeHierarchies();
             ensureConcreteTypes();
+            IndexDatabases = new Dictionary<string, ManagedIndex>();
+        }
+
+        private void configureServiceEndpoint(CloudStorageAccount cloudStorageAccount)
+        {
+            var servicePoint = ServicePointManager.FindServicePoint(cloudStorageAccount.TableEndpoint);
+            servicePoint.ConnectionLimit = 16 * Environment.ProcessorCount;
+            servicePoint.Expect100Continue = false;
         }
 
         private void ensureGraphContainer() 
@@ -64,6 +76,7 @@ namespace Stash.Azure
         }
 
         public CloudBlobContainer GraphContainer { get; private set; }
+        public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
 
         public IQueryable<TableServiceEntity> TypeHierarchyQuery
         {
@@ -91,7 +104,13 @@ namespace Stash.Azure
 
         public void EnsureIndex(IRegisteredIndexer registeredIndexer)
         {
-            cloudTableClient.CreateTableIfNotExist()
+            var managedIndex = new ManagedIndex(this, registeredIndexer);
+
+            IndexDatabases.Add(
+                registeredIndexer.IndexName,
+                managedIndex);
+
+            managedIndex.EnsureIndex(cloudTableClient);
         }
 
         public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)

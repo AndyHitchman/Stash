@@ -48,6 +48,8 @@
     <Compile Include="AzureQueries\IAzureQuery.cs" />
     <Compile Include="AzureStorageWork.cs" />
     <Compile Include="ConcreteTypeEntity.cs" />
+    <Compile Include="IndexEntity.cs" />
+    <Compile Include="ManagedIndex.cs" />
     <Compile Include="ProjectedIndex`1.cs" />
     <Compile Include="TypeHierarchyEntity.cs" />
     <Compile Include="ProjectedIndex.cs" />
