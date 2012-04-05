@@ -132,7 +132,7 @@ namespace Stash.Azure
                                     {
                                         try
                                         {
-                                            Insert(projection.Projection.KeyAsString, projection.InternalId, ((AzureStorageWork)work).ServiceContext);
+                                            Insert(projection.Projection.UntypedKey, projection.InternalId, ((AzureStorageWork)work).ServiceContext);
                                         }
                                         catch(InvalidOperationException ioEx)
                                         {
@@ -153,8 +153,8 @@ namespace Stash.Azure
 
         public void Insert(object key, InternalId internalId, TableServiceContext serviceContext)
         {
-            serviceContext.AddObject(forwardIndexName, new IndexEntity {PartitionKey = key, RowKey = internalId.ToString()});
-            serviceContext.AddObject(reverseIndexName, new IndexEntity {PartitionKey = internalId.ToString(), RowKey = key});
+            serviceContext.AddObject(forwardIndexName, new IndexEntity {PartitionKey = KeyAsString(key), RowKey = internalId.ToString()});
+            serviceContext.AddObject(reverseIndexName, new IndexEntity { PartitionKey = internalId.ToString(), RowKey = KeyAsString(key)});
         }
 
 
@@ -202,9 +202,14 @@ namespace Stash.Azure
             return new InternalId(Guid.Parse(stringRepresentation));
         }
 
-        public IComparable<object> ConvertToKey(string stringRepresentation)
+        public object ConvertToKey(string stringRepresentation)
         {
             throw new NotImplementedException();
+        }
+
+        public string KeyAsString(object key)
+        {
+            return Convert.IntoString[registeredIndexer.YieldType](key);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Stash.Azure
 {
     using System;
     using System.Collections.Generic;
+    using AzureQueries;
     using Stash.Configuration;
     using Stash.Queries;
 

@@ -57,14 +57,14 @@ namespace Stash.Azure.AzureQueries
         {
             //The seed of the aggregate is the matches for the first element of the set. The remaineder of the set
             //is passed as the comparison set.
-            var matchingFirst = IndexMatching.GetMatching(managedIndex, transaction, Set.First());
-            return execute(transaction, matchingFirst, Set.Skip(1));
+            var matchingFirst = IndexMatching.GetMatching(managedIndex, serviceContext, Set.First());
+            return execute(serviceContext, matchingFirst, Set.Skip(1));
         }
 
         public IEnumerable<InternalId> ExecuteInsideIntersect(TableServiceContext serviceContext, IEnumerable<InternalId> joinConstraint)
         {
             //The seed of the aggregate is the join constraint. The full set is passed as the comparison set.
-            return execute(transaction, joinConstraint, Set);
+            return execute(serviceContext, joinConstraint, Set);
         }
 
         public INotAllOfQuery<TKey> GetComplementaryQuery()
@@ -76,15 +76,15 @@ namespace Stash.Azure.AzureQueries
         {
             //If the number of graphs in the constraint is less than the size of the set,
             //then it should be quicker to hit the reverse index for all graphs and eliminate,
-            //rather than aggregrating the intersection.
+            //rather than aggregating the intersection.
             return joinMatching.Count() < Set.Count()
                        ? joinMatching.Where(
                            internalId =>
                                {
-                                   var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, transaction, internalId);
+                                   var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, serviceContext, internalId);
                                    return Set.All(key => reverseMatching.Contains(key));
                                })
-                       : comparisonSubset.Aggregate(joinMatching, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, transaction, key)));
+                       : comparisonSubset.Aggregate(joinMatching, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, serviceContext, key)));
         }
     }
 }

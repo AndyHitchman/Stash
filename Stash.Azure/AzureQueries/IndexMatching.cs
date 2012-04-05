@@ -29,7 +29,7 @@ namespace Stash.Azure.AzureQueries
         {
             return
                 (from fi in managedIndex.Index(serviceContext)
-                    where fi.PartitionKey == key.ToString()
+                    where fi.PartitionKey == managedIndex.KeyAsString(key)
                     select managedIndex.ConvertToInternalId(fi.RowKey));
         }
 
@@ -38,7 +38,7 @@ namespace Stash.Azure.AzureQueries
             return
                 (from ri in managedIndex.ReverseIndex(serviceContext)
                  where ri.PartitionKey == internalId.ToString()
-                 select managedIndex.ConvertToKey(ri.RowKey));
+                 select (TKey)managedIndex.ConvertToKey(ri.RowKey));
         }
     }
 }
