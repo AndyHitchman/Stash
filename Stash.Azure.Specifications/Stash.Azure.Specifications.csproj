@@ -89,7 +89,12 @@
     <Compile Include="given_queries\when_executing_outside_having_nothing_inside.cs" />
     <Compile Include="given_queries\when_executing_outside_inside_intersect.cs" />
     <Compile Include="given_queries\when_executing_outside_nothing_matching.cs" />
+    <Compile Include="given_queries\when_executing_starts_with.cs" />
+    <Compile Include="given_queries\when_executing_starts_with_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_union.cs" />
+    <Compile Include="given_queries\when_executing_union_inside_intersect.cs" />
     <Compile Include="given_queries\with_development_storage.cs" />
+    <Compile Include="given_queries\with_string_indexer.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />
@@ -101,6 +106,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Support\Specification.cs" />
     <Compile Include="Support\SpecificationExtensions.cs" />
+    <Compile Include="Support\StringIndex.cs" />
     <Compile Include="Support\ThenAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

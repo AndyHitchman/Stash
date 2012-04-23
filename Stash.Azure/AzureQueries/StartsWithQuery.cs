@@ -16,7 +16,6 @@
 
 namespace Stash.Azure.AzureQueries
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.WindowsAzure.StorageClient;
@@ -25,21 +24,23 @@ namespace Stash.Azure.AzureQueries
     using Stash.Engine;
     using Stash.Queries;
 
-    public class IsIndexedQuery : IAzureIndexQuery, IIsIndexedQuery
+    public class StartsWithQuery : IAzureIndexQuery, IStartsWithQuery
     {
         private readonly ManagedIndex managedIndex;
 
-        public IsIndexedQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer)
+        public StartsWithQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, string startsWith)
         {
             this.managedIndex = managedIndex;
             Indexer = indexer;
+            Key = startsWith;
         }
 
         public IRegisteredIndexer Indexer { get; private set; }
+        public string Key { get; private set; }
 
         public QueryCostScale QueryCostScale
         {
-            get { return QueryCostScale.FullScan; }
+            get { return QueryCostScale.ClosedRangeScan; }
         }
 
         public double EstimatedQueryCost(TableServiceContext serviceContext)
@@ -49,22 +50,13 @@ namespace Stash.Azure.AzureQueries
 
         public IEnumerable<InternalId> Execute(TableServiceContext serviceContext)
         {
-            var query = managedIndex.ReverseIndex(serviceContext);
-
-            Func<InternalId, InternalId> nextInternalId =
-                cid =>
-                    {
-                        var next =
-                            (from ri in query
-                             where ri.PartitionKey.CompareTo(cid.Value.ToString()) > 0
-                             select ri)
-                                .FirstOrDefault();
-                        return next != null ? managedIndex.ConvertToInternalId(next.PartitionKey) : null;
-                    };
-           
-            var currentInternalId = new InternalId(Guid.Empty);
-            while ((currentInternalId = nextInternalId(currentInternalId)) != null)
-                yield return currentInternalId;
+            return
+                (from fi in managedIndex.ForwardIndex(serviceContext)
+                 where fi.PartitionKey.CompareTo(managedIndex.KeyAsString(Key)) >= 0
+                 select fi)
+                    .AsEnumerable()
+                    .TakeWhile(fi => fi.PartitionKey.StartsWith(Key))
+                    .Select(fi => managedIndex.ConvertToInternalId(fi.RowKey));
         }
 
         public IEnumerable<InternalId> ExecuteInsideIntersect(TableServiceContext serviceContext, IEnumerable<InternalId> joinConstraint)
@@ -72,16 +64,14 @@ namespace Stash.Azure.AzureQueries
             if(joinConstraint.Count() > EstimatedQueryCost(serviceContext))
                 return Execute(serviceContext);
 
-            var query = managedIndex.ReverseIndex(serviceContext);
-
             return
-                joinConstraint
-                    .Where(
-                        joinMatched =>
-                        (from ri in query
-                         where ri.PartitionKey == joinMatched.ToString()
-                         select ri)
-                            .FirstOrDefault() != null);
+                joinConstraint.Aggregate(
+                    Enumerable.Empty<InternalId>(),
+                    (matching, joinMatched) => matching.Union(
+                        IndexMatching
+                            .GetReverseMatching<string>(managedIndex, serviceContext, joinMatched)
+                            .Where(key => key.StartsWith(Key))
+                            .Select(_ => joinMatched)));
         }
     }
 }

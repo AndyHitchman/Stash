@@ -62,6 +62,8 @@
     <Compile Include="AzureQueries\NotAllOfQuery.cs" />
     <Compile Include="AzureQueries\NotEqualToQuery.cs" />
     <Compile Include="AzureQueries\OutsideQuery.cs" />
+    <Compile Include="AzureQueries\StartsWithQuery.cs" />
+    <Compile Include="AzureQueries\UnionOperator.cs" />
     <Compile Include="AzureStorageWork.cs" />
     <Compile Include="AzureQueryFactory.cs" />
     <Compile Include="ConcreteTypeEntity.cs" />
