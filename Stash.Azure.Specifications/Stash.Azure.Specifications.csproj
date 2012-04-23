@@ -69,6 +69,8 @@
     <Compile Include="given_queries\when_executing_greater_than_having_an_equal_match_but_no_greater_than_match.cs" />
     <Compile Include="given_queries\when_executing_greater_than_inside_intersect.cs" />
     <Compile Include="given_queries\when_executing_greater_than_with_only_greater.cs" />
+    <Compile Include="given_queries\when_executing_inside.cs" />
+    <Compile Include="given_queries\when_executing_inside_inside_intersect.cs" />
     <Compile Include="given_queries\when_executing_less_than.cs" />
     <Compile Include="given_queries\when_executing_less_than_equal_to.cs" />
     <Compile Include="given_queries\when_executing_less_than_equal_to_matches_none.cs" />
