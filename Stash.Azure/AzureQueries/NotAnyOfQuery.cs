@@ -14,18 +14,18 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BerkeleyDB.BerkeleyQueries
+namespace Stash.Azure.AzureQueries
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using BerkeleyDB;
-    using global::BerkeleyDB;
-    using Stash.Configuration;
-    using Stash.Engine;
-    using Stash.Queries;
+    using Microsoft.WindowsAzure.StorageClient;
+    using Azure;
+    using Configuration;
+    using Engine;
+    using Queries;
 
-    public class NotAnyOfQuery<TKey> : IBerkeleyIndexQuery, INotAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
+    public class NotAnyOfQuery<TKey> : IAzureIndexQuery, INotAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private const int pageSizeBufferMultipler = 4;
         private readonly ManagedIndex managedIndex;
@@ -45,34 +45,38 @@ namespace Stash.BerkeleyDB.BerkeleyQueries
             get { return QueryCostScale.FullScan; }
         }
 
-        public double EstimatedQueryCost(Transaction transaction)
+        public double EstimatedQueryCost(TableServiceContext serviceContext)
         {
-            return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
+            return (double)QueryCostScale;
         }
 
-        public IEnumerable<InternalId> Execute(Transaction transaction)
+        public IEnumerable<InternalId> Execute(TableServiceContext serviceContext)
         {
-            var matchingAny = new AnyOfQuery<TKey>(managedIndex, Indexer, Set).Execute(transaction).Materialize();
+            var query = managedIndex.ReverseIndex(serviceContext);
 
-            var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), transaction);
-            try
-            {
-                while(cursor.MoveNextUnique())
-                {
-                    if(!matchingAny.Any(matchingKey => cursor.Current.Key.Data.AsInternalId() == matchingKey))
-                        yield return cursor.Current.Key.Data.AsInternalId();
-                }
-            }
-            finally
-            {
-                cursor.Close();
-            }
+            Func<InternalId, InternalId> nextInternalId =
+                cid =>
+                    {
+                        var next =
+                            (from ri in query
+                             where ri.PartitionKey.CompareTo(cid.Value.ToString()) > 0
+                             select ri)
+                                .FirstOrDefault();
+                        return next != null ? managedIndex.ConvertToInternalId(next.PartitionKey) : null;
+                    };
+
+            var matchingAny = new AnyOfQuery<TKey>(managedIndex, Indexer, Set).Execute(serviceContext).Materialize();
+            
+            var currentInternalId = new InternalId(Guid.Empty);
+            while ((currentInternalId = nextInternalId(currentInternalId)) != null)
+                if(!matchingAny.Contains(currentInternalId))
+                    yield return currentInternalId;
         }
 
-        public IEnumerable<InternalId> ExecuteInsideIntersect(Transaction transaction, IEnumerable<InternalId> joinConstraint)
+        public IEnumerable<InternalId> ExecuteInsideIntersect(TableServiceContext serviceContext, IEnumerable<InternalId> joinConstraint)
         {
-            if(joinConstraint.Count() > EstimatedQueryCost(transaction))
-                return Execute(transaction);
+            if(joinConstraint.Count() > EstimatedQueryCost(serviceContext))
+                return Execute(serviceContext);
 
             return
                 joinConstraint.Except(
@@ -80,7 +84,7 @@ namespace Stash.BerkeleyDB.BerkeleyQueries
                         Enumerable.Empty<InternalId>(),
                         (matching, joinMatched) => matching.Union(
                             IndexMatching
-                                .GetReverseMatching<TKey>(managedIndex, transaction, joinMatched)
+                                .GetReverseMatching<TKey>(managedIndex, serviceContext, joinMatched)
                                 .Where(key => Set.Contains(key))
                                 .Select(_ => joinMatched))));
         }

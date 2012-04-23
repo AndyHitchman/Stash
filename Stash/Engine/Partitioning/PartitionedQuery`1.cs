@@ -48,9 +48,19 @@ namespace Stash.Engine.Partitioning
             return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<INotAnyOfQuery<TKey>>, INotAnyOfQuery<TKey>>);
         }
 
+        IAnyOfQuery<TKey> IComplementaryQuery<IAnyOfQuery<TKey>>.GetComplementaryQuery()
+        {
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<INotAnyOfQuery<TKey>>, INotAnyOfQuery<TKey>>);
+        }
+
         IOutsideQuery<TKey> IComplementaryQuery<IOutsideQuery<TKey>>.GetComplementaryQuery()
         {
             return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IOutsideQuery<TKey>>, IOutsideQuery<TKey>>);
+        }
+
+        IBetweenQuery<TKey> IComplementaryQuery<IBetweenQuery<TKey>>.GetComplementaryQuery()
+        {
+            return new PartitionedQuery<TKey>(PartitionedQueryFactories, complementQuery<IComplementaryQuery<IBetweenQuery<TKey>>, IBetweenQuery<TKey>>);
         }
 
         INotEqualToQuery<TKey> IComplementaryQuery<INotEqualToQuery<TKey>>.GetComplementaryQuery()

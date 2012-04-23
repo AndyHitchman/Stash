@@ -121,5 +121,10 @@ namespace Stash.BerkeleyDB.BerkeleyQueries
                             .Where(key => comparer.Compare(key, LowerKey) < 0 || comparer.Compare(key, UpperKey) > 0)
                             .Select(_ => joinMatched)));
         }
+
+        public IBetweenQuery<TKey> GetComplementaryQuery()
+        {
+            return new BetweenQuery<TKey>(managedIndex, Indexer, LowerKey, UpperKey);
+        }
     }
 }

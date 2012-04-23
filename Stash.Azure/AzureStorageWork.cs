@@ -21,6 +21,11 @@ namespace Stash.Azure
             ServiceContext = cloudTableClient.GetDataServiceContext();
         }
 
+        public void Commit()
+        {
+            ServiceContext.SaveChangesWithRetries();
+        }
+
         public int Count(IQuery query)
         {
             return executeQuery(query).Count();
@@ -30,7 +35,7 @@ namespace Stash.Azure
         {
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return Matching(query).Select(internalId => backingStore.Get(internalId));
+            return Matching(query).Distinct().Select(internalId => backingStore.Get(internalId));
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)
@@ -42,7 +47,7 @@ namespace Stash.Azure
         {
             var graph = backingStore.GraphContainer.GetBlobReference(internalId.ToString());
             var concreteType =
-                (from ct in backingStore.TypeHierarchyQuery
+                (from ct in backingStore.ConcreteTypeQuery
                  where ct.PartitionKey == internalId.ToString()
                  select ct).First();
             return new StoredGraph(internalId, graph.DownloadByteArray(), concreteType.RowKey);
@@ -108,7 +113,7 @@ namespace Stash.Azure
 
         private void insertTypeHierarchy(ITrackedGraph trackedGraph)
         {
-            var typeHierarchyIndex = backingStore.IndexDatabases[AzureBackingStore.TypeHierarchyTableName];
+            var typeHierarchyIndex = backingStore.IndexDatabases[backingStore.RegisteredTypeHierarchyIndex.IndexName];
 
             foreach (var type in trackedGraph.TypeHierarchy)
             {
@@ -118,7 +123,7 @@ namespace Stash.Azure
 
         private void deleteTypeHierarchy(InternalId internalId)
         {
-            var typeHierarchyIndex = backingStore.IndexDatabases[AzureBackingStore.TypeHierarchyTableName];
+            var typeHierarchyIndex = backingStore.IndexDatabases[backingStore.RegisteredTypeHierarchyIndex.IndexName];
             deleteAllIndexEntriesForInternalId(typeHierarchyIndex, internalId);
         }
 
@@ -159,10 +164,10 @@ namespace Stash.Azure
             managedIndex.Delete(internalId, ServiceContext);
         }
 
-        private static IEnumerable<InternalId> executeQuery(IQuery query)
+        private IEnumerable<InternalId> executeQuery(IQuery query)
         {
             var azureQuery = (IAzureQuery)query;
-            return azureQuery.Execute();
+            return azureQuery.Execute(ServiceContext);
         }
     }
 }

@@ -14,9 +14,10 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Queries
+namespace Stash.Azure.Specifications.Support
 {
-    using System;
-
-    public interface INotAnyOfQuery<TKey> : ISetQuery<TKey>, IComplementaryQuery<IAnyOfQuery<TKey>> where TKey : IEquatable<TKey> {}
+    /// <summary>
+    /// method that throws.
+    /// </summary>
+    public delegate void MethodThatThrows();
 }

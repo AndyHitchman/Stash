@@ -20,10 +20,10 @@ namespace Stash.Azure.AzureQueries
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.WindowsAzure.StorageClient;
-    using Stash.Azure;
-    using Stash.Configuration;
-    using Stash.Engine;
-    using Stash.Queries;
+    using Azure;
+    using Configuration;
+    using Engine;
+    using Queries;
 
     public class NotAllOfQuery<TKey> : IAzureIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
@@ -47,34 +47,18 @@ namespace Stash.Azure.AzureQueries
 
         public double EstimatedQueryCost(TableServiceContext serviceContext)
         {
-            return managedIndex.Index.FastStats().nPages / (double)pageSizeBufferMultipler * (double)QueryCostScale;
+            return (double)QueryCostScale;
         }
 
         public IEnumerable<InternalId> Execute(TableServiceContext serviceContext)
         {
-            var cursor = managedIndex.ReverseIndex.Cursor(new CursorConfig(), serviceContext);
-            try
+            var query = managedIndex.ForwardIndex(serviceContext).AsQueryable();
+            foreach(var key in Set)
             {
-                var bufferSize = (int)managedIndex.ReverseIndex.Pagesize * pageSizeBufferMultipler;
-                if(cursor.MoveFirstMultipleKey(bufferSize))
-                {
-                    var setKeysAsBytes = Set.Select(key => managedIndex.KeyAsByteArray(key)).Materialize();
-                    do
-                    {
-                        foreach(var internalId in cursor.CurrentMultipleKey
-                            .Where(pair => !setKeysAsBytes.Any(setKey => pair.Value.Data.SequenceEqual(setKey)))
-                            .Select(pair => pair.Key.Data.AsInternalId()))
-                        {
-                            yield return internalId;
-                        }
-                    }
-                    while(cursor.MoveNextMultipleKey(bufferSize));
-                }
+                var closedKeyString = managedIndex.KeyAsString(key);
+                query = query.Where(fi => fi.PartitionKey != closedKeyString);
             }
-            finally
-            {
-                cursor.Close();
-            }
+            return query.AsEnumerable().Select(fi => managedIndex.ConvertToInternalId(fi.RowKey));
         }
 
         public IEnumerable<InternalId> ExecuteInsideIntersect(TableServiceContext serviceContext, IEnumerable<InternalId> joinConstraint)
@@ -82,16 +66,16 @@ namespace Stash.Azure.AzureQueries
             if(joinConstraint.Count() > EstimatedQueryCost(serviceContext))
                 return Execute(serviceContext);
 
-            var comparer = managedIndex.Comparer;
-
             return
-                joinConstraint.Aggregate(
-                    Enumerable.Empty<InternalId>(),
-                    (matching, joinMatched) => matching.Union(
-                        IndexMatching
-                            .GetReverseMatching<TKey>(managedIndex, serviceContext, joinMatched)
-                            .Where(key => !Set.Contains(key))
-                            .Select(_ => joinMatched)));
+                joinConstraint
+                    .AsParallel()
+                    .Aggregate(
+                        Enumerable.Empty<InternalId>(),
+                        (matching, joinMatched) => matching.Union(
+                            IndexMatching
+                                .GetReverseMatching<TKey>(managedIndex, serviceContext, joinMatched)
+                                .Where(key => !Set.Contains(key))
+                                .Select(_ => joinMatched)));
         }
 
         public IAllOfQuery<TKey> GetComplementaryQuery()

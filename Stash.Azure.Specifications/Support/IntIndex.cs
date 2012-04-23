@@ -14,9 +14,16 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Queries
+namespace Stash.Azure.Specifications.Support
 {
     using System;
+    using System.Collections.Generic;
 
-    public interface INotAnyOfQuery<TKey> : ISetQuery<TKey>, IComplementaryQuery<IAnyOfQuery<TKey>> where TKey : IEquatable<TKey> {}
+    public class IntIndex : IIndex<ClassWithTwoAncestors, int>
+    {
+        public IEnumerable<int> Yield(ClassWithTwoAncestors graph)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

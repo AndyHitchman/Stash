@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A26611D1-12A0-4626-894F-FA862CBB1412}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Stash.Azure.Specifications</RootNamespace>
+    <AssemblyName>Stash.Azure.Specifications</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.DevelopmentStorage.Services">
+      <HintPath>..\..\..\Program Files\Windows Azure Emulator\emulator\devstore\Microsoft.WindowsAzure.DevelopmentStorage.Services.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.1.6\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.3.0.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="given_convert\when_converting_decimal_to_string.cs" />
+    <Compile Include="given_queries\when_executing_all_of_having_a_smaller_number_of_graphs_than_keys_in_set.cs" />
+    <Compile Include="given_queries\when_executing_any_of.cs" />
+    <Compile Include="given_queries\when_executing_any_of_having_query_key_that_doesnt_exist.cs" />
+    <Compile Include="given_queries\when_executing_between.cs" />
+    <Compile Include="given_queries\when_executing_between_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_not_all_of.cs" />
+    <Compile Include="given_queries\when_executing_not_all_of_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_not_any_of.cs" />
+    <Compile Include="given_queries\when_executing_not_any_of_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_outside.cs" />
+    <Compile Include="given_queries\when_executing_outside_having_nothing_inside.cs" />
+    <Compile Include="given_queries\when_executing_outside_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_outside_nothing_matching.cs" />
+    <Compile Include="given_queries\with_development_storage.cs" />
+    <Compile Include="Support\ClassWithNoAncestors.cs" />
+    <Compile Include="Support\ClassWithOneAncestors.cs" />
+    <Compile Include="Support\ClassWithTwoAncestors.cs" />
+    <Compile Include="given_queries\when_executing_all_of.cs" />
+    <Compile Include="given_queries\when_executing_all_of_inside_intersect.cs" />
+    <Compile Include="given_queries\with_int_indexer.cs" />
+    <Compile Include="Support\IntIndex.cs" />
+    <Compile Include="Support\MethodThatThrows.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\Specification.cs" />
+    <Compile Include="Support\SpecificationExtensions.cs" />
+    <Compile Include="Support\ThenAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stash.Azure\Stash.Azure.csproj">
+      <Project>{F4C894AF-18AA-4827-97B2-FF8087F7B815}</Project>
+      <Name>Stash.Azure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Stash\Stash.csproj">
+      <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
+      <Name>Stash</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

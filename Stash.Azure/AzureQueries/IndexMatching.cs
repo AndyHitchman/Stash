@@ -23,14 +23,17 @@ namespace Stash.Azure.AzureQueries
     using Stash.Azure;
     using Stash.Engine;
 
-    public class IndexMatching
+    public static class IndexMatching
     {
         public static IEnumerable<InternalId> GetMatching<TKey>(ManagedIndex managedIndex, TableServiceContext serviceContext, TKey key) where TKey : IComparable<TKey>
         {
             return
-                (from fi in managedIndex.Index(serviceContext)
-                    where fi.PartitionKey == managedIndex.KeyAsString(key)
-                    select managedIndex.ConvertToInternalId(fi.RowKey));
+                (from fi in managedIndex.ForwardIndex(serviceContext)
+                 where fi.PartitionKey == managedIndex.KeyAsString(key)
+                 select fi)
+                    .AsEnumerable()
+                    .Select(fi => managedIndex.ConvertToInternalId(fi.RowKey));
+
         }
 
         public static IEnumerable<TKey> GetReverseMatching<TKey>(ManagedIndex managedIndex, TableServiceContext serviceContext, InternalId internalId) where TKey : IComparable<TKey>
@@ -38,7 +41,9 @@ namespace Stash.Azure.AzureQueries
             return
                 (from ri in managedIndex.ReverseIndex(serviceContext)
                  where ri.PartitionKey == internalId.ToString()
-                 select (TKey)managedIndex.ConvertToKey(ri.RowKey));
+                 select ri)
+                    .AsEnumerable()
+                    .Select(ri => (TKey)managedIndex.ConvertToKey(ri.RowKey));
         }
     }
 }

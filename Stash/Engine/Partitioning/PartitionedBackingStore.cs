@@ -102,5 +102,10 @@ namespace Stash.Engine.Partitioning
                         storageWorkActions(partitionedWork);
                     });
         }
+
+        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

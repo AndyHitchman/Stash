@@ -142,6 +142,28 @@ namespace Stash.BerkeleyDB
             }
         }
 
+        List<Type> supportedTypes = new List<Type>
+            {
+                typeof(string),
+                typeof(Type), 
+                typeof(TimeSpan),
+                typeof(DateTime),
+                typeof(bool),
+                typeof(char),  
+                typeof(decimal),
+                typeof(int),
+                typeof(long), 
+                typeof(short),
+                typeof(uint),
+                typeof(ulong),
+                typeof(ushort),
+            };
+        
+        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            return supportedTypes.Contains(proposedIndexType);
+        }
+
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             var storageWork = new BerkeleyStorageWork(this);

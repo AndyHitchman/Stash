@@ -27,9 +27,7 @@ namespace Stash.Azure
     public class AzureBackingStore : IBackingStore, IDisposable
     {
         private bool isDisposed;
-        private readonly CloudTableClient cloudTableClient;
         private const string graphContainerName = "stash";
-        public const string TypeHierarchyTableName = "stashtypehierarchies";
         public const string ConcreteTypeTableName = "stashconretetypes";
 
         public AzureBackingStore(CloudStorageAccount cloudStorageAccount)
@@ -42,12 +40,14 @@ namespace Stash.Azure
                     .GetContainerReference(graphContainerName);
             ensureGraphContainer();
 
-            cloudTableClient = cloudStorageAccount.CreateCloudTableClient();
-            cloudTableClient.RetryPolicy = RetryPolicies.Retry(3, new TimeSpan(0, 0, 0, 0, 100));
+            CloudTableClient = cloudStorageAccount.CreateCloudTableClient();
+            CloudTableClient.RetryPolicy = RetryPolicies.Retry(3, new TimeSpan(0, 0, 0, 0, 100));
 
-            ensureTypeHierarchies();
             ensureConcreteTypes();
             IndexDatabases = new Dictionary<string, ManagedIndex>();
+            RegisteredTypeHierarchyIndex = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), null);
+
+            QueryFactory = new AzureQueryFactory(this);
         }
 
         private void configureServiceEndpoint(CloudStorageAccount cloudStorageAccount)
@@ -65,33 +65,28 @@ namespace Stash.Azure
             GraphContainer.SetPermissions(permissions, new BlobRequestOptions {AccessCondition = AccessCondition.IfMatch(GraphContainer.Properties.ETag)});
         }
 
-        private void ensureTypeHierarchies()
-        {
-            cloudTableClient.CreateTableIfNotExist(TypeHierarchyTableName);
-        }
-
         private void ensureConcreteTypes()
         {
-            cloudTableClient.CreateTableIfNotExist(ConcreteTypeTableName);
+            CloudTableClient.CreateTableIfNotExist(ConcreteTypeTableName);
         }
 
+        public CloudTableClient CloudTableClient { get; private set; }
         public CloudBlobContainer GraphContainer { get; private set; }
         public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
 
-        public IQueryable<TableServiceEntity> TypeHierarchyQuery
+        public TableServiceContext TableServiceContext
         {
-            get { return cloudTableClient.GetDataServiceContext().CreateQuery<TypeHierarchyEntity>(TypeHierarchyTableName); }
+            get { return CloudTableClient.GetDataServiceContext(); }
         }
 
         public IQueryable<TableServiceEntity> ConcreteTypeQuery
         {
-            get { return cloudTableClient.GetDataServiceContext().CreateQuery<TypeHierarchyEntity>(ConcreteTypeTableName); }
+            get { return CloudTableClient.GetDataServiceContext().CreateQuery<TypeHierarchyEntity>(ConcreteTypeTableName); }
         }
 
-        public IQueryFactory QueryFactory
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public IQueryFactory QueryFactory { get; private set; }
+
+        public RegisteredIndexer<Type, string> RegisteredTypeHierarchyIndex { get; private set; }
 
         public void Close()
         {
@@ -110,7 +105,7 @@ namespace Stash.Azure
                 registeredIndexer.IndexName,
                 managedIndex);
 
-            managedIndex.EnsureIndex(cloudTableClient);
+            managedIndex.EnsureIndex(CloudTableClient);
         }
 
         public IProjectedIndex ProjectIndex<TKey>(string indexName, TKey key)
@@ -135,14 +130,33 @@ namespace Stash.Azure
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkActions)
         {
-            var storageWork = new AzureStorageWork(this, cloudTableClient);
-            return storageWorkActions(storageWork);
+            var storageWork = new AzureStorageWork(this, CloudTableClient);
+            try
+            {
+                return storageWorkActions(storageWork);
+            }
+            finally
+            {
+                storageWork.Commit();
+            }
         }
 
         public void InTransactionDo(Action<IStorageWork> storageWorkActions)
         {
-            var storageWork = new AzureStorageWork(this, cloudTableClient);
-            storageWorkActions(storageWork);
+            var storageWork = new AzureStorageWork(this, CloudTableClient);
+            try
+            {
+                storageWorkActions(storageWork);
+            }
+            finally
+            {
+                storageWork.Commit();
+            }
+        }
+
+        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            return Convert.For.ContainsKey(proposedIndexType);
         }
 
         public void Dispose()

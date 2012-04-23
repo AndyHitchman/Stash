@@ -20,18 +20,14 @@ namespace Stash.Azure.AzureQueries
     using System.Collections.Generic;
     using System.Linq;
     using Microsoft.WindowsAzure.StorageClient;
-    using Stash.Azure;
-    using Stash.Configuration;
-    using Stash.Engine;
-    using Stash.Queries;
+    using Azure;
+    using Configuration;
+    using Engine;
+    using Queries;
 
     public class AllOfQuery<TKey> : IAzureIndexQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
         private readonly ManagedIndex managedIndex;
-
-        public AllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set, QueryCostScale queryCostScaleHint)
-            : this(managedIndex, indexer, set)
-        {}
 
         public AllOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
         {
@@ -55,7 +51,7 @@ namespace Stash.Azure.AzureQueries
 
         public IEnumerable<InternalId> Execute(TableServiceContext serviceContext)
         {
-            //The seed of the aggregate is the matches for the first element of the set. The remaineder of the set
+            //The seed of the aggregate is the matches for the first element of the set. The remainder of the set
             //is passed as the comparison set.
             var matchingFirst = IndexMatching.GetMatching(managedIndex, serviceContext, Set.First());
             return execute(serviceContext, matchingFirst, Set.Skip(1));
@@ -78,13 +74,17 @@ namespace Stash.Azure.AzureQueries
             //then it should be quicker to hit the reverse index for all graphs and eliminate,
             //rather than aggregating the intersection.
             return joinMatching.Count() < Set.Count()
-                       ? joinMatching.Where(
-                           internalId =>
-                               {
-                                   var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, serviceContext, internalId);
-                                   return Set.All(key => reverseMatching.Contains(key));
-                               })
-                       : comparisonSubset.Aggregate(joinMatching, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, serviceContext, key)));
+                       ? joinMatching
+                             .AsParallel()
+                             .Where(
+                                 internalId =>
+                                     {
+                                         var reverseMatching = IndexMatching.GetReverseMatching<TKey>(managedIndex, serviceContext, internalId);
+                                         return Set.All(key => reverseMatching.Contains(key));
+                                     })
+                       : comparisonSubset
+                        .AsParallel()
+                        .Aggregate(joinMatching, (current, key) => current.Intersect(IndexMatching.GetMatching(managedIndex, serviceContext, key)));
         }
     }
 }

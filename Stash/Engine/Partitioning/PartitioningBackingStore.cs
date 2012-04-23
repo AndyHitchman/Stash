@@ -103,6 +103,11 @@ namespace Stash.Engine.Partitioning
             fireAtPartitions((partition, backingStore) => backingStore.InTransactionDo(storageWorkActions));
         }
 
+        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            throw new NotImplementedException();
+        }
+
         private TResult collectFromPartitions<TResult>(Func<IPartition, IBackingStore, TResult> map, TResult seed, Func<TResult, TResult, TResult> reduce)
         {
             //Fire off async invokes of the map function, collecting the async results in an enumerable.

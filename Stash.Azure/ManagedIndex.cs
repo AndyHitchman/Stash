@@ -70,15 +70,15 @@ namespace Stash.Azure
             //Before we open (with create if needed).
             var recompileRequired = RecompileIsRequired(cloudTableClient);
 
-            if (recompileRequired)
-                BuildIndexFromGraphs(cloudTableClient);
-            else
+//            if (recompileRequired)
+//                BuildIndexFromGraphs(cloudTableClient);
+//            else
                 indexCompiled.Set();
         }
 
         public bool RecompileIsRequired(CloudTableClient cloudTableClient)
         {
-            return !(indexIsTypeHierarchy() || indexExists(cloudTableClient));
+            return !(indexIsTypeHierarchy() | ensureIndexExists(cloudTableClient));
         }
 
         private bool indexIsTypeHierarchy()
@@ -86,16 +86,16 @@ namespace Stash.Azure
             return registeredIndexer.IndexType == typeof(StashTypeHierarchy);
         }
 
-        private bool indexExists(CloudTableClient cloudTableClient) {
-            return !cloudTableClient.CreateTableIfNotExist(tableName);
+        private bool ensureIndexExists(CloudTableClient cloudTableClient) {
+            return !cloudTableClient.CreateTableIfNotExist(ForwardIndexName) | !cloudTableClient.CreateTableIfNotExist(ReverseIndexName);
         }
 
-        private string reverseIndexName
+        public string ReverseIndexName
         {
             get { return reverseIndexFilenamePrefix + tableName; }
         }
 
-        private string forwardIndexName
+        public string ForwardIndexName
         {
             get { return indexFilenamePrefix + tableName; }
         }
@@ -153,8 +153,8 @@ namespace Stash.Azure
 
         public void Insert(object key, InternalId internalId, TableServiceContext serviceContext)
         {
-            serviceContext.AddObject(forwardIndexName, new IndexEntity {PartitionKey = KeyAsString(key), RowKey = internalId.ToString()});
-            serviceContext.AddObject(reverseIndexName, new IndexEntity { PartitionKey = internalId.ToString(), RowKey = KeyAsString(key)});
+            serviceContext.AddObject(ForwardIndexName, new IndexEntity {PartitionKey = KeyAsString(key), RowKey = internalId.ToString(), OriginalValue = key.ToString()});
+            serviceContext.AddObject(ReverseIndexName, new IndexEntity { PartitionKey = internalId.ToString(), RowKey = KeyAsString(key), OriginalValue = key.ToString() });
         }
 
 
@@ -171,7 +171,7 @@ namespace Stash.Azure
                 reverseEntity =>
                     {
                         var forwardEntity = new IndexEntity {PartitionKey = reverseEntity.RowKey, RowKey = reverseEntity.PartitionKey};
-                        serviceContext.AttachTo(forwardIndexName, forwardEntity, "*");
+                        serviceContext.AttachTo(ForwardIndexName, forwardEntity, "*");
                         serviceContext.DeleteObject(forwardEntity);
                         serviceContext.DeleteObject(reverseEntity);
                     });
@@ -180,11 +180,11 @@ namespace Stash.Azure
 
         public string Name { get; set; }
 
-        public DataServiceQuery<IndexEntity> Index(TableServiceContext serviceContext)
+        public DataServiceQuery<IndexEntity> ForwardIndex(TableServiceContext serviceContext)
         {
             //Give the background thread time to finish recompiling. 
             if(indexCompiled.WaitOne(recompileTimeoutMs))
-                return serviceContext.CreateQuery<IndexEntity>(forwardIndexName);
+                return serviceContext.CreateQuery<IndexEntity>(ForwardIndexName);
 
             throw new IndexNotReadyException(Name);
         }
@@ -192,7 +192,7 @@ namespace Stash.Azure
         public DataServiceQuery<IndexEntity> ReverseIndex(TableServiceContext serviceContext)
         {
             if(indexCompiled.WaitOne(recompileTimeoutMs))
-                return serviceContext.CreateQuery<IndexEntity>(reverseIndexName);
+                return serviceContext.CreateQuery<IndexEntity>(ReverseIndexName);
 
             throw new IndexNotReadyException(Name);
         }
@@ -204,12 +204,12 @@ namespace Stash.Azure
 
         public object ConvertToKey(string stringRepresentation)
         {
-            throw new NotImplementedException();
+            return Convert.For[registeredIndexer.YieldType].AsObject(stringRepresentation);
         }
 
         public string KeyAsString(object key)
         {
-            return Convert.IntoString[registeredIndexer.YieldType](key);
+            return Convert.For[registeredIndexer.YieldType].IntoString(key);
         }
     }
 }

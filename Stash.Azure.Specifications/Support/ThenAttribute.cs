@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,9 +14,9 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Queries
+namespace Stash.Azure.Specifications.Support
 {
-    using System;
+    using NUnit.Framework;
 
-    public interface INotAnyOfQuery<TKey> : ISetQuery<TKey>, IComplementaryQuery<IAnyOfQuery<TKey>> where TKey : IEquatable<TKey> {}
+    public class Then : TestAttribute {}
 }

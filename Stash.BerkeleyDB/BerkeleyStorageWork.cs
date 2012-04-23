@@ -72,7 +72,7 @@ namespace Stash.BerkeleyDB
         {
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return Matching(query).Select(internalId => BackingStore.Get(internalId));
+            return Matching(query).Distinct().Select(internalId => BackingStore.Get(internalId));
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)

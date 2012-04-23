@@ -26,7 +26,7 @@ namespace Stash.Azure
     {
         private readonly AzureBackingStore backingStore;
 
-        public BerkeleyQueryFactory(AzureBackingStore berkeleyBackingStore)
+        public AzureQueryFactory(AzureBackingStore berkeleyBackingStore)
         {
             backingStore = berkeleyBackingStore;
         }
@@ -43,47 +43,47 @@ namespace Stash.Azure
 
         public IBetweenQuery<TKey> Between<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new BetweenQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+            throw new NotImplementedException();
         }
 
         public IEqualToQuery<TKey> EqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new EqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public IGreaterThanQuery<TKey> GreaterThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new GreaterThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public IGreaterThanEqualQuery<TKey> GreaterThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new GreaterThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public IInsideQuery<TKey> Inside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new InsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+            throw new NotImplementedException();
         }
 
         public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
         {
-            return new IntersectOperator(queries);
+            throw new NotImplementedException();
         }
 
         public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
         {
-            return new IsIndexedQuery(backingStore.IndexDatabases[indexer.IndexName], indexer);
+            throw new NotImplementedException();
         }
 
         public ILessThanQuery<TKey> LessThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new LessThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public ILessThanEqualQuery<TKey> LessThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new LessThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public INotAllOfQuery<TKey> NotAllOf<TKey>(IRegisteredIndexer indexer, IEnumerable<TKey> set) where TKey : IComparable<TKey>, IEquatable<TKey>
@@ -98,22 +98,87 @@ namespace Stash.Azure
 
         public INotEqualToQuery<TKey> NotEqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new NotEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
         {
-            return new OutsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+            throw new NotImplementedException();
         }
 
-        public IStartsWithQuery StartsWith(IRegisteredIndexer indexer, string key)
+        public IStartsWithQuery StartsWith(IRegisteredIndexer getIndexerFor, string key)
         {
-            return new StartsWithQuery(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+            throw new NotImplementedException();
         }
 
         public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
         {
-            return new UnionOperator(queries);
+            throw new NotImplementedException();
         }
+
+//        public IBetweenQuery<TKey> Between<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new BetweenQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+//        }
+//
+//        public IEqualToQuery<TKey> EqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new EqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public IGreaterThanQuery<TKey> GreaterThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new GreaterThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public IGreaterThanEqualQuery<TKey> GreaterThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new GreaterThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public IInsideQuery<TKey> Inside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new InsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+//        }
+//
+//        public IIntersectOperator IntersectionOf(IEnumerable<IQuery> queries)
+//        {
+//            return new IntersectOperator(queries);
+//        }
+//
+//        public IIsIndexedQuery IsIndexed(IRegisteredIndexer indexer)
+//        {
+//            return new IsIndexedQuery(backingStore.IndexDatabases[indexer.IndexName], indexer);
+//        }
+//
+//        public ILessThanQuery<TKey> LessThan<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new LessThanQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public ILessThanEqualQuery<TKey> LessThanEqual<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new LessThanEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public INotEqualToQuery<TKey> NotEqualTo<TKey>(IRegisteredIndexer indexer, TKey key) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new NotEqualToQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public IOutsideQuery<TKey> Outside<TKey>(IRegisteredIndexer indexer, TKey lowerKey, TKey upperKey) where TKey : IComparable<TKey>, IEquatable<TKey>
+//        {
+//            return new OutsideQuery<TKey>(backingStore.IndexDatabases[indexer.IndexName], indexer, lowerKey, upperKey);
+//        }
+//
+//        public IStartsWithQuery StartsWith(IRegisteredIndexer indexer, string key)
+//        {
+//            return new StartsWithQuery(backingStore.IndexDatabases[indexer.IndexName], indexer, key);
+//        }
+//
+//        public IUnionOperator UnionOf(IEnumerable<IQuery> queries)
+//        {
+//            return new UnionOperator(queries);
+//        }
     }
 }

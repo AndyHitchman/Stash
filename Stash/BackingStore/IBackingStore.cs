@@ -79,5 +79,12 @@ namespace Stash.BackingStore
         /// </summary>
         /// <param name="storageWorkActions"></param>
         void InTransactionDo(Action<IStorageWork> storageWorkActions);
+
+        /// <summary>
+        /// Indicates whether a type yielded by an index is supported by the backing store
+        /// </summary>
+        /// <param name="proposedIndexType"></param>
+        /// <returns></returns>
+        bool IsTypeASupportedInIndexes(Type proposedIndexType);
     }
 }

@@ -70,6 +70,11 @@ namespace Stash.Specifications.Support
             throw new NotImplementedException();
         }
 
+        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            throw new NotImplementedException();
+        }
+
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             throw new NotImplementedException();
