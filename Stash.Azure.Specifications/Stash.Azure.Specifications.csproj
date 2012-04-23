@@ -60,10 +60,14 @@
     <Compile Include="given_queries\when_executing_any_of_having_query_key_that_doesnt_exist.cs" />
     <Compile Include="given_queries\when_executing_between.cs" />
     <Compile Include="given_queries\when_executing_between_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_equal_to.cs" />
+    <Compile Include="given_queries\when_executing_equal_to_is_false.cs" />
     <Compile Include="given_queries\when_executing_not_all_of.cs" />
     <Compile Include="given_queries\when_executing_not_all_of_inside_intersect.cs" />
     <Compile Include="given_queries\when_executing_not_any_of.cs" />
     <Compile Include="given_queries\when_executing_not_any_of_inside_intersect.cs" />
+    <Compile Include="given_queries\when_executing_not_equal_to.cs" />
+    <Compile Include="given_queries\when_executing_not_equal_to_inside_intersect.cs" />
     <Compile Include="given_queries\when_executing_outside.cs" />
     <Compile Include="given_queries\when_executing_outside_having_nothing_inside.cs" />
     <Compile Include="given_queries\when_executing_outside_inside_intersect.cs" />

@@ -48,10 +48,12 @@
     <Compile Include="AzureQueries\AllOfQuery.cs" />
     <Compile Include="AzureQueries\AnyOfQuery.cs" />
     <Compile Include="AzureQueries\BetweenQuery.cs" />
+    <Compile Include="AzureQueries\EqualToQuery.cs" />
     <Compile Include="AzureQueries\IAzureIndexQuery.cs" />
     <Compile Include="AzureQueries\IAzureQuery.cs" />
     <Compile Include="AzureQueries\IndexMatching.cs" />
     <Compile Include="AzureQueries\NotAllOfQuery.cs" />
+    <Compile Include="AzureQueries\NotEqualToQuery.cs" />
     <Compile Include="AzureQueries\OutsideQuery.cs" />
     <Compile Include="AzureStorageWork.cs" />
     <Compile Include="AzureQueryFactory.cs" />

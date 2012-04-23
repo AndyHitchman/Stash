@@ -27,7 +27,6 @@ namespace Stash.Azure.AzureQueries
 
     public class NotAnyOfQuery<TKey> : IAzureIndexQuery, INotAnyOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {
-        private const int pageSizeBufferMultipler = 4;
         private readonly ManagedIndex managedIndex;
 
         public NotAnyOfQuery(ManagedIndex managedIndex, IRegisteredIndexer indexer, IEnumerable<TKey> set)
