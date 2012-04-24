@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,18 +14,22 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers
+namespace Stash.Serializers
 {
-    public class NoTransformer<TGraph> : ITransformer<TGraph, TGraph>
+    using System;
+    using System.Collections.Generic;
+    using Engine;
+
+    public class BSONSerializer<TGraph> : ISerializer<TGraph>
     {
-        public TGraph TransformDown(TGraph graph)
+        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
-            return graph;
+            throw new NotImplementedException();
         }
 
-        public TGraph TransformUp(TGraph transform)
+        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-            return transform;
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers
+namespace Stash.Serializers
 {
     public interface ITransformer<TGraph, TTransform>
     {

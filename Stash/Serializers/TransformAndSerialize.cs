@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,30 +14,30 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers
+namespace Stash.Serializers
 {
-    using System;
     using System.Collections.Generic;
+    using Engine;
 
-    public class AdhocSerializer<TGraph> : ISerializer<TGraph>
+    public class TransformAndSerialize<TGraph, TTransform> : ISerializer<TGraph>
     {
-        private readonly Func<IEnumerable<byte>, TGraph> deserializer;
-        private readonly Func<TGraph, IEnumerable<byte>> serializer;
-
-        public AdhocSerializer(Func<TGraph, IEnumerable<byte>> serializer, Func<IEnumerable<byte>, TGraph> deserializer)
+        public TransformAndSerialize(ITransformer<TGraph, TTransform> transformer, ISerializer<TTransform> serializer)
         {
-            this.serializer = serializer;
-            this.deserializer = deserializer;
+            Transformer = transformer;
+            Serializer = serializer;
         }
+
+        public ITransformer<TGraph, TTransform> Transformer { get; private set; }
+        public ISerializer<TTransform> Serializer { get; private set; }
 
         public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
-            return deserializer(bytes);
+            return Transformer.TransformUp(Serializer.Deserialize(bytes, session));
         }
 
         public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-            return serializer(graph);
+            return Serializer.Serialize(Transformer.TransformDown(graph), session);
         }
     }
 }

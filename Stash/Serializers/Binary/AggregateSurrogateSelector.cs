@@ -14,13 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers.Binary
+namespace Stash.Serializers.Binary
 {
     using System;
-    using System.Linq;
-    using System.Reflection;
     using System.Runtime.Serialization;
-    using Configuration;
+    using Stash.Configuration;
 
     /// <summary>
     /// A custom surrogate selector to enable serialisation and deserialisation of referenced

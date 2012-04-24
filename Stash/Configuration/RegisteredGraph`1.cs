@@ -20,7 +20,7 @@ namespace Stash.Configuration
     using System.Linq;
     using BackingStore;
     using Engine;
-    using Engine.Serializers;
+    using Serializers;
 
     /// <summary>
     /// A configured object graph.

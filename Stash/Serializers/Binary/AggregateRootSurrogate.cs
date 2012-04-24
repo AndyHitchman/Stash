@@ -1,9 +1,10 @@
-﻿namespace Stash.Engine.Serializers.Binary
+﻿namespace Stash.Serializers.Binary
 {
     using System;
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
+    using Engine;
 
     public class AggregateRootSurrogate : ISerializationSurrogate 
     {

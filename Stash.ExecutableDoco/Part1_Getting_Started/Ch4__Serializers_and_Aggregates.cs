@@ -23,8 +23,8 @@ namespace Stash.ExecutableDoco.Part1_Getting_Started
     using System.Collections.Generic;
     using System.Linq;
     using BerkeleyDB;
-    using Engine.Serializers.Binary;
     using NUnit.Framework;
+    using Serializers.Binary;
     using Support;
 
 

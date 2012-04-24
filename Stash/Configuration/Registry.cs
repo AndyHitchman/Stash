@@ -21,8 +21,8 @@ namespace Stash.Configuration
     using System.Linq;
     using BackingStore;
     using Engine;
-    using Engine.Serializers;
-    using Engine.Serializers.Binary;
+    using Serializers;
+    using Serializers.Binary;
 
     public class Registry : IRegistry
     {

@@ -95,6 +95,16 @@
     <Compile Include="given_queries\when_executing_union_inside_intersect.cs" />
     <Compile Include="given_queries\with_development_storage.cs" />
     <Compile Include="given_queries\with_string_indexer.cs" />
+    <Compile Include="integration\Comment.cs" />
+    <Compile Include="integration\Post.cs" />
+    <Compile Include="integration\when_adding_a_transient_graph.cs" />
+    <Compile Include="integration\when_deleting_a_tracked_graph.cs" />
+    <Compile Include="integration\when_querying_an_untyped_stashed_set.cs" />
+    <Compile Include="integration\when_querying_a_stashed_set.cs" />
+    <Compile Include="integration\when_querying_a_stashed_set_with_a_query_matching_nothing.cs" />
+    <Compile Include="integration\when_querying_a_stashed_set_with_the_not_constraint.cs" />
+    <Compile Include="integration\when_updating_a_tracked_graph.cs" />
+    <Compile Include="integration\with_real_configuration.cs" />
     <Compile Include="Support\ClassWithNoAncestors.cs" />
     <Compile Include="Support\ClassWithOneAncestors.cs" />
     <Compile Include="Support\ClassWithTwoAncestors.cs" />

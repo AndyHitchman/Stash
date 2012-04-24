@@ -14,24 +14,29 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BerkeleyDB.Specifications.integration
+namespace Stash.Azure.Specifications.integration
 {
+    using given_queries;
+    using Microsoft.WindowsAzure;
+    using Microsoft.WindowsAzure.StorageClient;
     using Serializers.Binary;
-    using Stash.BerkeleyDB;
+    using Support;
 
-    public abstract class with_real_configuration : with_temp_directory
+    public abstract class with_real_configuration : Specification
     {
         protected override void TidyUp()
         {
             Kernel.Shutdown();
-            base.TidyUp();
         }
 
         protected override void WithContext()
         {
-            base.WithContext();
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist(AzureBackingStore.ConcreteTypeTableName);
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashEngineStashTypeHierarchy");
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashEngineStashTypeHierarchy");
+
             Kernel.Kickstart(
-                new BerkeleyBackingStore(new DefaultBerkeleyBackingStoreEnvironment(TempDir)),
+                new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount),
                 register =>
                     {
                         register.Graph<Post>(

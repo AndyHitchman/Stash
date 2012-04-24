@@ -14,10 +14,11 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers.Binary
+namespace Stash.Serializers.Binary
 {
     using System;
     using System.Runtime.Serialization;
+    using Engine;
 
     public class AggregateReferenceSurrogate : ISerializationSurrogate
     {

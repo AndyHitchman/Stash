@@ -14,12 +14,25 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Configuration
+namespace Stash.Azure.Specifications.integration
 {
-    using Serializers;
+    using System;
+    using System.Collections.Generic;
 
-    public interface IRegisteredGraph<TGraph> : IRegisteredGraph
+    [Serializable]
+    public class Post
     {
-        ISerializer<TGraph> TransformSerializer { get; set; }
+        public string Title { get; set; }
+        public DateTime PostedAt { get; set; }
+        public string Text { get; set; }
+        public List<Comment> Comments { get; set; }
+    }
+
+    public class NumberOfCommentsOnPost : IIndex<Post, int>
+    {
+        public IEnumerable<int> Yield(Post graph)
+        {
+            yield return graph.Comments.Count;
+        }
     }
 }

@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,21 +14,16 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers
+namespace Stash.Azure.Specifications.integration
 {
     using System;
-    using System.Collections.Generic;
 
-    public class BSONSerializer<TGraph> : ISerializer<TGraph>
+    [Serializable]
+    public class Comment
     {
-        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
-        {
-            throw new NotImplementedException();
-        }
+        public string Author { get; set; }
+        public string AuthorsEmail { get; set; }
+        public DateTime CommentedAt { get; set; }
+        public string Text { get; set; }
     }
 }

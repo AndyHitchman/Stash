@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,12 +14,18 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Configuration
+namespace Stash.Serializers
 {
-    using Serializers;
+    using System.Collections.Generic;
+    using Engine;
 
-    public interface IRegisteredGraph<TGraph> : IRegisteredGraph
+    /// <summary>
+    /// An interface that provides serialization and deserialization functions for a graph
+    /// Implement to provide customised behaviour or alternative serialization strategies.
+    /// </summary>
+    public interface ISerializer<TGraph>
     {
-        ISerializer<TGraph> TransformSerializer { get; set; }
+        TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session);
+        IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session);
     }
 }

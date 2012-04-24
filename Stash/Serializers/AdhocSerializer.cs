@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,25 +14,31 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers.Binary
+namespace Stash.Serializers
 {
+    using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization.Formatters.Binary;
+    using Engine;
 
-    public class BinarySerializer<TGraph> : BinarySerializer, ISerializer<TGraph>
+    public class AdhocSerializer<TGraph> : ISerializer<TGraph>
     {
-        public BinarySerializer() : this(new BinaryFormatter()) {}
+        private readonly Func<IEnumerable<byte>, TGraph> deserializer;
+        private readonly Func<TGraph, IEnumerable<byte>> serializer;
 
-        public BinarySerializer(BinaryFormatter binaryFormatter) : base(binaryFormatter) {}
+        public AdhocSerializer(Func<TGraph, IEnumerable<byte>> serializer, Func<IEnumerable<byte>, TGraph> deserializer)
+        {
+            this.serializer = serializer;
+            this.deserializer = deserializer;
+        }
 
         public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
-            return (TGraph)base.Deserialize(bytes);
+            return deserializer(bytes);
         }
 
         public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-            return base.Serialize(graph);
+            return serializer(graph);
         }
     }
 }

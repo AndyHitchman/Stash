@@ -20,8 +20,8 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
     using System.Collections.Generic;
     using Configuration;
     using Engine;
-    using Engine.Serializers.Binary;
     using Rhino.Mocks;
+    using Serializers.Binary;
     using Support;
 
     public class when_deserializing_an_aggregate_referencing_another_aggregate : AutoMockedSpecification<AggregateBinarySerializer<GraphB>>

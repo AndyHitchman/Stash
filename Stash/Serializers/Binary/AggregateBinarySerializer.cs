@@ -14,12 +14,13 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers.Binary
+namespace Stash.Serializers.Binary
 {
     using System.Collections.Generic;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
-    using Configuration;
+    using Engine;
+    using Stash.Configuration;
 
     /// <summary>
     /// The AggregateBinarySerializer performs standard binary formatting except

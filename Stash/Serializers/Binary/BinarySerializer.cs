@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers.Binary
+namespace Stash.Serializers.Binary
 {
     using System.Collections.Generic;
     using System.IO;

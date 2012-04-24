@@ -16,7 +16,7 @@
 
 namespace Stash.Configuration
 {
-    using Engine.Serializers;
+    using Serializers;
 
     /// <summary>
     /// The context for configuring a persistent object graph.

@@ -14,29 +14,26 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Engine.Serializers
+namespace Stash.Serializers.Binary
 {
     using System.Collections.Generic;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using Engine;
 
-    public class TransformAndSerialize<TGraph, TTransform> : ISerializer<TGraph>
+    public class BinarySerializer<TGraph> : BinarySerializer, ISerializer<TGraph>
     {
-        public TransformAndSerialize(ITransformer<TGraph, TTransform> transformer, ISerializer<TTransform> serializer)
-        {
-            Transformer = transformer;
-            Serializer = serializer;
-        }
+        public BinarySerializer() : this(new BinaryFormatter()) {}
 
-        public ITransformer<TGraph, TTransform> Transformer { get; private set; }
-        public ISerializer<TTransform> Serializer { get; private set; }
+        public BinarySerializer(BinaryFormatter binaryFormatter) : base(binaryFormatter) {}
 
         public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
-            return Transformer.TransformUp(Serializer.Deserialize(bytes, session));
+            return (TGraph)base.Deserialize(bytes);
         }
 
         public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-            return Serializer.Serialize(Transformer.TransformDown(graph), session);
+            return base.Serialize(graph);
         }
     }
 }
