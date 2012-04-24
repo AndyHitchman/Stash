@@ -16,6 +16,8 @@
 
 namespace Stash.Azure.Specifications.given_queries
 {
+    using Microsoft.WindowsAzure;
+    using Microsoft.WindowsAzure.StorageClient;
     using Stash.Azure.Specifications.Support;
     using Stash.Configuration;
 
@@ -27,6 +29,9 @@ namespace Stash.Azure.Specifications.given_queries
         protected override void WithContext()
         {
             base.WithContext();
+
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashAzureSpecificationsSupportStringIndex");
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsSupportStringIndex");
 
             RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(Registry);
             RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex(), Registry);
