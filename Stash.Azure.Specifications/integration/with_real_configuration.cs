@@ -34,7 +34,9 @@ namespace Stash.Azure.Specifications.integration
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist(AzureBackingStore.ConcreteTypeTableName);
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashEngineStashTypeHierarchy");
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashEngineStashTypeHierarchy");
-
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
+            
             Kernel.Kickstart(
                 new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount),
                 register =>
