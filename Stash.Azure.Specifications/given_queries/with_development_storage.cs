@@ -35,11 +35,11 @@ namespace Stash.Azure.Specifications.given_queries
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashEngineStashTypeHierarchy");
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashEngineStashTypeHierarchy");
 
-            Registry = new Registry();
+            Subject = new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount);
+            Registry = new Registry(Subject);
             var typeHierarchyIndexer = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), Registry);
             Registry.RegisteredIndexers.Add(typeHierarchyIndexer);
 
-            Subject = new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount);
             Subject.EnsureIndex(typeHierarchyIndexer);
         }
 

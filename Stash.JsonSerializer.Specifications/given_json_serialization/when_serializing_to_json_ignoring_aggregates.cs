@@ -18,7 +18,7 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
 
         protected override void Given()
         {
-            var registry = new Registry();
+            var registry = new Registry(null);
             var registeredGraph = new RegisteredGraph<IsolatedClass>(registry);
             subject = new JsonSerializer<IsolatedClass>(registeredGraph);
 

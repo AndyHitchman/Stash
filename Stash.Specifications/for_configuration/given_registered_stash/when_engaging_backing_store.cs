@@ -30,10 +30,10 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         {
             var mockRegisteredGraph = MockRepository.GenerateMock<RegisteredGraph<DummyPersistentObject>>((Registry)null);
             var fakeBackingStore = MockRepository.GenerateStub<IBackingStore>();
-            var sut = new Registry();
+            var sut = new Registry(fakeBackingStore);
             sut.RegisteredGraphs.Add(typeof(DummyPersistentObject), mockRegisteredGraph);
 
-            sut.EngageBackingStore(fakeBackingStore);
+            sut.EngageBackingStore();
 
             mockRegisteredGraph.AssertWasCalled(graph => graph.EngageBackingStore(fakeBackingStore));
         }

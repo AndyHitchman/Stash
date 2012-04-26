@@ -22,6 +22,7 @@ namespace Stash.Engine.Partitioning
     using BackingStore;
     using Configuration;
     using Queries;
+    using Serializers;
 
     /// <summary>
     ///   The partitioned backing store allows multiple backing stores to share resposibility for persisting data.
@@ -104,6 +105,11 @@ namespace Stash.Engine.Partitioning
         }
 
         public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph)
         {
             throw new NotImplementedException();
         }

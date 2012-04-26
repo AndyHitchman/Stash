@@ -49,7 +49,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_managed_ind
                     .Ctor<ObjectIndexDatabaseConfig>().Is(new ObjectIndexDatabaseConfig())
                 );
 
-            registry = new Registry();
+            registry = new Registry(Subject);
             var typeHierarchyIndexer = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), registry);
             registry.RegisteredIndexers.Add(typeHierarchyIndexer);
             Subject.EnsureIndex(typeHierarchyIndexer);

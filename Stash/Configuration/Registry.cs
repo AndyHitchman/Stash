@@ -26,8 +26,9 @@ namespace Stash.Configuration
 
     public class Registry : IRegistry
     {
-        public Registry()
+        public Registry(IBackingStore backingStore)
         {
+            BackingStore = backingStore;
             RegisteredGraphs = new Dictionary<Type, RegisteredGraph>();
             RegisteredIndexers = new List<IRegisteredIndexer>();
         }
@@ -48,17 +49,16 @@ namespace Stash.Configuration
         /// <summary>
         /// Engage the backing store in managing the stash.
         /// </summary>
-        public virtual void EngageBackingStore(IBackingStore backingStore)
+        public virtual void EngageBackingStore()
         {
-            BackingStore = backingStore;
             foreach(var registeredGraph in RegisteredGraphs.Values)
             {
-                registeredGraph.EngageBackingStore(backingStore);
+                registeredGraph.EngageBackingStore(BackingStore);
             }
 
             foreach(var registeredIndexer in RegisteredIndexers)
             {
-                registeredIndexer.EngageBackingStore(backingStore);
+                registeredIndexer.EngageBackingStore(BackingStore);
             }
         }
 
@@ -119,11 +119,11 @@ namespace Stash.Configuration
             if(RegisteredGraphs.ContainsKey(graph))
                 throw new ArgumentException(string.Format("Graph {0} is already registered", graph));
 
-            var registeredGraph = new RegisteredGraph<TGraph>(this)
-                {
-                    //We default to the binary serialiser with no transform.
-                    TransformSerializer = new TransformAndSerialize<TGraph, TGraph>(new NoTransformer<TGraph>(), new BinarySerializer<TGraph>())
-                };
+            var registeredGraph = new RegisteredGraph<TGraph>(this);
+            registeredGraph.TransformSerializer = 
+                new TransformAndSerialize<TGraph, TGraph>(
+                    new NoTransformer<TGraph>(), 
+                    BackingStore.GetDefaultSerialiser(registeredGraph));
             RegisteredGraphs.Add(graph, registeredGraph);
             return registeredGraph;
         }

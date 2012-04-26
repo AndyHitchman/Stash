@@ -28,7 +28,7 @@ namespace Stash.Specifications.for_configuration.given_graph_context
         [SetUp]
         public void each_up()
         {
-            registry = new Registry();
+            registry = new Registry(null);
             Sut = new GraphContext<DummyPersistentObject>(new RegisteredGraph<DummyPersistentObject>(registry));
         }
     }

@@ -22,6 +22,8 @@ namespace Stash.Specifications.Support
     using Configuration;
     using Engine;
     using Queries;
+    using Serializers;
+    using Serializers.Binary;
 
     public class DummyBackingStore : IBackingStore
     {
@@ -73,6 +75,11 @@ namespace Stash.Specifications.Support
         public bool IsTypeASupportedInIndexes(Type proposedIndexType)
         {
             throw new NotImplementedException();
+        }
+
+        public ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph)
+        {
+            return new BinarySerializer<TGraph>();
         }
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)

@@ -40,7 +40,7 @@ namespace Stash.Configuration
 
         public virtual void ApplyRegistration()
         {
-            persistenceContext.Registry.EngageBackingStore(backingStore);
+            persistenceContext.Registry.EngageBackingStore();
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Stash.Configuration
         /// <param name="persistenceConfigurationActions"></param>
         public virtual void PerformRegistration(Action<PersistenceContext<TBackingStore>> persistenceConfigurationActions)
         {
-            persistenceContext = new PersistenceContext<TBackingStore>(new Registry());
+            persistenceContext = new PersistenceContext<TBackingStore>(new Registry(backingStore));
             registerTypeHierarchyIndex();
             persistenceConfigurationActions(persistenceContext);
         }

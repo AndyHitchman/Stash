@@ -78,6 +78,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stash.JsonSerializer\Stash.JsonSerializer.csproj">
+      <Project>{165975FD-AC70-4243-A11A-94DC4FAFA8AF}</Project>
+      <Name>Stash.JsonSerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stash\Stash.csproj">
       <Project>{095683A6-57F6-4E5C-A039-4638F08AE7BC}</Project>
       <Name>Stash</Name>

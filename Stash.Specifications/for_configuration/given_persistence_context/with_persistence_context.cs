@@ -27,7 +27,7 @@ namespace Stash.Specifications.for_configuration.given_persistence_context
         [SetUp]
         public void each_up()
         {
-            Sut = new PersistenceContext<DummyBackingStore>(new Registry());
+            Sut = new PersistenceContext<DummyBackingStore>(new Registry(new DummyBackingStore()));
         }
     }
 }

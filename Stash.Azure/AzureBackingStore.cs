@@ -20,9 +20,11 @@ namespace Stash.Azure
     using BackingStore;
     using Configuration;
     using Engine;
+    using JsonSerializer;
     using Microsoft.WindowsAzure;
     using Queries;
     using Microsoft.WindowsAzure.StorageClient;
+    using Serializers;
 
     public class AzureBackingStore : IBackingStore, IDisposable
     {
@@ -157,6 +159,11 @@ namespace Stash.Azure
         public bool IsTypeASupportedInIndexes(Type proposedIndexType)
         {
             return Convert.For.ContainsKey(proposedIndexType);
+        }
+
+        public ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph)
+        {
+            return new JsonSerializer<TGraph>(registeredGraph);
         }
 
         public void Dispose()

@@ -20,6 +20,8 @@ namespace Stash.BerkeleyDB
     using System.Collections.Generic;
     using BackingStore;
     using global::BerkeleyDB;
+    using Serializers;
+    using Serializers.Binary;
     using Stash.Configuration;
     using Stash.Engine;
     using Stash.Queries;
@@ -162,6 +164,11 @@ namespace Stash.BerkeleyDB
         public bool IsTypeASupportedInIndexes(Type proposedIndexType)
         {
             return supportedTypes.Contains(proposedIndexType);
+        }
+
+        public ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph)
+        {
+            return new AggregateBinarySerializer<TGraph>(registeredGraph);
         }
 
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)

@@ -26,7 +26,7 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
         [Test]
         public void it_should_find_a_registered_index_by_the_index_type()
         {
-            var registry = new Registry();
+            var registry = new Registry(null);
             var registeredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new DummyIndex(), registry);
             var sut = new RegisteredGraph<DummyPersistentObject>(registry);
             registry.RegisteredIndexers.Add(registeredIndexer);
@@ -37,7 +37,7 @@ namespace Stash.Specifications.for_configuration.given_registered_graph
         [Test]
         public void it_should_find_the_correct_registered_index_by_the_index_type()
         {
-            var registry = new Registry();
+            var registry = new Registry(null);
             var registeredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new DummyIndex(), registry);
             var otherRegisteredIndexer = new RegisteredIndexer<DummyPersistentObject, int>(new OtherDummyIndex(), registry);
             var sut = new RegisteredGraph<DummyPersistentObject>(registry);

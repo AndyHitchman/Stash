@@ -27,12 +27,12 @@ namespace Stash.Specifications.for_configuration.given_registry
         [Test]
         public void it_should_tell_registered_indexers_to_engage_themselves()
         {
-            var sut = new Registry();
+            var sut = new Registry(null);
             var mockRegisteredIndexer =
                 MockRepository.GenerateMock<RegisteredIndexer<DummyPersistentObject, int>>((IIndex<DummyPersistentObject, int>)null, (IRegistry)null);
             sut.RegisteredIndexers.Add(mockRegisteredIndexer);
 
-            sut.EngageBackingStore(null);
+            sut.EngageBackingStore();
 
             mockRegisteredIndexer.AssertWasCalled(indexer => indexer.EngageBackingStore(null), options => options.IgnoreArguments());
         }

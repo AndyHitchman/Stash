@@ -35,7 +35,7 @@ namespace Stash.Configuration
         /// <summary>
         /// Engage the backing store in managing the stash.
         /// </summary>
-        void EngageBackingStore(IBackingStore backingStore);
+        void EngageBackingStore();
 
         IRegisteredIndexer GetIndexerFor(Type indexType);
         IRegisteredIndexer GetIndexerFor(IIndex index);

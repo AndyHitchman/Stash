@@ -21,6 +21,7 @@ namespace Stash.BackingStore
     using Configuration;
     using Engine;
     using Queries;
+    using Serializers;
 
     public interface IBackingStore
     {
@@ -86,5 +87,13 @@ namespace Stash.BackingStore
         /// <param name="proposedIndexType"></param>
         /// <returns></returns>
         bool IsTypeASupportedInIndexes(Type proposedIndexType);
+
+        /// <summary>
+        /// Get the default serializer for the backing store.
+        /// </summary>
+        /// <param name="registeredGraph"></param>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <returns></returns>
+        ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph);
     }
 }

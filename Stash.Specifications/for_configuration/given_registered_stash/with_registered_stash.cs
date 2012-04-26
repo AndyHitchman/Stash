@@ -18,6 +18,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
 {
     using Configuration;
     using NUnit.Framework;
+    using Support;
 
     public class with_registered_stash
     {
@@ -26,7 +27,7 @@ namespace Stash.Specifications.for_configuration.given_registered_stash
         [SetUp]
         public void each_up()
         {
-            Sut = new Registry();
+            Sut = new Registry(new DummyBackingStore());
         }
     }
 }

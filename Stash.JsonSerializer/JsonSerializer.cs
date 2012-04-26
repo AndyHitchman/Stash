@@ -32,18 +32,15 @@ namespace Stash.JsonSerializer
 
         public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-
-            var tmp = JsonConvert.SerializeObject(graph, new AggregateConverter<TGraph>(isAggregate, session));
-            return tmp.ToCharArray().Select(c => char.);
-            //            var jsonSerializer = createFreshSerializer(session);
-            //            
-            //            using (var memoryStream = new MemoryStream(initialBufferSize))
-            //            using (var streamWriter = new StreamWriter(memoryStream))
-            //            using (var writer = new JsonTextWriter(streamWriter))
-            //            {
-            //                jsonSerializer.Serialize(writer, graph);
-            //                return memoryStream.ToArray();
-            //            }
+            var jsonSerializer = createFreshSerializer(session);
+                        
+            using (var memoryStream = new MemoryStream(initialBufferSize))
+            using (var streamWriter = new StreamWriter(memoryStream))
+            using (var writer = new JsonTextWriter(streamWriter))
+            {
+                jsonSerializer.Serialize(writer, graph);
+                return memoryStream.ToArray();
+            }
         }
 
         private JsonSerializer createFreshSerializer(ISerializationSession session) 
