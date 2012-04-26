@@ -13,15 +13,17 @@ namespace Stash.JsonSerializer
     {
         const int initialBufferSize = 1024 * 32;
         private readonly IRegisteredGraph<TGraph> registeredGraph;
+        private readonly Func<Type, bool> isAggregate;
 
         public JsonSerializer(IRegisteredGraph<TGraph> registeredGraph)
         {
             this.registeredGraph = registeredGraph;
+            isAggregate = objectType => registeredGraph.Registry.IsManagingGraphTypeOrAncestor(objectType);
         }
 
         public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
         {
-            var jsonSerializer = createFreshSerializer(registeredGraph, session);
+            var jsonSerializer = createFreshSerializer(session);
 
             using (var sr = new StreamReader(new MemoryStream(bytes.ToArray())))
             using (var reader = new JsonTextReader(sr))
@@ -30,18 +32,21 @@ namespace Stash.JsonSerializer
 
         public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
         {
-            var jsonSerializer = createFreshSerializer(registeredGraph, session);
 
-            using (var memoryStream = new MemoryStream(initialBufferSize))
-            using (var sr = new StreamWriter(memoryStream))
-            using (var writer = new JsonTextWriter(sr))
-            {
-                jsonSerializer.Serialize(writer, graph);
-                return memoryStream.ToArray();
-            }
+            var tmp = JsonConvert.SerializeObject(graph, new AggregateConverter<TGraph>(isAggregate, session));
+            return tmp.ToCharArray().Select(c => char.);
+            //            var jsonSerializer = createFreshSerializer(session);
+            //            
+            //            using (var memoryStream = new MemoryStream(initialBufferSize))
+            //            using (var streamWriter = new StreamWriter(memoryStream))
+            //            using (var writer = new JsonTextWriter(streamWriter))
+            //            {
+            //                jsonSerializer.Serialize(writer, graph);
+            //                return memoryStream.ToArray();
+            //            }
         }
 
-        private static JsonSerializer createFreshSerializer(IRegisteredGraph<TGraph> registeredGraph, ISerializationSession session) 
+        private JsonSerializer createFreshSerializer(ISerializationSession session) 
         {
             var jsonSerializer = JsonSerializer.Create(
                 new JsonSerializerSettings
@@ -49,71 +54,8 @@ namespace Stash.JsonSerializer
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         TypeNameHandling = TypeNameHandling.Auto
                     });
-            jsonSerializer.Converters.Insert(0, new AggregateConverter<TGraph>(registeredGraph, session));
+            jsonSerializer.Converters.Insert(0, new AggregateConverter<TGraph>(isAggregate, session));
             return jsonSerializer;
-        }
-    }
-
-    public class AggregateConverter<TGraph> : JsonConverter 
-    {
-        private readonly IRegisteredGraph<TGraph> registeredGraph;
-        private readonly ISerializationSession session;
-        private bool handlingRoot;
-        private readonly object rootLock = new object();
-
-        public AggregateConverter(IRegisteredGraph<TGraph> registeredGraph, ISerializationSession session)
-        {
-            this.registeredGraph = registeredGraph;
-            this.session = session;
-            handlingRoot = true;
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            var internalId = session.InternalIdOfTrackedGraph(value);
-
-            if (internalId == null)
-                throw new InvalidOperationException(
-                    string.Format("Graph of type {0} ({1}) is not tracked and therefore cannot be serialised as a reference", value.GetType(), value));
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("Key");
-            writer.WriteValue(entityKeyMember.Key);
-            writer.WritePropertyName("Type");
-            writer.WriteValue((keyType != null) ? keyType.FullName : null);
-
-            writer.WritePropertyName("Value");
-
-            if (keyType != null)
-            {
-                string valueJson;
-                if (JsonSerializerInternalWriter.TryConvertToString(entityKeyMember.Value, keyType, out valueJson))
-                    writer.WriteValue(valueJson);
-                else
-                    writer.WriteValue(entityKeyMember.Value);
-            }
-            else
-            {
-                writer.WriteNull();
-            }
-
-            writer.WriteEndObject();
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-        }
-
-        public override bool CanConvert(Type objectType)
-        {
-            if(handlingRoot)
-                lock(rootLock)
-                    if(handlingRoot)
-                    {
-                        handlingRoot = false;
-                        return false;
-                    }
-            return registeredGraph.Registry.IsManagingGraphTypeOrAncestor(objectType);
         }
     }
 }

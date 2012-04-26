@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Azure.Specifications"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.JsonSerializer", "Stash.JsonSerializer\Stash.JsonSerializer.csproj", "{165975FD-AC70-4243-A11A-94DC4FAFA8AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.JsonSerializer.Specifications", "Stash.JsonSerializer.Specifications\Stash.JsonSerializer.Specifications.csproj", "{1402A599-E61E-400C-8B01-A94B38108235}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,18 @@ Global
 		{165975FD-AC70-4243-A11A-94DC4FAFA8AF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{165975FD-AC70-4243-A11A-94DC4FAFA8AF}.Release|x64.ActiveCfg = Release|Any CPU
 		{165975FD-AC70-4243-A11A-94DC4FAFA8AF}.Release|x86.ActiveCfg = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|x64.ActiveCfg = Release|Any CPU
+		{1402A599-E61E-400C-8B01-A94B38108235}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
