@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using Stash.BackingStore;
@@ -46,7 +47,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             firstTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_),
+                new MemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, firstIndexDistinctIndexValue),
@@ -57,7 +58,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             secondTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "thesecondobjectsserialisedgraph".Select(_ => (byte)_),
+                new MemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, commonIndexValues),
@@ -86,11 +87,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         public void it_should_persist_the_serialised_graph_data_of_both()
         {
             Subject.GraphDatabase
-                .ValueForKey(firstTrackedGraph.InternalId)
-                .ShouldEqual(firstTrackedGraph.SerialisedGraph.ToArray());
+                .ValueForKey(firstTrackedGraph.InternalId).AsStream()
+                .ShouldEqual(firstTrackedGraph.SerialisedGraph);
             Subject.GraphDatabase
-                .ValueForKey(secondTrackedGraph.InternalId)
-                .ShouldEqual(secondTrackedGraph.SerialisedGraph.ToArray());
+                .ValueForKey(secondTrackedGraph.InternalId).AsStream()
+                .ShouldEqual(secondTrackedGraph.SerialisedGraph);
         }
 
         [Then]

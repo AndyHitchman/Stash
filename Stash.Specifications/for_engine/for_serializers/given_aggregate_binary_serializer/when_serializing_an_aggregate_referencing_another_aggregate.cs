@@ -18,6 +18,7 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Configuration;
     using Engine;
     using Rhino.Mocks;
@@ -29,7 +30,7 @@ namespace Stash.Specifications.for_engine.for_serializers.given_aggregate_binary
         private GraphB root;
         private InternalId internalIdOfCustomer;
         private ISerializationSession mockTrackedSession;
-        private IEnumerable<byte> actual;
+        private Stream actual;
         private IRegistry mockRegistry;
 
         protected override void Given()

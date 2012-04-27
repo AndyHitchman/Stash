@@ -17,26 +17,26 @@
 namespace Stash.Serializers
 {
     using System;
-    using System.Collections.Generic;
+    using System.IO;
     using Engine;
 
     public class AdhocSerializer<TGraph> : ISerializer<TGraph>
     {
-        private readonly Func<IEnumerable<byte>, TGraph> deserializer;
-        private readonly Func<TGraph, IEnumerable<byte>> serializer;
+        private readonly Func<Stream, TGraph> deserializer;
+        private readonly Func<TGraph, Stream> serializer;
 
-        public AdhocSerializer(Func<TGraph, IEnumerable<byte>> serializer, Func<IEnumerable<byte>, TGraph> deserializer)
+        public AdhocSerializer(Func<TGraph, Stream> serializer, Func<Stream, TGraph> deserializer)
         {
             this.serializer = serializer;
             this.deserializer = deserializer;
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
+        public TGraph Deserialize(Stream bytes, ISerializationSession session)
         {
             return deserializer(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
+        public Stream Serialize(TGraph graph, ISerializationSession session)
         {
             return serializer(graph);
         }

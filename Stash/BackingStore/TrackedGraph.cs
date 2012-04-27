@@ -18,6 +18,7 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Configuration;
     using Engine;
 
@@ -25,7 +26,7 @@ namespace Stash.BackingStore
     {
         public TrackedGraph(
             InternalId internalId,
-            IEnumerable<byte> graph,
+            Stream graph,
             IEnumerable<IProjectedIndex> projectedIndices,
             IRegisteredGraph registeredGraph)
         {
@@ -56,6 +57,6 @@ namespace Stash.BackingStore
 
         public InternalId InternalId { get; private set; }
 
-        public IEnumerable<byte> SerialisedGraph { get; private set; }
+        public Stream SerialisedGraph { get; private set; }
     }
 }

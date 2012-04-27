@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.Configuration;
@@ -39,7 +40,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             trackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 Enumerable.Empty<IProjectedIndex>(),
                 insertingRegisteredGraph
                 );

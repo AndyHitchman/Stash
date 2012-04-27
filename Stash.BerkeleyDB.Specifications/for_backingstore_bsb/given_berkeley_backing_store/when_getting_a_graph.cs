@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.Configuration;
@@ -29,7 +30,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
     {
         private ITrackedGraph trackedGraph;
         private RegisteredGraph<ClassWithTwoAncestors> registeredGraph;
-        private IStoredGraph result;
+        private IStoredGraph actual;
 
         protected override void Given()
         {
@@ -37,7 +38,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             trackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 Enumerable.Empty<IProjectedIndex>(),
                 registeredGraph
                 );
@@ -47,19 +48,21 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
         protected override void When()
         {
-            result = Subject.Get(trackedGraph.InternalId);
+            actual = Subject.Get(trackedGraph.InternalId);
         }
 
         [Then]
         public void it_should_return_the_stored_graph_internal_id()
         {
-            result.InternalId.ShouldEqual(trackedGraph.InternalId);
+            actual.InternalId.ShouldEqual(trackedGraph.InternalId);
         }
 
         [Then]
         public void it_should_return_the_stored_graph_data()
         {
-            result.SerialisedGraph.SequenceEqual(trackedGraph.SerialisedGraph).ShouldBeTrue();
+//            Console.WriteLine("actual: " + new StreamReader(result.SerialisedGraph).ReadToEnd());
+//            Console.WriteLine("expected: " + new StreamReader(trackedGraph.SerialisedGraph).ReadToEnd());
+            actual.SerialisedGraph.ShouldEqual(trackedGraph.SerialisedGraph).ShouldBeTrue();
         }
     }
 }

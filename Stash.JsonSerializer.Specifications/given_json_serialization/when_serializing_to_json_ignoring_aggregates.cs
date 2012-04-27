@@ -2,6 +2,7 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Configuration;
     using Engine;
     using Newtonsoft.Json;
@@ -14,7 +15,7 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
         private JsonSerializer<IsolatedClass> subject;
         private IsolatedClass graph;
         private ISerializationSession session;
-        private IEnumerable<byte> actual;
+        private Stream actual;
 
         protected override void Given()
         {
@@ -35,7 +36,7 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
         [Then]
         public void it_should_create_a_json_document()
         {
-            var doc = new string(actual.Cast<char>().ToArray());
+            var doc = new StreamReader(actual).ReadToEnd();
             doc.ShouldEqual(@"{""AProperty"":""test property""}");
         }
     }

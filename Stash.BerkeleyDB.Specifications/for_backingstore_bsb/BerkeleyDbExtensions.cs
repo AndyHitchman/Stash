@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using global::BerkeleyDB;
     using Stash.Engine;
@@ -43,6 +44,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb
         public static void ShouldNotHaveKey(this BTreeDatabase store, byte[] key)
         {
             store.Exists(new DatabaseEntry(key)).ShouldBeFalse();
+        }
+
+        public static Stream AsStream(this byte[] bytes)
+        {
+            return new MemoryStream(bytes);
         }
 
         public static byte[] ValueForKey(this HashDatabase store, InternalId key)

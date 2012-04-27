@@ -16,7 +16,7 @@
 
 namespace Stash.Serializers
 {
-    using System.Collections.Generic;
+    using System.IO;
     using Engine;
 
     public class TransformAndSerialize<TGraph, TTransform> : ISerializer<TGraph>
@@ -30,12 +30,12 @@ namespace Stash.Serializers
         public ITransformer<TGraph, TTransform> Transformer { get; private set; }
         public ISerializer<TTransform> Serializer { get; private set; }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
+        public TGraph Deserialize(Stream serial, ISerializationSession session)
         {
-            return Transformer.TransformUp(Serializer.Deserialize(bytes, session));
+            return Transformer.TransformUp(Serializer.Deserialize(serial, session));
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
+        public Stream Serialize(TGraph graph, ISerializationSession session)
         {
             return Serializer.Serialize(Transformer.TransformDown(graph), session);
         }

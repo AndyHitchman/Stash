@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_backing_store
 {
     using System;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.Configuration;
@@ -40,7 +41,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             originalTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_),
+                new MemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, 1),
@@ -51,7 +52,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             updatedTrackedGraph = new TrackedGraph(
                 originalTrackedGraph.InternalId,
-                "thesecondobjectsserialisedgraph".Select(_ => (byte)_),
+                new MemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, 2),
@@ -72,7 +73,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         [Then]
         public void it_should_update_the_serialised_graph_data()
         {
-            Subject.GraphDatabase.ValueForKey(originalTrackedGraph.InternalId).ShouldEqual(updatedTrackedGraph.SerialisedGraph.ToArray());
+            Subject.GraphDatabase.ValueForKey(originalTrackedGraph.InternalId).AsStream().ShouldEqual(updatedTrackedGraph.SerialisedGraph);
         }
 
         [Then]

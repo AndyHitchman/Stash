@@ -19,6 +19,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.BerkeleyDB;
@@ -40,35 +41,35 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         {
             insideTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
                 RegisteredGraph
                 );
 
             lowerTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             upperTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)},
                 RegisteredGraph
                 );
 
             lessThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 104)},
                 RegisteredGraph
                 );
@@ -89,7 +90,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
                             _.InsertGraph(
                                 new TrackedGraph(
                                     new InternalId(Guid.NewGuid()),
-                                    "letspretendthisisserialiseddata".Select(b => (byte)b),
+                                    new MemoryStream("letspretendthisisserialiseddata".Select(b => (byte)b).ToArray()),
                                     new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
                                     RegisteredGraph
                                     ));

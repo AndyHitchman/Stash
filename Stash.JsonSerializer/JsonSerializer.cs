@@ -21,25 +21,23 @@ namespace Stash.JsonSerializer
             isAggregate = objectType => registeredGraph.Registry.IsManagingGraphTypeOrAncestor(objectType);
         }
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
+        public TGraph Deserialize(Stream serial, ISerializationSession session)
         {
             var jsonSerializer = createFreshSerializer(session);
 
-            using (var sr = new StreamReader(new MemoryStream(bytes.ToArray())))
-            using (var reader = new JsonTextReader(sr))
+            using (var reader = new JsonTextReader(new StreamReader(serial)))
                 return (TGraph)jsonSerializer.Deserialize(reader, registeredGraph.GraphType);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
+        public Stream Serialize(TGraph graph, ISerializationSession session)
         {
             var jsonSerializer = createFreshSerializer(session);
-                        
-            using (var memoryStream = new MemoryStream(initialBufferSize))
-            using (var streamWriter = new StreamWriter(memoryStream))
-            using (var writer = new JsonTextWriter(streamWriter))
+
+            var ms = new MemoryStream();
+            using (var writer = new JsonTextWriter(new StreamWriter(ms)))
             {
                 jsonSerializer.Serialize(writer, graph);
-                return memoryStream.ToArray();
+                return ms;
             }
         }
 

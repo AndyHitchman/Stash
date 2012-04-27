@@ -17,6 +17,7 @@
 namespace Stash.Serializers.Binary
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using Engine;
 
@@ -26,14 +27,14 @@ namespace Stash.Serializers.Binary
 
         public BinarySerializer(BinaryFormatter binaryFormatter) : base(binaryFormatter) {}
 
-        public TGraph Deserialize(IEnumerable<byte> bytes, ISerializationSession session)
+        public TGraph Deserialize(Stream bytes, ISerializationSession session)
         {
             return (TGraph)base.Deserialize(bytes);
         }
 
-        public IEnumerable<byte> Serialize(TGraph graph, ISerializationSession session)
+        public Stream Serialize(TGraph graph, ISerializationSession session)
         {
-            return base.Serialize(graph);
+            return Serialize(graph);
         }
     }
 }

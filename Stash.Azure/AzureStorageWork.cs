@@ -2,6 +2,7 @@ namespace Stash.Azure
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using AzureQueries;
     using BackingStore;
@@ -50,7 +51,9 @@ namespace Stash.Azure
                 (from ct in backingStore.ConcreteTypeQuery
                  where ct.PartitionKey == internalId.ToString()
                  select ct).First();
-            return new StoredGraph(internalId, graph.DownloadByteArray(), concreteType.RowKey);
+            var stream = new MemoryStream();
+            graph.DownloadToStream(stream);
+            return new StoredGraph(internalId, stream, concreteType.RowKey);
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)
@@ -78,13 +81,13 @@ namespace Stash.Azure
         private void insertGraphData(ITrackedGraph trackedGraph)
         {
             var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
-            blob.UploadByteArray(trackedGraph.SerialisedGraph.ToArray());
+            blob.UploadFromStream(trackedGraph.SerialisedGraph);
         }
 
         private void updateGraphData(ITrackedGraph trackedGraph)
         {
             var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
-            blob.UploadByteArray(trackedGraph.SerialisedGraph.ToArray());
+            blob.UploadFromStream(trackedGraph.SerialisedGraph);
         }
 
         private void deleteGraphData(InternalId internalId)

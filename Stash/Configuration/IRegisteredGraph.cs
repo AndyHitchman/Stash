@@ -18,6 +18,7 @@ namespace Stash.Configuration
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Engine;
 
     public interface IRegisteredGraph
@@ -39,7 +40,7 @@ namespace Stash.Configuration
 
         IRegistry Registry { get; }
 
-        object Deserialize(IEnumerable<byte> serializedGraph, ISerializationSession session);
-        IEnumerable<byte> Serialize(object graph, ISerializationSession session);
+        object Deserialize(Stream serializedGraph, ISerializationSession session);
+        Stream Serialize(object graph, ISerializationSession session);
     }
 }

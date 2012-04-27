@@ -18,6 +18,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.BerkeleyDB;
@@ -40,35 +41,35 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         {
             lessThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)},
                 RegisteredGraph
                 );
 
             secondLessThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             equalToTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
                 RegisteredGraph
                 );
 
             secondGreaterThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)},
                 RegisteredGraph
                 );

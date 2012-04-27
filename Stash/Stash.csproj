@@ -140,7 +140,6 @@
     <Compile Include="Serializers\ISerializer.cs" />
     <Compile Include="Engine\PersistenceEvents\PersistenceEvent`1.cs" />
     <Compile Include="Engine\PersistenceEvents\IPersistenceEvent.cs" />
-    <Compile Include="Serializers\BSONSerializer.cs" />
     <Compile Include="BackingStore\StoredGraph.cs" />
     <Compile Include="BackingStore\TrackedGraph.cs" />
     <Compile Include="Queries\IIsIndexedQuery.cs" />

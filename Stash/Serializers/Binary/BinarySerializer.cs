@@ -30,31 +30,18 @@ namespace Stash.Serializers.Binary
             this.binaryFormatter = binaryFormatter;
         }
 
-        public object Deserialize(IEnumerable<byte> bytes)
+        public object Deserialize(Stream stream)
         {
-            var stream = new MemoryStream(bytes.ToArray());
-            try
-            {
-                return binaryFormatter.Deserialize(stream);
-            }
-            finally
-            {
-                stream.Close();
-            }
+            stream.Position = 0;
+            return binaryFormatter.Deserialize(stream);
         }
 
-        public IEnumerable<byte> Serialize(object graph)
+        public Stream Serialize(object graph)
         {
             var stream = new MemoryStream();
-            try
-            {
-                binaryFormatter.Serialize(stream, graph);
-                return stream.ToArray();
-            }
-            finally
-            {
-                stream.Close();
-            }
+            binaryFormatter.Serialize(stream, graph);
+            stream.Position = 0;
+            return stream;
         }
     }
 }

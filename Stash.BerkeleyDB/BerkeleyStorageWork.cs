@@ -17,6 +17,7 @@
 namespace Stash.BerkeleyDB
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using BackingStore;
     using BerkeleyQueries;
@@ -89,7 +90,7 @@ namespace Stash.BerkeleyDB
                 var storedConcreteType = BackingStore.ConcreteTypeDatabase.Get(key, Transaction).Value.Data.AsString();
 
                 var entry = BackingStore.GraphDatabase.Get(key, Transaction);
-                return new StoredGraph(internalId, entry.Value.Data, storedConcreteType);
+                return new StoredGraph(internalId, new MemoryStream(entry.Value.Data), storedConcreteType);
             }
             catch(NotFoundException knfe)
             {
@@ -169,7 +170,7 @@ namespace Stash.BerkeleyDB
         {
             BackingStore.GraphDatabase.PutNoOverwrite(
                 new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
+                new DatabaseEntry(streamToBytes(trackedGraph.SerialisedGraph)),
                 Transaction);
         }
 
@@ -199,7 +200,7 @@ namespace Stash.BerkeleyDB
         {
             BackingStore.GraphDatabase.Put(
                 new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.SerialisedGraph.ToArray()),
+                new DatabaseEntry(streamToBytes(trackedGraph.SerialisedGraph)),
                 Transaction);
         }
 
@@ -218,6 +219,15 @@ namespace Stash.BerkeleyDB
             }
 
             insertIndexes(trackedGraph);
+        }
+
+        private static byte[] streamToBytes(Stream input)
+        {
+            var ms = new MemoryStream();
+            input.Position = 0;
+            input.CopyTo(ms);
+            input.Position = 0;
+            return ms.ToArray();
         }
     }
 }

@@ -17,6 +17,7 @@
 namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 {
     using System;
+    using System.IO;
     using System.Linq;
     using BackingStore;
     using Rhino.Mocks;
@@ -26,7 +27,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     {
         protected override void Given()
         {
-            var serializedGraph = "this is a pretend serialised object graph".Select(_ => Convert.ToByte(_));
+            var serializedGraph = new MemoryStream("this is a pretend serialised object graph".Select(_ => Convert.ToByte(_)).ToArray());
             Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(serializedGraph);
         }
 

@@ -380,4 +380,13 @@ limitations under the License.]]></FileHeader>
       <Abbreviation Text="BSON" />
     </Naming2>
   </CodeStyleSettings>
+  <CustomStructuralPatterns>
+    <Pattern Severity="DO_NOT_SHOW">
+      <ReplacePattern><![CDATA[new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())
+]]></ReplacePattern>
+      <SearchPattern><![CDATA["letspretendthisisserialiseddata".Select(_ => (byte)_)]]></SearchPattern>
+      <Params />
+      <Placeholders />
+    </Pattern>
+  </CustomStructuralPatterns>
 </Configuration>

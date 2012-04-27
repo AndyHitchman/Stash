@@ -18,6 +18,7 @@ namespace Stash.Engine.PersistenceEvents
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
     using BackingStore;
@@ -38,12 +39,12 @@ namespace Stash.Engine.PersistenceEvents
         public Track(ISerializationSession session, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
             : this(session, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
 
-        public Track(ISerializationSession session, InternalId internalId, IEnumerable<byte> storedSerializedGraph, IRegisteredGraph registeredGraph)
+        public Track(ISerializationSession session, InternalId internalId, Stream storedSerializedGraph, IRegisteredGraph registeredGraph)
             : this()
         {
             InternalId = internalId;
             this.registeredGraph = registeredGraph;
-            OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph.ToArray());
+            OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph);
             graph = registeredGraph.Deserialize(storedSerializedGraph, session);
         }
 
@@ -97,7 +98,8 @@ namespace Stash.Engine.PersistenceEvents
         protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction, ISerializationSession session)
         {
             var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph, session);
-            CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph.ToArray());
+            CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph);
+            transientSerializedGraph.Position = 0;
 
             if(CompletionHash.SequenceEqual(OriginalHash))
                 //No change to object. No work to do.

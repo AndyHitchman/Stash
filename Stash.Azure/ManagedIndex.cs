@@ -170,8 +170,13 @@ namespace Stash.Azure
                 allKeysInIndex,
                 reverseEntity =>
                     {
-                        var forwardEntity = new IndexEntity {PartitionKey = reverseEntity.RowKey, RowKey = reverseEntity.PartitionKey};
-                        serviceContext.AttachTo(ForwardIndexName, forwardEntity, "*");
+//                        var forwardEntity = new IndexEntity {PartitionKey = reverseEntity.RowKey, RowKey = reverseEntity.PartitionKey};
+//                        serviceContext.AttachTo(ForwardIndexName, forwardEntity, "*");
+                        var forwardEntity =
+                            (from fi in ForwardIndex(serviceContext)
+                             where fi.PartitionKey == reverseEntity.RowKey
+                             where fi.RowKey == reverseEntity.PartitionKey
+                             select fi).Single();
                         serviceContext.DeleteObject(forwardEntity);
                         serviceContext.DeleteObject(reverseEntity);
                     });

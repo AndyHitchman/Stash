@@ -18,6 +18,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using Stash.BackingStore;
     using Stash.BerkeleyDB;
@@ -39,7 +40,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         {
             firstMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102),
@@ -51,7 +52,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             secondMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102), 
@@ -64,7 +65,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             matchingButExcludedByIntersectTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100),
@@ -75,7 +76,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             nonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                "letspretendthisisserialiseddata".Select(_ => (byte)_),
+                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101) },
                 RegisteredGraph
                 );
