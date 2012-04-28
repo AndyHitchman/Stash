@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash", "Stash\Stash.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.Specifications", "Stash.Specifications\Stash.Specifications.csproj", "{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lib", "lib\lib.csproj", "{25D856D0-9295-42AB-B55B-A8156187F269}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.ExecutableDoco", "Stash.ExecutableDoco\Stash.ExecutableDoco.csproj", "{FE8D9F27-2F35-4936-8CC6-D2473E110F44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stash.BerkeleyDB", "Stash.BerkeleyDB\Stash.BerkeleyDB.csproj", "{072B337D-4E89-458D-AD82-02E2D3F096C2}"
@@ -67,18 +65,6 @@ Global
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x64.Build.0 = Release|x64
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x86.ActiveCfg = Release|x86
 		{27692BBE-2932-4D4D-8E2C-26380C8ABDA7}.Release|x86.Build.0 = Release|x86
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|x64.ActiveCfg = Release|Any CPU
-		{25D856D0-9295-42AB-B55B-A8156187F269}.Release|x86.ActiveCfg = Release|Any CPU
 		{FE8D9F27-2F35-4936-8CC6-D2473E110F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE8D9F27-2F35-4936-8CC6-D2473E110F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE8D9F27-2F35-4936-8CC6-D2473E110F44}.Debug|Mixed Platforms.ActiveCfg = Debug|x64

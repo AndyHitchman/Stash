@@ -36,7 +36,10 @@ namespace Stash.JsonSerializer
             var ms = new MemoryStream();
             using (var writer = new JsonTextWriter(new StreamWriter(ms)))
             {
+                writer.CloseOutput = false;
                 jsonSerializer.Serialize(writer, graph);
+                writer.Flush();
+                ms.Position = 0;
                 return ms;
             }
         }

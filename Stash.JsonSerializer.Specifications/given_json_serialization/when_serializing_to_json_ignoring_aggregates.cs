@@ -30,7 +30,6 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
         protected override void When()
         {
             actual = subject.Serialize(graph, session);
-            var test = JsonConvert.SerializeObject(graph);
         }
 
         [Then]
