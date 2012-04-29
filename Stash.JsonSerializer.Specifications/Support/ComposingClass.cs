@@ -19,6 +19,7 @@ namespace Stash.JsonSerializer.Specifications.Support
     public class ComposingClass
     {
         public IsolatedClass Composed { get; set; }
+        public ComposingClass AnotherComposed { get; set; }
         public string AnotherProperty { get; set; }
     }
 }

@@ -22,6 +22,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
     using Configuration;
     using Engine.PersistenceEvents;
     using Rhino.Mocks;
+    using Serializers;
     using Support;
 
     public class when_completing : Specification
@@ -36,7 +37,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
             subject = new Endure(null, null, mockRegisteredGraph);
 
-            mockRegisteredGraph.Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(new MemoryStream());
+            mockRegisteredGraph.Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(new PreservedMemoryStream());
             mockRegisteredGraph.Expect(_ => _.IndexersOnGraph).Return(Enumerable.Empty<IRegisteredIndexer>());
         }
 

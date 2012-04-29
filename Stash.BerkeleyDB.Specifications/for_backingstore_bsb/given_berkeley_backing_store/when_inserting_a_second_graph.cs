@@ -20,6 +20,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
     using System.IO;
     using System.Linq;
     using System.Text;
+    using Serializers;
     using Stash.BackingStore;
     using Stash.Configuration;
     using Stash.Engine;
@@ -47,7 +48,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             firstTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, firstIndexDistinctIndexValue),
@@ -58,7 +59,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             secondTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(registeredIndexer.IndexName, commonIndexValues),

@@ -21,6 +21,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.IO;
     using System.Linq;
     using AzureQueries;
+    using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;
     using Stash.Engine;
@@ -40,28 +41,28 @@ namespace Stash.Azure.Specifications.given_queries
         {
             firstTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             secondTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
                 RegisteredGraph
                 );
 
             thirdTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
                 RegisteredGraph
                 );
 
             fourthTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
                 RegisteredGraph
                 );

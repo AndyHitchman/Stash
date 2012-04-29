@@ -21,6 +21,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.IO;
     using System.Linq;
     using AzureQueries;
+    using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;
     using Stash.Engine;
@@ -41,35 +42,35 @@ namespace Stash.Azure.Specifications.given_queries
         {
             lessThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "ml")},
                 RegisteredGraph
                 );
 
             lowerTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mm")},
                 RegisteredGraph
                 );
 
             insideTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mma")},
                 RegisteredGraph
                 );
 
             upperTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mmz")},
                 RegisteredGraph
                 );
 
             greaterThanTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mn")},
                 RegisteredGraph
                 );

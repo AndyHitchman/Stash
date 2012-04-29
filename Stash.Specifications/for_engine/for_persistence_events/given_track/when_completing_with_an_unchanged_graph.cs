@@ -21,6 +21,7 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     using BackingStore;
     using Configuration;
     using Rhino.Mocks;
+    using Serializers;
     using Support;
 
     public class when_completing_with_an_unchanged_graph : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
@@ -29,8 +30,8 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
 
         protected override void Given()
         {
-            Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(new MemoryStream(Enumerable.Repeat<byte>(0x01, 100).ToArray()));
-            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(new MemoryStream(Enumerable.Repeat<byte>(0x01, 100).ToArray()));
+            Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(new PreservedMemoryStream(Enumerable.Repeat<byte>(0x01, 100).ToArray()));
+            Dependency<IRegisteredGraph<DummyPersistentObject>>().Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(new PreservedMemoryStream(Enumerable.Repeat<byte>(0x01, 100).ToArray()));
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
         }
 

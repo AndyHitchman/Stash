@@ -38,5 +38,12 @@ namespace Stash.JsonSerializer.Specifications.given_json_serialization
             var doc = new StreamReader(actual).ReadToEnd();
             doc.ShouldEqual(@"{""AProperty"":""test property""}");
         }
+
+        [Then]
+        public void after_gc_the_stream_should_still_be_readable()
+        {
+            GC.Collect();
+            actual.CanRead.ShouldBeTrue();
+        }
     }
 }

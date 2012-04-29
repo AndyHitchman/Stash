@@ -110,6 +110,7 @@
     <Compile Include="Serializers\Binary\BinarySerializer`1.cs" />
     <Compile Include="Serializers\ITransformer.cs" />
     <Compile Include="Serializers\NoTransformer.cs" />
+    <Compile Include="Serializers\PreservedMemoryStream.cs" />
     <Compile Include="Serializers\TransformAndSerialize.cs" />
     <Compile Include="Engine\SessionFactory.cs" />
     <Compile Include="Engine\InternalSession.cs" />

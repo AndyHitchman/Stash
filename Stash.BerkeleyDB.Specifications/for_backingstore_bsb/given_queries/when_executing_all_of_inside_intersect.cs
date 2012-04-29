@@ -20,6 +20,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Serializers;
     using Stash.BackingStore;
     using Stash.BerkeleyDB;
     using Stash.BerkeleyDB.BerkeleyQueries;
@@ -40,7 +41,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         {
             firstMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101),
@@ -51,7 +52,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             secondMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99),
@@ -62,7 +63,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             matchingButExcludedByIntersectTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100),
@@ -73,7 +74,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             nonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101) },
                 RegisteredGraph
                 );

@@ -20,6 +20,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb
     using System.IO;
     using System.Linq;
     using global::BerkeleyDB;
+    using Serializers;
     using Stash.Engine;
     using NUnit.Framework;
     using Support;
@@ -48,7 +49,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb
 
         public static Stream AsStream(this byte[] bytes)
         {
-            return new MemoryStream(bytes);
+            return new PreservedMemoryStream(bytes);
         }
 
         public static byte[] ValueForKey(this HashDatabase store, InternalId key)

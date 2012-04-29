@@ -24,6 +24,7 @@ namespace Stash.Azure.Specifications.given_queries
     using BackingStore;
     using Engine;
     using Queries;
+    using Serializers;
     using Stash.Azure;
     using Support;
 
@@ -40,7 +41,7 @@ namespace Stash.Azure.Specifications.given_queries
         {
             firstMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream(new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101),
@@ -51,7 +52,7 @@ namespace Stash.Azure.Specifications.given_queries
 
             secondMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream(new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
+                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
                 new IProjectedIndex[]
                     {
                         new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99),
@@ -63,14 +64,14 @@ namespace Stash.Azure.Specifications.given_queries
 
             firstNonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream(new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
+                new PreservedMemoryStream(new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
                 new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100) },
                 RegisteredGraph
                 );
 
             secondtNonMatchingTrackedGraph = new TrackedGraph(
                 new InternalId(Guid.NewGuid()),
-                new MemoryStream(new MemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
+                new PreservedMemoryStream(new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()).ToArray()),
                 new IProjectedIndex[] { new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101) },
                 RegisteredGraph
                 );

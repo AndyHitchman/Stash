@@ -24,6 +24,7 @@ namespace Stash.JsonSerializer
         public TGraph Deserialize(Stream serial, ISerializationSession session)
         {
             var jsonSerializer = createFreshSerializer(session);
+            serial.Position = 0;
 
             using (var reader = new JsonTextReader(new StreamReader(serial)))
                 return (TGraph)jsonSerializer.Deserialize(reader, registeredGraph.GraphType);
@@ -33,10 +34,10 @@ namespace Stash.JsonSerializer
         {
             var jsonSerializer = createFreshSerializer(session);
 
-            var ms = new MemoryStream();
-            using (var writer = new JsonTextWriter(new StreamWriter(ms)))
+            var ms = new PreservedMemoryStream();
+            using (var streamWriter = new StreamWriter(ms))
+            using (var writer = new JsonTextWriter(streamWriter))
             {
-                writer.CloseOutput = false;
                 jsonSerializer.Serialize(writer, graph);
                 writer.Flush();
                 ms.Position = 0;

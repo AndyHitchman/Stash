@@ -22,6 +22,7 @@ namespace Stash.BerkeleyDB
     using BackingStore;
     using BerkeleyQueries;
     using global::BerkeleyDB;
+    using Serializers;
     using Stash.Configuration;
     using Stash.Engine;
     using Stash.Queries;
@@ -90,7 +91,7 @@ namespace Stash.BerkeleyDB
                 var storedConcreteType = BackingStore.ConcreteTypeDatabase.Get(key, Transaction).Value.Data.AsString();
 
                 var entry = BackingStore.GraphDatabase.Get(key, Transaction);
-                return new StoredGraph(internalId, new MemoryStream(entry.Value.Data), storedConcreteType);
+                return new StoredGraph(internalId, new PreservedMemoryStream(entry.Value.Data), storedConcreteType);
             }
             catch(NotFoundException knfe)
             {
@@ -223,7 +224,7 @@ namespace Stash.BerkeleyDB
 
         private static byte[] streamToBytes(Stream input)
         {
-            var ms = new MemoryStream();
+            var ms = new PreservedMemoryStream();
             input.Position = 0;
             input.CopyTo(ms);
             input.Position = 0;

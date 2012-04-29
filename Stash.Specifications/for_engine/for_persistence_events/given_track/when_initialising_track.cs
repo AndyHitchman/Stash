@@ -21,13 +21,14 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_track
     using System.Linq;
     using BackingStore;
     using Rhino.Mocks;
+    using Serializers;
     using Support;
 
     public class when_initialising_track : AutoMockedSpecification<StandInTrack<DummyPersistentObject>>
     {
         protected override void Given()
         {
-            var serializedGraph = new MemoryStream("this is a pretend serialised object graph".Select(_ => Convert.ToByte(_)).ToArray());
+            var serializedGraph = new PreservedMemoryStream("this is a pretend serialised object graph".Select(_ => Convert.ToByte(_)).ToArray());
             Dependency<IStoredGraph>().Expect(_ => _.SerialisedGraph).Return(serializedGraph);
         }
 

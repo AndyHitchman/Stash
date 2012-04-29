@@ -38,7 +38,7 @@ namespace Stash.Serializers.Binary
 
         public Stream Serialize(object graph)
         {
-            var stream = new MemoryStream();
+            var stream = new PreservedMemoryStream();
             binaryFormatter.Serialize(stream, graph);
             stream.Position = 0;
             return stream;

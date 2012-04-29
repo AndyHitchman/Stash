@@ -10,6 +10,7 @@ namespace Stash.Azure
     using Engine;
     using Microsoft.WindowsAzure.StorageClient;
     using Queries;
+    using Serializers;
 
     public class AzureStorageWork : IStorageWork
     {
@@ -51,7 +52,7 @@ namespace Stash.Azure
                 (from ct in backingStore.ConcreteTypeQuery
                  where ct.PartitionKey == internalId.ToString()
                  select ct).First();
-            var stream = new MemoryStream();
+            var stream = new PreservedMemoryStream();
             graph.DownloadToStream(stream);
             return new StoredGraph(internalId, stream, concreteType.RowKey);
         }

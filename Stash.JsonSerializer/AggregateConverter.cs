@@ -7,6 +7,7 @@
 
     public class AggregateConverter<TGraph> : JsonConverter 
     {
+        private const string stashInternalId = "__StashInternalId";
         private readonly Func<Type, bool> isAggregate;
         private readonly ISerializationSession session;
         private bool handlingRoot;
@@ -28,7 +29,7 @@
                     string.Format("Graph of type {0} ({1}) is not tracked and therefore cannot be serialised as a reference", value.GetType(), value));
 
             writer.WriteStartObject();
-            writer.WritePropertyName("__StashInternalId");
+            writer.WritePropertyName(stashInternalId);
             writer.WriteValue(internalId.ToString());
             writer.WriteEndObject();
         }
@@ -49,7 +50,7 @@
         
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            readAndAssertProperty(reader, "Key");
+            readAndAssertProperty(reader, stashInternalId);
             readAndAssert(reader);
             var internalId = new InternalId(new Guid(reader.Value.ToString()));
             

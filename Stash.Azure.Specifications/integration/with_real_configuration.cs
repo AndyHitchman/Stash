@@ -34,16 +34,14 @@ namespace Stash.Azure.Specifications.integration
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist(AzureBackingStore.ConcreteTypeTableName);
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashEngineStashTypeHierarchy");
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashEngineStashTypeHierarchy");
-            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
+            CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
             
             Kernel.Kickstart(
                 new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount),
                 register =>
                     {
-                        register.Graph<Post>(
-                            _ =>
-                            _.SerializeWith(new BinarySerializer<Post>()));
+                        register.Graph<Post>();
                         register.Index(new NumberOfCommentsOnPost());
                     }
                 );
