@@ -25,8 +25,9 @@ namespace Stash.Serializers
         private readonly Func<Stream, TGraph> deserializer;
         private readonly Func<TGraph, Stream> serializer;
 
-        public AdhocSerializer(Func<TGraph, Stream> serializer, Func<Stream, TGraph> deserializer)
+        public AdhocSerializer(Func<TGraph, Stream> serializer, Func<Stream, TGraph> deserializer, string serializedContentType)
         {
+            SerializedContentType = serializedContentType;
             this.serializer = serializer;
             this.deserializer = deserializer;
         }
@@ -40,5 +41,7 @@ namespace Stash.Serializers
         {
             return serializer(graph);
         }
+
+        public string SerializedContentType { get; private set; }
     }
 }

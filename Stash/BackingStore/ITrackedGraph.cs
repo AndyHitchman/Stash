@@ -24,5 +24,6 @@ namespace Stash.BackingStore
         IEnumerable<IProjectedIndex> ProjectedIndexes { get; }
         IEnumerable<string> TypeHierarchy { get; }
         IEnumerable<IRegisteredIndexer> Indexes { get; }
+        string SerializedContentType { get; }
     }
 }

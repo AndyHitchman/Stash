@@ -45,6 +45,11 @@ namespace Stash.JsonSerializer
             }
         }
 
+        public string SerializedContentType
+        {
+            get { return "application/json"; }
+        }
+
         private JsonSerializer createFreshSerializer(ISerializationSession session) 
         {
             var jsonSerializer = JsonSerializer.Create(

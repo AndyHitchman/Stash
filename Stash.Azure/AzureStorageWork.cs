@@ -83,12 +83,16 @@ namespace Stash.Azure
         {
             var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
             blob.UploadFromStream(trackedGraph.SerialisedGraph);
+            blob.Properties.ContentType = trackedGraph.SerializedContentType;
+            blob.SetProperties();
         }
 
         private void updateGraphData(ITrackedGraph trackedGraph)
         {
             var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
             blob.UploadFromStream(trackedGraph.SerialisedGraph);
+            blob.Properties.ContentType = trackedGraph.SerializedContentType;
+            blob.SetProperties();
         }
 
         private void deleteGraphData(InternalId internalId)

@@ -29,5 +29,6 @@ namespace Stash.Serializers
         TGraph Deserialize(Stream serial, ISerializationSession session);
         Stream Serialize(TGraph graph, ISerializationSession session);
 
+        string SerializedContentType { get; }
     }
 }

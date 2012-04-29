@@ -53,6 +53,11 @@ namespace Stash.BackingStore
             get { return RegisteredGraph.IndexersOnGraph; }
         }
 
+        public string SerializedContentType
+        {
+            get { return RegisteredGraph.SerializedContentType; }
+        }
+
         public IRegisteredGraph RegisteredGraph { get; private set; }
 
         public InternalId InternalId { get; private set; }

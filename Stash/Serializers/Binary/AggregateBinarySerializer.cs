@@ -16,6 +16,7 @@
 
 namespace Stash.Serializers.Binary
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.Serialization;
@@ -57,6 +58,11 @@ namespace Stash.Serializers.Binary
         {
             var binarySerializer = getBinarySerializerWithSurrogateSelector(session);
             return binarySerializer.Serialize(graph);
+        }
+
+        public string SerializedContentType
+        {
+            get { return "application/octet-stream"; }
         }
 
         /// <summary>

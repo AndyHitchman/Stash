@@ -80,5 +80,10 @@ namespace Stash.Configuration
         {
             return TransformSerializer.Serialize((TGraph)graph, session);
         }
+
+        public override string SerializedContentType
+        {
+            get { return TransformSerializer.SerializedContentType;  }
+        }
     }
 }

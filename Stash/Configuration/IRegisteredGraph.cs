@@ -39,6 +39,7 @@ namespace Stash.Configuration
         IEnumerable<IRegisteredIndexer> IndexersOnGraph { get; }
 
         IRegistry Registry { get; }
+        string SerializedContentType { get; }
 
         object Deserialize(Stream serializedGraph, ISerializationSession session);
         Stream Serialize(object graph, ISerializationSession session);

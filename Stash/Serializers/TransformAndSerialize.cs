@@ -16,6 +16,7 @@
 
 namespace Stash.Serializers
 {
+    using System;
     using System.IO;
     using Engine;
 
@@ -38,6 +39,11 @@ namespace Stash.Serializers
         public Stream Serialize(TGraph graph, ISerializationSession session)
         {
             return Serializer.Serialize(Transformer.TransformDown(graph), session);
+        }
+
+        public string SerializedContentType
+        {
+            get { return Serializer.SerializedContentType; }
         }
     }
 }
