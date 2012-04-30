@@ -73,15 +73,26 @@ namespace Stash
 
         public IEnumerator<TGraph> GetEnumerator()
         {
+            return 
+                GetMatchingStoredGraphs()
+                    .Select(
+                        storedGraph => 
+                            session.Load(
+                                storedGraph, 
+                                registry.GetRegistrationFor(storedGraph.GraphType), 
+                                new SerializationSession(() => session.EnrolledPersistenceEvents, session, untracked), untracked))
+                    .Select(track => (TGraph)track.UntypedGraph)
+                    .GetEnumerator();
+        }
+
+        public IEnumerable<IStoredGraph> GetMatchingStoredGraphs()
+        {
             if(!queryChain.Any())
                 throw new InvalidOperationException("No queries in query chain");
 
             return
                 backingStore
-                    .Get(queryFactory.IntersectionOf(queryChain.Select(_ => _.match)))
-                    .Select(storedGraph => session.Load(storedGraph, registry.GetRegistrationFor(storedGraph.GraphType), new SerializationSession(() => session.EnrolledPersistenceEvents, session, untracked), untracked))
-                    .Select(track => (TGraph)track.UntypedGraph)
-                    .GetEnumerator();
+                    .Get(queryFactory.IntersectionOf(queryChain.Select(_ => _.match)));
         }
 
         public IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint)

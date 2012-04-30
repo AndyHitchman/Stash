@@ -168,6 +168,11 @@ namespace Stash.Azure
             return new JsonSerializer<TGraph>(registeredGraph);
         }
 
+        public CloudBlob GetBlobReferenceForInternalId(InternalId internalId)
+        {
+            return GraphContainer.GetBlobReference(internalId.ToString());
+        }
+
         public void Dispose()
         {
             if (isDisposed) return;

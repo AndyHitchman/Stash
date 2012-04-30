@@ -45,13 +45,13 @@
 
         public IStoredGraph Get(InternalId internalId)
         {
-            var graph = backingStore.GraphContainer.GetBlobReference(internalId.ToString());
+            var blobReference = backingStore.GraphContainer.GetBlobReference(internalId.ToString());
             var concreteType =
                 (from ct in backingStore.ConcreteTypeQuery
                  where ct.PartitionKey == internalId.ToString()
                  select ct).First();
             var stream = new PreservedMemoryStream();
-            graph.DownloadToStream(stream);
+            blobReference.DownloadToStream(stream);
             return new StoredGraph(internalId, stream, concreteType.RowKey);
         }
 
