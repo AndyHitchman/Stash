@@ -22,8 +22,23 @@ namespace Stash
 
     public interface IStashedSet<TGraph> : IEnumerable<TGraph> where TGraph : class
     {
+        /// <summary>
+        /// Destroy the persistence of a graph.
+        /// </summary>
+        /// <param name="item"></param>
         void Destroy(TGraph item);
+
+        /// <summary>
+        /// Endure a graph by making it persistent.
+        /// </summary>
+        /// <param name="item"></param>
         void Endure(TGraph item);
+        
+        /// <summary>
+        /// Restrict the stashed set to entities matching the provided constraint.
+        /// </summary>
+        /// <param name="constraint"></param>
+        /// <returns></returns>
         IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint);
 
         /// <summary>
