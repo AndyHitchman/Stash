@@ -26,6 +26,7 @@ namespace Stash.Azure.Specifications.given_queries
     using Queries;
     using Serializers;
     using Stash.Azure;
+    using Stash.Engine;
     using Support;
 
     public class when_executing_all_of : with_int_indexer

@@ -16,6 +16,7 @@
 
 namespace Stash.BerkeleyDB.Specifications.integration
 {
+    using Engine;
     using Serializers.Binary;
     using Stash.BerkeleyDB;
 

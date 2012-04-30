@@ -21,6 +21,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.IO;
     using System.Linq;
     using AzureQueries;
+    using Engine;
     using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;

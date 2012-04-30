@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Azure
+namespace Stash.Azure.Engine
 {
     using System;
     using System.Collections.Generic;

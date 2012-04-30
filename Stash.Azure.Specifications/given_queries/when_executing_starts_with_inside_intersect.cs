@@ -20,6 +20,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Engine;
     using Serializers;
     using Stash.Azure;
     using Stash.Azure.AzureQueries;

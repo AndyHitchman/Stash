@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BerkeleyDB
+namespace Stash.BerkeleyDB.Engine
 {
     using System.Collections;
     using System.IO;
@@ -22,8 +22,8 @@ namespace Stash.BerkeleyDB
     using System.Threading;
     using BackingStore;
     using BerkeleyConfigs;
+    using Configuration;
     using global::BerkeleyDB;
-    using Stash.Configuration;
     using Stash.Engine;
 
     public class ManagedIndex

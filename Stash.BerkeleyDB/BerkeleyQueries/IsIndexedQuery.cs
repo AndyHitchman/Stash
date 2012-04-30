@@ -19,6 +19,7 @@ namespace Stash.BerkeleyDB.BerkeleyQueries
     using System.Collections.Generic;
     using System.Linq;
     using BerkeleyDB;
+    using Engine;
     using global::BerkeleyDB;
     using Stash.Configuration;
     using Stash.Engine;

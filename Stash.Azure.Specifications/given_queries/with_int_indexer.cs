@@ -19,8 +19,10 @@ namespace Stash.Azure.Specifications.given_queries
     using System;
     using System.Linq;
     using Configuration;
+    using JsonSerializer;
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.StorageClient;
+    using Serializers;
     using Stash.Azure.Specifications.Support;
 
     public abstract class with_int_indexer : with_development_storage
@@ -36,6 +38,7 @@ namespace Stash.Azure.Specifications.given_queries
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsSupportIntIndex");
 
             RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(Registry);
+            RegisteredGraph.TransformSerializer = new JsonSerializer<ClassWithTwoAncestors>(RegisteredGraph);
             RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex(), Registry);
             Registry.RegisteredIndexers.Add(RegisteredIndexer);
             Subject.EnsureIndex(RegisteredIndexer);

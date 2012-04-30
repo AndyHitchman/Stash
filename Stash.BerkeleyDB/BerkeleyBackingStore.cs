@@ -19,6 +19,7 @@ namespace Stash.BerkeleyDB
     using System;
     using System.Collections.Generic;
     using BackingStore;
+    using Engine;
     using global::BerkeleyDB;
     using Serializers;
     using Serializers.Binary;

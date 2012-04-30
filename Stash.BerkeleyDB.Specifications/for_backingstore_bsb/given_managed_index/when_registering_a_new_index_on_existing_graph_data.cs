@@ -16,6 +16,7 @@
 
 namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_managed_index
 {
+    using Engine;
     using Stash.BerkeleyDB;
     using Stash.Configuration;
     using Stash.Engine;

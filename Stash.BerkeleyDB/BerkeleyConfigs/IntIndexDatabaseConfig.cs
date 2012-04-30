@@ -18,6 +18,7 @@ namespace Stash.BerkeleyDB.BerkeleyConfigs
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Engine;
 
     public class IntIndexDatabaseConfig : IndexDatabaseConfig
     {

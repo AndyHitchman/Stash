@@ -20,6 +20,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using Engine;
     using Serializers;
     using Stash.BackingStore;
     using Stash.BerkeleyDB;

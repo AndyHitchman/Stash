@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,19 +14,19 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Azure
+namespace Stash.BerkeleyDB.Engine
 {
     using System;
     using System.Collections.Generic;
-    using AzureQueries;
-    using Stash.Configuration;
-    using Stash.Queries;
+    using BerkeleyQueries;
+    using Configuration;
+    using Queries;
 
-    public class AzureQueryFactory : IQueryFactory
+    public class BerkeleyQueryFactory : IQueryFactory
     {
-        private readonly AzureBackingStore backingStore;
+        private readonly BerkeleyBackingStore backingStore;
 
-        public AzureQueryFactory(AzureBackingStore berkeleyBackingStore)
+        public BerkeleyQueryFactory(BerkeleyBackingStore berkeleyBackingStore)
         {
             backingStore = berkeleyBackingStore;
         }

@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,19 +14,16 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.Azure
+namespace Stash.Azure.Engine
 {
     using System;
-    using System.Collections;
     using System.Data.Services.Client;
-    using System.IO;
     using System.Linq;
-    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+    using BackingStore;
+    using Configuration;
     using Microsoft.WindowsAzure.StorageClient;
-    using Stash.BackingStore;
-    using Stash.Configuration;
     using Stash.Engine;
 
     public class ManagedIndex
@@ -173,10 +170,10 @@ namespace Stash.Azure
 //                        var forwardEntity = new IndexEntity {PartitionKey = reverseEntity.RowKey, RowKey = reverseEntity.PartitionKey};
 //                        serviceContext.AttachTo(ForwardIndexName, forwardEntity, "*");
                         var forwardEntity =
-                            (from fi in ForwardIndex(serviceContext)
-                             where fi.PartitionKey == reverseEntity.RowKey
-                             where fi.RowKey == reverseEntity.PartitionKey
-                             select fi).Single();
+                            Queryable.Single<IndexEntity>((from fi in ForwardIndex(serviceContext)
+                                                             where fi.PartitionKey == reverseEntity.RowKey
+                                                             where fi.RowKey == reverseEntity.PartitionKey
+                                                             select fi));
                         serviceContext.DeleteObject(forwardEntity);
                         serviceContext.DeleteObject(reverseEntity);
                     });

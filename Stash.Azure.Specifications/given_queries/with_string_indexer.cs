@@ -16,10 +16,11 @@
 
 namespace Stash.Azure.Specifications.given_queries
 {
+    using Configuration;
+    using JsonSerializer;
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.StorageClient;
-    using Stash.Azure.Specifications.Support;
-    using Stash.Configuration;
+    using Support;
 
     public abstract class with_string_indexer : with_development_storage
     {
@@ -34,6 +35,7 @@ namespace Stash.Azure.Specifications.given_queries
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsSupportStringIndex");
 
             RegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(Registry);
+            RegisteredGraph.TransformSerializer = new JsonSerializer<ClassWithTwoAncestors>(RegisteredGraph);
             RegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex(), Registry);
             Registry.RegisteredIndexers.Add(RegisteredIndexer);
             Subject.EnsureIndex(RegisteredIndexer);

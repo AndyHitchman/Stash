@@ -14,7 +14,7 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BerkeleyDB
+namespace Stash.BerkeleyDB.Engine
 {
     using System;
     using BackingStore;

@@ -22,6 +22,7 @@ namespace Stash.Azure.Specifications.given_queries
     using Engine;
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.StorageClient;
+    using Stash.Engine;
     using Support;
 
     public abstract class with_development_storage : Specification

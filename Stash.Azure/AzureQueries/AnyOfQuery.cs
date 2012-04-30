@@ -19,6 +19,7 @@ namespace Stash.Azure.AzureQueries
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Engine;
     using Stash.Azure;
     using Microsoft.WindowsAzure.StorageClient;
     using Stash.Configuration;

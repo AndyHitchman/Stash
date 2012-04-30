@@ -1,16 +1,14 @@
-namespace Stash.Azure
+﻿namespace Stash.Azure.Engine
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using AzureQueries;
     using BackingStore;
     using Configuration;
-    using Engine;
     using Microsoft.WindowsAzure.StorageClient;
     using Queries;
     using Serializers;
+    using Stash.Engine;
 
     public class AzureStorageWork : IStorageWork
     {
@@ -37,7 +35,7 @@ namespace Stash.Azure
         {
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return Matching(query).Distinct().Select(internalId => backingStore.Get(internalId));
+            return Matching(query).Distinct().Select<InternalId, IStoredGraph>(internalId => backingStore.Get(internalId));
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)

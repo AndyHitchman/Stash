@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BerkeleyBackingStore.cs" />
-    <Compile Include="BerkeleyBackingStoreEnvironment.cs" />
     <Compile Include="BerkeleyConfigs\BooleanIndexDatabaseConfig.cs" />
     <Compile Include="BerkeleyConfigs\CharIndexDatabaseConfig.cs" />
     <Compile Include="BerkeleyConfigs\DateTimeIndexDatabaseConfig.cs" />
@@ -66,7 +65,6 @@
     <Compile Include="BerkeleyConfigs\ULongIndexDatabaseConfig.cs" />
     <Compile Include="BerkeleyConfigs\UShortIndexDatabaseConfig.cs" />
     <Compile Include="BerkeleyConfigs\ValueDatabaseConfig.cs" />
-    <Compile Include="BerkeleyDbExtensions.cs" />
     <Compile Include="BerkeleyQueries\AllOfQuery.cs" />
     <Compile Include="BerkeleyQueries\AnyOfQuery.cs" />
     <Compile Include="BerkeleyQueries\BetweenQuery.cs" />
@@ -88,15 +86,17 @@
     <Compile Include="BerkeleyQueries\QueryCostScale.cs" />
     <Compile Include="BerkeleyQueries\StartsWithQuery.cs" />
     <Compile Include="BerkeleyQueries\UnionOperator.cs" />
-    <Compile Include="BerkeleyQueryFactory.cs" />
-    <Compile Include="BerkeleyStorageWork.cs" />
-    <Compile Include="Convert.cs" />
-    <Compile Include="DefaultBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="IBerkeleyBackingStoreEnvironment.cs" />
-    <Compile Include="ManagedIndex.cs" />
+    <Compile Include="Engine\BerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="Engine\BerkeleyDbExtensions.cs" />
+    <Compile Include="Engine\BerkeleyQueryFactory.cs" />
+    <Compile Include="Engine\BerkeleyStorageWork.cs" />
+    <Compile Include="Engine\Convert.cs" />
+    <Compile Include="Engine\DefaultBerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="Engine\IBerkeleyBackingStoreEnvironment.cs" />
+    <Compile Include="Engine\ManagedIndex.cs" />
+    <Compile Include="Engine\ProjectedIndex.cs" />
+    <Compile Include="Engine\ProjectedIndex`1.cs" />
     <Compile Include="PartitionedBerkeleyBackingStore.cs" />
-    <Compile Include="ProjectedIndex.cs" />
-    <Compile Include="ProjectedIndex`1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

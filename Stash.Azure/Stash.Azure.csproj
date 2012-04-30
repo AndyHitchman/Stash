@@ -64,17 +64,17 @@
     <Compile Include="AzureQueries\OutsideQuery.cs" />
     <Compile Include="AzureQueries\StartsWithQuery.cs" />
     <Compile Include="AzureQueries\UnionOperator.cs" />
-    <Compile Include="AzureStorageWork.cs" />
-    <Compile Include="AzureQueryFactory.cs" />
-    <Compile Include="ConcreteTypeEntity.cs" />
-    <Compile Include="Convert.cs" />
-    <Compile Include="IndexEntity.cs" />
-    <Compile Include="ManagedIndex.cs" />
+    <Compile Include="Engine\AzureQueryFactory.cs" />
+    <Compile Include="Engine\AzureStorageWork.cs" />
+    <Compile Include="Engine\ConcreteTypeEntity.cs" />
+    <Compile Include="Engine\Convert.cs" />
+    <Compile Include="Engine\IndexEntity.cs" />
+    <Compile Include="Engine\ManagedIndex.cs" />
+    <Compile Include="Engine\ProjectedIndex.cs" />
+    <Compile Include="Engine\ProjectedIndex`1.cs" />
+    <Compile Include="Engine\TypeHierarchyEntity.cs" />
     <Compile Include="AzureQueries\NotAnyOfQuery.cs" />
-    <Compile Include="ProjectedIndex`1.cs" />
     <Compile Include="AzureQueries\QueryCostScale.cs" />
-    <Compile Include="TypeHierarchyEntity.cs" />
-    <Compile Include="ProjectedIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

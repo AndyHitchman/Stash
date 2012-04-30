@@ -25,6 +25,8 @@ namespace Stash.Azure
     using Queries;
     using Microsoft.WindowsAzure.StorageClient;
     using Serializers;
+    using Stash.Engine;
+    using Convert = Engine.Convert;
 
     public class AzureBackingStore : IBackingStore, IDisposable
     {

@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 // Copyright 2009, 2010 Andrew Hitchman
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); 
@@ -14,18 +14,18 @@
 // limitations under the License.
 #endregion
 
-namespace Stash.BerkeleyDB
+namespace Stash.BerkeleyDB.Engine
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using BackingStore;
     using BerkeleyQueries;
+    using Configuration;
     using global::BerkeleyDB;
+    using Queries;
     using Serializers;
-    using Stash.Configuration;
     using Stash.Engine;
-    using Stash.Queries;
 
     public class BerkeleyStorageWork : IStorageWork
     {

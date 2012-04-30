@@ -1,4 +1,4 @@
-namespace Stash.Azure
+﻿namespace Stash.Azure.Engine
 {
     using Microsoft.WindowsAzure.StorageClient;
 

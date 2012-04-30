@@ -18,6 +18,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_managed_ind
 {
     using System;
     using System.IO;
+    using Engine;
     using global::BerkeleyDB;
     using Stash.BerkeleyDB;
     using Stash.BerkeleyDB.BerkeleyConfigs;

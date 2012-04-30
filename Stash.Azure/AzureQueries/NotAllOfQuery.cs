@@ -24,6 +24,7 @@ namespace Stash.Azure.AzureQueries
     using Configuration;
     using Engine;
     using Queries;
+    using Stash.Engine;
 
     public class NotAllOfQuery<TKey> : IAzureIndexQuery, INotAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {

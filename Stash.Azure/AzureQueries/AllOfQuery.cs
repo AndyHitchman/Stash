@@ -24,6 +24,7 @@ namespace Stash.Azure.AzureQueries
     using Configuration;
     using Engine;
     using Queries;
+    using Stash.Engine;
 
     public class AllOfQuery<TKey> : IAzureIndexQuery, IAllOfQuery<TKey> where TKey : IComparable<TKey>, IEquatable<TKey>
     {

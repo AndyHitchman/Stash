@@ -1,5 +1,6 @@
 namespace Stash.Azure.Specifications.given_convert
 {
+    using Engine;
     using NUnit.Framework;
     using Support;
 

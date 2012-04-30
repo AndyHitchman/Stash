@@ -1,9 +1,9 @@
 namespace Stash.Azure.AzureQueries
 {
     using System.Collections.Generic;
-    using Engine;
     using Microsoft.WindowsAzure.StorageClient;
     using Queries;
+    using Stash.Engine;
 
     public interface IAzureQuery : IQuery
     {
