@@ -117,7 +117,7 @@ namespace Stash.Azure
 
         public IEnumerable<InternalId> Matching(IQuery query)
         {
-            throw new NotImplementedException();
+            return InTransactionDo(work => work.Matching(query));
         }
 
         public IEnumerable<IStoredGraph> Get(IQuery query)
