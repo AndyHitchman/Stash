@@ -25,6 +25,11 @@ namespace Stash
         void Destroy(TGraph item);
         void Endure(TGraph item);
         IStashedSet<TGraph> Matching(Func<MakeConstraint, IQuery> constraint);
+
+        /// <summary>
+        /// Use the stashed set read-only, where no changes to entities are tracked or persisted.
+        /// </summary>
+        /// <returns></returns>
         IStashedSet<TGraph> Untracked();
     }
 }
