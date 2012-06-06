@@ -138,6 +138,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb_csharp52.dll" "$(TargetDir)"
+
 copy "$(SolutionDir)lib\BerkeleyDB\$(PlatformName)\libdb52.dll" "$(TargetDir)"
 </PostBuildEvent>
   </PropertyGroup>
