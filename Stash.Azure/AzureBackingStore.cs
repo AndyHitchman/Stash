@@ -158,7 +158,7 @@ namespace Stash.Azure
             }
         }
 
-        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        public bool IsTypeSupportedInIndexes(Type proposedIndexType)
         {
             return Convert.For.ContainsKey(proposedIndexType);
         }

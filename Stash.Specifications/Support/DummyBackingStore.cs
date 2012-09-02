@@ -72,7 +72,7 @@ namespace Stash.Specifications.Support
             throw new NotImplementedException();
         }
 
-        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        public bool IsTypeSupportedInIndexes(Type proposedIndexType)
         {
             throw new NotImplementedException();
         }

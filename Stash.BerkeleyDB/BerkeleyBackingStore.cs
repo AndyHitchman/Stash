@@ -162,7 +162,7 @@ namespace Stash.BerkeleyDB
                 typeof(ushort),
             };
         
-        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        public bool IsTypeSupportedInIndexes(Type proposedIndexType)
         {
             return supportedTypes.Contains(proposedIndexType);
         }

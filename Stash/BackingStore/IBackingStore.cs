@@ -86,7 +86,7 @@ namespace Stash.BackingStore
         /// </summary>
         /// <param name="proposedIndexType"></param>
         /// <returns></returns>
-        bool IsTypeASupportedInIndexes(Type proposedIndexType);
+        bool IsTypeSupportedInIndexes(Type proposedIndexType);
 
         /// <summary>
         /// Get the default serializer for the backing store.

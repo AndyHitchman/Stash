@@ -104,7 +104,7 @@ namespace Stash.Engine.Partitioning
                     });
         }
 
-        public bool IsTypeASupportedInIndexes(Type proposedIndexType)
+        public bool IsTypeSupportedInIndexes(Type proposedIndexType)
         {
             throw new NotImplementedException();
         }
