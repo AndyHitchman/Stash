@@ -29,16 +29,20 @@ namespace Stash.Specifications.for_engine.for_persistence_events.given_endure
     {
         private IRegisteredGraph<DummyPersistentObject> mockRegisteredGraph;
         private IStorageWork mockStorageWork;
+        private IStoredGraph mockStoredGraph;
         private Endure subject;
 
         protected override void Given()
         {
             mockRegisteredGraph = MockRepository.GenerateMock<IRegisteredGraph<DummyPersistentObject>>();
             mockStorageWork = MockRepository.GenerateMock<IStorageWork>();
-            subject = new Endure(null, null, mockRegisteredGraph);
+            mockStoredGraph = MockRepository.GenerateMock<IStoredGraph>();
 
             mockRegisteredGraph.Expect(_ => _.Serialize(null, null)).IgnoreArguments().Return(new PreservedMemoryStream());
             mockRegisteredGraph.Expect(_ => _.IndexersOnGraph).Return(Enumerable.Empty<IRegisteredIndexer>());
+            mockRegisteredGraph.Expect(_ => _.CreateStoredGraph()).Return(mockStoredGraph);
+
+            subject = new Endure(null, mockRegisteredGraph);
         }
 
         protected override void When()

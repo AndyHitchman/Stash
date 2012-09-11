@@ -36,12 +36,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
         protected override void Given()
         {
-            trackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            trackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
 

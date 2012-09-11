@@ -43,16 +43,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             secondRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex(), registry);
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
-            trackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
-                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
-                    },
-                registeredGraph
-                );
+            trackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), registeredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
+                    new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
+                }, registeredGraph);
 
             Subject.EnsureIndex(firstRegisteredIndexer);
             Subject.EnsureIndex(secondRegisteredIndexer);
@@ -61,19 +56,19 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
         protected override void When()
         {
-            Subject.InTransactionDo(_ => _.DeleteGraph(trackedGraph.InternalId, registeredGraph));
+            Subject.InTransactionDo(_ => _.DeleteGraph(trackedGraph.StoredGraph.InternalId, registeredGraph));
         }
 
         [Then]
         public void it_should_have_removed_the_graph()
         {
-            Subject.GraphDatabase.ShouldNotHaveKey(trackedGraph.InternalId);
+            Subject.GraphDatabase.ShouldNotHaveKey(trackedGraph.StoredGraph.InternalId);
         }
 
         [Then]
         public void it_should_remove_the_concrete_type_of_the_graph()
         {
-            Subject.ConcreteTypeDatabase.ShouldNotHaveKey(trackedGraph.InternalId);
+            Subject.ConcreteTypeDatabase.ShouldNotHaveKey(trackedGraph.StoredGraph.InternalId);
         }
 
         [Then]

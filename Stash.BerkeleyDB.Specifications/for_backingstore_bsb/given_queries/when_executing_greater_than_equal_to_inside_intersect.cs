@@ -41,40 +41,15 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
         protected override void Given()
         {
-            lessThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)},
-                RegisteredGraph
-                );
+            lessThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)}, RegisteredGraph);
 
-            secondLessThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            secondLessThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            equalToTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
-                RegisteredGraph
-                );
+            equalToTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)}, RegisteredGraph);
 
-            greaterThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
-                RegisteredGraph
-                );
+            greaterThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)}, RegisteredGraph);
 
-            secondGreaterThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)},
-                RegisteredGraph
-                );
+            secondGreaterThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)}, RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ =>
@@ -90,7 +65,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             joinConstraint = new[]
                 {
-                    equalToTrackedGraph.InternalId, lessThanTrackedGraph.InternalId,
+                    equalToTrackedGraph.StoredGraph.InternalId, lessThanTrackedGraph.StoredGraph.InternalId,
                 };
         }
 
@@ -113,7 +88,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         [Then]
         public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _ == equalToTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == equalToTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
         }
     }
 }

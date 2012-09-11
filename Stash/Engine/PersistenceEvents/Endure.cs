@@ -17,16 +17,46 @@
 namespace Stash.Engine.PersistenceEvents
 {
     using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
     using BackingStore;
     using Configuration;
 
-    public class Endure : Track, IEndure
+    public class Endure : IEndure
     {
-        public Endure(IInternalSession trackedSession, object graph, IRegisteredGraph registeredGraph) : base(new InternalId(Guid.NewGuid()), graph, registeredGraph) {}
+        private readonly IRegisteredGraph registeredGraph;
+        private readonly IStoredGraph storedGraph;
 
-        public override void Complete(IStorageWork work, ISerializationSession session)
+        public Endure(object graph, IRegisteredGraph registeredGraph)
         {
-            CompleteInBackingStore(trackedGraph => work.InsertGraph(trackedGraph), session);
+            UntypedGraph = graph;
+            this.registeredGraph = registeredGraph;
+            storedGraph = registeredGraph.CreateStoredGraph();
+        }
+
+        public object UntypedGraph { get; private set; }
+
+        public InternalId InternalId { get; private set; }
+
+        protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
+        {
+            return
+                registeredGraph.IndexersOnGraph
+                    .Select(registeredIndexer => registeredIndexer.GetUntypedProjections(UntypedGraph))
+                    .SelectMany(indices => indices);
+        }
+
+        public void Complete(IStorageWork work, ISerializationSession session)
+        {
+            storedGraph.SerialisedGraph = registeredGraph.Serialize(UntypedGraph, session);
+
+            var trackedGraph = new TrackedGraph(
+                storedGraph, 
+                CalculateIndexes(), 
+                registeredGraph);
+
+            work.InsertGraph(trackedGraph);
         }
     }
 }

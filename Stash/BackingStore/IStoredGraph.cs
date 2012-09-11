@@ -24,7 +24,7 @@ namespace Stash.BackingStore
     public interface IStoredGraph
     {
         InternalId InternalId { get; }
-        Stream SerialisedGraph { get; }
+        Stream SerialisedGraph { get; set; }
         Type GraphType { get; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Stash.Azure.Engine
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using AzureQueries;
@@ -35,7 +36,7 @@
         {
             //This Get is lazy, so the transaction that originally did the match is likely closed. 
             //We go back to the backing store to start a new transaction.
-            return Matching(query).Distinct().Select<InternalId, IStoredGraph>(internalId => backingStore.Get(internalId));
+            return Matching(query).Distinct().Select(internalId => backingStore.Get(internalId));
         }
 
         public IEnumerable<InternalId> Matching(IQuery query)
@@ -52,7 +53,12 @@
                  select ct).First();
             var stream = new PreservedMemoryStream();
             blobReference.DownloadToStream(stream);
-            return new StoredGraph(internalId, stream, concreteType.RowKey);
+            return 
+                new StoredGraph(
+                    internalId, 
+                    Type.GetType(concreteType.RowKey), 
+                    backingStore.ConcurrencyPolicy.GetAccessConditionForModification(blobReference.Properties.ETag), 
+                    stream);
         }
 
         public void InsertGraph(ITrackedGraph trackedGraph)
@@ -79,18 +85,20 @@
 
         private void insertGraphData(ITrackedGraph trackedGraph)
         {
-            var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
-            blob.UploadFromStream(trackedGraph.SerialisedGraph);
+            var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.StoredGraph.InternalId.ToString());
             blob.Properties.ContentType = trackedGraph.SerializedContentType;
-            blob.SetProperties();
+            blob.UploadFromStream(
+                trackedGraph.StoredGraph.SerialisedGraph,
+                new BlobRequestOptions { AccessCondition = ((StoredGraph)trackedGraph.StoredGraph).AccessCondition });
         }
 
         private void updateGraphData(ITrackedGraph trackedGraph)
         {
-            var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.InternalId.ToString());
-            blob.UploadFromStream(trackedGraph.SerialisedGraph);
+            var blob = backingStore.GraphContainer.GetBlockBlobReference(trackedGraph.StoredGraph.InternalId.ToString());
             blob.Properties.ContentType = trackedGraph.SerializedContentType;
-            blob.SetProperties();
+            blob.UploadFromStream(
+                trackedGraph.StoredGraph.SerialisedGraph,
+                new BlobRequestOptions { AccessCondition = ((StoredGraph)trackedGraph.StoredGraph).AccessCondition });
         }
 
         private void deleteGraphData(InternalId internalId)
@@ -105,8 +113,8 @@
                 AzureBackingStore.ConcreteTypeTableName,
                 new ConcreteTypeEntity
                     {
-                        PartitionKey = trackedGraph.InternalId.ToString(),
-                        RowKey = trackedGraph.GraphType.AssemblyQualifiedName
+                        PartitionKey = trackedGraph.StoredGraph.InternalId.ToString(),
+                        RowKey = trackedGraph.StoredGraph.GraphType.AssemblyQualifiedName
                     });
         }
 
@@ -123,7 +131,7 @@
 
             foreach (var type in trackedGraph.TypeHierarchy)
             {
-                typeHierarchyIndex.Insert(type, trackedGraph.InternalId, ServiceContext);
+                typeHierarchyIndex.Insert(type, trackedGraph.StoredGraph.InternalId, ServiceContext);
             }
         }
 
@@ -136,7 +144,7 @@
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
             foreach (var projection in trackedGraph.ProjectedIndexes)
-                insertIndex((ProjectedIndex)projection, trackedGraph.InternalId);
+                insertIndex((ProjectedIndex)projection, trackedGraph.StoredGraph.InternalId);
         }
 
         private void updateIndexes(ITrackedGraph trackedGraph)
@@ -148,7 +156,7 @@
                             managedIndex = backingStore.IndexDatabases[index.IndexName]
                         }))
             {
-                deleteAllIndexEntriesForInternalId(index.managedIndex, trackedGraph.InternalId);
+                deleteAllIndexEntriesForInternalId(index.managedIndex, trackedGraph.StoredGraph.InternalId);
             }
 
             insertIndexes(trackedGraph);

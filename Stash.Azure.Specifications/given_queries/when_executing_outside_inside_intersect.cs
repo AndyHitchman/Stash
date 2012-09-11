@@ -22,6 +22,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.Linq;
     using AzureQueries;
     using Engine;
+    using Microsoft.WindowsAzure.StorageClient;
     using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;
@@ -41,40 +42,15 @@ namespace Stash.Azure.Specifications.given_queries
 
         protected override void Given()
         {
-            insideTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
-                RegisteredGraph
-                );
+            insideTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)}, RegisteredGraph);
 
-            lowerTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            lowerTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            upperTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)},
-                RegisteredGraph
-                );
+            upperTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 103)}, RegisteredGraph);
 
-            lessThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)},
-                RegisteredGraph
-                );
+            lessThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 99)}, RegisteredGraph);
 
-            greaterThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 104)},
-                RegisteredGraph
-                );
+            greaterThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 104)}, RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ =>
@@ -90,7 +66,7 @@ namespace Stash.Azure.Specifications.given_queries
 
             joinConstraint = new[]
                 {
-                    insideTrackedGraph.InternalId, greaterThanTrackedGraph.InternalId,
+                    insideTrackedGraph.StoredGraph.InternalId, greaterThanTrackedGraph.StoredGraph.InternalId,
                 };
         }
 
@@ -113,7 +89,7 @@ namespace Stash.Azure.Specifications.given_queries
         [Then]
         public void it_should_get_the_correct_graph()
         {
-            actual.Any(_ => _ == greaterThanTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == greaterThanTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
         }
     }
 }

@@ -91,6 +91,7 @@
     <Compile Include="Engine\ManagedIndex.cs" />
     <Compile Include="Engine\ProjectedIndex.cs" />
     <Compile Include="Engine\ProjectedIndex`1.cs" />
+    <Compile Include="Engine\StoredGraph.cs" />
     <Compile Include="PartitionedBerkeleyBackingStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

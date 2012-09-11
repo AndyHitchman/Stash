@@ -52,7 +52,7 @@ namespace Stash.Specifications.for_engine.given_default_internal_session
             var mockRegisteredGraph = MockRepository.GenerateStub<IRegisteredGraph<DummyPersistentObject>>();
             var mockStoredGraph = MockRepository.GenerateStub<IStoredGraph>();
 
-            mockStoredGraph.Stub(graph => graph.SerialisedGraph).Return(new PreservedMemoryStream(new byte[0]));
+            mockStoredGraph.SerialisedGraph = new PreservedMemoryStream(new byte[0]);
 
             sut.Load(mockStoredGraph, mockRegisteredGraph, null, true);
 

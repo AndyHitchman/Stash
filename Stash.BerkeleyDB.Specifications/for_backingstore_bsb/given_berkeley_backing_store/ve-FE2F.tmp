@@ -19,7 +19,6 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
     using System;
     using System.IO;
     using System.Linq;
-    using Engine;
     using Serializers;
     using Stash.BackingStore;
     using Stash.Configuration;
@@ -40,7 +39,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             insertingRegisteredGraph = new RegisteredGraph<ClassWithTwoAncestors>(registry);
             gettingRegisteredGraph = new RegisteredGraph<OtherClassWithTwoAncestors>(registry);
 
-            trackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), insertingRegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), Enumerable.Empty<IProjectedIndex>(), insertingRegisteredGraph);
+            trackedGraph = new TrackedGraph(new IStoredGraph(new InternalId(Guid.NewGuid()), new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), Enumerable.Empty<IProjectedIndex>(), insertingRegisteredGraph);
 
             Subject.InTransactionDo(_ => _.InsertGraph(trackedGraph));
         }

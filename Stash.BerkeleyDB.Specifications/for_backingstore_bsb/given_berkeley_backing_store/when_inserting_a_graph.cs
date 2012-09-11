@@ -44,16 +44,11 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             registry.RegisteredIndexers.Add(firstRegisteredIndexer);
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
-            trackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1),
-                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
-                    },
-                registeredGraph
-                );
+            trackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), registeredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1),
+                    new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
+                }, registeredGraph);
 
             Subject.EnsureIndex(firstRegisteredIndexer);
             Subject.EnsureIndex(secondRegisteredIndexer);
@@ -67,20 +62,20 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         [Then]
         public void it_should_persist_using_the_internal_id_as_the_key()
         {
-            Subject.GraphDatabase.ShouldHaveKey(trackedGraph.InternalId);
+            Subject.GraphDatabase.ShouldHaveKey(trackedGraph.StoredGraph.InternalId);
         }
 
         [Then]
         public void it_should_persist_the_serialised_graph_data()
         {
-            Subject.GraphDatabase.ValueForKey(trackedGraph.InternalId).AsStream().ShouldEqual(trackedGraph.SerialisedGraph);
+            Subject.GraphDatabase.ValueForKey(trackedGraph.StoredGraph.InternalId).AsStream().ShouldEqual(trackedGraph.StoredGraph.SerialisedGraph);
         }
 
         [Then]
         public void it_should_persist_the_concrete_type_of_the_graph()
         {
-            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.InternalId)
-                .ShouldEqual(new UnicodeEncoding().GetBytes(trackedGraph.GraphType.AssemblyQualifiedName));
+            Subject.ConcreteTypeDatabase.ValueForKey(trackedGraph.StoredGraph.InternalId)
+                .ShouldEqual(new UnicodeEncoding().GetBytes(trackedGraph.StoredGraph.GraphType.AssemblyQualifiedName));
         }
 
         [Then]
@@ -88,13 +83,13 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         {
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.First())
-                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
+                .ShouldEqual(trackedGraph.StoredGraph.InternalId.AsByteArray());
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.Skip(1).First())
-                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
+                .ShouldEqual(trackedGraph.StoredGraph.InternalId.AsByteArray());
             Subject.IndexDatabases[Subject.RegisteredTypeHierarchyIndex.IndexName].Index
                 .ValueForKey(trackedGraph.TypeHierarchy.Skip(2).First())
-                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
+                .ShouldEqual(trackedGraph.StoredGraph.InternalId.AsByteArray());
         }
 
         [Then]
@@ -104,7 +99,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             Subject.IndexDatabases[firstRegisteredIndexer.IndexName].Index
                 .ValueForKey(((int)((ProjectedIndex)projectedIndex).UntypedKey).AsByteArray())
-                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
+                .ShouldEqual(trackedGraph.StoredGraph.InternalId.AsByteArray());
         }
 
         [Then]
@@ -114,7 +109,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
 
             Subject.IndexDatabases[secondRegisteredIndexer.IndexName].Index
                 .ValueForKey(((string)((ProjectedIndex)projectedIndex).UntypedKey).AsByteArray())
-                .ShouldEqual(trackedGraph.InternalId.AsByteArray());
+                .ShouldEqual(trackedGraph.StoredGraph.InternalId.AsByteArray());
         }
     }
 }

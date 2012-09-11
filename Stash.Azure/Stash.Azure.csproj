@@ -68,10 +68,14 @@
     <Compile Include="Engine\AzureStorageWork.cs" />
     <Compile Include="Engine\ConcreteTypeEntity.cs" />
     <Compile Include="Engine\Convert.cs" />
+    <Compile Include="Engine\FailOnConcurrentModification.cs" />
+    <Compile Include="Engine\IConcurrencyPolicy.cs" />
     <Compile Include="Engine\IndexEntity.cs" />
     <Compile Include="Engine\ManagedIndex.cs" />
+    <Compile Include="Engine\NoConcurrencyProtection.cs" />
     <Compile Include="Engine\ProjectedIndex.cs" />
     <Compile Include="Engine\ProjectedIndex`1.cs" />
+    <Compile Include="Engine\StoredGraph.cs" />
     <Compile Include="Engine\TypeHierarchyEntity.cs" />
     <Compile Include="AzureQueries\NotAnyOfQuery.cs" />
     <Compile Include="AzureQueries\QueryCostScale.cs" />

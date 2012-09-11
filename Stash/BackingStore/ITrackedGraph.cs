@@ -19,11 +19,12 @@ namespace Stash.BackingStore
     using System.Collections.Generic;
     using Configuration;
 
-    public interface ITrackedGraph : IStoredGraph
+    public interface ITrackedGraph
     {
         IEnumerable<IProjectedIndex> ProjectedIndexes { get; }
         IEnumerable<string> TypeHierarchy { get; }
         IEnumerable<IRegisteredIndexer> Indexes { get; }
         string SerializedContentType { get; }
+        IStoredGraph StoredGraph { get; }
     }
 }

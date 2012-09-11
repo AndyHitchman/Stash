@@ -22,6 +22,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.Linq;
     using AzureQueries;
     using Engine;
+    using Microsoft.WindowsAzure.StorageClient;
     using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;
@@ -41,40 +42,15 @@ namespace Stash.Azure.Specifications.given_queries
 
         protected override void Given()
         {
-            lessThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "ml")},
-                RegisteredGraph
-                );
+            lessThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "ml")}, RegisteredGraph);
 
-            lowerTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mm")},
-                RegisteredGraph
-                );
+            lowerTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mm")}, RegisteredGraph);
 
-            insideTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mma")},
-                RegisteredGraph
-                );
+            insideTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mma")}, RegisteredGraph);
 
-            upperTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mmz")},
-                RegisteredGraph
-                );
+            upperTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mmz")}, RegisteredGraph);
 
-            greaterThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mn")},
-                RegisteredGraph
-                );
+            greaterThanTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<string>(RegisteredIndexer.IndexName, "mn")}, RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ =>
@@ -103,9 +79,9 @@ namespace Stash.Azure.Specifications.given_queries
         [Then]
         public void it_should_get_the_correct_graphs()
         {
-            actual.Any(_ => _.InternalId == lowerTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == insideTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == upperTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == lowerTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == insideTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == upperTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
         }
     }
 }

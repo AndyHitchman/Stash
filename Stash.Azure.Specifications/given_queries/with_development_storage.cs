@@ -18,6 +18,7 @@ namespace Stash.Azure.Specifications.given_queries
 {
     using System;
     using System.IO;
+    using BackingStore;
     using Configuration;
     using Engine;
     using Microsoft.WindowsAzure;
@@ -36,7 +37,7 @@ namespace Stash.Azure.Specifications.given_queries
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("idxStashEngineStashTypeHierarchy");
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashEngineStashTypeHierarchy");
 
-            Subject = new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount);
+            Subject = new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount, new NoConcurrencyProtection());
             Registry = new Registry(Subject);
             var typeHierarchyIndexer = new RegisteredIndexer<Type, string>(new StashTypeHierarchy(), Registry);
             Registry.RegisteredIndexers.Add(typeHierarchyIndexer);

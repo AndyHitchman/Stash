@@ -58,6 +58,7 @@
     <AssemblyOriginatorKeyFile>Properties\Stash.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -65,6 +66,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackingStore\ConcurrentUpdateException.cs" />
     <Compile Include="BackingStore\IndexNotReadyException.cs" />
     <Compile Include="Configuration\IRegisteredGraph.cs" />
     <Compile Include="Configuration\IRegisteredGraph`1.cs" />
@@ -84,17 +86,6 @@
     <Compile Include="BackingStore\IStorageWork.cs" />
     <Compile Include="Engine\InternalId.cs" />
     <Compile Include="Engine\ISerializationSession.cs" />
-    <Compile Include="Engine\Partitioning\IPartitionedQuery.cs" />
-    <Compile Include="Engine\Partitioning\ISegment.cs" />
-    <Compile Include="Engine\Partitioning\PartitionedBackingStore.cs" />
-    <Compile Include="Engine\Partitioning\PartitionedStorageWork.cs" />
-    <Compile Include="Engine\Partitioning\PartitioningBackingStore.cs" />
-    <Compile Include="Engine\Partitioning\PartitionedOperator.cs" />
-    <Compile Include="Engine\Partitioning\PartitionedQuery.cs" />
-    <Compile Include="Engine\Partitioning\IPartition.cs" />
-    <Compile Include="Engine\Partitioning\PartitionedQuery`1.cs" />
-    <Compile Include="Engine\Partitioning\PartitioningQueryFactory.cs" />
-    <Compile Include="Engine\Partitioning\PartitioningStrategy.cs" />
     <Compile Include="Engine\SerializationSession.cs" />
     <Compile Include="Serializers\Binary\AggregateRootSurrogate.cs" />
     <Compile Include="LinqExtensions.cs" />
@@ -116,7 +107,6 @@
     <Compile Include="Engine\InternalSession.cs" />
     <Compile Include="BackingStore\IBackingStore.cs" />
     <Compile Include="Engine\IInternalSession.cs" />
-    <Compile Include="BackingStore\ITrackedGraph`1.cs" />
     <Compile Include="IIndex.cs" />
     <Compile Include="IIndex`1.cs" />
     <Compile Include="BackingStore\IProjectedIndex.cs" />
@@ -139,9 +129,7 @@
     <Compile Include="Engine\PersistenceEvents\Endure.cs" />
     <Compile Include="Configuration\RegisteredReducer.cs" />
     <Compile Include="Serializers\ISerializer.cs" />
-    <Compile Include="Engine\PersistenceEvents\PersistenceEvent`1.cs" />
     <Compile Include="Engine\PersistenceEvents\IPersistenceEvent.cs" />
-    <Compile Include="BackingStore\StoredGraph.cs" />
     <Compile Include="BackingStore\TrackedGraph.cs" />
     <Compile Include="Queries\IIsIndexedQuery.cs" />
     <Compile Include="Queries\IClosedRangeQuery.cs" />

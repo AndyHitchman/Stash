@@ -22,6 +22,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.Linq;
     using AzureQueries;
     using Engine;
+    using Microsoft.WindowsAzure.StorageClient;
     using Serializers;
     using Stash.Azure;
     using Stash.BackingStore;
@@ -40,33 +41,13 @@ namespace Stash.Azure.Specifications.given_queries
 
         protected override void Given()
         {
-            firstTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            firstTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            secondTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            secondTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            thirdTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
-                RegisteredGraph
-                );
+            thirdTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)}, RegisteredGraph);
 
-            fourthTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
-                RegisteredGraph
-                );
+            fourthTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)}, RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ =>
@@ -94,10 +75,10 @@ namespace Stash.Azure.Specifications.given_queries
         [Then]
         public void it_should_get_the_correct_graphs()
         {
-            actual.Any(_ => _.InternalId == firstTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == secondTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == thirdTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _.InternalId == fourthTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == firstTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == secondTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == thirdTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _.InternalId == fourthTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
         }
     }
 }

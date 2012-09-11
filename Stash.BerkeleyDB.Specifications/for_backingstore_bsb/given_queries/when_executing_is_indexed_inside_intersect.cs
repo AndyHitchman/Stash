@@ -40,33 +40,13 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
         protected override void Given()
         {
-            firstTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            firstTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            secondTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)},
-                RegisteredGraph
-                );
+            secondTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 100)}, RegisteredGraph);
 
-            thirdTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
-                RegisteredGraph
-                );
+            thirdTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)}, RegisteredGraph);
 
-            fourthTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)},
-                RegisteredGraph
-                );
+            fourthTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), RegisteredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 102)}, RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ =>
@@ -81,7 +61,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
 
             joinConstraint = new[]
                 {
-                    firstTrackedGraph.InternalId, secondTrackedGraph.InternalId,
+                    firstTrackedGraph.StoredGraph.InternalId, secondTrackedGraph.StoredGraph.InternalId,
                 };
         }
 
@@ -104,8 +84,8 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_queries
         [Then]
         public void it_should_get_the_correct_graphs()
         {
-            actual.Any(_ => _ == firstTrackedGraph.InternalId).ShouldBeTrue();
-            actual.Any(_ => _ == secondTrackedGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == firstTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
+            actual.Any(_ => _ == secondTrackedGraph.StoredGraph.InternalId).ShouldBeTrue();
         }
     }
 }

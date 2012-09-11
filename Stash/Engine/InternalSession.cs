@@ -133,7 +133,7 @@ namespace Stash.Engine
 
         public void Endure(object graph, IRegisteredGraph registeredGraph)
         {
-            Enroll(new Endure(this, graph, registeredGraph));
+            Enroll(new Endure(graph, registeredGraph));
         }
 
         public void Endure<TGraph>(TGraph graph)

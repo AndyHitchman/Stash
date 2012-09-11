@@ -34,8 +34,9 @@ namespace Stash.Azure
         private const string graphContainerName = "stash";
         public const string ConcreteTypeTableName = "stashconretetypes";
 
-        public AzureBackingStore(CloudStorageAccount cloudStorageAccount)
+        public AzureBackingStore(CloudStorageAccount cloudStorageAccount, IConcurrencyPolicy concurrencyPolicy)
         {
+            ConcurrencyPolicy = concurrencyPolicy;
             configureServiceEndpoint(cloudStorageAccount);
 
             GraphContainer =
@@ -77,6 +78,7 @@ namespace Stash.Azure
         public CloudTableClient CloudTableClient { get; private set; }
         public CloudBlobContainer GraphContainer { get; private set; }
         public Dictionary<string, ManagedIndex> IndexDatabases { get; private set; }
+        public IConcurrencyPolicy ConcurrencyPolicy { get; private set; }
 
         public TableServiceContext TableServiceContext
         {
@@ -166,6 +168,11 @@ namespace Stash.Azure
         public ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph)
         {
             return new JsonSerializer<TGraph>(registeredGraph);
+        }
+
+        public IStoredGraph CreateStoredGraph(Type graphType)
+        {
+            return new StoredGraph(new InternalId(Guid.NewGuid()), graphType, ConcurrencyPolicy.GetAccessConditionForCreation());
         }
 
         public CloudBlob GetBlobReferenceForInternalId(InternalId internalId)

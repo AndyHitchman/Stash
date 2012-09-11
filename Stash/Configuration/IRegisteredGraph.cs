@@ -19,6 +19,7 @@ namespace Stash.Configuration
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using BackingStore;
     using Engine;
 
     public interface IRegisteredGraph
@@ -43,5 +44,11 @@ namespace Stash.Configuration
 
         object Deserialize(Stream serializedGraph, ISerializationSession session);
         Stream Serialize(object graph, ISerializationSession session);
+
+        /// <summary>
+        /// Create a stored graph (delegates to backing store)
+        /// </summary>
+        /// <returns></returns>
+        IStoredGraph CreateStoredGraph();
     }
 }

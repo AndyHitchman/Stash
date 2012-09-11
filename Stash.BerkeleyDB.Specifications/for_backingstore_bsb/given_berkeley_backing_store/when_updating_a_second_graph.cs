@@ -45,38 +45,23 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             secondRegisteredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, string>(new StringIndex(), registry);
             registry.RegisteredIndexers.Add(secondRegisteredIndexer);
 
-            firstTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
-                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
-                    },
-                registeredGraph
-                );
+            firstTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), registeredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
+                    new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wibble")
+                }, registeredGraph);
 
-            secondTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
-                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wiggle")
-                    },
-                registeredGraph
-                );
+            secondTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), registeredGraph.GraphType, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 1), 
+                    new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "wiggle")
+                }, registeredGraph);
 
-            updatedSecondTrackedGraph = new TrackedGraph(
-                secondTrackedGraph.InternalId,
-                new PreservedMemoryStream("updateddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 2), 
-                        new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "floop")
-                    },
-                registeredGraph
-                );
+            updatedSecondTrackedGraph = new TrackedGraph(new StoredGraph(secondTrackedGraph.StoredGraph.InternalId, registeredGraph.GraphType, new PreservedMemoryStream("updateddata".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(firstRegisteredIndexer.IndexName, 2), 
+                    new ProjectedIndex<string>(secondRegisteredIndexer.IndexName, "floop")
+                }, registeredGraph);
 
             Subject.EnsureIndex(firstRegisteredIndexer);
             Subject.EnsureIndex(secondRegisteredIndexer);
@@ -96,13 +81,13 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         [Then]
         public void it_should_not_have_removed_the_first_graph()
         {
-            Subject.GraphDatabase.ShouldHaveKey(firstTrackedGraph.InternalId);
+            Subject.GraphDatabase.ShouldHaveKey(firstTrackedGraph.StoredGraph.InternalId);
         }
 
         [Then]
         public void it_should_not_have_removed_the_concrete_type_of_the_first_graph()
         {
-            Subject.ConcreteTypeDatabase.ShouldHaveKey(firstTrackedGraph.InternalId);
+            Subject.ConcreteTypeDatabase.ShouldHaveKey(firstTrackedGraph.StoredGraph.InternalId);
         }
 
         [Then]

@@ -113,5 +113,10 @@ namespace Stash.Engine.Partitioning
         {
             throw new NotImplementedException();
         }
+
+        public IStoredGraph CreateStoredGraph(Type graphType)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

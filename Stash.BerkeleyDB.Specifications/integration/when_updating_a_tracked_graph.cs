@@ -19,6 +19,7 @@ namespace Stash.BerkeleyDB.Specifications.integration
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using Engine;
     using Stash.BackingStore;
     using Stash.Engine;
     using Support;
@@ -51,7 +52,7 @@ namespace Stash.BerkeleyDB.Specifications.integration
             var registeredGraph = Kernel.Registry.GetRegistrationFor<Post>();
             var serializedGraph = registeredGraph.Serialize(stashedPost, null);
             var projectedIndexes = registeredGraph.IndexersOnGraph.SelectMany(_ => _.GetUntypedProjections(stashedPost));
-            var tracked = new TrackedGraph(internalId, serializedGraph, projectedIndexes, registeredGraph);
+            var tracked = new TrackedGraph(new StoredGraph(internalId, registeredGraph.GraphType, serializedGraph), projectedIndexes, registeredGraph);
 
             Kernel.Registry.BackingStore.InTransactionDo(_ => _.InsertGraph(tracked));
         }

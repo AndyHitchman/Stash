@@ -125,15 +125,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_not_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_get_a_graph_that_the_partition_is_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_delete_a_graph_that_the_partition_is_not_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_delete_a_graph_that_the_partition_is_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_update_a_graph_that_the_partition_is_not_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_update_a_graph_that_the_partition_is_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_insert_a_graph_that_the_partition_is_not_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioned_storage_work\when_told_to_insert_a_graph_that_the_partition_is_responsible_for.cs" />
-    <Compile Include="for_engine\for_partitioning\given_partitioning_backing_store\when_told_to_get_the_count_of_records_for_query.cs" />
     <Compile Include="for_engine\for_persistence_events\given_destroy\when_completing.cs" />
     <Compile Include="for_engine\for_persistence_events\given_endure\when_completing.cs" />
     <Compile Include="for_engine\for_persistence_events\given_track\when_completing_with_a_changed_graph.cs" />

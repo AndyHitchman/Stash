@@ -22,46 +22,36 @@ namespace Stash.BackingStore
     using Configuration;
     using Engine;
 
+
     public class TrackedGraph : ITrackedGraph
     {
-        public TrackedGraph(
-            InternalId internalId,
-            Stream graph,
-            IEnumerable<IProjectedIndex> projectedIndices,
+        private readonly IRegisteredGraph registeredGraph;
+
+        public TrackedGraph(IStoredGraph storedGraph, IEnumerable<IProjectedIndex> projectedIndices,
             IRegisteredGraph registeredGraph)
         {
-            InternalId = internalId;
-            SerialisedGraph = graph;
+            this.registeredGraph = registeredGraph;
+            StoredGraph = storedGraph;
             ProjectedIndexes = projectedIndices;
-            RegisteredGraph = registeredGraph;
         }
+
+        public IStoredGraph StoredGraph { get; private set; }
 
         public IEnumerable<IProjectedIndex> ProjectedIndexes { get; private set; }
 
         public IEnumerable<string> TypeHierarchy
         {
-            get { return RegisteredGraph.TypeHierarchy; }
-        }
-
-        public Type GraphType
-        {
-            get { return RegisteredGraph.GraphType; }
+            get { return registeredGraph.TypeHierarchy; }
         }
 
         public IEnumerable<IRegisteredIndexer> Indexes
         {
-            get { return RegisteredGraph.IndexersOnGraph; }
+            get { return registeredGraph.IndexersOnGraph; }
         }
 
         public string SerializedContentType
         {
-            get { return RegisteredGraph.SerializedContentType; }
+            get { return registeredGraph.SerializedContentType; }
         }
-
-        public IRegisteredGraph RegisteredGraph { get; private set; }
-
-        public InternalId InternalId { get; private set; }
-
-        public Stream SerialisedGraph { get; private set; }
     }
 }

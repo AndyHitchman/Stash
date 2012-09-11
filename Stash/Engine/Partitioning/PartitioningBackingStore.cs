@@ -114,6 +114,12 @@ namespace Stash.Engine.Partitioning
             throw new NotImplementedException();
         }
 
+        public IStoredGraph CreateStoredGraph(Type graphType)
+        {
+            throw new NotImplementedException();
+        }
+
+
         private TResult collectFromPartitions<TResult>(Func<IPartition, IBackingStore, TResult> map, TResult seed, Func<TResult, TResult, TResult> reduce)
         {
             //Fire off async invokes of the map function, collecting the async results in an enumerable.

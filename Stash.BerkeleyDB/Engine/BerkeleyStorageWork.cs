@@ -16,6 +16,7 @@
 
 namespace Stash.BerkeleyDB.Engine
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -91,7 +92,7 @@ namespace Stash.BerkeleyDB.Engine
                 var storedConcreteType = BackingStore.ConcreteTypeDatabase.Get(key, Transaction).Value.Data.AsString();
 
                 var entry = BackingStore.GraphDatabase.Get(key, Transaction);
-                return new StoredGraph(internalId, new PreservedMemoryStream(entry.Value.Data), storedConcreteType);
+                return new StoredGraph(internalId, Type.GetType(storedConcreteType), new PreservedMemoryStream(entry.Value.Data));
             }
             catch(NotFoundException knfe)
             {
@@ -162,23 +163,23 @@ namespace Stash.BerkeleyDB.Engine
         private void insertConcreteType(ITrackedGraph trackedGraph)
         {
             BackingStore.ConcreteTypeDatabase.PutNoOverwrite(
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(trackedGraph.GraphType.AsByteArray()),
+                new DatabaseEntry(trackedGraph.StoredGraph.InternalId.AsByteArray()),
+                new DatabaseEntry(trackedGraph.StoredGraph.GraphType.AsByteArray()),
                 Transaction);
         }
 
         private void insertGraphData(ITrackedGraph trackedGraph)
         {
             BackingStore.GraphDatabase.PutNoOverwrite(
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(streamToBytes(trackedGraph.SerialisedGraph)),
+                new DatabaseEntry(trackedGraph.StoredGraph.InternalId.AsByteArray()),
+                new DatabaseEntry(streamToBytes(trackedGraph.StoredGraph.SerialisedGraph)),
                 Transaction);
         }
 
         private void insertIndexes(ITrackedGraph trackedGraph)
         {
             foreach(var projection in trackedGraph.ProjectedIndexes)
-                insertIndex((ProjectedIndex)projection, trackedGraph.InternalId);
+                insertIndex((ProjectedIndex)projection, trackedGraph.StoredGraph.InternalId);
         }
 
         private void insertIndex(ProjectedIndex projection, InternalId internalId)
@@ -193,21 +194,21 @@ namespace Stash.BerkeleyDB.Engine
 
             foreach(var type in trackedGraph.TypeHierarchy)
             {
-                typeHierarchyIndex.Insert(type, trackedGraph.InternalId, Transaction);
+                typeHierarchyIndex.Insert(type, trackedGraph.StoredGraph.InternalId, Transaction);
             }
         }
 
         private void updateGraphData(ITrackedGraph trackedGraph)
         {
             BackingStore.GraphDatabase.Put(
-                new DatabaseEntry(trackedGraph.InternalId.AsByteArray()),
-                new DatabaseEntry(streamToBytes(trackedGraph.SerialisedGraph)),
+                new DatabaseEntry(trackedGraph.StoredGraph.InternalId.AsByteArray()),
+                new DatabaseEntry(streamToBytes(trackedGraph.StoredGraph.SerialisedGraph)),
                 Transaction);
         }
 
         private void updateIndexes(ITrackedGraph trackedGraph)
         {
-            var graphKey = new DatabaseEntry(trackedGraph.InternalId.AsByteArray());
+            var graphKey = new DatabaseEntry(trackedGraph.StoredGraph.InternalId.AsByteArray());
 
             foreach(var index in trackedGraph.Indexes
                 .Select(

@@ -41,27 +41,17 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
             registeredIndexer = new RegisteredIndexer<ClassWithTwoAncestors, int>(new IntIndex(), registry);
             registry.RegisteredIndexers.Add(registeredIndexer);
 
-            originalTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(registeredIndexer.IndexName, 1),
-                        new ProjectedIndex<int>(registeredIndexer.IndexName, 2)
-                    },
-                registeredGraph
-                );
+            originalTrackedGraph = new TrackedGraph(new StoredGraph(new InternalId(Guid.NewGuid()), registeredGraph.GraphType, new PreservedMemoryStream("thisistheserialisedgraphofthefirstobject".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(registeredIndexer.IndexName, 1),
+                    new ProjectedIndex<int>(registeredIndexer.IndexName, 2)
+                }, registeredGraph);
 
-            updatedTrackedGraph = new TrackedGraph(
-                originalTrackedGraph.InternalId,
-                new PreservedMemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[]
-                    {
-                        new ProjectedIndex<int>(registeredIndexer.IndexName, 2),
-                        new ProjectedIndex<int>(registeredIndexer.IndexName, 3)
-                    },
-                registeredGraph
-                );
+            updatedTrackedGraph = new TrackedGraph(new StoredGraph(originalTrackedGraph.StoredGraph.InternalId, registeredGraph.GraphType, new PreservedMemoryStream("thesecondobjectsserialisedgraph".Select(_ => (byte)_).ToArray())), new IProjectedIndex[]
+                {
+                    new ProjectedIndex<int>(registeredIndexer.IndexName, 2),
+                    new ProjectedIndex<int>(registeredIndexer.IndexName, 3)
+                }, registeredGraph);
 
             Subject.EnsureIndex(registeredIndexer);
             Subject.InTransactionDo(_ => _.InsertGraph(originalTrackedGraph));
@@ -75,7 +65,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_berkeley_ba
         [Then]
         public void it_should_update_the_serialised_graph_data()
         {
-            Subject.GraphDatabase.ValueForKey(originalTrackedGraph.InternalId).AsStream().ShouldEqual(updatedTrackedGraph.SerialisedGraph);
+            Subject.GraphDatabase.ValueForKey(originalTrackedGraph.StoredGraph.InternalId).AsStream().ShouldEqual(updatedTrackedGraph.StoredGraph.SerialisedGraph);
         }
 
         [Then]

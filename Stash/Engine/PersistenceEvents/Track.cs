@@ -26,9 +26,9 @@ namespace Stash.Engine.PersistenceEvents
 
     public class Track : ITrack
     {
-        private readonly object graph;
-        private readonly SHA1CryptoServiceProvider hashCodeGenerator;
+        private static readonly SHA1CryptoServiceProvider hashCodeGenerator = new SHA1CryptoServiceProvider();
         private readonly IRegisteredGraph registeredGraph;
+        private readonly IStoredGraph storedGraph;
 
         /// <summary>
         /// <paramref name="session"/> is used transiently in the constructor.
@@ -37,29 +37,15 @@ namespace Stash.Engine.PersistenceEvents
         /// <param name="storedGraph"></param>
         /// <param name="registeredGraph"></param>
         public Track(ISerializationSession session, IStoredGraph storedGraph, IRegisteredGraph registeredGraph)
-            : this(session, storedGraph.InternalId, storedGraph.SerialisedGraph, registeredGraph) {}
-
-        public Track(ISerializationSession session, InternalId internalId, Stream storedSerializedGraph, IRegisteredGraph registeredGraph)
-            : this()
         {
-            InternalId = internalId;
+            this.storedGraph = storedGraph;
             this.registeredGraph = registeredGraph;
-            OriginalHash = hashCodeGenerator.ComputeHash(storedSerializedGraph);
-            graph = registeredGraph.Deserialize(storedSerializedGraph, session);
-        }
+            OriginalHash = hashCodeGenerator.ComputeHash(storedGraph.SerialisedGraph);
 
-        protected Track(InternalId internalId, object graph, IRegisteredGraph registeredGraph)
-            : this()
-        {
-            InternalId = internalId;
-            this.graph = graph;
-            this.registeredGraph = registeredGraph;
-            OriginalHash = new byte[0];
-        }
-
-        private Track()
-        {
-            hashCodeGenerator = new SHA1CryptoServiceProvider();
+            //Reset stream after calculating hash.
+            storedGraph.SerialisedGraph.Position = 0;
+            
+            UntypedGraph = registeredGraph.Deserialize(storedGraph.SerialisedGraph, session);
         }
 
         /// <summary>
@@ -72,15 +58,9 @@ namespace Stash.Engine.PersistenceEvents
         /// </summary>
         public byte[] CompletionHash { get; private set; }
 
-        public InternalId InternalId { get; private set; }
+        public InternalId InternalId { get { return storedGraph.InternalId; } }
 
-        /// <summary>
-        /// Get the untyped graph.
-        /// </summary>
-        public object UntypedGraph
-        {
-            get { return graph; }
-        }
+        public object UntypedGraph { get; private set; }
 
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
         {
@@ -92,21 +72,19 @@ namespace Stash.Engine.PersistenceEvents
 
         public virtual void Complete(IStorageWork work, ISerializationSession session)
         {
-            CompleteInBackingStore(trackedGraph => work.UpdateGraph(trackedGraph), session);
-        }
+            storedGraph.SerialisedGraph = registeredGraph.Serialize(UntypedGraph, session);
 
-        protected void CompleteInBackingStore(Action<ITrackedGraph> completionAction, ISerializationSession session)
-        {
-            var transientSerializedGraph = registeredGraph.Serialize(UntypedGraph, session);
-            CompletionHash = hashCodeGenerator.ComputeHash(transientSerializedGraph);
-            transientSerializedGraph.Position = 0;
+            CompletionHash = hashCodeGenerator.ComputeHash(storedGraph.SerialisedGraph);
+            
+            //Reset stream after calculating hash.
+            storedGraph.SerialisedGraph.Position = 0;
 
             if(CompletionHash.SequenceEqual(OriginalHash))
                 //No change to object. No work to do.
                 return;
 
-            var trackedGraph = new TrackedGraph(InternalId, transientSerializedGraph, CalculateIndexes(), registeredGraph);
-            completionAction(trackedGraph);
+            var trackedGraph = new TrackedGraph(storedGraph, CalculateIndexes(), registeredGraph);
+            work.UpdateGraph(trackedGraph);
         }
     }
 }

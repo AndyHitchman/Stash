@@ -21,6 +21,7 @@ namespace Stash.Azure.Specifications.given_queries
     using System.IO;
     using System.Linq;
     using Engine;
+    using Microsoft.WindowsAzure.StorageClient;
     using Serializers;
     using Stash.Azure;
     using Stash.Azure.AzureQueries;
@@ -37,12 +38,14 @@ namespace Stash.Azure.Specifications.given_queries
 
         protected override void Given()
         {
-            greaterThanTrackedGraph = new TrackedGraph(
-                new InternalId(Guid.NewGuid()),
-                new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray()),
-                new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
-                RegisteredGraph
-                );
+            greaterThanTrackedGraph =
+                new TrackedGraph(
+                    new StoredGraph(
+                        new InternalId(Guid.NewGuid()),
+                        RegisteredGraph.GraphType,
+                        AccessCondition.None, new PreservedMemoryStream("letspretendthisisserialiseddata".Select(_ => (byte)_).ToArray())),
+                    new IProjectedIndex[] {new ProjectedIndex<int>(RegisteredIndexer.IndexName, 101)},
+                    RegisteredGraph);
 
             Subject.InTransactionDo(
                 _ => _.InsertGraph(greaterThanTrackedGraph));

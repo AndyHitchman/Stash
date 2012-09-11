@@ -172,6 +172,11 @@ namespace Stash.BerkeleyDB
             return new AggregateBinarySerializer<TGraph>(registeredGraph);
         }
 
+        public IStoredGraph CreateStoredGraph(Type graphType)
+        {
+            return new StoredGraph(new InternalId(Guid.NewGuid()), graphType, null);
+        }
+
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             var storageWork = new BerkeleyStorageWork(this);

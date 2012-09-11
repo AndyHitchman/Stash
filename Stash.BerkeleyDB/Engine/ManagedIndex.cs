@@ -232,6 +232,9 @@ namespace Stash.BerkeleyDB.Engine
 
         public void Close()
         {
+            //Give the background thread time to finish recompiling. 
+            indexCompiled.WaitOne(recompileTimeoutMs);
+                
             if(index != null)
                 index.Close();
             

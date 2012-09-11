@@ -82,6 +82,11 @@ namespace Stash.Specifications.Support
             return new BinarySerializer<TGraph>();
         }
 
+        public IStoredGraph CreateStoredGraph(Type graphType)
+        {
+            throw new NotImplementedException();
+        }
+
         public TReturn InTransactionDo<TReturn>(Func<IStorageWork, TReturn> storageWorkFunction)
         {
             throw new NotImplementedException();

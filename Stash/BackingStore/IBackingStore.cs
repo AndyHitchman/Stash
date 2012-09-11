@@ -18,6 +18,7 @@ namespace Stash.BackingStore
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using Configuration;
     using Engine;
     using Queries;
@@ -95,5 +96,7 @@ namespace Stash.BackingStore
         /// <typeparam name="TGraph"></typeparam>
         /// <returns></returns>
         ISerializer<TGraph> GetDefaultSerialiser<TGraph>(IRegisteredGraph<TGraph> registeredGraph);
+
+        IStoredGraph CreateStoredGraph(Type graphType);
     }
 }

@@ -75,7 +75,7 @@ namespace Stash.Engine.Partitioning
 
         public void InsertGraph(ITrackedGraph trackedGraph)
         {
-            if(!partition.IsResponsibleForGraph(trackedGraph.InternalId))
+            if(!partition.IsResponsibleForGraph(trackedGraph.StoredGraph.InternalId))
                 return;
 
             underlyingStorageWork.InsertGraph(trackedGraph);
@@ -83,7 +83,7 @@ namespace Stash.Engine.Partitioning
 
         public void UpdateGraph(ITrackedGraph trackedGraph)
         {
-            if(!partition.IsResponsibleForGraph(trackedGraph.InternalId))
+            if(!partition.IsResponsibleForGraph(trackedGraph.StoredGraph.InternalId))
                 return;
 
             underlyingStorageWork.UpdateGraph(trackedGraph);

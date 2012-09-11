@@ -58,5 +58,10 @@ namespace Stash.Configuration
 
         public abstract object Deserialize(Stream serializedGraph, ISerializationSession session);
         public abstract Stream Serialize(object graph, ISerializationSession session);
+
+        public IStoredGraph CreateStoredGraph()
+        {
+            return Registry.BackingStore.CreateStoredGraph(GraphType);
+        }
     }
 }

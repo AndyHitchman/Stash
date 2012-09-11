@@ -16,6 +16,8 @@
 
 namespace Stash.Azure.Specifications.integration
 {
+    using BackingStore;
+    using Engine;
     using given_queries;
     using Microsoft.WindowsAzure;
     using Microsoft.WindowsAzure.StorageClient;
@@ -38,7 +40,7 @@ namespace Stash.Azure.Specifications.integration
             CloudStorageAccount.DevelopmentStorageAccount.CreateCloudTableClient().DeleteTableIfExist("rdxStashAzureSpecificationsintegrationNumberOfCommentsOnPost");
             
             Kernel.Kickstart(
-                new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount),
+                new AzureBackingStore(CloudStorageAccount.DevelopmentStorageAccount, new FailOnConcurrentModification()),
                 register =>
                     {
                         register.Graph<Post>();
