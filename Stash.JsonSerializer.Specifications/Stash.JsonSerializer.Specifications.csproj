@@ -67,6 +67,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Stash.Azure\Stash.Azure.csproj">
+      <Project>{F4C894AF-18AA-4827-97B2-FF8087F7B815}</Project>
+      <Name>Stash.Azure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Stash.JsonSerializer\Stash.JsonSerializer.csproj">
       <Project>{165975FD-AC70-4243-A11A-94DC4FAFA8AF}</Project>
       <Name>Stash.JsonSerializer</Name>
