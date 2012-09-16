@@ -24,6 +24,7 @@ namespace Stash.BerkeleyDB.Specifications.for_backingstore_bsb.given_managed_ind
     using Support;
 
     [TestFixture]
+    [Ignore("Automatic index build diabled")]
     public class when_registering_a_new_index_on_existing_graph_data : with_temp_dir
     {
         private IRegistry registry;

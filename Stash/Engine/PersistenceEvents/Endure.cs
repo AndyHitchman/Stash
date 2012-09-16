@@ -16,9 +16,7 @@
 
 namespace Stash.Engine.PersistenceEvents
 {
-    using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using BackingStore;
     using Configuration;
@@ -37,7 +35,10 @@ namespace Stash.Engine.PersistenceEvents
 
         public object UntypedGraph { get; private set; }
 
-        public InternalId InternalId { get; private set; }
+        public InternalId InternalId
+        {
+            get { return storedGraph.InternalId; }
+        }
 
         protected virtual IEnumerable<IProjectedIndex> CalculateIndexes()
         {
