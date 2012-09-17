@@ -58,7 +58,6 @@
     <AssemblyOriginatorKeyFile>Properties\Stash.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -156,7 +155,6 @@
     <Compile Include="Queries\IQueryFactory.cs" />
     <Compile Include="Queries\IValueQuery.cs" />
     <Compile Include="ISession.cs" />
-    <Compile Include="IRepository.cs" />
     <Compile Include="Engine\StashTypeHierarchy.cs" />
     <Compile Include="IIndex`2.cs" />
     <Compile Include="Engine\PersistentGraph.cs" />

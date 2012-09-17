@@ -21,7 +21,7 @@ namespace Stash.Azure.Specifications.integration
     using System.Linq;
     using Engine;
     using Microsoft.WindowsAzure.StorageClient;
-    using Stash.BackingStore;
+    using BackingStore;
     using Stash.Engine;
     using Support;
 
